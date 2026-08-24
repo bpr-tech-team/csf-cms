@@ -26,7 +26,7 @@ export const Logo = (props: Props) => {
             loading={loading}
             fetchPriority={priority}
             decoding="async"
-            className={clsx("h-auto w-[9.75rem]", className)}
+            className={clsx("h-auto w-[9.75rem] object-contain", className)}
             src="/csf-logo.png"
         />
     );
