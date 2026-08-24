@@ -3,16 +3,20 @@ import type { Page, Post } from "@/payload-types";
 
 import { getCachedDocument } from "@/utilities/getDocument";
 import { getCachedRedirects } from "@/utilities/getRedirects";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { notFound, redirect } from "next/navigation";
 
 interface Props {
     disableNotFound?: boolean;
+    locale?: AppLocale;
     url: string;
 }
 
 /* This component helps us with SSR based dynamic redirects */
 export const PayloadRedirects: React.FC<Props> = async ({
     disableNotFound,
+    locale = defaultLocale,
     url,
 }) => {
     const redirects = await getCachedRedirects()();
@@ -21,7 +25,11 @@ export const PayloadRedirects: React.FC<Props> = async ({
 
     if (redirectItem) {
         if (redirectItem.to?.url) {
-            redirect(redirectItem.to.url);
+            redirect(
+                redirectItem.to.url.startsWith("/")
+                    ? withLocalePrefix(redirectItem.to.url, locale)
+                    : redirectItem.to.url,
+            );
         }
 
         let redirectUrl: string;
@@ -30,17 +38,26 @@ export const PayloadRedirects: React.FC<Props> = async ({
             const collection = redirectItem.to?.reference?.relationTo;
             const id = redirectItem.to?.reference?.value;
 
-            const document = (await getCachedDocument(collection, id)()) as
-                Page | Post;
-            redirectUrl = `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
-                document?.slug
-            }`;
+            const document = (await getCachedDocument(
+                collection,
+                id,
+                locale,
+            )()) as Page | Post;
+            redirectUrl = withLocalePrefix(
+                `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
+                    document?.slug
+                }`,
+                locale,
+            );
         } else {
-            redirectUrl = `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
-                typeof redirectItem.to?.reference?.value === "object"
-                    ? redirectItem.to?.reference?.value?.slug
-                    : ""
-            }`;
+            redirectUrl = withLocalePrefix(
+                `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
+                    typeof redirectItem.to?.reference?.value === "object"
+                        ? redirectItem.to?.reference?.value?.slug
+                        : ""
+                }`,
+                locale,
+            );
         }
 
         if (redirectUrl) redirect(redirectUrl);

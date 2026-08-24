@@ -1,4 +1,7 @@
 "use client";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale, withLocalePrefix } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 import { cn } from "@/utilities/ui";
 import useClickableCard from "@/utilities/useClickableCard";
 import Link from "next/link";
@@ -14,6 +17,7 @@ export const Card: React.FC<{
     alignItems?: "center";
     className?: string;
     doc?: CardPostData;
+    locale?: AppLocale;
     relationTo?: "posts";
     showCategories?: boolean;
     title?: string;
@@ -22,10 +26,12 @@ export const Card: React.FC<{
     const {
         className,
         doc,
+        locale = defaultLocale,
         relationTo,
         showCategories,
         title: titleFromProps,
     } = props;
+    const messages = frontendMessages[locale];
 
     const { slug, categories, meta, title } = doc || {};
     const { description, image: metaImage } = meta || {};
@@ -34,7 +40,7 @@ export const Card: React.FC<{
         categories && Array.isArray(categories) && categories.length > 0;
     const titleToUse = titleFromProps || title;
     const sanitizedDescription = description?.replace(/\s/g, " "); // replace non-breaking space with white space
-    const href = `/${relationTo}/${slug}`;
+    const href = withLocalePrefix(`/${relationTo}/${slug}`, locale);
 
     return (
         <article
@@ -45,7 +51,7 @@ export const Card: React.FC<{
             ref={cardRef}
         >
             <div className="relative w-full ">
-                {!metaImage && <div className="">No image</div>}
+                {!metaImage && <div className="">{messages.noImage}</div>}
                 {metaImage && typeof metaImage !== "string" && (
                     <Media resource={metaImage} size="33vw" />
                 )}
@@ -58,7 +64,8 @@ export const Card: React.FC<{
                                 const { title: titleFromCategory } = category;
 
                                 const categoryTitle =
-                                    titleFromCategory || "Untitled category";
+                                    titleFromCategory ||
+                                    messages.untitledCategory;
 
                                 const isLast = index === categories.length - 1;
 

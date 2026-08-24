@@ -17,6 +17,11 @@ export const Header: GlobalConfig = {
                     appearances: false,
                 }),
             ],
+            label: {
+                cs: "Položky navigace",
+                en: "Navigation items",
+            },
+            localized: true,
             maxRows: 6,
             admin: {
                 initCollapsed: true,
@@ -28,5 +33,9 @@ export const Header: GlobalConfig = {
     ],
     hooks: {
         afterChange: [revalidateHeader],
+    },
+    label: {
+        cs: "Hlavička",
+        en: "Header",
     },
 };

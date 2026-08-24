@@ -1,4 +1,4 @@
-import type { Field, GroupField } from "payload";
+import type { Field, GroupField, StaticLabel } from "payload";
 
 import deepMerge from "@/utilities/deepMerge";
 
@@ -6,14 +6,20 @@ export type LinkAppearances = "default" | "outline";
 
 export const appearanceOptions: Record<
     LinkAppearances,
-    { label: string; value: string }
+    { label: StaticLabel; value: string }
 > = {
     default: {
-        label: "Default",
+        label: {
+            cs: "Výchozí",
+            en: "Default",
+        },
         value: "default",
     },
     outline: {
-        label: "Outline",
+        label: {
+            cs: "Obrys",
+            en: "Outline",
+        },
         value: "outline",
     },
 };
@@ -35,6 +41,10 @@ export const link: LinkType = ({
         admin: {
             hideGutter: true,
         },
+        label: {
+            cs: "Odkaz",
+            en: "Link",
+        },
         fields: [
             {
                 type: "row",
@@ -47,13 +57,23 @@ export const link: LinkType = ({
                             width: "50%",
                         },
                         defaultValue: "reference",
+                        label: {
+                            cs: "Typ odkazu",
+                            en: "Link type",
+                        },
                         options: [
                             {
-                                label: "Internal link",
+                                label: {
+                                    cs: "Interní odkaz",
+                                    en: "Internal link",
+                                },
                                 value: "reference",
                             },
                             {
-                                label: "Custom URL",
+                                label: {
+                                    cs: "Vlastní URL",
+                                    en: "Custom URL",
+                                },
                                 value: "custom",
                             },
                         ],
@@ -67,7 +87,10 @@ export const link: LinkType = ({
                             },
                             width: "50%",
                         },
-                        label: "Open in new tab",
+                        label: {
+                            cs: "Otevřít v novém panelu",
+                            en: "Open in new tab",
+                        },
                     },
                 ],
             },
@@ -82,7 +105,10 @@ export const link: LinkType = ({
                 condition: (_, siblingData) =>
                     siblingData?.type === "reference",
             },
-            label: "Document to link to",
+            label: {
+                cs: "Dokument pro odkaz",
+                en: "Document to link to",
+            },
             relationTo: ["pages", "posts"],
             required: true,
         },
@@ -92,7 +118,11 @@ export const link: LinkType = ({
             admin: {
                 condition: (_, siblingData) => siblingData?.type === "custom",
             },
-            label: "Custom URL",
+            label: {
+                cs: "Vlastní URL",
+                en: "Custom URL",
+            },
+            localized: true,
             required: true,
         },
     ];
@@ -116,7 +146,11 @@ export const link: LinkType = ({
                     admin: {
                         width: "50%",
                     },
-                    label: "Label",
+                    label: {
+                        cs: "Text odkazu",
+                        en: "Label",
+                    },
+                    localized: true,
                     required: true,
                 },
             ],
@@ -141,9 +175,16 @@ export const link: LinkType = ({
             name: "appearance",
             type: "select",
             admin: {
-                description: "Choose how the link should be rendered.",
+                description: {
+                    cs: "Vyberte, jak se má odkaz zobrazit.",
+                    en: "Choose how the link should be rendered.",
+                },
             },
             defaultValue: "default",
+            label: {
+                cs: "Vzhled",
+                en: "Appearance",
+            },
             options: appearanceOptionsToUse,
         });
     }

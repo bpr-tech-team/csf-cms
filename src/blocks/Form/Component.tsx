@@ -1,12 +1,10 @@
 "use client";
-import type {
-    FormFieldBlock,
-    Form as FormType,
-} from "@payloadcms/plugin-form-builder/types";
+import type { Form as FormType } from "@/payload-types";
 
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import RichText from "@/components/RichText";
 import { Button } from "@/components/ui/button";
 import type { DefaultTypedEditorState } from "@payloadcms/richtext-lexical";
@@ -15,33 +13,29 @@ import { fields } from "./fields";
 import { getClientSideURL } from "@/utilities/getURL";
 
 export type FormBlockType = {
-    blockName?: string;
+    blockName?: null | string;
     blockType?: "formBlock";
-    enableIntro: boolean;
+    enableIntro?: boolean | null;
     form: FormType;
-    introContent?: DefaultTypedEditorState;
+    introContent?: DefaultTypedEditorState | null;
 };
 
 export const FormBlock: React.FC<
     {
-        id?: string;
+        id?: null | string;
     } & FormBlockType
 > = (props) => {
+    const { enableIntro, form: formFromProps, introContent } = props;
     const {
-        enableIntro,
-        form: formFromProps,
-        form: {
-            id: formID,
-            confirmationMessage,
-            confirmationType,
-            redirect,
-            submitButtonLabel,
-        } = {},
-        introContent,
-    } = props;
+        confirmationMessage,
+        confirmationType,
+        redirect,
+        submitButtonLabel,
+    } = formFromProps;
+    const formID = String(formFromProps.id);
 
     const formMethods = useForm({
-        defaultValues: formFromProps.fields,
+        defaultValues: formFromProps.fields || [],
     });
     const {
         control,
@@ -58,7 +52,7 @@ export const FormBlock: React.FC<
     const router = useRouter();
 
     const onSubmit = useCallback(
-        (data: FormFieldBlock[]) => {
+        (data: FieldValues) => {
             let loadingTimerID: ReturnType<typeof setTimeout>;
             const submitForm = async () => {
                 setError(undefined);
@@ -144,7 +138,8 @@ export const FormBlock: React.FC<
                 <FormProvider {...formMethods}>
                     {!isLoading &&
                         hasSubmitted &&
-                        confirmationType === "message" && (
+                        confirmationType === "message" &&
+                        confirmationMessage && (
                             <RichText data={confirmationMessage} />
                         )}
                     {isLoading && !hasSubmitted && (

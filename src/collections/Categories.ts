@@ -19,10 +19,26 @@ export const Categories: CollectionConfig = {
         {
             name: "title",
             type: "text",
+            label: {
+                cs: "Název",
+                en: "Title",
+            },
+            localized: true,
             required: true,
         },
         slugField({
+            localized: true,
             position: undefined,
         }),
     ],
+    labels: {
+        plural: {
+            cs: "Kategorie",
+            en: "Categories",
+        },
+        singular: {
+            cs: "Kategorie",
+            en: "Category",
+        },
+    },
 };

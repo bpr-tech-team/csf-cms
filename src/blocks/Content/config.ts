@@ -14,21 +14,37 @@ const columnFields: Field[] = [
         name: "size",
         type: "select",
         defaultValue: "oneThird",
+        label: {
+            cs: "Šířka",
+            en: "Size",
+        },
         options: [
             {
-                label: "One Third",
+                label: {
+                    cs: "Jedna třetina",
+                    en: "One Third",
+                },
                 value: "oneThird",
             },
             {
-                label: "Half",
+                label: {
+                    cs: "Polovina",
+                    en: "Half",
+                },
                 value: "half",
             },
             {
-                label: "Two Thirds",
+                label: {
+                    cs: "Dvě třetiny",
+                    en: "Two Thirds",
+                },
                 value: "twoThirds",
             },
             {
-                label: "Full",
+                label: {
+                    cs: "Celá šířka",
+                    en: "Full",
+                },
                 value: "full",
             },
         ],
@@ -51,6 +67,10 @@ const columnFields: Field[] = [
     {
         name: "enableLink",
         type: "checkbox",
+        label: {
+            cs: "Povolit odkaz",
+            en: "Enable link",
+        },
     },
     link({
         overrides: {
@@ -74,6 +94,20 @@ export const Content: Block = {
                 initCollapsed: true,
             },
             fields: columnFields,
+            label: {
+                cs: "Sloupce",
+                en: "Columns",
+            },
         },
     ],
+    labels: {
+        plural: {
+            cs: "Obsahové bloky",
+            en: "Content blocks",
+        },
+        singular: {
+            cs: "Obsahový blok",
+            en: "Content block",
+        },
+    },
 };

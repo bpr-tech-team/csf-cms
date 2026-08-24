@@ -1,6 +1,7 @@
 import { getServerSideSitemap } from "next-sitemap";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { defaultLocale, locales, withLocalePrefix } from "@/i18n/config";
 import { unstable_cache } from "next/cache";
 import { getCanonicalUrl } from "@/seo/config";
 
@@ -13,6 +14,7 @@ const getPostsSitemap = unstable_cache(
             draft: false,
             depth: 0,
             limit: 1000,
+            locale: "all",
             pagination: false,
             where: {
                 _status: {
@@ -28,12 +30,31 @@ const getPostsSitemap = unstable_cache(
         const dateFallback = new Date().toISOString();
 
         const sitemap = results.docs
-            ? results.docs
-                  .filter((post) => Boolean(post?.slug))
-                  .map((post) => ({
-                      loc: getCanonicalUrl(`/posts/${post?.slug}`),
-                      lastmod: post.updatedAt || dateFallback,
-                  }))
+            ? results.docs.flatMap((post) =>
+                  locales
+                      .map((locale) => {
+                          const slug =
+                              typeof post.slug === "string"
+                                  ? post.slug
+                                  : post.slug?.[locale] ||
+                                    post.slug?.[defaultLocale];
+
+                          if (!slug) {
+                              return null;
+                          }
+
+                          return {
+                              loc: getCanonicalUrl(
+                                  withLocalePrefix(`/posts/${slug}`, locale),
+                              ),
+                              lastmod: post.updatedAt || dateFallback,
+                          };
+                      })
+                      .filter(
+                          (entry): entry is { lastmod: string; loc: string } =>
+                              Boolean(entry),
+                      ),
+              )
             : [];
 
         return sitemap;

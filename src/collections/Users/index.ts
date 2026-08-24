@@ -20,7 +20,21 @@ export const Users: CollectionConfig = {
         {
             name: "name",
             type: "text",
+            label: {
+                cs: "Jméno",
+                en: "Name",
+            },
         },
     ],
+    labels: {
+        plural: {
+            cs: "Uživatelé",
+            en: "Users",
+        },
+        singular: {
+            cs: "Uživatel",
+            en: "User",
+        },
+    },
     timestamps: true,
 };

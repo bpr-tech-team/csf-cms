@@ -1,14 +1,17 @@
 import { cn } from "@/utilities/ui";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import React from "react";
 
 import { Card, CardPostData } from "@/components/Card";
 
 export type Props = {
+    locale?: AppLocale;
     posts: CardPostData[];
 };
 
 export const CollectionArchive: React.FC<Props> = (props) => {
-    const { posts } = props;
+    const { locale = defaultLocale, posts } = props;
 
     return (
         <div className={cn("container")}>
@@ -21,6 +24,7 @@ export const CollectionArchive: React.FC<Props> = (props) => {
                                     <Card
                                         className="h-full"
                                         doc={result}
+                                        locale={locale}
                                         relationTo="posts"
                                         showCategories
                                     />

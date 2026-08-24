@@ -3,11 +3,17 @@ import React from "react";
 import RichText from "@/components/RichText";
 
 import type { ContentBlock as ContentBlockProps } from "@/payload-types";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 
 import { CMSLink } from "../../components/Link";
 
-export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
-    const { columns } = props;
+export const ContentBlock: React.FC<
+    ContentBlockProps & {
+        locale?: AppLocale;
+    }
+> = (props) => {
+    const { columns, locale = defaultLocale } = props;
 
     const colsSpanClasses = {
         full: "12",
@@ -41,7 +47,9 @@ export const ContentBlock: React.FC<ContentBlockProps> = (props) => {
                                     />
                                 )}
 
-                                {enableLink && <CMSLink {...link} />}
+                                {enableLink && (
+                                    <CMSLink {...link} locale={locale} />
+                                )}
                             </div>
                         );
                     })}

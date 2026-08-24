@@ -14,13 +14,20 @@ export const FormBlock: Block = {
         {
             name: "form",
             type: "relationship",
+            label: {
+                cs: "Formulář",
+                en: "Form",
+            },
             relationTo: "forms",
             required: true,
         },
         {
             name: "enableIntro",
             type: "checkbox",
-            label: "Enable Intro Content",
+            label: {
+                cs: "Povolit úvodní obsah",
+                en: "Enable Intro Content",
+            },
         },
         {
             name: "introContent",
@@ -40,14 +47,23 @@ export const FormBlock: Block = {
                     ];
                 },
             }),
-            label: "Intro Content",
+            label: {
+                cs: "Úvodní obsah",
+                en: "Intro Content",
+            },
         },
     ],
     graphQL: {
         singularName: "FormBlock",
     },
     labels: {
-        plural: "Form Blocks",
-        singular: "Form Block",
+        plural: {
+            cs: "Formulářové bloky",
+            en: "Form Blocks",
+        },
+        singular: {
+            cs: "Formulářový blok",
+            en: "Form Block",
+        },
     },
 };

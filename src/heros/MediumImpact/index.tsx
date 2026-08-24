@@ -1,16 +1,18 @@
 import React from "react";
 
 import type { Page } from "@/payload-types";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 
 import { CMSLink } from "@/components/Link";
 import { Media } from "@/components/Media";
 import RichText from "@/components/RichText";
 
-export const MediumImpactHero: React.FC<Page["hero"]> = ({
-    links,
-    media,
-    richText,
-}) => {
+export const MediumImpactHero: React.FC<
+    Page["hero"] & {
+        locale?: AppLocale;
+    }
+> = ({ locale = defaultLocale, links, media, richText }) => {
     return (
         <div className="">
             <div className="container mb-8">
@@ -27,7 +29,7 @@ export const MediumImpactHero: React.FC<Page["hero"]> = ({
                         {links.map(({ link }, i) => {
                             return (
                                 <li key={i}>
-                                    <CMSLink {...link} />
+                                    <CMSLink {...link} locale={locale} />
                                 </li>
                             );
                         })}

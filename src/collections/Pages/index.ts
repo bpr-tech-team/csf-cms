@@ -58,6 +58,11 @@ export const Pages: CollectionConfig<"pages"> = {
         {
             name: "title",
             type: "text",
+            label: {
+                cs: "Název",
+                en: "Title",
+            },
+            localized: true,
             required: true,
         },
         {
@@ -65,7 +70,10 @@ export const Pages: CollectionConfig<"pages"> = {
             tabs: [
                 {
                     fields: [hero],
-                    label: "Hero",
+                    label: {
+                        cs: "Úvodní sekce",
+                        en: "Hero",
+                    },
                 },
                 {
                     fields: [
@@ -83,9 +91,17 @@ export const Pages: CollectionConfig<"pages"> = {
                             admin: {
                                 initCollapsed: true,
                             },
+                            label: {
+                                cs: "Obsahové bloky",
+                                en: "Content blocks",
+                            },
+                            localized: true,
                         },
                     ],
-                    label: "Content",
+                    label: {
+                        cs: "Obsah",
+                        en: "Content",
+                    },
                 },
                 {
                     name: "meta",
@@ -122,8 +138,12 @@ export const Pages: CollectionConfig<"pages"> = {
             admin: {
                 position: "sidebar",
             },
+            label: {
+                cs: "Publikováno",
+                en: "Published at",
+            },
         },
-        slugField(),
+        slugField({ localized: true }),
     ],
     hooks: {
         afterChange: [revalidatePage],
@@ -138,5 +158,15 @@ export const Pages: CollectionConfig<"pages"> = {
             schedulePublish: true,
         },
         maxPerDoc: 50,
+    },
+    labels: {
+        plural: {
+            cs: "Stránky",
+            en: "Pages",
+        },
+        singular: {
+            cs: "Stránka",
+            en: "Page",
+        },
     },
 };

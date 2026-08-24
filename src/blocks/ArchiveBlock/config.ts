@@ -26,19 +26,32 @@ export const Archive: Block = {
                     ];
                 },
             }),
-            label: "Intro Content",
+            label: {
+                cs: "Úvodní obsah",
+                en: "Intro Content",
+            },
         },
         {
             name: "populateBy",
             type: "select",
             defaultValue: "collection",
+            label: {
+                cs: "Naplnit podle",
+                en: "Populate by",
+            },
             options: [
                 {
-                    label: "Collection",
+                    label: {
+                        cs: "Kolekce",
+                        en: "Collection",
+                    },
                     value: "collection",
                 },
                 {
-                    label: "Individual Selection",
+                    label: {
+                        cs: "Ruční výběr",
+                        en: "Individual Selection",
+                    },
                     value: "selection",
                 },
             ],
@@ -51,10 +64,16 @@ export const Archive: Block = {
                     siblingData.populateBy === "collection",
             },
             defaultValue: "posts",
-            label: "Collections To Show",
+            label: {
+                cs: "Zobrazené kolekce",
+                en: "Collections To Show",
+            },
             options: [
                 {
-                    label: "Posts",
+                    label: {
+                        cs: "Články",
+                        en: "Posts",
+                    },
                     value: "posts",
                 },
             ],
@@ -67,7 +86,10 @@ export const Archive: Block = {
                     siblingData.populateBy === "collection",
             },
             hasMany: true,
-            label: "Categories To Show",
+            label: {
+                cs: "Zobrazené kategorie",
+                en: "Categories To Show",
+            },
             relationTo: "categories",
         },
         {
@@ -79,7 +101,10 @@ export const Archive: Block = {
                 step: 1,
             },
             defaultValue: 10,
-            label: "Limit",
+            label: {
+                cs: "Limit",
+                en: "Limit",
+            },
         },
         {
             name: "selectedDocs",
@@ -89,12 +114,21 @@ export const Archive: Block = {
                     siblingData.populateBy === "selection",
             },
             hasMany: true,
-            label: "Selection",
+            label: {
+                cs: "Výběr",
+                en: "Selection",
+            },
             relationTo: ["posts"],
         },
     ],
     labels: {
-        plural: "Archives",
-        singular: "Archive",
+        plural: {
+            cs: "Archivy",
+            en: "Archives",
+        },
+        singular: {
+            cs: "Archiv",
+            en: "Archive",
+        },
     },
 };

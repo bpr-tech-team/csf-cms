@@ -3,6 +3,8 @@ import React from "react";
 import RichText from "@/components/RichText";
 
 import type { Post } from "@/payload-types";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 
 import { Card } from "../../components/Card";
 import { DefaultTypedEditorState } from "@payloadcms/richtext-lexical";
@@ -11,10 +13,11 @@ export type RelatedPostsProps = {
     className?: string;
     docs?: Post[];
     introContent?: DefaultTypedEditorState;
+    locale?: AppLocale;
 };
 
 export const RelatedPosts: React.FC<RelatedPostsProps> = (props) => {
-    const { className, docs, introContent } = props;
+    const { className, docs, introContent, locale = defaultLocale } = props;
 
     return (
         <div className={clsx("lg:container", className)}>
@@ -30,6 +33,7 @@ export const RelatedPosts: React.FC<RelatedPostsProps> = (props) => {
                         <Card
                             key={index}
                             doc={doc}
+                            locale={locale}
                             relationTo="posts"
                             showCategories
                         />

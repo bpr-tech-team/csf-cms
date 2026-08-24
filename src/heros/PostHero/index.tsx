@@ -2,15 +2,20 @@ import { formatDateTime } from "src/utilities/formatDateTime";
 import React from "react";
 
 import type { Post } from "@/payload-types";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 
 import { Media } from "@/components/Media";
 import { formatAuthors } from "@/utilities/formatAuthors";
 
 export const PostHero: React.FC<{
+    locale?: AppLocale;
     post: Post;
-}> = ({ post }) => {
+}> = ({ locale = defaultLocale, post }) => {
     const { categories, heroImage, populatedAuthors, publishedAt, title } =
         post;
+    const messages = frontendMessages[locale];
 
     const hasAuthors =
         populatedAuthors &&
@@ -30,7 +35,7 @@ export const PostHero: React.FC<{
                                 const { title: categoryTitle } = category;
 
                                 const titleToUse =
-                                    categoryTitle || "Untitled category";
+                                    categoryTitle || messages.untitledCategory;
 
                                 const isLast = index === categories.length - 1;
 
@@ -59,7 +64,7 @@ export const PostHero: React.FC<{
                         {hasAuthors && (
                             <div className="flex flex-col gap-4">
                                 <div className="flex flex-col gap-1">
-                                    <p className="text-sm">Author</p>
+                                    <p className="text-sm">{messages.author}</p>
 
                                     <p>{formatAuthors(populatedAuthors)}</p>
                                 </div>
@@ -67,10 +72,12 @@ export const PostHero: React.FC<{
                         )}
                         {publishedAt && (
                             <div className="flex flex-col gap-1">
-                                <p className="text-sm">Date Published</p>
+                                <p className="text-sm">
+                                    {messages.datePublished}
+                                </p>
 
                                 <time dateTime={publishedAt}>
-                                    {formatDateTime(publishedAt)}
+                                    {formatDateTime(publishedAt, locale)}
                                 </time>
                             </div>
                         )}

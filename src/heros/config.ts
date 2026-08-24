@@ -17,22 +17,37 @@ export const hero: Field = {
             name: "type",
             type: "select",
             defaultValue: "lowImpact",
-            label: "Type",
+            label: {
+                cs: "Typ",
+                en: "Type",
+            },
             options: [
                 {
-                    label: "None",
+                    label: {
+                        cs: "Žádný",
+                        en: "None",
+                    },
                     value: "none",
                 },
                 {
-                    label: "High Impact",
+                    label: {
+                        cs: "Výrazný",
+                        en: "High Impact",
+                    },
                     value: "highImpact",
                 },
                 {
-                    label: "Medium Impact",
+                    label: {
+                        cs: "Střední",
+                        en: "Medium Impact",
+                    },
                     value: "mediumImpact",
                 },
                 {
-                    label: "Low Impact",
+                    label: {
+                        cs: "Nízký",
+                        en: "Low Impact",
+                    },
                     value: "lowImpact",
                 },
             ],
@@ -67,9 +82,14 @@ export const hero: Field = {
                 condition: (_, { type } = {}) =>
                     ["highImpact", "mediumImpact"].includes(type),
             },
+            label: {
+                cs: "Médium",
+                en: "Media",
+            },
             relationTo: "media",
             required: true,
         },
     ],
     label: false,
+    localized: true,
 };

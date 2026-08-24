@@ -1,3 +1,6 @@
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 import React from "react";
 
 const defaultLabels = {
@@ -21,6 +24,7 @@ export const PageRange: React.FC<{
     };
     currentPage?: number;
     limit?: number;
+    locale?: AppLocale;
     totalDocs?: number;
 }> = (props) => {
     const {
@@ -29,10 +33,12 @@ export const PageRange: React.FC<{
         collectionLabels: collectionLabelsFromProps,
         currentPage,
         limit,
+        locale = defaultLocale,
         totalDocs,
     } = props;
+    const messages = frontendMessages[locale];
 
-    let indexStart = (currentPage ? currentPage - 1 : 1) * (limit || 1) + 1;
+    let indexStart = (currentPage ? currentPage - 1 : 0) * (limit || 1) + 1;
     if (totalDocs && indexStart > totalDocs) indexStart = 0;
 
     let indexEnd = (currentPage || 1) * (limit || 1);
@@ -47,10 +53,10 @@ export const PageRange: React.FC<{
     return (
         <div className={[className, "font-semibold"].filter(Boolean).join(" ")}>
             {(typeof totalDocs === "undefined" || totalDocs === 0) &&
-                "Search produced no results."}
+                messages.pageRangeEmpty}
             {typeof totalDocs !== "undefined" &&
                 totalDocs > 0 &&
-                `Showing ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ""} of ${totalDocs} ${
+                `${messages.pageRangeShowing} ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ""} ${messages.pageRangeOf} ${totalDocs} ${
                     totalDocs > 1 ? plural : singular
                 }`}
         </div>

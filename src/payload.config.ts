@@ -2,6 +2,7 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import sharp from "sharp";
 import path from "path";
 import { buildConfig, PayloadRequest } from "payload";
+import { cs } from "payload/i18n/cs";
 import { fileURLToPath } from "url";
 
 import { Categories } from "./collections/Categories";
@@ -14,9 +15,23 @@ import { Header } from "./Header/config";
 import { plugins } from "./plugins";
 import { defaultLexical } from "@/fields/defaultLexical";
 import { getServerSideURL } from "./utilities/getURL";
+import { defaultLocale, localeLabels, locales } from "@/i18n/config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+const adminTranslations = {
+    cs: {
+        "plugin-redirects": {
+            customUrl: "Vlastní URL",
+            documentToRedirect: "Dokument, na který přesměrovat",
+            fromUrl: "Zdrojová URL",
+            internalLink: "Interní odkaz",
+            redirectType: "Typ přesměrování",
+            toUrlType: "Typ cílové URL",
+        },
+    },
+};
 
 export default buildConfig({
     admin: {
@@ -35,7 +50,7 @@ export default buildConfig({
         livePreview: {
             breakpoints: [
                 {
-                    label: "Mobile",
+                    label: "Mobil",
                     name: "mobile",
                     width: 375,
                     height: 667,
@@ -57,10 +72,25 @@ export default buildConfig({
     },
     // This config helps us configure global or default features that the other editors can inherit
     editor: defaultLexical,
+    i18n: {
+        fallbackLanguage: defaultLocale,
+        supportedLanguages: { cs },
+        translations: adminTranslations,
+    },
+    localization: {
+        defaultLocale,
+        fallback: true,
+        locales: locales.map((locale) => ({
+            code: locale,
+            label: localeLabels[locale],
+        })),
+    },
     db: postgresAdapter({
+        migrationDir: path.resolve(dirname, "migrations"),
         pool: {
             connectionString: process.env.DATABASE_URL || "",
         },
+        push: process.env.NODE_ENV !== "production",
     }),
     collections: [Pages, Posts, Media, Categories, Users],
     cors: [getServerSideURL()].filter(Boolean),

@@ -38,7 +38,13 @@ export const CallToAction: Block = {
         }),
     ],
     labels: {
-        plural: "Calls to Action",
-        singular: "Call to Action",
+        plural: {
+            cs: "Výzvy k akci",
+            en: "Calls to Action",
+        },
+        singular: {
+            cs: "Výzva k akci",
+            en: "Call to Action",
+        },
     },
 };

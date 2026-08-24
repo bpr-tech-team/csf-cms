@@ -1,4 +1,6 @@
 import { Button, type ButtonProps } from "@/components/ui/button";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { cn } from "@/utilities/ui";
 import Link from "next/link";
 import React from "react";
@@ -10,6 +12,7 @@ type CMSLinkType = {
     children?: React.ReactNode;
     className?: string;
     label?: string | null;
+    locale?: AppLocale;
     newTab?: boolean | null;
     reference?: {
         relationTo: "pages" | "posts";
@@ -27,13 +30,14 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         children,
         className,
         label,
+        locale = defaultLocale,
         newTab,
         reference,
         size: sizeFromProps,
         url,
     } = props;
 
-    const href =
+    const referenceHref =
         type === "reference" &&
         typeof reference?.value === "object" &&
         reference.value.slug
@@ -41,6 +45,10 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
                   reference.value.slug
               }`
             : url;
+    const href =
+        referenceHref && referenceHref.startsWith("/")
+            ? withLocalePrefix(referenceHref, locale)
+            : referenceHref;
 
     if (!href) return null;
 

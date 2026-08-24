@@ -7,9 +7,9 @@ import "./index.scss";
 
 const SuccessMessage: React.FC = () => (
     <div>
-        Database seeded! You can now{" "}
+        Databáze byla naplněna. Nyní můžete{" "}
         <a target="_blank" href="/">
-            visit your website
+            otevřít web
         </a>
     </div>
 );
@@ -24,15 +24,17 @@ export const SeedButton: React.FC = () => {
             e.preventDefault();
 
             if (seeded) {
-                toast.info("Database already seeded.");
+                toast.info("Databáze už byla naplněna.");
                 return;
             }
             if (loading) {
-                toast.info("Seeding already in progress.");
+                toast.info("Naplnění databáze už probíhá.");
                 return;
             }
             if (error) {
-                toast.error(`An error occurred, please refresh and try again.`);
+                toast.error(
+                    "Došlo k chybě, obnovte prosím stránku a zkuste to znovu.",
+                );
                 return;
             }
 
@@ -52,7 +54,7 @@ export const SeedButton: React.FC = () => {
                                         setSeeded(true);
                                     } else {
                                         reject(
-                                            "An error occurred while seeding.",
+                                            "Došlo k chybě při naplňování databáze.",
                                         );
                                     }
                                 })
@@ -64,9 +66,9 @@ export const SeedButton: React.FC = () => {
                         }
                     }),
                     {
-                        loading: "Seeding with data....",
+                        loading: "Probíhá naplňování databáze...",
                         success: <SuccessMessage />,
-                        error: "An error occurred while seeding.",
+                        error: "Došlo k chybě při naplňování databáze.",
                     },
                 );
             } catch (err) {
@@ -78,14 +80,14 @@ export const SeedButton: React.FC = () => {
     );
 
     let message = "";
-    if (loading) message = " (seeding...)";
-    if (seeded) message = " (done!)";
-    if (error) message = ` (error: ${error})`;
+    if (loading) message = " (probíhá...)";
+    if (seeded) message = " (hotovo)";
+    if (error) message = ` (chyba: ${error})`;
 
     return (
         <Fragment>
             <button className="seedButton" onClick={handleClick}>
-                Seed your database
+                Naplnit databázi
             </button>
             {message}
         </Fragment>

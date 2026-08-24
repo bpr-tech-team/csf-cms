@@ -27,6 +27,11 @@ export const Media: CollectionConfig = {
         {
             name: "alt",
             type: "text",
+            label: {
+                cs: "Alternativní text",
+                en: "Alt text",
+            },
+            localized: true,
             //required: true,
         },
         {
@@ -41,8 +46,23 @@ export const Media: CollectionConfig = {
                     ];
                 },
             }),
+            label: {
+                cs: "Popisek",
+                en: "Caption",
+            },
+            localized: true,
         },
     ],
+    labels: {
+        plural: {
+            cs: "Média",
+            en: "Media",
+        },
+        singular: {
+            cs: "Médium",
+            en: "Media",
+        },
+    },
     upload: {
         // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
         staticDir: path.resolve(dirname, "../../public/media"),

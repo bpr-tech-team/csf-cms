@@ -7,8 +7,22 @@ export const MediaBlock: Block = {
         {
             name: "media",
             type: "upload",
+            label: {
+                cs: "Médium",
+                en: "Media",
+            },
             relationTo: "media",
             required: true,
         },
     ],
+    labels: {
+        plural: {
+            cs: "Mediální bloky",
+            en: "Media blocks",
+        },
+        singular: {
+            cs: "Mediální blok",
+            en: "Media block",
+        },
+    },
 };

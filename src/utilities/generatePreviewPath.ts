@@ -1,4 +1,5 @@
 import { PreviewSearchParams } from "@/app/(frontend)/next/preview/route";
+import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import { PayloadRequest, CollectionSlug } from "payload";
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
@@ -12,7 +13,7 @@ type Props = {
     req: PayloadRequest;
 };
 
-export const generatePreviewPath = ({ collection, slug }: Props) => {
+export const generatePreviewPath = ({ collection, req, slug }: Props) => {
     if (slug === undefined || slug === null) {
         return null;
     }
@@ -20,8 +21,16 @@ export const generatePreviewPath = ({ collection, slug }: Props) => {
     // Encode to support slugs with special characters
     const encodedSlug = encodeURIComponent(slug);
 
+    const locale = isLocale(req.locale) ? req.locale : defaultLocale;
+    const path = withLocalePrefix(
+        collection === "pages" && slug === "home"
+            ? "/"
+            : `${collectionPrefixMap[collection]}/${encodedSlug}`,
+        locale,
+    );
+
     const encodedParams = new URLSearchParams({
-        path: `${collectionPrefixMap[collection]}/${encodedSlug}`,
+        path,
         previewSecret: process.env.PREVIEW_SECRET || "",
     } satisfies PreviewSearchParams);
 

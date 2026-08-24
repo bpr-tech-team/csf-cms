@@ -13,11 +13,39 @@ export const Banner: Block = {
             name: "style",
             type: "select",
             defaultValue: "info",
+            label: {
+                cs: "Styl",
+                en: "Style",
+            },
             options: [
-                { label: "Info", value: "info" },
-                { label: "Warning", value: "warning" },
-                { label: "Error", value: "error" },
-                { label: "Success", value: "success" },
+                {
+                    label: {
+                        cs: "Info",
+                        en: "Info",
+                    },
+                    value: "info",
+                },
+                {
+                    label: {
+                        cs: "Varování",
+                        en: "Warning",
+                    },
+                    value: "warning",
+                },
+                {
+                    label: {
+                        cs: "Chyba",
+                        en: "Error",
+                    },
+                    value: "error",
+                },
+                {
+                    label: {
+                        cs: "Úspěch",
+                        en: "Success",
+                    },
+                    value: "success",
+                },
             ],
             required: true,
         },
@@ -38,4 +66,14 @@ export const Banner: Block = {
         },
     ],
     interfaceName: "BannerBlock",
+    labels: {
+        plural: {
+            cs: "Bannery",
+            en: "Banners",
+        },
+        singular: {
+            cs: "Banner",
+            en: "Banner",
+        },
+    },
 };

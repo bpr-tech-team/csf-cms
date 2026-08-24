@@ -17,6 +17,11 @@ export const Footer: GlobalConfig = {
                     appearances: false,
                 }),
             ],
+            label: {
+                cs: "Položky navigace",
+                en: "Navigation items",
+            },
+            localized: true,
             maxRows: 6,
             admin: {
                 initCollapsed: true,
@@ -28,5 +33,9 @@ export const Footer: GlobalConfig = {
     ],
     hooks: {
         afterChange: [revalidateFooter],
+    },
+    label: {
+        cs: "Patička",
+        en: "Footer",
     },
 };

@@ -69,6 +69,11 @@ export const Posts: CollectionConfig<"posts"> = {
         {
             name: "title",
             type: "text",
+            label: {
+                cs: "Název",
+                en: "Title",
+            },
+            localized: true,
             required: true,
         },
         {
@@ -79,6 +84,10 @@ export const Posts: CollectionConfig<"posts"> = {
                         {
                             name: "heroImage",
                             type: "upload",
+                            label: {
+                                cs: "Úvodní obrázek",
+                                en: "Hero image",
+                            },
                             relationTo: "media",
                         },
                         {
@@ -106,10 +115,14 @@ export const Posts: CollectionConfig<"posts"> = {
                                 },
                             }),
                             label: false,
+                            localized: true,
                             required: true,
                         },
                     ],
-                    label: "Content",
+                    label: {
+                        cs: "Obsah",
+                        en: "Content",
+                    },
                 },
                 {
                     fields: [
@@ -127,6 +140,10 @@ export const Posts: CollectionConfig<"posts"> = {
                                 };
                             },
                             hasMany: true,
+                            label: {
+                                cs: "Související články",
+                                en: "Related posts",
+                            },
                             relationTo: "posts",
                         },
                         {
@@ -136,10 +153,17 @@ export const Posts: CollectionConfig<"posts"> = {
                                 position: "sidebar",
                             },
                             hasMany: true,
+                            label: {
+                                cs: "Kategorie",
+                                en: "Categories",
+                            },
                             relationTo: "categories",
                         },
                     ],
-                    label: "Meta",
+                    label: {
+                        cs: "Metadata",
+                        en: "Meta",
+                    },
                 },
                 {
                     name: "meta",
@@ -179,6 +203,10 @@ export const Posts: CollectionConfig<"posts"> = {
                 },
                 position: "sidebar",
             },
+            label: {
+                cs: "Publikováno",
+                en: "Published at",
+            },
             hooks: {
                 beforeChange: [
                     ({ siblingData, value }) => {
@@ -197,6 +225,10 @@ export const Posts: CollectionConfig<"posts"> = {
                 position: "sidebar",
             },
             hasMany: true,
+            label: {
+                cs: "Autoři",
+                en: "Authors",
+            },
             relationTo: "users",
         },
         // This field is only used to populate the user data via the `populateAuthors` hook
@@ -212,6 +244,10 @@ export const Posts: CollectionConfig<"posts"> = {
                 disabled: true,
                 readOnly: true,
             },
+            label: {
+                cs: "Načtení autoři",
+                en: "Populated authors",
+            },
             fields: [
                 {
                     name: "id",
@@ -220,10 +256,14 @@ export const Posts: CollectionConfig<"posts"> = {
                 {
                     name: "name",
                     type: "text",
+                    label: {
+                        cs: "Jméno",
+                        en: "Name",
+                    },
                 },
             ],
         },
-        slugField(),
+        slugField({ localized: true }),
     ],
     hooks: {
         afterChange: [revalidatePost],
@@ -238,5 +278,15 @@ export const Posts: CollectionConfig<"posts"> = {
             schedulePublish: true,
         },
         maxPerDoc: 50,
+    },
+    labels: {
+        plural: {
+            cs: "Články",
+            en: "Posts",
+        },
+        singular: {
+            cs: "Článek",
+            en: "Post",
+        },
     },
 };

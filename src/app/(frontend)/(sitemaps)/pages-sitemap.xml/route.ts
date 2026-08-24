@@ -1,6 +1,7 @@
 import { getServerSideSitemap } from "next-sitemap";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { locales, defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { unstable_cache } from "next/cache";
 import { getCanonicalUrl, getSiteUrl } from "@/seo/config";
 
@@ -15,6 +16,7 @@ const getPagesSitemap = unstable_cache(
             draft: false,
             depth: 0,
             limit: 1000,
+            locale: "all",
             pagination: false,
             where: {
                 _status: {
@@ -30,24 +32,41 @@ const getPagesSitemap = unstable_cache(
         const dateFallback = new Date().toISOString();
 
         const defaultSitemap = [
-            {
-                loc: `${SITE_URL}/posts`,
+            ...locales.map((locale) => ({
+                loc: `${SITE_URL}${withLocalePrefix("/posts", locale)}`,
                 lastmod: dateFallback,
-            },
+            })),
         ];
 
         const sitemap = results.docs
-            ? results.docs
-                  .filter((page) => Boolean(page?.slug))
-                  .map((page) => {
-                      return {
-                          loc:
-                              page?.slug === "home"
-                                  ? getCanonicalUrl()
-                                  : getCanonicalUrl(`/${page?.slug}`),
-                          lastmod: page.updatedAt || dateFallback,
-                      };
-                  })
+            ? results.docs.flatMap((page) =>
+                  locales
+                      .map((locale) => {
+                          const slug =
+                              typeof page.slug === "string"
+                                  ? page.slug
+                                  : page.slug?.[locale] ||
+                                    page.slug?.[defaultLocale];
+
+                          if (!slug) {
+                              return null;
+                          }
+
+                          return {
+                              loc: getCanonicalUrl(
+                                  withLocalePrefix(
+                                      slug === "home" ? "/" : `/${slug}`,
+                                      locale,
+                                  ),
+                              ),
+                              lastmod: page.updatedAt || dateFallback,
+                          };
+                      })
+                      .filter(
+                          (entry): entry is { lastmod: string; loc: string } =>
+                              Boolean(entry),
+                      ),
+              )
             : [];
 
         return [...defaultSitemap, ...sitemap];

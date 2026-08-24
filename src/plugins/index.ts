@@ -15,6 +15,7 @@ import { searchFields } from "@/search/fieldOverrides";
 import { beforeSyncWithSearch } from "@/search/beforeSync";
 
 import { Page, Post } from "@/payload-types";
+import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import { getCanonicalUrl, seoConfig } from "@/seo/config";
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
@@ -23,23 +24,42 @@ const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
         : seoConfig.defaultTitle;
 };
 
-const generateURL: GenerateURL<Post | Page> = ({ collectionConfig, doc }) => {
+const generateURL: GenerateURL<Post | Page> = ({
+    collectionConfig,
+    doc,
+    locale: incomingLocale,
+}) => {
     if (!doc?.slug || doc.slug === "home") {
-        return getCanonicalUrl();
+        const locale = isLocale(incomingLocale)
+            ? incomingLocale
+            : defaultLocale;
+
+        return getCanonicalUrl(withLocalePrefix("/", locale));
     }
 
     const path =
         collectionConfig?.slug === "posts"
             ? `/posts/${doc.slug}`
             : `/${doc.slug}`;
+    const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
 
-    return getCanonicalUrl(path);
+    return getCanonicalUrl(withLocalePrefix(path, locale));
 };
 
 export const plugins: Plugin[] = [
     redirectsPlugin({
         collections: ["pages", "posts"],
         overrides: {
+            labels: {
+                plural: {
+                    cs: "Přesměrování",
+                    en: "Redirects",
+                },
+                singular: {
+                    cs: "Přesměrování",
+                    en: "Redirect",
+                },
+            },
             // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
             fields: ({ defaultFields }) => {
                 return defaultFields.map((field) => {
@@ -47,8 +67,10 @@ export const plugins: Plugin[] = [
                         return {
                             ...field,
                             admin: {
-                                description:
-                                    "You will need to rebuild the website when changing this field.",
+                                description: {
+                                    cs: "Po změně tohoto pole je potřeba znovu sestavit web.",
+                                    en: "You will need to rebuild the website when changing this field.",
+                                },
                             },
                         };
                     }
@@ -74,6 +96,16 @@ export const plugins: Plugin[] = [
             payment: false,
         },
         formOverrides: {
+            labels: {
+                plural: {
+                    cs: "Formuláře",
+                    en: "Forms",
+                },
+                singular: {
+                    cs: "Formulář",
+                    en: "Form",
+                },
+            },
             fields: ({ defaultFields }) => {
                 return defaultFields.map((field) => {
                     if (
@@ -104,11 +136,39 @@ export const plugins: Plugin[] = [
                 });
             },
         },
+        formSubmissionOverrides: {
+            labels: {
+                plural: {
+                    cs: "Odeslání formulářů",
+                    en: "Form Submissions",
+                },
+                singular: {
+                    cs: "Odeslání formuláře",
+                    en: "Form Submission",
+                },
+            },
+        },
     }),
     searchPlugin({
         collections: ["posts"],
         beforeSync: beforeSyncWithSearch,
         searchOverrides: {
+            admin: {
+                description: {
+                    cs: "Automaticky vytvářené výsledky pro globální vyhledávání na webu. Aktualizují se při změnách dokumentů v CMS.",
+                    en: "This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.",
+                },
+            },
+            labels: {
+                plural: {
+                    cs: "Výsledky vyhledávání",
+                    en: "Search Results",
+                },
+                singular: {
+                    cs: "Výsledek vyhledávání",
+                    en: "Search Result",
+                },
+            },
             fields: ({ defaultFields }) => {
                 return [...defaultFields, ...searchFields];
             },

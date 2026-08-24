@@ -1,6 +1,8 @@
 import type { Post, ArchiveBlock as ArchiveBlockProps } from "@/payload-types";
 
 import configPromise from "@payload-config";
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import { getPayload } from "payload";
 import React from "react";
 import RichText from "@/components/RichText";
@@ -9,13 +11,15 @@ import { CollectionArchive } from "@/components/CollectionArchive";
 
 export const ArchiveBlock: React.FC<
     ArchiveBlockProps & {
-        id?: string;
+        id?: null | string;
+        locale?: AppLocale;
     }
 > = async (props) => {
     const {
         id,
         categories,
         introContent,
+        locale = defaultLocale,
         limit: limitFromProps,
         populateBy,
         selectedDocs,
@@ -36,7 +40,9 @@ export const ArchiveBlock: React.FC<
         const fetchedPosts = await payload.find({
             collection: "posts",
             depth: 1,
+            fallbackLocale: locale === defaultLocale ? false : defaultLocale,
             limit,
+            locale,
             ...(flattenedCategories && flattenedCategories.length > 0
                 ? {
                       where: {
@@ -70,7 +76,7 @@ export const ArchiveBlock: React.FC<
                     />
                 </div>
             )}
-            <CollectionArchive posts={posts} />
+            <CollectionArchive locale={locale} posts={posts} />
         </div>
     );
 };

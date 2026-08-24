@@ -5,16 +5,19 @@ import type {
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
+import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import type { Post } from "../../../payload-types";
 
 export const revalidatePost: CollectionAfterChangeHook<Post> = ({
     doc,
     previousDoc,
-    req: { payload, context },
+    req: { payload, context, locale: reqLocale },
 }) => {
     if (!context.disableRevalidate) {
+        const locale = isLocale(reqLocale) ? reqLocale : defaultLocale;
+
         if (doc._status === "published") {
-            const path = `/posts/${doc.slug}`;
+            const path = withLocalePrefix(`/posts/${doc.slug}`, locale);
 
             payload.logger.info(`Revalidating post at path: ${path}`);
 
@@ -27,7 +30,10 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
             previousDoc._status === "published" &&
             doc._status !== "published"
         ) {
-            const oldPath = `/posts/${previousDoc.slug}`;
+            const oldPath = withLocalePrefix(
+                `/posts/${previousDoc.slug}`,
+                locale,
+            );
 
             payload.logger.info(`Revalidating old post at path: ${oldPath}`);
 
@@ -40,10 +46,11 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({
     doc,
-    req: { context },
+    req: { context, locale: reqLocale },
 }) => {
     if (!context.disableRevalidate) {
-        const path = `/posts/${doc?.slug}`;
+        const locale = isLocale(reqLocale) ? reqLocale : defaultLocale;
+        const path = withLocalePrefix(`/posts/${doc?.slug}`, locale);
 
         revalidatePath(path);
         revalidateTag("posts-sitemap", "max");

@@ -5,15 +5,24 @@ export const searchFields: Field[] = [
         name: "slug",
         type: "text",
         index: true,
+        label: {
+            cs: "Slug",
+            en: "Slug",
+        },
+        localized: true,
         admin: {
             readOnly: true,
         },
     },
     {
         name: "meta",
-        label: "Meta",
+        label: {
+            cs: "Meta",
+            en: "Meta",
+        },
         type: "group",
         index: true,
+        localized: true,
         admin: {
             readOnly: true,
         },
@@ -21,25 +30,38 @@ export const searchFields: Field[] = [
             {
                 type: "text",
                 name: "title",
-                label: "Title",
+                label: {
+                    cs: "Název",
+                    en: "Title",
+                },
             },
             {
                 type: "text",
                 name: "description",
-                label: "Description",
+                label: {
+                    cs: "Popis",
+                    en: "Description",
+                },
             },
             {
                 name: "image",
-                label: "Image",
+                label: {
+                    cs: "Obrázek",
+                    en: "Image",
+                },
                 type: "upload",
                 relationTo: "media",
             },
         ],
     },
     {
-        label: "Categories",
+        label: {
+            cs: "Kategorie",
+            en: "Categories",
+        },
         name: "categories",
         type: "array",
+        localized: true,
         admin: {
             readOnly: true,
         },

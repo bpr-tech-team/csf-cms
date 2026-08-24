@@ -1,4 +1,7 @@
 import type { Post } from "@/payload-types";
+import type { AppLocale } from "@/i18n/config";
+import { localeLanguages, withLocalePrefix } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 
 import { getAbsoluteUrl, getCanonicalUrl, seoConfig } from "./config";
 
@@ -27,16 +30,16 @@ export const organizationJsonLd = () => ({
     address: postalAddress(seoConfig.address),
 });
 
-export const websiteJsonLd = () => ({
+export const websiteJsonLd = (locale: AppLocale = "cs") => ({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${getCanonicalUrl()}/#website`,
     name: seoConfig.siteName,
-    url: getCanonicalUrl(),
+    url: getCanonicalUrl(withLocalePrefix("/", locale)),
     publisher: {
         "@id": `${getCanonicalUrl()}/#organization`,
     },
-    inLanguage: seoConfig.language,
+    inLanguage: localeLanguages[locale],
 });
 
 export const professionalServiceJsonLd = () => ({
@@ -64,9 +67,15 @@ export const professionalServiceJsonLd = () => ({
     })),
 });
 
-export const blogPostingJsonLd = (post: Post) => {
+export const blogPostingJsonLd = (
+    post: Post,
+    locale: AppLocale = "cs",
+    path?: string,
+) => {
     const title = post.meta?.title || post.title;
+    const messages = frontendMessages[locale];
     const slug = post.slug ? `/posts/${post.slug}` : "/posts";
+    const pagePath = path || withLocalePrefix(slug, locale);
     const image =
         post.meta?.image && typeof post.meta.image === "object"
             ? post.meta.image.url
@@ -76,20 +85,20 @@ export const blogPostingJsonLd = (post: Post) => {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         headline: title,
-        description: post.meta?.description || seoConfig.defaultDescription,
+        description: post.meta?.description || messages.defaultDescription,
         image: image
             ? getAbsoluteUrl(image)
             : getCanonicalUrl(seoConfig.defaultOgImagePath),
         datePublished: post.publishedAt || post.createdAt,
         dateModified: post.updatedAt,
-        mainEntityOfPage: getCanonicalUrl(slug),
+        mainEntityOfPage: getCanonicalUrl(pagePath),
         author: {
             "@id": `${getCanonicalUrl()}/#organization`,
         },
         publisher: {
             "@id": `${getCanonicalUrl()}/#organization`,
         },
-        inLanguage: seoConfig.language,
+        inLanguage: localeLanguages[locale],
     };
 };
 

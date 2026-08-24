@@ -22,6 +22,10 @@ export const linkGroup: LinkGroupType = ({
                 appearances,
             }),
         ],
+        label: {
+            cs: "Odkazy",
+            en: "Links",
+        },
         admin: {
             initCollapsed: true,
         },

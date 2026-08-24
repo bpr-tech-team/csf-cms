@@ -5,6 +5,8 @@ import type {
     PayloadMeUser,
 } from "@payloadcms/admin-bar";
 
+import type { AppLocale } from "@/i18n/config";
+import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { cn } from "@/utilities/ui";
 import { useSelectedLayoutSegments } from "next/navigation";
 import { PayloadAdminBar } from "@payloadcms/admin-bar";
@@ -19,32 +21,42 @@ const baseClass = "admin-bar";
 
 const collectionLabels = {
     pages: {
-        plural: "Pages",
-        singular: "Page",
+        plural: {
+            cs: "Stránky",
+            en: "Pages",
+        },
+        singular: {
+            cs: "Stránka",
+            en: "Page",
+        },
     },
     posts: {
-        plural: "Posts",
-        singular: "Post",
-    },
-    projects: {
-        plural: "Projects",
-        singular: "Project",
+        plural: {
+            cs: "Články",
+            en: "Posts",
+        },
+        singular: {
+            cs: "Článek",
+            en: "Post",
+        },
     },
 };
 
-const Title: React.FC = () => <span>Dashboard</span>;
+const Title: React.FC<{ locale: AppLocale }> = ({ locale }) => (
+    <span>{locale === "cs" ? "Administrace" : "Dashboard"}</span>
+);
 
 export const AdminBar: React.FC<{
     adminBarProps?: PayloadAdminBarProps;
+    locale?: AppLocale;
 }> = (props) => {
     const { adminBarProps } = props || {};
+    const locale = props.locale || defaultLocale;
     const segments = useSelectedLayoutSegments();
     const [show, setShow] = useState(false);
-    const collection = (
-        collectionLabels[segments?.[1] as keyof typeof collectionLabels]
-            ? segments[1]
-            : "pages"
-    ) as keyof typeof collectionLabels;
+    const collection = (segments.find(
+        (segment) => segment in collectionLabels,
+    ) || "pages") as keyof typeof collectionLabels;
     const router = useRouter();
 
     const onAuthChange = React.useCallback((user: PayloadMeUser) => {
@@ -70,15 +82,18 @@ export const AdminBar: React.FC<{
                     cmsURL={getClientSideURL()}
                     collectionSlug={collection}
                     collectionLabels={{
-                        plural: collectionLabels[collection]?.plural || "Pages",
+                        plural:
+                            collectionLabels[collection]?.plural[locale] ||
+                            "Pages",
                         singular:
-                            collectionLabels[collection]?.singular || "Page",
+                            collectionLabels[collection]?.singular[locale] ||
+                            "Page",
                     }}
-                    logo={<Title />}
+                    logo={<Title locale={locale} />}
                     onAuthChange={onAuthChange}
                     onPreviewExit={() => {
                         fetch("/next/exit-preview").then(() => {
-                            router.push("/");
+                            router.push(withLocalePrefix("/", locale));
                             router.refresh();
                         });
                     }}
