@@ -1,31 +1,31 @@
 services:
-  payload:
-    image: node:20-alpine
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "corepack enable && pnpm install && pnpm dev"
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/csf-cms
+    payload:
+        image: node:20-alpine
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/home/node/app
+            - node_modules:/home/node/app/node_modules
+        working_dir: /home/node/app/
+        command: sh -c "corepack enable && pnpm install && pnpm dev"
+        depends_on:
+            - postgres
+        env_file:
+            - .env
+        environment:
+            DATABASE_URL: postgresql://postgres:postgres@postgres:5432/csf-cms
 
-  postgres:
-    image: postgres:16-alpine
-    ports:
-      - '5432:5432'
-    environment:
-      POSTGRES_DB: csf-cms
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - data:/var/lib/postgresql/data
+    postgres:
+        image: postgres:16-alpine
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: csf-cms
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - data:/var/lib/postgresql/data
 
 volumes:
-  data:
-  node_modules:
+    data:
+    node_modules:

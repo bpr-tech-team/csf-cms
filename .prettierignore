@@ -1,4 +1,8 @@
 **/payload-types.ts
+**/payload-generated-schema.ts
+.agents
+.next
+.pnpm-store
 .tmp
 **/.git
 **/.hg
@@ -10,5 +14,9 @@
 **/node_modules
 **/temp
 **/docs/**
+pnpm-lock.yaml
+coverage
+playwright-report
+test-results
 tsconfig.json
-
+tsconfig.tsbuildinfo
