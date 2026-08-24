@@ -90,7 +90,10 @@ export async function generateMetadata({
         slug: decodedSlug,
     });
 
-    return generateMeta({ doc: page });
+    return generateMeta({
+        doc: page,
+        path: decodedSlug === "home" ? "/" : `/${decodedSlug}`,
+    });
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {

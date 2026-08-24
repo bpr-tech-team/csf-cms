@@ -14,7 +14,13 @@ import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
 import { draftMode } from "next/headers";
 
 import "./globals.css";
-import { getServerSideURL } from "@/utilities/getURL";
+import { getCanonicalUrl, getSiteUrl, seoConfig } from "@/seo/config";
+import {
+    JsonLd,
+    organizationJsonLd,
+    professionalServiceJsonLd,
+    websiteJsonLd,
+} from "@/seo/structuredData";
 
 export default async function RootLayout({
     children,
@@ -26,13 +32,16 @@ export default async function RootLayout({
     return (
         <html
             className={cn(GeistSans.variable, GeistMono.variable)}
-            lang="en"
+            lang={seoConfig.language}
             suppressHydrationWarning
         >
             <head>
                 <InitTheme />
                 <link href="/favicon.ico" rel="icon" sizes="32x32" />
-                <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+                <link href="/favicon.ico" rel="icon" type="image/svg+xml" />
+                <JsonLd data={organizationJsonLd()} />
+                <JsonLd data={websiteJsonLd()} />
+                <JsonLd data={professionalServiceJsonLd()} />
             </head>
             <body>
                 <Providers>
@@ -52,10 +61,20 @@ export default async function RootLayout({
 }
 
 export const metadata: Metadata = {
-    metadataBase: new URL(getServerSideURL()),
+    alternates: {
+        canonical: getCanonicalUrl(),
+    },
+    description: seoConfig.defaultDescription,
+    metadataBase: new URL(getSiteUrl()),
     openGraph: mergeOpenGraph(),
+    title: {
+        default: seoConfig.defaultTitle,
+        template: `%s${seoConfig.titleSuffix}`,
+    },
     twitter: {
         card: "summary_large_image",
-        creator: "@payloadcms",
+        description: seoConfig.defaultDescription,
+        images: [getCanonicalUrl(seoConfig.defaultOgImagePath)],
+        title: seoConfig.defaultTitle,
     },
 };

@@ -8,6 +8,7 @@ import { getPayload } from "payload";
 import React from "react";
 import PageClient from "./page.client";
 import { notFound } from "next/navigation";
+import { getCanonicalUrl, seoConfig } from "@/seo/config";
 
 export const revalidate = 600;
 
@@ -70,7 +71,14 @@ export async function generateMetadata({
 }: Args): Promise<Metadata> {
     const { pageNumber } = await paramsPromise;
     return {
-        title: `Payload Website Template Posts Page ${pageNumber || ""}`,
+        alternates: {
+            canonical: getCanonicalUrl(`/posts/page/${pageNumber}`),
+        },
+        robots: {
+            follow: true,
+            index: false,
+        },
+        title: `Novinky – strana ${pageNumber || ""}${seoConfig.titleSuffix}`,
     };
 }
 

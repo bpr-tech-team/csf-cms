@@ -7,6 +7,7 @@ import configPromise from "@payload-config";
 import { getPayload } from "payload";
 import React from "react";
 import PageClient from "./page.client";
+import { getCanonicalUrl, seoConfig } from "@/seo/config";
 
 export const dynamic = "force-static";
 export const revalidate = 600;
@@ -61,6 +62,11 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
     return {
-        title: `Payload Website Template Posts`,
+        alternates: {
+            canonical: getCanonicalUrl("/posts"),
+        },
+        description:
+            "Novinky a odborné články CSF o IT službách, ICT infrastruktuře, cloudových řešeních, hardwaru a servisu.",
+        title: `Novinky${seoConfig.titleSuffix}`,
     };
 }

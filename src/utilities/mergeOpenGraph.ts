@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
-import { getServerSideURL } from "./getURL";
+import { getCanonicalUrl, seoConfig } from "@/seo/config";
 
 const defaultOpenGraph: Metadata["openGraph"] = {
     type: "website",
-    description: "An open-source website built with Payload and Next.js.",
+    description: seoConfig.defaultDescription,
     images: [
         {
-            url: `${getServerSideURL()}/website-template-OG.webp`,
+            url: getCanonicalUrl(seoConfig.defaultOgImagePath),
+            width: 1200,
+            height: 630,
+            alt: seoConfig.defaultTitle,
         },
     ],
-    siteName: "Payload Website Template",
-    title: "Payload Website Template",
+    locale: seoConfig.locale,
+    siteName: seoConfig.siteName,
+    title: seoConfig.defaultTitle,
 };
 
 export const mergeOpenGraph = (

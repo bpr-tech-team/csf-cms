@@ -15,18 +15,25 @@ import { searchFields } from "@/search/fieldOverrides";
 import { beforeSyncWithSearch } from "@/search/beforeSync";
 
 import { Page, Post } from "@/payload-types";
-import { getServerSideURL } from "@/utilities/getURL";
+import { getCanonicalUrl, seoConfig } from "@/seo/config";
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
     return doc?.title
-        ? `${doc.title} | Payload Website Template`
-        : "Payload Website Template";
+        ? `${doc.title}${seoConfig.titleSuffix}`
+        : seoConfig.defaultTitle;
 };
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
-    const url = getServerSideURL();
+const generateURL: GenerateURL<Post | Page> = ({ collectionConfig, doc }) => {
+    if (!doc?.slug || doc.slug === "home") {
+        return getCanonicalUrl();
+    }
 
-    return doc?.slug ? `${url}/${doc.slug}` : url;
+    const path =
+        collectionConfig?.slug === "posts"
+            ? `/posts/${doc.slug}`
+            : `/${doc.slug}`;
+
+    return getCanonicalUrl(path);
 };
 
 export const plugins: Plugin[] = [

@@ -14,6 +14,7 @@ import { PostHero } from "@/heros/PostHero";
 import { generateMeta } from "@/utilities/generateMeta";
 import PageClient from "./page.client";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
+import { JsonLd, blogPostingJsonLd } from "@/seo/structuredData";
 
 export async function generateStaticParams() {
     const payload = await getPayload({ config: configPromise });
@@ -60,6 +61,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
             {draft && <LivePreviewListener />}
 
+            <JsonLd data={blogPostingJsonLd(post)} />
             <PostHero post={post} />
 
             <div className="flex flex-col items-center gap-4 pt-8">
@@ -91,7 +93,7 @@ export async function generateMetadata({
     const decodedSlug = decodeURIComponent(slug);
     const post = await queryPostBySlug({ slug: decodedSlug });
 
-    return generateMeta({ doc: post });
+    return generateMeta({ doc: post, path: `/posts/${decodedSlug}` });
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
