@@ -5,11 +5,13 @@ import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
 import { HighImpactHero } from "@/heros/HighImpact";
+import { HomepageHero } from "@/heros/Homepage";
 import { LowImpactHero } from "@/heros/LowImpact";
 import { MediumImpactHero } from "@/heros/MediumImpact";
 
 const heroes = {
     highImpact: HighImpactHero,
+    homepage: HomepageHero,
     lowImpact: LowImpactHero,
     mediumImpact: MediumImpactHero,
 };

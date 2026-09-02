@@ -159,7 +159,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'homepage';
     richText?: {
       root: {
         type: string;
@@ -200,8 +200,90 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    slides?:
+      | {
+          heading: string;
+          description: string;
+          links?:
+            | {
+                link: {
+                  type?: ('reference' | 'custom') | null;
+                  newTab?: boolean | null;
+                  reference?:
+                    | ({
+                        relationTo: 'pages';
+                        value: number | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: number | Post;
+                      } | null);
+                  url?: string | null;
+                  label: string;
+                  /**
+                   * Choose how the link should be rendered.
+                   */
+                  appearance?: ('default' | 'outline') | null;
+                };
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    autoplay?: boolean | null;
+    /**
+     * Time between slides in milliseconds.
+     */
+    autoplayInterval?: number | null;
+    intro?: {
+      eyebrow?: string | null;
+      heading: string;
+      highlightedText?: string | null;
+      description: string;
+    };
+    quickLinks?:
+      | {
+          image: number | Media;
+          icon: number | Media;
+          title: string;
+          links?:
+            | {
+                link: {
+                  type?: ('reference' | 'custom') | null;
+                  newTab?: boolean | null;
+                  reference?:
+                    | ({
+                        relationTo: 'pages';
+                        value: number | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: number | Post;
+                      } | null);
+                  url?: string | null;
+                  label: string;
+                };
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | ServicesGridBlock
+    | MetricsStripBlock
+    | ProductsGridBlock
+    | LogoMarqueeBlock
+    | CenteredCtaBlock
+    | ProcessStepsBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -586,6 +668,8 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
+  appearance?: ('default' | 'homepageDark') | null;
+  eyebrow?: string | null;
   form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
@@ -771,6 +855,170 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesGridBlock".
+ */
+export interface ServicesGridBlock {
+  eyebrow?: string | null;
+  heading: string;
+  /**
+   * A substring of the heading highlighted in green.
+   */
+  highlightedText?: string | null;
+  items: {
+    icon: number | Media;
+    title: string;
+    description: string;
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'servicesGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MetricsStripBlock".
+ */
+export interface MetricsStripBlock {
+  heading: string;
+  items: {
+    prefix?: string | null;
+    value: number;
+    suffix?: string | null;
+    label: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'metricsStrip';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductsGridBlock".
+ */
+export interface ProductsGridBlock {
+  eyebrow?: string | null;
+  heading: string;
+  /**
+   * A substring of the heading highlighted in green.
+   */
+  highlightedText?: string | null;
+  items: {
+    image?: (number | null) | Media;
+    icon: number | Media;
+    title: string;
+    description: string;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null);
+      url?: string | null;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'productsGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoMarqueeBlock".
+ */
+export interface LogoMarqueeBlock {
+  eyebrow: string;
+  items: {
+    logo: number | Media;
+    name: string;
+    url?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * Duration of one complete pass in seconds.
+   */
+  duration: number;
+  pauseOnHover?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'logoMarquee';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CenteredCtaBlock".
+ */
+export interface CenteredCtaBlock {
+  heading: string;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: 'default' | null;
+  };
+  /**
+   * Optional decorative layer behind the content.
+   */
+  backgroundMedia?: (number | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'centeredCta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock".
+ */
+export interface ProcessStepsBlock {
+  eyebrow?: string | null;
+  heading: string;
+  /**
+   * A substring of the heading highlighted in green.
+   */
+  highlightedText?: string | null;
+  description?: string | null;
+  items: {
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'processSteps';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1071,6 +1319,60 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        slides?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                          appearance?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+            };
+        autoplay?: T;
+        autoplayInterval?: T;
+        intro?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              highlightedText?: T;
+              description?: T;
+            };
+        quickLinks?:
+          | T
+          | {
+              image?: T;
+              icon?: T;
+              title?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          newTab?: T;
+                          reference?: T;
+                          url?: T;
+                          label?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+            };
       };
   layout?:
     | T
@@ -1080,6 +1382,12 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        servicesGrid?: T | ServicesGridBlockSelect<T>;
+        metricsStrip?: T | MetricsStripBlockSelect<T>;
+        productsGrid?: T | ProductsGridBlockSelect<T>;
+        logoMarquee?: T | LogoMarqueeBlockSelect<T>;
+        centeredCta?: T | CenteredCtaBlockSelect<T>;
+        processSteps?: T | ProcessStepsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1173,9 +1481,143 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  appearance?: T;
+  eyebrow?: T;
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesGridBlock_select".
+ */
+export interface ServicesGridBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  highlightedText?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MetricsStripBlock_select".
+ */
+export interface MetricsStripBlockSelect<T extends boolean = true> {
+  heading?: T;
+  items?:
+    | T
+    | {
+        prefix?: T;
+        value?: T;
+        suffix?: T;
+        label?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductsGridBlock_select".
+ */
+export interface ProductsGridBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  highlightedText?: T;
+  items?:
+    | T
+    | {
+        image?: T;
+        icon?: T;
+        title?: T;
+        description?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoMarqueeBlock_select".
+ */
+export interface LogoMarqueeBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  items?:
+    | T
+    | {
+        logo?: T;
+        name?: T;
+        url?: T;
+        id?: T;
+      };
+  duration?: T;
+  pauseOnHover?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CenteredCtaBlock_select".
+ */
+export interface CenteredCtaBlockSelect<T extends boolean = true> {
+  heading?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  backgroundMedia?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock_select".
+ */
+export interface ProcessStepsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  highlightedText?: T;
+  description?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

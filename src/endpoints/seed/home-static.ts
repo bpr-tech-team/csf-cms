@@ -1,88 +1,27 @@
-import type { RequiredDataFromCollectionSlug } from "payload";
+import type { Form } from "@/payload-types";
 
-// Used for pre-seeded content so that the homepage is not empty
-export const homeStatic: RequiredDataFromCollectionSlug<"pages"> = {
-    slug: "home",
-    _status: "published",
-    hero: {
-        type: "lowImpact",
-        richText: {
-            root: {
-                type: "root",
-                children: [
-                    {
-                        type: "heading",
-                        children: [
-                            {
-                                type: "text",
-                                detail: 0,
-                                format: 0,
-                                mode: "normal",
-                                style: "",
-                                text: "Payload Website Template",
-                                version: 1,
-                            },
-                        ],
-                        direction: "ltr",
-                        format: "",
-                        indent: 0,
-                        tag: "h1",
-                        version: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        children: [
-                            {
-                                type: "link",
-                                children: [
-                                    {
-                                        type: "text",
-                                        detail: 0,
-                                        format: 0,
-                                        mode: "normal",
-                                        style: "",
-                                        text: "Visit the admin dashboard",
-                                        version: 1,
-                                    },
-                                ],
-                                direction: "ltr",
-                                fields: {
-                                    linkType: "custom",
-                                    newTab: false,
-                                    url: "/admin",
-                                },
-                                format: "",
-                                indent: 0,
-                                version: 2,
-                            },
-                            {
-                                type: "text",
-                                detail: 0,
-                                format: 0,
-                                mode: "normal",
-                                style: "",
-                                text: " to make your account and seed content for your website.",
-                                version: 1,
-                            },
-                        ],
-                        direction: "ltr",
-                        format: "",
-                        indent: 0,
-                        textFormat: 0,
-                        version: 1,
-                    },
-                ],
-                direction: "ltr",
-                format: "",
-                indent: 0,
-                version: 1,
-            },
-        },
-    },
-    meta: {
-        description: "An open-source website built with Payload and Next.js.",
-        title: "Payload Website Template",
-    },
-    title: "Home",
-    layout: [],
+import { contactForm as contactFormData } from "./contact-form";
+import { home, type HomepageMedia } from "./home";
+
+const staticContactForm: Form = {
+    ...contactFormData,
+    createdAt: "2026-09-02T00:00:00.000Z",
+    id: 0,
+    updatedAt: "2026-09-02T00:00:00.000Z",
 };
+
+const fallbackMedia: HomepageMedia = {
+    heroIcons: [0, 0, 0],
+    heroImages: [0, 0, 0],
+    partnerLogos: Array.from({ length: 9 }, () => 0),
+    productIcons: [0, 0, 0],
+    productImages: [0, 0, 0, 0, 0],
+    serviceIcons: [0, 0, 0, 0, 0, 0],
+};
+
+// Used when the database has not been seeded yet. Numeric zero relationships
+// intentionally select the checked-in Figma asset fallbacks in UI components.
+export const homeStatic = home({
+    contactForm: staticContactForm,
+    media: fallbackMedia,
+});

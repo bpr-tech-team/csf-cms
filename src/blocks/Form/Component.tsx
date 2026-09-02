@@ -1,5 +1,8 @@
 "use client";
-import type { Form as FormType } from "@/payload-types";
+import type {
+    Form as FormType,
+    FormBlock as GeneratedFormBlock,
+} from "@/payload-types";
 
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -7,17 +10,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
 import RichText from "@/components/RichText";
 import { Button } from "@/components/ui/button";
-import type { DefaultTypedEditorState } from "@payloadcms/richtext-lexical";
-
 import { fields } from "./fields";
 import { getClientSideURL } from "@/utilities/getURL";
+import { cn } from "@/utilities/ui";
 
-export type FormBlockType = {
-    blockName?: null | string;
-    blockType?: "formBlock";
-    enableIntro?: boolean | null;
+export type FormBlockType = Omit<GeneratedFormBlock, "form"> & {
     form: FormType;
-    introContent?: DefaultTypedEditorState | null;
 };
 
 export const FormBlock: React.FC<
@@ -25,7 +23,13 @@ export const FormBlock: React.FC<
         id?: null | string;
     } & FormBlockType
 > = (props) => {
-    const { enableIntro, form: formFromProps, introContent } = props;
+    const {
+        appearance,
+        enableIntro,
+        eyebrow,
+        form: formFromProps,
+        introContent,
+    } = props;
     const {
         confirmationMessage,
         confirmationType,
@@ -50,6 +54,7 @@ export const FormBlock: React.FC<
         { message: string; status?: string } | undefined
     >();
     const router = useRouter();
+    const isHomepageDark = appearance === "homepageDark";
 
     const onSubmit = useCallback(
         (data: FieldValues) => {
@@ -126,73 +131,119 @@ export const FormBlock: React.FC<
     );
 
     return (
-        <div className="container lg:max-w-[48rem]">
-            {enableIntro && introContent && !hasSubmitted && (
-                <RichText
-                    className="mb-8 lg:mb-12"
-                    data={introContent}
-                    enableGutter={false}
-                />
+        <section
+            className={cn(
+                isHomepageDark
+                    ? "bg-ink-950 py-20 text-paper-0 md:py-24"
+                    : "my-16",
             )}
-            <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
-                <FormProvider {...formMethods}>
-                    {!isLoading &&
-                        hasSubmitted &&
-                        confirmationType === "message" &&
-                        confirmationMessage && (
-                            <RichText data={confirmationMessage} />
+            data-theme={isHomepageDark ? "dark" : undefined}
+            id={isHomepageDark ? "kontakt" : undefined}
+        >
+            <div className="container lg:max-w-[46rem]">
+                {eyebrow && isHomepageDark && !hasSubmitted && (
+                    <p className="mb-5 text-center text-eyebrow uppercase text-paper-0/90">
+                        {eyebrow}
+                    </p>
+                )}
+                {enableIntro && introContent && !hasSubmitted && (
+                    <RichText
+                        className={cn(
+                            "mb-8 lg:mb-12",
+                            isHomepageDark &&
+                                "text-center [&_h1]:text-heading-xl [&_h1]:font-bold [&_h2]:text-heading-xl [&_h2]:font-bold [&_p]:text-paper-0/90",
                         )}
-                    {isLoading && !hasSubmitted && (
-                        <p>Loading, please wait...</p>
+                        data={introContent}
+                        enableGutter={false}
+                    />
+                )}
+                <div
+                    className={cn(
+                        "rounded-md border border-border p-4 lg:p-6",
+                        isHomepageDark &&
+                            "border-brand-500/20 bg-olive-950 p-6 md:p-10 [&_input]:h-12 [&_input]:rounded-xs [&_input]:border-brand-500/20 [&_input]:bg-olive-850 [&_label]:text-eyebrow [&_label]:uppercase [&_textarea]:min-h-28 [&_textarea]:rounded-xs [&_textarea]:border-brand-500/20 [&_textarea]:bg-olive-850",
                     )}
-                    {error && (
-                        <div>{`${error.status || "500"}: ${error.message || ""}`}</div>
-                    )}
-                    {!hasSubmitted && (
-                        <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-                            <div className="mb-4 last:mb-0">
-                                {formFromProps &&
-                                    formFromProps.fields &&
-                                    formFromProps.fields?.map(
-                                        (field, index) => {
-                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                            const Field: React.FC<any> =
-                                                fields?.[
-                                                    field.blockType as keyof typeof fields
-                                                ];
-                                            if (Field) {
-                                                return (
-                                                    <div
-                                                        className="mb-6 last:mb-0"
-                                                        key={index}
-                                                    >
-                                                        <Field
-                                                            form={formFromProps}
-                                                            {...field}
-                                                            {...formMethods}
-                                                            control={control}
-                                                            errors={errors}
-                                                            register={register}
-                                                        />
-                                                    </div>
-                                                );
-                                            }
-                                            return null;
-                                        },
-                                    )}
-                            </div>
+                >
+                    <FormProvider {...formMethods}>
+                        {!isLoading &&
+                            hasSubmitted &&
+                            confirmationType === "message" &&
+                            confirmationMessage && (
+                                <RichText data={confirmationMessage} />
+                            )}
+                        {isLoading && !hasSubmitted && (
+                            <p>Loading, please wait...</p>
+                        )}
+                        {error && (
+                            <div>{`${error.status || "500"}: ${error.message || ""}`}</div>
+                        )}
+                        {!hasSubmitted && (
+                            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+                                <div className="-mx-2 -mb-6 flex flex-wrap">
+                                    {formFromProps &&
+                                        formFromProps.fields &&
+                                        formFromProps.fields?.map(
+                                            (field, index) => {
+                                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                const Field: React.FC<any> =
+                                                    fields?.[
+                                                        field.blockType as keyof typeof fields
+                                                    ];
+                                                if (Field) {
+                                                    const width =
+                                                        "width" in field &&
+                                                        field.width
+                                                            ? field.width
+                                                            : 100;
 
-                            <Button
-                                form={formID}
-                                type="submit"
-                                variant="default"
-                            >
-                                {submitButtonLabel}
-                            </Button>
-                        </form>
-                    )}
-                </FormProvider>
+                                                    return (
+                                                        <div
+                                                            className="mb-6 w-full px-2 sm:w-[var(--form-field-width)]"
+                                                            key={index}
+                                                            style={
+                                                                {
+                                                                    "--form-field-width": `${width}%`,
+                                                                } as React.CSSProperties
+                                                            }
+                                                        >
+                                                            <Field
+                                                                form={
+                                                                    formFromProps
+                                                                }
+                                                                {...field}
+                                                                {...formMethods}
+                                                                control={
+                                                                    control
+                                                                }
+                                                                errors={errors}
+                                                                register={
+                                                                    register
+                                                                }
+                                                                width={100}
+                                                            />
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
+                                            },
+                                        )}
+                                </div>
+
+                                <Button
+                                    className={cn(
+                                        isHomepageDark && "mt-8 w-full",
+                                    )}
+                                    form={formID}
+                                    type="submit"
+                                    variant="default"
+                                >
+                                    {submitButtonLabel}
+                                </Button>
+                            </form>
+                        )}
+                    </FormProvider>
+                </div>
             </div>
-        </div>
+        </section>
     );
 };

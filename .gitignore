@@ -8,8 +8,10 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 .vercel
 
-# Payload default media upload directory
-public/media/
+# Payload default media upload directory. Keep bundled homepage assets versioned.
+public/media/*
+!public/media/homepage/
+!public/media/homepage/**
 
 public/robots.txt
 public/sitemap*.xml

@@ -1,0 +1,692 @@
+{
+    "source": {
+        "provider": "Figma",
+        "fileKey": "K4BgfjIEUNwyGJoyyIm6xx",
+        "pageNode": "42:791"
+    },
+    "naming": "Files retain the stable order returned by Figma within each section.",
+    "assets": [
+        {
+            "section": "header",
+            "kind": "image",
+            "sourceNode": "120:928",
+            "path": "/media/homepage/header/image-01.png",
+            "format": "png",
+            "sizeBytes": 6143,
+            "sha256": "984723aa63dd2b123bcd64bdbcfe73f7d00232599185f98fc62bdf3ec8bb0a34",
+            "width": 681,
+            "height": 230
+        },
+        {
+            "section": "header",
+            "kind": "image",
+            "sourceNode": "120:928",
+            "path": "/media/homepage/header/image-02.png",
+            "format": "png",
+            "sizeBytes": 9445,
+            "sha256": "01d2f7fac2a0e116ffbd2dbaa41cedce1502f58a9a847d5f718a299d4376e584",
+            "width": 341,
+            "height": 115
+        },
+        {
+            "section": "hero",
+            "kind": "image",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/image-01.jpg",
+            "format": "jpeg",
+            "sizeBytes": 26311,
+            "sha256": "a917c22258e195f7617e8071b2093ad7f072abd680fe02499e4b5c0d3421c650",
+            "width": 1,
+            "height": 1
+        },
+        {
+            "section": "hero",
+            "kind": "image",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/image-02.png",
+            "format": "png",
+            "sizeBytes": 305059,
+            "sha256": "35437f1c26480cb4d46925757f0ffb44fdda8d5b734be37873e62fcc838e0a6f",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "hero",
+            "kind": "image",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/image-03.png",
+            "format": "png",
+            "sizeBytes": 309826,
+            "sha256": "a567ef453551870e9cab4fdee5ac216be3eba2b8993c410a71b9d408fb86237d",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "hero",
+            "kind": "vector",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/vector-01.svg",
+            "format": "svg",
+            "sizeBytes": 239,
+            "sha256": "2fbe480fe2a34e377608c37c74ec5014d419cc96bc9118fe84b902d6ac0670d6"
+        },
+        {
+            "section": "hero",
+            "kind": "vector",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/vector-02.svg",
+            "format": "svg",
+            "sizeBytes": 554,
+            "sha256": "f76c628e797622e2c2dbdac80d15819cbed686c83733c0f3268883e33e813c0f"
+        },
+        {
+            "section": "hero",
+            "kind": "vector",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/vector-03.svg",
+            "format": "svg",
+            "sizeBytes": 239,
+            "sha256": "fb559ec864534638a7db610b3ed9199dfd2c0b38f1e57922c98f553a182cccf2"
+        },
+        {
+            "section": "hero",
+            "kind": "vector",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/vector-04.svg",
+            "format": "svg",
+            "sizeBytes": 2115,
+            "sha256": "08affbd626f832a15cf8f867743eea9baebe345082bf56bc82b3fedb6bcf89c5"
+        },
+        {
+            "section": "hero",
+            "kind": "vector",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/vector-05.svg",
+            "format": "svg",
+            "sizeBytes": 1862,
+            "sha256": "4639f94b5af76b85ba181cc73afaf9854f7ab9549ec1b85731acef35ac70ea1a"
+        },
+        {
+            "section": "hero",
+            "kind": "vector",
+            "sourceNode": "42:942",
+            "path": "/media/homepage/hero/vector-06.svg",
+            "format": "svg",
+            "sizeBytes": 714,
+            "sha256": "649515bee90f273b9bc9049190ef57f54689b78c758476e373f02faf5c82bc36"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-01.svg",
+            "format": "svg",
+            "sizeBytes": 496,
+            "sha256": "d8c418cc51f19a4b17c1288805a792f39bfd65f7bbad610c191d7104f54cb9a2"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-02.svg",
+            "format": "svg",
+            "sizeBytes": 269,
+            "sha256": "86821b57afdd531553cd206d8bd58706c5a3e998c453554db5a366d7823ecbc1"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-03.svg",
+            "format": "svg",
+            "sizeBytes": 269,
+            "sha256": "bcf034ddcebc3cfa077bda4f9a335673cf315bc8a1f7785957ffd37fc1c7e03d"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-04.svg",
+            "format": "svg",
+            "sizeBytes": 882,
+            "sha256": "1bc96201f1bf3b0c0ceb00126f2f04eff00f1a9fb32f6b8752e56aad0275bb4a"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-05.svg",
+            "format": "svg",
+            "sizeBytes": 702,
+            "sha256": "d7c022104160211a0be5c8ea0a63c2aaf96eabe9cd17cfc7bd819cba3a329686"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-06.svg",
+            "format": "svg",
+            "sizeBytes": 335,
+            "sha256": "3a4049a0bd9b66d67e6e6ae879334a3eb83c8c16ea692480f2ff7df6acfc726d"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-07.svg",
+            "format": "svg",
+            "sizeBytes": 349,
+            "sha256": "2c401d2f714c1fb0d37b710ef1e73b719ade5446979daeb4d303afbc82aea1b6"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-08.svg",
+            "format": "svg",
+            "sizeBytes": 349,
+            "sha256": "63c565f06f6621c258f4849d5bcaca528097d5fd8ea85e6c7eee9416f5159dc0"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-09.svg",
+            "format": "svg",
+            "sizeBytes": 1352,
+            "sha256": "2815b358c82547afedb4967d949d7ba1766ec8bb9df92ebfcb1947f6a7f21c3e"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-10.svg",
+            "format": "svg",
+            "sizeBytes": 492,
+            "sha256": "46d216a81c90c57357bd844d2dbec8b2a6f7f847265730d80a2488829d4db315"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-11.svg",
+            "format": "svg",
+            "sizeBytes": 492,
+            "sha256": "c5efd2d26b6d08726e4a1b8edf847213b3cc9d5a738091b5280af6605d2275c5"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-12.svg",
+            "format": "svg",
+            "sizeBytes": 1241,
+            "sha256": "a3e636798635e1c1fd9e2d726bafbba25f09a33742af35c75e0a555ae17d5218"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-13.svg",
+            "format": "svg",
+            "sizeBytes": 335,
+            "sha256": "0316a5ed915bec53644c3f4a4a944021bf8413ec72862233f76350abf7761caf"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/vector-14.svg",
+            "format": "svg",
+            "sizeBytes": 702,
+            "sha256": "13b964982773232f2c818bdcc459a46154bf1733b79ce5f980191bb2287bdd05"
+        },
+        {
+            "section": "products",
+            "kind": "image",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/image-01.png",
+            "format": "png",
+            "sizeBytes": 305059,
+            "sha256": "35437f1c26480cb4d46925757f0ffb44fdda8d5b734be37873e62fcc838e0a6f",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "products",
+            "kind": "image",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/image-02.jpg",
+            "format": "jpeg",
+            "sizeBytes": 26311,
+            "sha256": "a917c22258e195f7617e8071b2093ad7f072abd680fe02499e4b5c0d3421c650",
+            "width": 1,
+            "height": 1
+        },
+        {
+            "section": "products",
+            "kind": "image",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/image-03.png",
+            "format": "png",
+            "sizeBytes": 300021,
+            "sha256": "4b1133e91e1bf6210f3b96e6b2e192caf0a77459d4effb1efb1a3df7798d0211",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "products",
+            "kind": "image",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/image-04.png",
+            "format": "png",
+            "sizeBytes": 276551,
+            "sha256": "023c3f4c9db01289f89202325b0d1ad3add818cdb9af0fe2143e712a2e28325f",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "products",
+            "kind": "image",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/image-05.png",
+            "format": "png",
+            "sizeBytes": 294231,
+            "sha256": "19d3f81f30e31ef06d492049844d2741121193517281745870c8cccea6073ff8",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "products",
+            "kind": "image",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/image-06.png",
+            "format": "png",
+            "sizeBytes": 309826,
+            "sha256": "a567ef453551870e9cab4fdee5ac216be3eba2b8993c410a71b9d408fb86237d",
+            "width": 512,
+            "height": 512
+        },
+        {
+            "section": "products",
+            "kind": "vector",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/vector-01.svg",
+            "format": "svg",
+            "sizeBytes": 1352,
+            "sha256": "8c28cf986a04c3aa36ec490cec0e502ba7c6c67be6329ffec1eb8d8485e3add1"
+        },
+        {
+            "section": "products",
+            "kind": "vector",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/vector-02.svg",
+            "format": "svg",
+            "sizeBytes": 1219,
+            "sha256": "c6709255239aeb85aa10e02f602d36da94085c73322854f284f223d90c5f6526"
+        },
+        {
+            "section": "products",
+            "kind": "vector",
+            "sourceNode": "23:388",
+            "path": "/media/homepage/products/vector-03.svg",
+            "format": "svg",
+            "sizeBytes": 585,
+            "sha256": "aac5dc672bc8ec65eaa43b0f00a635a923d7fd23d4602cde4f2137b9ddda278d"
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-01.png",
+            "format": "png",
+            "sizeBytes": 7648,
+            "sha256": "986a5d8f39859669626ac8769e2f5d98ff9b391f5cb2343a62a09ecadade00b0",
+            "width": 462,
+            "height": 102
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-02.png",
+            "format": "png",
+            "sizeBytes": 9672,
+            "sha256": "23e925aa2d5d25afea10c6a735b642f832ef2fa366ef6a8a612d0e071a72de3e",
+            "width": 462,
+            "height": 193
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-03.png",
+            "format": "png",
+            "sizeBytes": 604,
+            "sha256": "212e5731f5db5e4c5ca18bbd658c515e8408580f8f3254fc894fbb5d58c8bdff",
+            "width": 174,
+            "height": 45
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-04.png",
+            "format": "png",
+            "sizeBytes": 6296,
+            "sha256": "df19d4f7a75d1bec808e1ae173ba022b39aa0bba2e3926921a4437c295b97011",
+            "width": 462,
+            "height": 59
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-05.png",
+            "format": "png",
+            "sizeBytes": 16926,
+            "sha256": "ca3c9a4698a0ed79bccb600948a1ba537e89a330a9994297edce7ca0d6d26438",
+            "width": 2499,
+            "height": 607
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-06.png",
+            "format": "png",
+            "sizeBytes": 14090,
+            "sha256": "c142eadaca012e23e8496400e19fb22f8277ec6ad8571e144d62fb4a682b07b3",
+            "width": 371,
+            "height": 371
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-07.png",
+            "format": "png",
+            "sizeBytes": 6239,
+            "sha256": "eaf90048941f480fdfd8b254fc889b25df18ce9dce63035bf688f48a2d4d7fcb",
+            "width": 924,
+            "height": 386
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-08.png",
+            "format": "png",
+            "sizeBytes": 4205,
+            "sha256": "6a18410ef9ad4303ba2a837d91bd252abdda6c0de7ee148f94ae41806ba574d0",
+            "width": 462,
+            "height": 99
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-09.png",
+            "format": "png",
+            "sizeBytes": 7554,
+            "sha256": "af32e55fbd654336deffd028d1c4997685548fd6e374ee87fb704706637a3ac1",
+            "width": 313,
+            "height": 76
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-10.png",
+            "format": "png",
+            "sizeBytes": 9853,
+            "sha256": "f4e23ed1a1becd0cd9e75fc991758350e34aa9642343087380b02bb8808cc94f",
+            "width": 741,
+            "height": 741
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-11.png",
+            "format": "png",
+            "sizeBytes": 4852,
+            "sha256": "e7ffcbb5b9d8e385249d6dbd7f9cad97da43a938c1a8c85e678bfb193df9f9b0",
+            "width": 924,
+            "height": 203
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-12.png",
+            "format": "png",
+            "sizeBytes": 3576,
+            "sha256": "630e949eab6b07fbfbea65d47786dded1c32d4545c9cb018f4658c087747caf3",
+            "width": 924,
+            "height": 198
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/image-13.png",
+            "format": "png",
+            "sizeBytes": 4092,
+            "sha256": "27f44267a2b35f6218a610ae616ae8a0e39d74cb73f3e2ba17137e3a2f8afc8e",
+            "width": 924,
+            "height": 118
+        },
+        {
+            "section": "partners",
+            "kind": "vector",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/vector-01.svg",
+            "format": "svg",
+            "sizeBytes": 1690,
+            "sha256": "382944dd3a2eb36a2a4f1515b9b84411ddd433b3b3a5d9ad6fcf90fec3aa0427"
+        },
+        {
+            "section": "partners",
+            "kind": "vector",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/vector-02.svg",
+            "format": "svg",
+            "sizeBytes": 411,
+            "sha256": "ff551544345d47457f0836ec3cdecabf074ea417cce553b568fab5099db75ce7"
+        },
+        {
+            "section": "partners",
+            "kind": "vector",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/vector-03.svg",
+            "format": "svg",
+            "sizeBytes": 673,
+            "sha256": "a3ddb3663b8628b41dad9422f999f8157127ac2575e2201980b7b5340e3e041a"
+        },
+        {
+            "section": "partners",
+            "kind": "vector",
+            "sourceNode": "42:820",
+            "path": "/media/homepage/partners/vector-04.svg",
+            "format": "svg",
+            "sizeBytes": 614,
+            "sha256": "0abea49495eeeee8d3f3cef1cec68d6c75abb72754068ff62f383dfd1d9245a1"
+        },
+        {
+            "section": "contact",
+            "kind": "image",
+            "sourceNode": "120:942",
+            "path": "/media/homepage/contact/image-01.png",
+            "format": "png",
+            "sizeBytes": 6143,
+            "sha256": "984723aa63dd2b123bcd64bdbcfe73f7d00232599185f98fc62bdf3ec8bb0a34",
+            "width": 681,
+            "height": 230
+        },
+        {
+            "section": "contact",
+            "kind": "image",
+            "sourceNode": "120:942",
+            "path": "/media/homepage/contact/image-02.png",
+            "format": "png",
+            "sizeBytes": 9445,
+            "sha256": "01d2f7fac2a0e116ffbd2dbaa41cedce1502f58a9a847d5f718a299d4376e584",
+            "width": 341,
+            "height": 115
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/card-icon-01.svg",
+            "format": "svg",
+            "sizeBytes": 496,
+            "sha256": "d8c418cc51f19a4b17c1288805a792f39bfd65f7bbad610c191d7104f54cb9a2"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/card-icon-02.svg",
+            "format": "svg",
+            "sizeBytes": 882,
+            "sha256": "1bc96201f1bf3b0c0ceb00126f2f04eff00f1a9fb32f6b8752e56aad0275bb4a"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/card-icon-03.svg",
+            "format": "svg",
+            "sizeBytes": 977,
+            "sha256": "6c0f0d86f9b9c519509257a65e7859df7774b25fe105e4b22676d5c6fb4dfe87"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/card-icon-04.svg",
+            "format": "svg",
+            "sizeBytes": 1352,
+            "sha256": "2815b358c82547afedb4967d949d7ba1766ec8bb9df92ebfcb1947f6a7f21c3e"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/card-icon-05.svg",
+            "format": "svg",
+            "sizeBytes": 1038,
+            "sha256": "d880c185d82b12fd8decc60a92cb6620c001ab6f6569b6791940bd3c163c27ff"
+        },
+        {
+            "section": "services",
+            "kind": "vector",
+            "sourceNode": "42:885",
+            "path": "/media/homepage/services/card-icon-06.svg",
+            "format": "svg",
+            "sizeBytes": 1241,
+            "sha256": "a3e636798635e1c1fd9e2d726bafbba25f09a33742af35c75e0a555ae17d5218"
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "178:717",
+            "path": "/media/homepage/partners/logo-hp.png",
+            "format": "png",
+            "sizeBytes": 909,
+            "sha256": "bcc07d8638cdfd8b02e956cdc4e9f5ec92eea390b35f48f0866fcf7e9b112d6e",
+            "width": 25,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "178:733",
+            "path": "/media/homepage/partners/logo-aoc.png",
+            "format": "png",
+            "sizeBytes": 960,
+            "sha256": "0c7b402aff53a5bd0acae0d5403613cc34e17ebed120aa8788b424a37b21ee15",
+            "width": 76,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:738",
+            "path": "/media/homepage/partners/logo-oki.png",
+            "format": "png",
+            "sizeBytes": 974,
+            "sha256": "6018da5e25862f3a012a5eecaf59c56f0c95870ee6930fa76dbd3c3a7ab628a4",
+            "width": 97,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:743",
+            "path": "/media/homepage/partners/logo-philips.png",
+            "format": "png",
+            "sizeBytes": 1126,
+            "sha256": "bba3ae457da8c03545457bc96ec85998c5539219091710200030a38bf9a4fa4d",
+            "width": 137,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:768",
+            "path": "/media/homepage/partners/logo-dell.png",
+            "format": "png",
+            "sizeBytes": 3603,
+            "sha256": "d0e6a3cdb8285cdceeda3988b3f7727b7fc9c647d2fd914fa3b0ce98b873ab0e",
+            "width": 196,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:759",
+            "path": "/media/homepage/partners/logo-huawei.png",
+            "format": "png",
+            "sizeBytes": 2314,
+            "sha256": "bc812bec5aa43dac2a2a3653a5c92ffa3230b009c8805da1bfe0782de6958e4b",
+            "width": 114,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:756",
+            "path": "/media/homepage/partners/logo-epson.png",
+            "format": "png",
+            "sizeBytes": 2341,
+            "sha256": "b9cafd288ae669f4db51b7c987caacd2056f9d7784770cb43b6999da5126d964",
+            "width": 103,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:762",
+            "path": "/media/homepage/partners/logo-kyocera.png",
+            "format": "png",
+            "sizeBytes": 1643,
+            "sha256": "0e0b8ba15dc382e02678d8ba71ea3d6f89e37317e7d351d77a633569c77269dd",
+            "width": 117,
+            "height": 25
+        },
+        {
+            "section": "partners",
+            "kind": "image",
+            "sourceNode": "179:765",
+            "path": "/media/homepage/partners/logo-hpe.png",
+            "format": "png",
+            "sizeBytes": 1521,
+            "sha256": "64625dbf7a47bdbc83fef2c8ddad4e08dedd96a7e8d74ee8958de9101288de03",
+            "width": 60,
+            "height": 25
+        }
+    ]
+}

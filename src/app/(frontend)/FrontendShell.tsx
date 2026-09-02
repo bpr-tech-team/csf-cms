@@ -20,7 +20,14 @@ import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
 import { draftMode } from "next/headers";
 import React from "react";
 import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+    display: "swap",
+    subsets: ["latin", "latin-ext"],
+    variable: "--font-poppins",
+    weight: ["400", "500", "600", "700", "800"],
+});
 
 export async function FrontendShell({
     children,
@@ -33,7 +40,7 @@ export async function FrontendShell({
 
     return (
         <html
-            className={cn(GeistSans.variable, GeistMono.variable)}
+            className={cn(poppins.variable, GeistMono.variable)}
             lang={localeLanguages[locale]}
             suppressHydrationWarning
         >

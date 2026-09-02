@@ -9,6 +9,7 @@ import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { homeStatic } from "@/endpoints/seed/home-static";
 import { generateMeta } from "@/utilities/generateMeta";
+import { cn } from "@/utilities/ui";
 import configPromise from "@payload-config";
 import { draftMode } from "next/headers";
 import React, { cache } from "react";
@@ -80,8 +81,16 @@ export async function PageTemplate({
     const { hero, layout } = page;
 
     return (
-        <article className="pt-16 pb-24">
-            <SetHeaderTheme theme="light" />
+        <article
+            className={cn("pt-16", hero.type === "homepage" ? "pb-0" : "pb-24")}
+        >
+            <SetHeaderTheme
+                theme={
+                    hero.type === "homepage" || hero.type === "highImpact"
+                        ? "dark"
+                        : "light"
+                }
+            />
             <PayloadRedirects disableNotFound locale={locale} url={url} />
 
             {draft && <LivePreviewListener />}

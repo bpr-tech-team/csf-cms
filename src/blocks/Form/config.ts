@@ -12,6 +12,43 @@ export const FormBlock: Block = {
     interfaceName: "FormBlock",
     fields: [
         {
+            name: "appearance",
+            type: "select",
+            defaultValue: "default",
+            label: {
+                cs: "Vzhled",
+                en: "Appearance",
+            },
+            options: [
+                {
+                    label: {
+                        cs: "Výchozí",
+                        en: "Default",
+                    },
+                    value: "default",
+                },
+                {
+                    label: {
+                        cs: "Tmavý blok domovské stránky",
+                        en: "Homepage dark",
+                    },
+                    value: "homepageDark",
+                },
+            ],
+        },
+        {
+            name: "eyebrow",
+            type: "text",
+            admin: {
+                condition: (_, { appearance } = {}) =>
+                    appearance === "homepageDark",
+            },
+            label: {
+                cs: "Nadpis sekce",
+                en: "Eyebrow",
+            },
+        },
+        {
             name: "form",
             type: "relationship",
             label: {
