@@ -88,6 +88,18 @@ See the [Globals](https://payloadcms.com/docs/configuration/globals) docs for de
 
     Same as above but for the footer of your site.
 
+### Payload global locale-copy patch
+
+Payload Admin UI `3.88.0` contains a bug in the `Copy to locale` action for Globals. The action tries to resolve a Global configuration through `globals[globalSlug]`, although Payload stores Global configurations in `globals.config`. As a result, copying localized data for `Header`, `Footer`, or any other Global fails with:
+
+```text
+Cannot read properties of undefined (reading 'config')
+```
+
+This project applies a temporary pnpm patch from [`patches/@payloadcms__ui@3.88.0.patch`](patches/@payloadcms__ui@3.88.0.patch). The patch resolves the Global configuration from `globals.config` and is registered under `pnpm.patchedDependencies` in `package.json`. It is applied automatically by `pnpm install`; do not edit the installed file in `node_modules` directly.
+
+After upgrading to a Payload release that includes an official fix, update `payload` and all `@payloadcms/*` packages together, verify the locale-copy action for both `Header` and `Footer`, and then remove the patch file and its `pnpm.patchedDependencies` entry.
+
 ## Access control
 
 Basic access control is setup to limit access to various content based based on publishing status.

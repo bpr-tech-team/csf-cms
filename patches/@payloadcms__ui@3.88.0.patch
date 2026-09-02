@@ -1,0 +1,17 @@
+diff --git a/dist/utilities/copyDataFromLocale.js b/dist/utilities/copyDataFromLocale.js
+index a038ed715b50d5245f9deb90343ecebe834248d3..70a825e123a832eaf10886a13752b155dc75ceca 100644
+--- a/dist/utilities/copyDataFromLocale.js
++++ b/dist/utilities/copyDataFromLocale.js
+@@ -205,7 +205,11 @@ export const copyDataFromLocale = async args => {
+   if (toLocaleData.status === 'rejected') {
+     throw new Error(`Error fetching data from locale "${toLocale}"`);
+   }
+-  const fields = globalSlug ? globals[globalSlug].config.fields : collections[collectionSlug].config.fields;
++  const globalConfig = globalSlug ? globals.config.find(({ slug }) => slug === globalSlug) : undefined;
++  const fields = globalSlug ? globalConfig?.fields : collections[collectionSlug]?.config.fields;
++  if (!fields) {
++    throw new Error(`Unable to find fields for "${globalSlug ?? collectionSlug}"`);
++  }
+   const fromLocaleDataWithoutID = fromLocaleData.value;
+   const toLocaleDataWithoutID = toLocaleData.value;
+   const dataWithID = overrideData ? fromLocaleDataWithoutID : mergeData(fromLocaleDataWithoutID, toLocaleDataWithoutID, fields, req, false);
