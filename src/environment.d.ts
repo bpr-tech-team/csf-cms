@@ -5,6 +5,14 @@ declare global {
             DATABASE_URL: string;
             NEXT_PUBLIC_SERVER_URL: string;
             VERCEL_PROJECT_PRODUCTION_URL: string;
+            SMTP_FROM_ADDRESS?: string;
+            SMTP_FROM_NAME?: string;
+            SMTP_HOST?: string;
+            SMTP_PASS?: string;
+            SMTP_PORT?: string;
+            SMTP_SECURE?: string;
+            SMTP_SKIP_VERIFY?: string;
+            SMTP_USER?: string;
         }
     }
 }

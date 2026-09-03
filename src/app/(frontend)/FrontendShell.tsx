@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AdminBar } from "@/components/AdminBar";
+import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/Footer/Component";
 import { Header } from "@/Header/Component";
 import type { AppLocale } from "@/i18n/config";
@@ -59,6 +60,7 @@ export async function FrontendShell({
                         }}
                         locale={locale}
                     />
+                    <CustomCursor />
 
                     <Header locale={locale} />
                     {children}

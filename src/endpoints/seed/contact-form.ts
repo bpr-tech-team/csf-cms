@@ -35,6 +35,42 @@ export const contactForm: RequiredDataFromCollectionSlug<"forms"> = {
     createdAt: "2023-01-12T21:47:41.374Z",
     emails: [
         {
+            emailFrom: '"CSF web" \u003Cinfo@csf.cz\u003E',
+            emailTo: "info@csf.cz",
+            message: {
+                root: {
+                    type: "root",
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [
+                                {
+                                    type: "text",
+                                    detail: 0,
+                                    format: 0,
+                                    mode: "normal",
+                                    style: "",
+                                    text: "{{*:table}}",
+                                    version: 1,
+                                },
+                            ],
+                            direction: "ltr",
+                            format: "",
+                            indent: 0,
+                            textFormat: 0,
+                            version: 1,
+                        },
+                    ],
+                    direction: "ltr",
+                    format: "",
+                    indent: 0,
+                    version: 1,
+                },
+            },
+            replyTo: "{{email}}",
+            subject: "Nová poptávka z webu od {{name}}",
+        },
+        {
             emailFrom: '"CSF" \u003Cinfo@csf.cz\u003E',
             emailTo: "{{email}}",
             message: {

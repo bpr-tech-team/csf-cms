@@ -1,17 +1,124 @@
 diff --git a/dist/utilities/copyDataFromLocale.js b/dist/utilities/copyDataFromLocale.js
-index a038ed715b50d5245f9deb90343ecebe834248d3..70a825e123a832eaf10886a13752b155dc75ceca 100644
+index a038ed715b50d5245f9deb90343ecebe834248d3..816d611e79124b1deed3169c452b6475e5ad7863 100644
 --- a/dist/utilities/copyDataFromLocale.js
 +++ b/dist/utilities/copyDataFromLocale.js
-@@ -205,7 +205,11 @@ export const copyDataFromLocale = async args => {
+@@ -1,5 +1,5 @@
+ import ObjectIdImport from 'bson-objectid';
+-import { canAccessAdmin, traverseFields } from 'payload';
++import { canAccessAdmin } from 'payload';
+ import { fieldAffectsData, fieldShouldBeLocalized, tabHasName } from 'payload/shared';
+ const ObjectId = 'default' in ObjectIdImport ? ObjectIdImport.default : ObjectIdImport;
+ function iterateFields(fields, fromLocaleData, toLocaleData, req, parentIsLocalized) {
+@@ -41,7 +41,7 @@ function iterateFields(fields, fromLocaleData, toLocaleData, req, parentIsLocali
+           // if the field has a value - loop over the data from target
+           if (field.name in toLocaleData) {
+             toLocaleData[field.name].map((blockData, index) => {
+-              const block = req.payload.blocks[blockData.blockType] ?? (field.blockReferences ?? field.blocks).find(block => typeof block !== 'string' && block.slug === blockData.blockType);
++              const block = req.payload.blocks[blockData.blockType] ?? field.blockReferences?.find(block => typeof block !== 'string' && block.slug === blockData.blockType) ?? field.blocks.find(block => typeof block !== 'string' && block.slug === blockData.blockType);
+               // Generate new IDs if the field is localized to prevent errors with relational DBs.
+               if (fieldShouldBeLocalized({
+                 field,
+@@ -114,19 +114,71 @@ function mergeData(fromLocaleData, toLocaleData, fields, req, parentIsLocalized)
+  * We don't have to recursively remove all ids,
+  * just the ones from the fields inside a localized array or block.
+  */
+-function removeIdIfParentIsLocalized(data, fields) {
+-  traverseFields({
+-    callback: ({
+-      parentIsLocalized,
+-      ref
+-    }) => {
+-      if (parentIsLocalized) {
+-        delete ref.id;
++function removeIdIfParentIsLocalized(data, fields, req, parentIsLocalized = false) {
++  fields.forEach(field => {
++    if (fieldAffectsData(field)) {
++      switch (field.type) {
++        case 'array': {
++          const rows = data?.[field.name];
++          if (!Array.isArray(rows)) {
++            break;
++          }
++          const rowsAreLocalized = parentIsLocalized || field.localized;
++          rows.forEach(row => {
++            if (!row || typeof row !== 'object') {
++              return;
++            }
++            if (rowsAreLocalized) {
++              delete row.id;
++            }
++            removeIdIfParentIsLocalized(row, field.fields, req, parentIsLocalized || field.localized);
++          });
++          break;
++        }
++        case 'blocks': {
++          const rows = data?.[field.name];
++          if (!Array.isArray(rows)) {
++            break;
++          }
++          const rowsAreLocalized = parentIsLocalized || field.localized;
++          rows.forEach(row => {
++            if (!row || typeof row !== 'object') {
++              return;
++            }
++            if (rowsAreLocalized) {
++              delete row.id;
++            }
++            const block = req.payload.blocks[row.blockType] ?? field.blockReferences?.find(block => typeof block !== 'string' && block.slug === row.blockType) ?? field.blocks.find(block => typeof block !== 'string' && block.slug === row.blockType);
++            if (block?.fields?.length) {
++              removeIdIfParentIsLocalized(row, block.fields, req, parentIsLocalized || field.localized);
++            }
++          });
++          break;
++        }
++        case 'group': {
++          const groupData = field.name in data ? data[field.name] : data;
++          if (groupData && typeof groupData === 'object') {
++            removeIdIfParentIsLocalized(groupData, field.fields, req, parentIsLocalized || field.localized);
++          }
++          break;
++        }
+       }
+-    },
+-    fields,
+-    fillEmpty: false,
+-    ref: data
++    } else {
++      switch (field.type) {
++        case 'collapsible':
++        case 'row':
++          removeIdIfParentIsLocalized(data, field.fields, req, parentIsLocalized);
++          break;
++        case 'tabs':
++          field.tabs.forEach(tab => {
++            const tabData = tabHasName(tab) ? data?.[tab.name] : data;
++            if (tabData && typeof tabData === 'object') {
++              removeIdIfParentIsLocalized(tabData, tab.fields, req, parentIsLocalized || tab.localized);
++            }
++          });
++          break;
++      }
++    }
+   });
+   return data;
+ }
+@@ -205,11 +257,15 @@ export const copyDataFromLocale = async args => {
    if (toLocaleData.status === 'rejected') {
      throw new Error(`Error fetching data from locale "${toLocale}"`);
    }
 -  const fields = globalSlug ? globals[globalSlug].config.fields : collections[collectionSlug].config.fields;
+-  const fromLocaleDataWithoutID = fromLocaleData.value;
+-  const toLocaleDataWithoutID = toLocaleData.value;
 +  const globalConfig = globalSlug ? globals.config.find(({ slug }) => slug === globalSlug) : undefined;
 +  const fields = globalSlug ? globalConfig?.fields : collections[collectionSlug]?.config.fields;
 +  if (!fields) {
 +    throw new Error(`Unable to find fields for "${globalSlug ?? collectionSlug}"`);
 +  }
-   const fromLocaleDataWithoutID = fromLocaleData.value;
-   const toLocaleDataWithoutID = toLocaleData.value;
++  const { id: _fromID, ...fromLocaleDataWithoutID } = fromLocaleData.value;
++  const { id: _toID, ...toLocaleDataWithoutID } = toLocaleData.value;
    const dataWithID = overrideData ? fromLocaleDataWithoutID : mergeData(fromLocaleDataWithoutID, toLocaleDataWithoutID, fields, req, false);
+-  const data = removeIdIfParentIsLocalized(dataWithID, fields);
++  const data = removeIdIfParentIsLocalized(dataWithID, fields, req);
+   return globalSlug ? await payload.updateGlobal({
+     slug: globalSlug,
+     data,

@@ -1,4 +1,5 @@
 import type { HomepageMedia } from "./home";
+import type { Media } from "@/payload-types";
 import type { File, Payload, PayloadRequest } from "payload";
 
 import { readFile } from "node:fs/promises";
@@ -81,21 +82,36 @@ export const createHomepageMedia = async ({
     payload: Payload;
     req: PayloadRequest;
 }): Promise<HomepageMedia> => {
-    const [
-        createdHeroImages,
-        createdHeroIcons,
-        createdServiceIcons,
-        createdProductImages,
-        createdProductIcons,
-        createdPartnerLogos,
-    ] = await Promise.all([
-        createMediaGroup({ payload, req, specs: heroImages }),
-        createMediaGroup({ payload, req, specs: heroIcons }),
-        createMediaGroup({ payload, req, specs: serviceIcons }),
-        createMediaGroup({ payload, req, specs: productImages }),
-        createMediaGroup({ payload, req, specs: productIcons }),
-        createMediaGroup({ payload, req, specs: partnerLogos }),
-    ]);
+    const createdHeroImages = await createMediaGroup({
+        payload,
+        req,
+        specs: heroImages,
+    });
+    const createdHeroIcons = await createMediaGroup({
+        payload,
+        req,
+        specs: heroIcons,
+    });
+    const createdServiceIcons = await createMediaGroup({
+        payload,
+        req,
+        specs: serviceIcons,
+    });
+    const createdProductImages = await createMediaGroup({
+        payload,
+        req,
+        specs: productImages,
+    });
+    const createdProductIcons = await createMediaGroup({
+        payload,
+        req,
+        specs: productIcons,
+    });
+    const createdPartnerLogos = await createMediaGroup({
+        payload,
+        req,
+        specs: partnerLogos,
+    });
 
     return {
         heroImages: createdHeroImages as HomepageMedia["heroImages"],
@@ -115,36 +131,54 @@ const createMediaGroup = async ({
     payload: Payload;
     req: PayloadRequest;
     specs: AssetSpec[];
-}) => {
-    return Promise.all(
-        specs.map(async (spec) => {
-            const data = await readFile(
-                path.resolve(
-                    process.cwd(),
-                    "public/media/homepage",
-                    spec.source,
-                ),
-            );
-            const extension = path.extname(spec.filename).toLowerCase();
-            const mimetype =
-                extension === ".svg"
-                    ? "image/svg+xml"
-                    : extension === ".jpg" || extension === ".jpeg"
-                      ? "image/jpeg"
-                      : "image/png";
-            const file: File = {
-                data,
-                mimetype,
-                name: spec.filename,
-                size: data.byteLength,
-            };
+}): Promise<Media[]> => {
+    const media: Media[] = [];
 
-            return payload.create({
-                collection: "media",
-                data: { alt: spec.alt },
-                file,
-                req,
-            });
-        }),
-    );
+    for (const spec of specs) {
+        const existing = await payload.find({
+            collection: "media",
+            depth: 0,
+            limit: 1,
+            pagination: false,
+            req,
+            where: {
+                filename: {
+                    equals: spec.filename,
+                },
+            },
+        });
+
+        if (existing.docs[0]) {
+            media.push(existing.docs[0]);
+            continue;
+        }
+
+        const data = await readFile(
+            path.resolve(process.cwd(), "public/media/homepage", spec.source),
+        );
+        const extension = path.extname(spec.filename).toLowerCase();
+        const mimetype =
+            extension === ".svg"
+                ? "image/svg+xml"
+                : extension === ".jpg" || extension === ".jpeg"
+                  ? "image/jpeg"
+                  : "image/png";
+        const file: File = {
+            data,
+            mimetype,
+            name: spec.filename,
+            size: data.byteLength,
+        };
+
+        const created = await payload.create({
+            collection: "media",
+            data: { alt: spec.alt },
+            file,
+            req,
+        });
+
+        media.push(created);
+    }
+
+    return media;
 };

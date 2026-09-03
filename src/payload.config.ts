@@ -16,9 +16,11 @@ import { plugins } from "./plugins";
 import { defaultLexical } from "@/fields/defaultLexical";
 import { getServerSideURL } from "./utilities/getURL";
 import { defaultLocale, localeLabels, locales } from "@/i18n/config";
+import { createSMTPEmailAdapter } from "@/email/smtp";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+const email = createSMTPEmailAdapter();
 
 const adminTranslations = {
     cs: {
@@ -92,6 +94,7 @@ export default buildConfig({
         },
         push: process.env.NODE_ENV !== "production",
     }),
+    ...(email ? { email } : {}),
     collections: [Pages, Posts, Media, Categories, Users],
     cors: [getServerSideURL()].filter(Boolean),
     globals: [Header, Footer],
