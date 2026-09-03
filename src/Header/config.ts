@@ -30,6 +30,26 @@ export const Header: GlobalConfig = {
                 },
             },
         },
+        link({
+            appearances: false,
+            overrides: {
+                name: "customerZoneLink",
+                label: {
+                    cs: "Odkaz do zákaznické zóny",
+                    en: "Customer zone link",
+                },
+            },
+        }),
+        link({
+            appearances: false,
+            overrides: {
+                name: "contactLink",
+                label: {
+                    cs: "Kontaktní tlačítko",
+                    en: "Contact button",
+                },
+            },
+        }),
     ],
     hooks: {
         afterChange: [revalidateHeader],

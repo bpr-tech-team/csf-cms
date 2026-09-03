@@ -2,7 +2,8 @@
 import { useHeaderTheme } from "@/providers/HeaderTheme";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 
 import type { Header } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
@@ -17,9 +18,12 @@ interface HeaderClientProps {
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
-    const { headerTheme, setHeaderTheme } = useHeaderTheme();
+    const { setHeaderTheme } = useHeaderTheme();
     const pathname = usePathname();
-    const theme = headerTheme ?? null;
+    const [openMenuPathname, setOpenMenuPathname] = useState<string | null>(
+        null,
+    );
+    const isMenuOpen = openMenuPathname === pathname;
 
     useEffect(() => {
         setHeaderTheme(null);
@@ -28,15 +32,66 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
     return (
         <header
-            className="container relative z-20   "
-            {...(theme ? { "data-theme": theme } : {})}
+            className="relative z-40 border-b border-white/20 bg-ink-900 text-white"
+            data-theme="dark"
         >
-            <div className="py-8 flex justify-between">
-                <Link href={withLocalePrefix("/", locale)}>
+            <div className="container flex h-[6.4375rem] items-center justify-between">
+                <Link
+                    aria-label={locale === "cs" ? "CSF — domů" : "CSF — home"}
+                    className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-ink-900"
+                    href={withLocalePrefix("/", locale)}
+                >
                     <Logo loading="eager" priority="high" />
                 </Link>
-                <HeaderNav data={data} locale={locale} />
+
+                <HeaderNav
+                    className="ml-auto hidden xl:flex"
+                    data={data}
+                    locale={locale}
+                    variant="desktop"
+                />
+
+                <button
+                    aria-controls="site-navigation"
+                    aria-expanded={isMenuOpen}
+                    aria-label={
+                        isMenuOpen
+                            ? locale === "cs"
+                                ? "Zavřít menu"
+                                : "Close menu"
+                            : locale === "cs"
+                              ? "Otevřít menu"
+                              : "Open menu"
+                    }
+                    className="flex size-12 items-center justify-center rounded-pill border border-white/20 text-white transition-colors duration-fast hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary xl:hidden"
+                    onClick={() =>
+                        setOpenMenuPathname(isMenuOpen ? null : pathname)
+                    }
+                    type="button"
+                >
+                    {isMenuOpen ? (
+                        <X aria-hidden className="size-5" />
+                    ) : (
+                        <Menu aria-hidden className="size-5" />
+                    )}
+                </button>
             </div>
+
+            {isMenuOpen ? (
+                <div
+                    className="absolute inset-x-0 top-full border-b border-white/20 bg-ink-900 shadow-floating xl:hidden"
+                    id="site-navigation"
+                >
+                    <div className="container py-6">
+                        <HeaderNav
+                            data={data}
+                            locale={locale}
+                            onNavigate={() => setOpenMenuPathname(null)}
+                            variant="mobile"
+                        />
+                    </div>
+                </div>
+            ) : null}
         </header>
     );
 };

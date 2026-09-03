@@ -21,13 +21,13 @@ export const Logo = (props: Props) => {
         /* eslint-disable @next/next/no-img-element */
         <img
             alt="CSF"
-            width={324}
-            height={159}
+            width={681}
+            height={230}
             loading={loading}
             fetchPriority={priority}
             decoding="async"
-            className={clsx("h-auto w-[9.75rem] object-contain", className)}
-            src="/csf-logo.png"
+            className={clsx("h-auto w-[6.1875rem] object-contain", className)}
+            src="/media/homepage/header/image-01.png"
         />
     );
 };

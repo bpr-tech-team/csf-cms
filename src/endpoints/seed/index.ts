@@ -265,49 +265,133 @@ export const seed = async ({
                     {
                         link: {
                             type: "custom",
-                            label: "Posts",
-                            url: "/posts",
+                            label: "O nás",
+                            url: "/o-nas",
                         },
                     },
                     {
                         link: {
-                            type: "reference",
-                            label: "Contact",
-                            reference: {
-                                relationTo: "pages",
-                                value: contactPage.id,
-                            },
+                            type: "custom",
+                            label: "Produkty",
+                            url: "/produkty",
+                        },
+                    },
+                    {
+                        link: {
+                            type: "custom",
+                            label: "Služby",
+                            url: "/sluzby",
+                        },
+                    },
+                    {
+                        link: {
+                            type: "custom",
+                            label: "Case Studies",
+                            url: "/case-studies",
                         },
                     },
                 ],
+                customerZoneLink: {
+                    type: "custom",
+                    label: "Zákaznická zóna",
+                    url: "/zakaznicka-zona",
+                },
+                contactLink: {
+                    type: "reference",
+                    label: "Kontaktovat CSF",
+                    reference: {
+                        relationTo: "pages",
+                        value: contactPage.id,
+                    },
+                },
             },
         }),
         payload.updateGlobal({
             slug: "footer",
             data: {
-                navItems: [
+                tagline:
+                    "Precizní infrastruktura pro digitální suverenitu firem.",
+                columns: [
                     {
-                        link: {
-                            type: "custom",
-                            label: "Admin",
-                            url: "/admin",
-                        },
+                        title: "Služby",
+                        links: [
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "Cloudové služby",
+                                    url: "/cloudove-sluzby",
+                                },
+                            },
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "Bezpečnostní audit",
+                                    url: "/it-sluzby",
+                                },
+                            },
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "IT poradenství",
+                                    url: "/it-sluzby",
+                                },
+                            },
+                        ],
                     },
                     {
-                        link: {
-                            type: "custom",
-                            label: "Source Code",
-                            newTab: true,
-                            url: "https://github.com/payloadcms/payload/tree/3.x/templates/website",
-                        },
+                        title: "Společnost",
+                        links: [
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "O nás",
+                                    url: "/o-nas",
+                                },
+                            },
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "Kariéra",
+                                    url: "/kariera",
+                                },
+                            },
+                            {
+                                link: {
+                                    type: "reference",
+                                    label: "Kontakt",
+                                    reference: {
+                                        relationTo: "pages",
+                                        value: contactPage.id,
+                                    },
+                                },
+                            },
+                        ],
                     },
                     {
-                        link: {
-                            type: "custom",
-                            label: "Payload",
-                            newTab: true,
-                            url: "https://payloadcms.com/",
-                        },
+                        title: "Právní info",
+                        links: [
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "Ochrana osobních údajů",
+                                    url: "/prohlaseni-osobni-udaje",
+                                },
+                            },
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "Obchodní podmínky",
+                                    url: "/obchodni-podminky",
+                                },
+                            },
+                            {
+                                link: {
+                                    type: "custom",
+                                    label: "SLA",
+                                    url: "/sla",
+                                },
+                            },
+                        ],
                     },
                 ],
             },
