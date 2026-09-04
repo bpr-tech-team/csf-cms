@@ -4,16 +4,20 @@ import type {
     FormBlock as GeneratedFormBlock,
 } from "@/payload-types";
 
-import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import type { FieldValues } from "react-hook-form";
+import { Eyebrow } from "@/components/Eyebrow";
 import RichText from "@/components/RichText";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Eyebrow } from "@/components/ui/eyebrow";
-import { fields } from "./fields";
+import { Form } from "@/components/ui/form";
 import { getClientSideURL } from "@/utilities/getURL";
 import { cn } from "@/utilities/ui";
+import { CircleAlert, CircleCheck, LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useState } from "react";
+import type { FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
+
+import { fields } from "./fields";
 
 export type FormBlockType = Omit<GeneratedFormBlock, "form"> & {
     form: FormType;
@@ -44,89 +48,57 @@ export const FormBlock: React.FC<
     });
     const {
         control,
-        formState: { errors },
+        formState: { isSubmitting },
         handleSubmit,
-        register,
     } = formMethods;
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [hasSubmitted, setHasSubmitted] = useState<boolean>();
-    const [error, setError] = useState<
-        { message: string; status?: string } | undefined
-    >();
+    const [hasSubmitted, setHasSubmitted] = useState(false);
+    const [error, setError] = useState<string>();
     const router = useRouter();
     const isHomepageDark = appearance === "homepageDark";
 
     const onSubmit = useCallback(
-        (data: FieldValues) => {
-            let loadingTimerID: ReturnType<typeof setTimeout>;
-            const submitForm = async () => {
-                setError(undefined);
+        async (data: FieldValues) => {
+            setError(undefined);
 
-                const dataToSend = Object.entries(data).map(
-                    ([name, value]) => ({
-                        field: name,
-                        value,
-                    }),
+            const dataToSend = Object.entries(data).map(([name, value]) => ({
+                field: name,
+                value,
+            }));
+
+            try {
+                const response = await fetch(
+                    `${getClientSideURL()}/api/form-submissions`,
+                    {
+                        body: JSON.stringify({
+                            form: formID,
+                            submissionData: dataToSend,
+                        }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                    },
                 );
 
-                // delay loading indicator by 1s
-                loadingTimerID = setTimeout(() => {
-                    setIsLoading(true);
-                }, 1000);
-
-                try {
-                    const req = await fetch(
-                        `${getClientSideURL()}/api/form-submissions`,
-                        {
-                            body: JSON.stringify({
-                                form: formID,
-                                submissionData: dataToSend,
-                            }),
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            method: "POST",
-                        },
+                if (!response.ok) {
+                    setError(
+                        "Formulář se nepodařilo odeslat. Zkuste to prosím znovu.",
                     );
-
-                    const res = await req.json();
-
-                    clearTimeout(loadingTimerID);
-
-                    if (req.status >= 400) {
-                        setIsLoading(false);
-
-                        setError({
-                            message:
-                                res.errors?.[0]?.message ||
-                                "Internal Server Error",
-                            status: res.status,
-                        });
-
-                        return;
-                    }
-
-                    setIsLoading(false);
-                    setHasSubmitted(true);
-
-                    if (confirmationType === "redirect" && redirect) {
-                        const { url } = redirect;
-
-                        const redirectUrl = url;
-
-                        if (redirectUrl) router.push(redirectUrl);
-                    }
-                } catch (err) {
-                    console.warn(err);
-                    setIsLoading(false);
-                    setError({
-                        message: "Something went wrong.",
-                    });
+                    return;
                 }
-            };
 
-            void submitForm();
+                setHasSubmitted(true);
+
+                if (confirmationType === "redirect" && redirect?.url) {
+                    router.push(redirect.url);
+                }
+            } catch (submissionError) {
+                console.warn(submissionError);
+                setError(
+                    "Při odesílání formuláře došlo k chybě. Zkuste to prosím znovu.",
+                );
+            }
         },
         [router, formID, redirect, confirmationType],
     );
@@ -165,25 +137,48 @@ export const FormBlock: React.FC<
                             "border-brand-500/20 bg-olive-950 p-6 md:p-10 [&_input]:h-12 [&_input]:rounded-xs [&_input]:border-brand-500/20 [&_input]:bg-olive-850 [&_label]:text-eyebrow [&_label]:font-medium [&_label]:uppercase [&_textarea]:min-h-28 [&_textarea]:rounded-xs [&_textarea]:border-brand-500/20 [&_textarea]:bg-olive-850",
                     )}
                 >
-                    <FormProvider {...formMethods}>
-                        {!isLoading &&
-                            hasSubmitted &&
+                    <Form {...formMethods}>
+                        {hasSubmitted &&
                             confirmationType === "message" &&
                             confirmationMessage && (
-                                <RichText data={confirmationMessage} />
+                                <Alert
+                                    aria-live="polite"
+                                    className="mb-6"
+                                    role="status"
+                                    variant="success"
+                                >
+                                    <CircleCheck aria-hidden />
+                                    <AlertTitle>
+                                        Formulář byl odeslán
+                                    </AlertTitle>
+                                    <AlertDescription>
+                                        <RichText data={confirmationMessage} />
+                                    </AlertDescription>
+                                </Alert>
                             )}
-                        {isLoading && !hasSubmitted && (
-                            <p>Loading, please wait...</p>
-                        )}
                         {error && (
-                            <div>{`${error.status || "500"}: ${error.message || ""}`}</div>
+                            <Alert
+                                className="mb-6"
+                                role="alert"
+                                variant="destructive"
+                            >
+                                <CircleAlert aria-hidden />
+                                <AlertTitle>Odeslání se nezdařilo</AlertTitle>
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
                         )}
                         {!hasSubmitted && (
-                            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-                                <div className="-mx-2 -mb-6 flex flex-wrap">
-                                    {formFromProps &&
-                                        formFromProps.fields &&
-                                        formFromProps.fields?.map(
+                            <form
+                                aria-busy={isSubmitting}
+                                id={formID}
+                                onSubmit={handleSubmit(onSubmit)}
+                            >
+                                <fieldset
+                                    className="m-0 min-w-0 border-0 p-0"
+                                    disabled={isSubmitting}
+                                >
+                                    <div className="-mx-2 -mb-6 flex flex-wrap">
+                                        {formFromProps.fields?.map(
                                             (field, index) => {
                                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                 const Field: React.FC<any> =
@@ -216,11 +211,6 @@ export const FormBlock: React.FC<
                                                                 control={
                                                                     control
                                                                 }
-                                                                errors={errors}
-                                                                register={
-                                                                    register
-                                                                }
-                                                                width={100}
                                                             />
                                                         </div>
                                                     );
@@ -228,21 +218,29 @@ export const FormBlock: React.FC<
                                                 return null;
                                             },
                                         )}
-                                </div>
+                                    </div>
 
-                                <Button
-                                    className={cn(
-                                        isHomepageDark && "mt-8 w-full",
-                                    )}
-                                    form={formID}
-                                    type="submit"
-                                    variant="default"
-                                >
-                                    {submitButtonLabel}
-                                </Button>
+                                    <Button
+                                        className={cn(
+                                            isHomepageDark && "mt-8 w-full",
+                                        )}
+                                        type="submit"
+                                        variant="default"
+                                    >
+                                        {isSubmitting && (
+                                            <LoaderCircle
+                                                aria-hidden
+                                                className="animate-spin"
+                                            />
+                                        )}
+                                        {isSubmitting
+                                            ? "Odesílání…"
+                                            : submitButtonLabel}
+                                    </Button>
+                                </fieldset>
                             </form>
                         )}
-                    </FormProvider>
+                    </Form>
                 </div>
             </div>
         </section>

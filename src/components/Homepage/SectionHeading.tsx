@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Eyebrow } from "@/components/ui/eyebrow";
+import { Eyebrow } from "@/components/Eyebrow";
 import { cn } from "@/utilities/ui";
 
 type SectionHeadingProps = {

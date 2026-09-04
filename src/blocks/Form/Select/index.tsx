@@ -1,7 +1,14 @@
 import type { SelectField } from "@payloadcms/plugin-form-builder/types";
-import type { Control, FieldErrorsImpl } from "react-hook-form";
+import type { Control, FieldValues } from "react-hook-form";
 
-import { Label } from "@/components/ui/label";
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    RequiredMark,
+} from "@/components/ui/form";
 import {
     Select as SelectComponent,
     SelectContent,
@@ -10,68 +17,55 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import React from "react";
-import { Controller } from "react-hook-form";
-
-import { Error } from "../Error";
-import { Width } from "../Width";
 
 export const Select: React.FC<
     SelectField & {
-        control: Control;
-        errors: Partial<FieldErrorsImpl>;
+        control: Control<FieldValues>;
     }
 > = ({
     name,
     control,
-    errors,
     label,
     options,
+    placeholder,
     required,
-    width,
     defaultValue,
 }) => {
     return (
-        <Width width={width}>
-            <Label htmlFor={name}>
-                {label}
-                {required && (
-                    <span className="required">
-                        * <span className="sr-only">(required)</span>
-                    </span>
-                )}
-            </Label>
-            <Controller
-                control={control}
-                defaultValue={defaultValue}
-                name={name}
-                render={({ field: { onChange, value } }) => {
-                    const controlledValue = options.find(
-                        (t) => t.value === value,
-                    );
-
-                    return (
-                        <SelectComponent
-                            onValueChange={(val) => onChange(val)}
-                            value={controlledValue?.value}
-                        >
-                            <SelectTrigger className="w-full" id={name}>
-                                <SelectValue placeholder={label} />
+        <FormField
+            control={control}
+            defaultValue={defaultValue ?? ""}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>
+                        {label}
+                        {required && <RequiredMark />}
+                    </FormLabel>
+                    <SelectComponent
+                        name={field.name}
+                        onValueChange={field.onChange}
+                        value={field.value || undefined}
+                    >
+                        <FormControl>
+                            <SelectTrigger className="w-full">
+                                <SelectValue
+                                    placeholder={placeholder || label}
+                                />
                             </SelectTrigger>
-                            <SelectContent>
-                                {options.map(({ label, value }) => {
-                                    return (
-                                        <SelectItem key={value} value={value}>
-                                            {label}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectContent>
-                        </SelectComponent>
-                    );
-                }}
-                rules={{ required }}
-            />
-            {errors[name] && <Error name={name} />}
-        </Width>
+                        </FormControl>
+                        <SelectContent>
+                            {options.map(({ label, value }) => (
+                                <SelectItem key={value} value={value}>
+                                    {label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </SelectComponent>
+                    <FormMessage />
+                </FormItem>
+            )}
+            rules={{ required: required ? "Toto pole je povinné." : false }}
+        />
     );
 };

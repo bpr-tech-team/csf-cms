@@ -1,7 +1,14 @@
 import type { StateField } from "@payloadcms/plugin-form-builder/types";
-import type { Control, FieldErrorsImpl } from "react-hook-form";
+import type { Control, FieldValues } from "react-hook-form";
 
-import { Label } from "@/components/ui/label";
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    RequiredMark,
+} from "@/components/ui/form";
 import {
     Select,
     SelectContent,
@@ -10,60 +17,47 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import React from "react";
-import { Controller } from "react-hook-form";
 
-import { Error } from "../Error";
-import { Width } from "../Width";
 import { stateOptions } from "./options";
 
 export const State: React.FC<
     StateField & {
-        control: Control;
-        errors: Partial<FieldErrorsImpl>;
+        control: Control<FieldValues>;
     }
-> = ({ name, control, errors, label, required, width }) => {
+> = ({ name, control, defaultValue, label, required }) => {
     return (
-        <Width width={width}>
-            <Label htmlFor={name}>
-                {label}
-                {required && (
-                    <span className="required">
-                        * <span className="sr-only">(required)</span>
-                    </span>
-                )}
-            </Label>
-            <Controller
-                control={control}
-                defaultValue=""
-                name={name}
-                render={({ field: { onChange, value } }) => {
-                    const controlledValue = stateOptions.find(
-                        (t) => t.value === value,
-                    );
-
-                    return (
-                        <Select
-                            onValueChange={(val) => onChange(val)}
-                            value={controlledValue?.value}
-                        >
-                            <SelectTrigger className="w-full" id={name}>
+        <FormField
+            control={control}
+            defaultValue={defaultValue ?? ""}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>
+                        {label}
+                        {required && <RequiredMark />}
+                    </FormLabel>
+                    <Select
+                        name={field.name}
+                        onValueChange={field.onChange}
+                        value={field.value || undefined}
+                    >
+                        <FormControl>
+                            <SelectTrigger className="w-full">
                                 <SelectValue placeholder={label} />
                             </SelectTrigger>
-                            <SelectContent>
-                                {stateOptions.map(({ label, value }) => {
-                                    return (
-                                        <SelectItem key={value} value={value}>
-                                            {label}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectContent>
-                        </Select>
-                    );
-                }}
-                rules={{ required }}
-            />
-            {errors[name] && <Error name={name} />}
-        </Width>
+                        </FormControl>
+                        <SelectContent>
+                            {stateOptions.map(({ label, value }) => (
+                                <SelectItem key={value} value={value}>
+                                    {label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                </FormItem>
+            )}
+            rules={{ required: required ? "Toto pole je povinné." : false }}
+        />
     );
 };

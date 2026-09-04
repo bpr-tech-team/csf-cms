@@ -1,40 +1,40 @@
 import type { TextField } from "@payloadcms/plugin-form-builder/types";
-import type {
-    FieldErrorsImpl,
-    FieldValues,
-    UseFormRegister,
-} from "react-hook-form";
+import type { Control, FieldValues } from "react-hook-form";
 
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    RequiredMark,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import React from "react";
 
-import { Error } from "../Error";
-import { Width } from "../Width";
 export const Number: React.FC<
     TextField & {
-        errors: Partial<FieldErrorsImpl>;
-        register: UseFormRegister<FieldValues>;
+        control: Control<FieldValues>;
     }
-> = ({ name, defaultValue, errors, label, register, required, width }) => {
+> = ({ name, defaultValue, label, control, required }) => {
     return (
-        <Width width={width}>
-            <Label htmlFor={name}>
-                {label}
-
-                {required && (
-                    <span className="required">
-                        * <span className="sr-only">(required)</span>
-                    </span>
-                )}
-            </Label>
-            <Input
-                defaultValue={defaultValue}
-                id={name}
-                type="number"
-                {...register(name, { required })}
-            />
-            {errors[name] && <Error name={name} />}
-        </Width>
+        <FormField
+            control={control}
+            defaultValue={defaultValue ?? ""}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>
+                        {label}
+                        {required && <RequiredMark />}
+                    </FormLabel>
+                    <FormControl>
+                        <Input inputMode="decimal" type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            rules={{ required: required ? "Toto pole je povinné." : false }}
+        />
     );
 };

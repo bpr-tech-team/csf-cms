@@ -1,49 +1,48 @@
 import type { CheckboxField } from "@payloadcms/plugin-form-builder/types";
-import type {
-    FieldErrorsImpl,
-    FieldValues,
-    UseFormRegister,
-} from "react-hook-form";
-
-import { useFormContext } from "react-hook-form";
+import type { Control, FieldValues } from "react-hook-form";
 
 import { Checkbox as CheckboxUi } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    RequiredMark,
+} from "@/components/ui/form";
 import React from "react";
-
-import { Error } from "../Error";
-import { Width } from "../Width";
 
 export const Checkbox: React.FC<
     CheckboxField & {
-        errors: Partial<FieldErrorsImpl>;
-        register: UseFormRegister<FieldValues>;
+        control: Control<FieldValues>;
     }
-> = ({ name, defaultValue, errors, label, register, required, width }) => {
-    const props = register(name, { required: required });
-    const { setValue } = useFormContext();
-
+> = ({ name, defaultValue, label, control, required }) => {
     return (
-        <Width width={width}>
-            <div className="flex items-center gap-2">
-                <CheckboxUi
-                    defaultChecked={defaultValue}
-                    id={name}
-                    {...props}
-                    onCheckedChange={(checked) => {
-                        setValue(props.name, checked);
-                    }}
-                />
-                <Label htmlFor={name}>
-                    {required && (
-                        <span className="required">
-                            * <span className="sr-only">(required)</span>
-                        </span>
-                    )}
-                    {label}
-                </Label>
-            </div>
-            {errors[name] && <Error name={name} />}
-        </Width>
+        <FormField
+            control={control}
+            defaultValue={defaultValue ?? false}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <div className="flex items-center gap-2">
+                        <FormControl>
+                            <CheckboxUi
+                                checked={field.value === true}
+                                name={field.name}
+                                onBlur={field.onBlur}
+                                onCheckedChange={field.onChange}
+                                ref={field.ref}
+                            />
+                        </FormControl>
+                        <FormLabel>
+                            {label}
+                            {required && <RequiredMark />}
+                        </FormLabel>
+                    </div>
+                    <FormMessage />
+                </FormItem>
+            )}
+            rules={{ required: required ? "Toto pole je povinné." : false }}
+        />
     );
 };

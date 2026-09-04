@@ -1,6 +1,6 @@
 import type { MetricsStripBlock as MetricsStripBlockProps } from "@/payload-types";
 
-import { Eyebrow } from "@/components/ui/eyebrow";
+import { Eyebrow } from "@/components/Eyebrow";
 import React from "react";
 
 export const MetricsStripBlock = ({

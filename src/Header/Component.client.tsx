@@ -1,9 +1,10 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { useHeaderTheme } from "@/providers/HeaderTheme";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
 import type { Header } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
@@ -23,12 +24,28 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
     const [openMenuPathname, setOpenMenuPathname] = useState<string | null>(
         null,
     );
+    const menuButtonRef = useRef<HTMLButtonElement>(null);
     const isMenuOpen = openMenuPathname === pathname;
 
     useEffect(() => {
         setHeaderTheme(null);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname]);
+
+    useEffect(() => {
+        if (!isMenuOpen) return;
+
+        const closeMenuOnEscape = (event: KeyboardEvent) => {
+            if (event.key !== "Escape") return;
+
+            setOpenMenuPathname(null);
+            menuButtonRef.current?.focus();
+        };
+
+        window.addEventListener("keydown", closeMenuOnEscape);
+
+        return () => window.removeEventListener("keydown", closeMenuOnEscape);
+    }, [isMenuOpen]);
 
     return (
         <header
@@ -51,7 +68,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
                     variant="desktop"
                 />
 
-                <button
+                <Button
                     aria-controls="site-navigation"
                     aria-expanded={isMenuOpen}
                     aria-label={
@@ -67,14 +84,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
                     onClick={() =>
                         setOpenMenuPathname(isMenuOpen ? null : pathname)
                     }
+                    ref={menuButtonRef}
+                    size="icon"
                     type="button"
+                    variant="ghost"
                 >
                     {isMenuOpen ? (
                         <X aria-hidden className="size-5" />
                     ) : (
                         <Menu aria-hidden className="size-5" />
                     )}
-                </button>
+                </Button>
             </div>
 
             {isMenuOpen ? (
