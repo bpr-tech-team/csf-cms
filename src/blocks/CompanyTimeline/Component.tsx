@@ -1,6 +1,6 @@
 import type { CompanyTimelineBlock as CompanyTimelineBlockProps } from "@/payload-types";
 
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { SectionHeading } from "@/components/Homepage/SectionHeading";
 import { cn } from "@/utilities/ui";
 import React from "react";
 
@@ -12,12 +12,12 @@ export const CompanyTimelineBlock = ({
     return (
         <section className="overflow-hidden bg-paper-0 py-20 text-ink-900 md:pt-24 md:pb-28">
             <div className="container">
-                <h2 className="text-4xl leading-snug font-bold tracking-tight text-balance md:text-heading-xl">
-                    <HighlightedText
-                        highlightedText={highlightedText}
-                        text={heading}
-                    />
-                </h2>
+                <SectionHeading
+                    heading={heading}
+                    headingClassName="leading-snug text-balance"
+                    highlightedText={highlightedText}
+                    showRule={false}
+                />
             </div>
 
             <ol className="mx-auto mt-20 flex max-w-[87rem] flex-col gap-12 px-5 md:mt-28 md:gap-15 md:px-8 xl:px-0">

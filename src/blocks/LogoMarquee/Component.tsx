@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { LogoMarqueeBlock as LogoMarqueeBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/Homepage/MediaAsset";
+import { Eyebrow } from "@/components/ui/eyebrow";
 import { cn } from "@/utilities/ui";
 import React from "react";
 
@@ -35,9 +36,9 @@ export const LogoMarqueeBlock = ({
             className="overflow-hidden border-b border-brand-500 bg-ink-950 py-9 text-paper-0"
             data-theme="dark"
         >
-            <p className="mb-9 text-center text-eyebrow uppercase text-brand-500">
+            <Eyebrow align="center" className="mb-9" tone="brand">
                 {eyebrow}
-            </p>
+            </Eyebrow>
             <div className="relative overflow-hidden">
                 <div
                     className={cn(

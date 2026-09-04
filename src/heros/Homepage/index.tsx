@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 
 import { MediaAsset } from "@/components/Homepage/MediaAsset";
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { SectionHeading } from "@/components/Homepage/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
@@ -211,17 +211,15 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
 
                 {intro && (
                     <div className="mx-auto mt-14 max-w-[62rem] text-center">
-                        {intro.eyebrow && (
-                            <p className="text-eyebrow uppercase text-paper-0/80">
-                                {intro.eyebrow}
-                            </p>
-                        )}
-                        <h2 className="mt-5 text-3xl leading-tight font-bold tracking-tight md:text-heading-lg">
-                            <HighlightedText
-                                highlightedText={intro.highlightedText}
-                                text={intro.heading}
-                            />
-                        </h2>
+                        <SectionHeading
+                            align="center"
+                            eyebrow={intro.eyebrow}
+                            heading={intro.heading}
+                            highlightedText={intro.highlightedText}
+                            showRule={false}
+                            size="compact"
+                            tone="inverse"
+                        />
                         <p className="mx-auto mt-5 max-w-[59rem] text-body-md text-paper-0/80 md:text-body-lg md:leading-8">
                             {intro.description}
                         </p>

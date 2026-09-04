@@ -10,6 +10,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
 import RichText from "@/components/RichText";
 import { Button } from "@/components/ui/button";
+import { Eyebrow } from "@/components/ui/eyebrow";
 import { fields } from "./fields";
 import { getClientSideURL } from "@/utilities/getURL";
 import { cn } from "@/utilities/ui";
@@ -142,9 +143,9 @@ export const FormBlock: React.FC<
         >
             <div className="container lg:max-w-[46rem]">
                 {eyebrow && isHomepageDark && !hasSubmitted && (
-                    <p className="mb-5 text-center text-eyebrow uppercase text-paper-0/90">
+                    <Eyebrow align="center" className="mb-5" tone="inverse">
                         {eyebrow}
-                    </p>
+                    </Eyebrow>
                 )}
                 {enableIntro && introContent && !hasSubmitted && (
                     <RichText

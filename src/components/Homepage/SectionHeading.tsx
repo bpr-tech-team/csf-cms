@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Eyebrow } from "@/components/ui/eyebrow";
 import { cn } from "@/utilities/ui";
 
 type SectionHeadingProps = {
@@ -7,8 +8,11 @@ type SectionHeadingProps = {
     className?: string;
     eyebrow?: null | string;
     heading: string;
+    headingClassName?: string;
     highlightedText?: null | string;
     showRule?: boolean;
+    size?: "compact" | "default";
+    tone?: "default" | "inverse";
 };
 
 export const SectionHeading = ({
@@ -16,20 +20,32 @@ export const SectionHeading = ({
     className,
     eyebrow,
     heading,
+    headingClassName,
     highlightedText,
     showRule = true,
+    size = "default",
+    tone = "default",
 }: SectionHeadingProps) => {
     const content = (
         <div className={cn(align === "center" && "text-center")}>
-            {eyebrow && (
-                <p className="text-eyebrow uppercase text-neutral-secondary">
+            {eyebrow ? (
+                <Eyebrow
+                    align={align}
+                    tone={tone === "inverse" ? "inverse" : "neutral"}
+                >
                     {eyebrow}
-                </p>
-            )}
+                </Eyebrow>
+            ) : null}
             <h2
                 className={cn(
-                    "mt-4 text-4xl leading-tight font-bold tracking-tight whitespace-pre-line text-ink-950 md:text-heading-xl",
+                    "leading-tight font-bold tracking-tight whitespace-pre-line",
+                    size === "compact"
+                        ? "text-3xl md:text-heading-lg"
+                        : "text-4xl md:text-heading-xl",
+                    eyebrow && (size === "compact" ? "mt-5" : "mt-4"),
+                    tone === "inverse" ? "text-paper-0" : "text-ink-950",
                     align === "center" && "text-balance",
+                    headingClassName,
                 )}
             >
                 <HighlightedText

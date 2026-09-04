@@ -1,5 +1,6 @@
 import type { MetricsStripBlock as MetricsStripBlockProps } from "@/payload-types";
 
+import { Eyebrow } from "@/components/ui/eyebrow";
 import React from "react";
 
 export const MetricsStripBlock = ({
@@ -18,9 +19,14 @@ export const MetricsStripBlock = ({
                             className="flex flex-col text-center"
                             key={item.id ?? index}
                         >
-                            <dt className="order-1 mt-3 text-eyebrow uppercase text-paper-0/85">
+                            <Eyebrow
+                                align="center"
+                                as="dt"
+                                className="order-1 mt-3"
+                                tone="inverse"
+                            >
                                 {item.label}
-                            </dt>
+                            </Eyebrow>
                             <dd className="text-5xl leading-none font-bold tracking-tight text-brand-500 md:text-metric">
                                 {item.prefix}
                                 {new Intl.NumberFormat("cs-CZ").format(
