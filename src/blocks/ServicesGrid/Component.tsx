@@ -66,7 +66,7 @@ export const ServicesGridBlock = ({
                                 <h3 className="mt-8 text-heading-md font-medium text-ink-950">
                                     {item.title}
                                 </h3>
-                                <p className="mt-3 text-body-md text-ink-950">
+                                <p className="mt-3 text-body-md font-normal text-ink-950">
                                     {item.description}
                                 </p>
                             </>

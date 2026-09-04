@@ -162,7 +162,7 @@ export const FormBlock: React.FC<
                     className={cn(
                         "rounded-md border border-border p-4 lg:p-6",
                         isHomepageDark &&
-                            "border-brand-500/20 bg-olive-950 p-6 md:p-10 [&_input]:h-12 [&_input]:rounded-xs [&_input]:border-brand-500/20 [&_input]:bg-olive-850 [&_label]:text-eyebrow [&_label]:uppercase [&_textarea]:min-h-28 [&_textarea]:rounded-xs [&_textarea]:border-brand-500/20 [&_textarea]:bg-olive-850",
+                            "border-brand-500/20 bg-olive-950 p-6 md:p-10 [&_input]:h-12 [&_input]:rounded-xs [&_input]:border-brand-500/20 [&_input]:bg-olive-850 [&_label]:text-eyebrow [&_label]:font-medium [&_label]:uppercase [&_textarea]:min-h-28 [&_textarea]:rounded-xs [&_textarea]:border-brand-500/20 [&_textarea]:bg-olive-850",
                     )}
                 >
                     <FormProvider {...formMethods}>

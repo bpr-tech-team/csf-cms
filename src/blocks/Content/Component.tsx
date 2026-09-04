@@ -8,19 +8,19 @@ import { defaultLocale } from "@/i18n/config";
 
 import { CMSLink } from "../../components/Link";
 
+const columnSpanClasses = {
+    full: "lg:col-span-12",
+    half: "lg:col-span-6",
+    oneThird: "lg:col-span-4",
+    twoThirds: "lg:col-span-8",
+} as const;
+
 export const ContentBlock: React.FC<
     ContentBlockProps & {
         locale?: AppLocale;
     }
 > = (props) => {
     const { columns, locale = defaultLocale } = props;
-
-    const colsSpanClasses = {
-        full: "12",
-        half: "6",
-        oneThird: "4",
-        twoThirds: "8",
-    };
 
     return (
         <div className="container my-16">
@@ -33,7 +33,8 @@ export const ContentBlock: React.FC<
                         return (
                             <div
                                 className={cn(
-                                    `col-span-4 lg:col-span-${colsSpanClasses[size!]}`,
+                                    "col-span-4",
+                                    columnSpanClasses[size!],
                                     {
                                         "md:col-span-2": size !== "full",
                                     },

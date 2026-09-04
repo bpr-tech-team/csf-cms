@@ -114,7 +114,9 @@ const ProductCard = ({
             <h3 className="mt-6 text-heading-md font-medium text-ink-950">
                 {item.title}
             </h3>
-            <p className="mt-3 text-body-md text-ink-950">{item.description}</p>
+            <p className="mt-3 text-body-md font-normal text-ink-950">
+                {item.description}
+            </p>
         </>
     );
     const className =

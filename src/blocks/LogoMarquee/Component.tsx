@@ -6,6 +6,8 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { cn } from "@/utilities/ui";
 import React from "react";
 
+import styles from "./styles.module.css";
+
 type LogoItem = LogoMarqueeBlockProps["items"][number];
 
 const logoFallbacks = [
@@ -42,7 +44,8 @@ export const LogoMarqueeBlock = ({
             <div className="relative overflow-hidden">
                 <div
                     className={cn(
-                        "homepage-logo-marquee flex w-max items-center",
+                        styles.marquee,
+                        "flex w-max items-center",
                         pauseOnHover && "hover:[animation-play-state:paused]",
                     )}
                     style={animationStyle}

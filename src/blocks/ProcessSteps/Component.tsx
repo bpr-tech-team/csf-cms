@@ -21,7 +21,7 @@ export const ProcessStepsBlock = ({
                     showRule={false}
                 />
                 {description && (
-                    <p className="mx-auto mt-5 max-w-[46rem] text-center text-body-md text-neutral-secondary">
+                    <p className="mx-auto mt-5 max-w-[46rem] text-center text-body-md font-normal text-neutral-secondary">
                         {description}
                     </p>
                 )}

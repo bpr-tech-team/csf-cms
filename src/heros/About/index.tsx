@@ -38,7 +38,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({
             <div className="container relative z-10">
                 {richText && (
                     <RichText
-                        className="[&_h1]:m-0 [&_h1]:text-5xl [&_h1]:leading-[1.08] [&_h1]:font-bold [&_h1]:tracking-[-0.04em] md:[&_h1]:text-display-xl [&_p]:mt-5 [&_p]:max-w-4xl [&_p]:text-body-md [&_p]:leading-7 [&_p]:text-paper-0 md:[&_p]:mt-16 md:[&_p]:text-body-lg md:[&_p]:leading-8"
+                        className="[&_h1]:m-0 [&_h1]:text-5xl [&_h1]:leading-[1.08] [&_h1]:font-bold [&_h1]:tracking-[-0.04em] md:[&_h1]:text-display-xl [&_p]:mt-5 [&_p]:max-w-4xl [&_p]:text-body-md [&_p]:leading-7 [&_p]:font-normal [&_p]:text-paper-0 md:[&_p]:mt-16 md:[&_p]:text-body-lg md:[&_p]:leading-8"
                         data={richText}
                         enableGutter={false}
                         enableProse={false}

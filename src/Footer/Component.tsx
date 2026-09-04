@@ -213,7 +213,7 @@ export async function Footer({
                     >
                         <Logo />
                     </Link>
-                    <p className="max-w-68 text-body-sm leading-6 text-neutral-inverse-muted">
+                    <p className="max-w-68 text-body-sm leading-6 font-normal text-neutral-inverse-muted">
                         © {year} CSF ICT Solutions. All rights reserved.
                         <br />
                         {tagline}
@@ -234,7 +234,7 @@ export async function Footer({
                                 <li key={id || `${link.label}-${index}`}>
                                     <CMSLink
                                         {...link}
-                                        className="text-body-md leading-6 text-neutral-inverse-muted no-underline transition-colors duration-fast hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary"
+                                        className="text-body-md leading-6 font-normal text-neutral-inverse-muted no-underline transition-colors duration-fast hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary"
                                         locale={locale}
                                     />
                                 </li>

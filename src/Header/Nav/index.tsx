@@ -67,7 +67,7 @@ export const HeaderNav: React.FC<{
             className={cn(
                 isMobile
                     ? "flex flex-col items-stretch gap-1"
-                    : "items-center text-body-sm",
+                    : "items-center text-body-sm font-normal",
                 className,
             )}
             onClickCapture={(event) => {

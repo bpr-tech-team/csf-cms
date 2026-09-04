@@ -25,7 +25,7 @@ export const Eyebrow = ({
 }: EyebrowProps) => (
     <Component
         className={cn(
-            "text-eyebrow uppercase",
+            "text-eyebrow font-medium uppercase",
             toneClasses[tone],
             align === "center" && "text-center",
             className,

@@ -13,6 +13,8 @@ import { cn } from "@/utilities/ui";
 import NextImage from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 
+import styles from "./styles.module.css";
+
 type HomepageHeroProps = Page["hero"] & {
     locale?: AppLocale;
 };
@@ -126,13 +128,13 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
             <div className="container relative z-10">
                 <div aria-live="polite" className="max-w-[68rem]">
                     <div
-                        className="homepage-hero-slide"
+                        className={styles.slide}
                         key={activeSlide.id ?? activeIndex}
                     >
                         <h1 className="max-w-[62rem] text-5xl leading-[1.08] font-bold tracking-[-0.035em] text-balance sm:text-6xl md:text-7xl xl:text-display-xl">
                             {activeSlide.heading}
                         </h1>
-                        <p className="mt-7 max-w-3xl text-body-md leading-8 text-paper-0/90 md:mt-9 md:text-body-lg">
+                        <p className="mt-7 max-w-3xl text-body-md leading-8 font-normal text-paper-0/90 md:mt-9 md:text-body-lg">
                             {activeSlide.description}
                         </p>
 
@@ -176,7 +178,8 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         <div className="relative h-1 flex-1 overflow-hidden bg-[#282828]">
                             <span
                                 className={cn(
-                                    "homepage-hero-progress absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
+                                    styles.progress,
+                                    "absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
                                     (!autoplay ||
                                         isPaused ||
                                         prefersReducedMotion) &&
@@ -220,7 +223,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                             size="compact"
                             tone="inverse"
                         />
-                        <p className="mx-auto mt-5 max-w-[59rem] text-body-md text-paper-0/80 md:text-body-lg md:leading-8">
+                        <p className="mx-auto mt-5 max-w-[59rem] text-body-md font-normal text-paper-0/80 md:text-body-lg md:leading-8">
                             {intro.description}
                         </p>
                     </div>

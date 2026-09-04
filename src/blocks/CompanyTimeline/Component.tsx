@@ -80,7 +80,7 @@ export const CompanyTimelineBlock = ({
                                             : "mr-11 rounded-r-2xl md:mr-0 md:rounded-2xl",
                                     )}
                                 >
-                                    <p className="text-body-md leading-6 md:text-body-lg">
+                                    <p className="text-body-md leading-6 font-normal md:text-body-lg">
                                         {item.description}
                                     </p>
                                 </div>
