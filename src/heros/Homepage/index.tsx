@@ -98,7 +98,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
     return (
         <section
             aria-label={locale === "cs" ? "Úvodní prezentace" : "Introduction"}
-            className="relative -mt-[10.5rem] overflow-hidden bg-ink-900 pt-[14.5rem] pb-20 text-paper-0 md:pb-24 xl:pb-[5.25rem]"
+            className="relative -mt-42 overflow-hidden bg-ink-900 pt-58 pb-20 text-paper-0 md:pb-24 xl:pb-21"
             data-theme="dark"
             onBlurCapture={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -129,10 +129,10 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         className="homepage-hero-slide"
                         key={activeSlide.id ?? activeIndex}
                     >
-                        <h1 className="max-w-[62rem] text-[2.75rem] leading-[1.08] font-bold tracking-[-0.035em] text-balance sm:text-[3.5rem] md:text-[4.25rem] xl:text-display-xl">
+                        <h1 className="max-w-[62rem] text-5xl leading-[1.08] font-bold tracking-[-0.035em] text-balance sm:text-6xl md:text-7xl xl:text-display-xl">
                             {activeSlide.heading}
                         </h1>
-                        <p className="mt-7 max-w-[48rem] text-body-md leading-8 text-paper-0/90 md:mt-9 md:text-body-lg">
+                        <p className="mt-7 max-w-3xl text-body-md leading-8 text-paper-0/90 md:mt-9 md:text-body-lg">
                             {activeSlide.description}
                         </p>
 
@@ -149,7 +149,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                                                         "default"
                                                     }
                                                     className={cn(
-                                                        "h-[3.25rem] px-7",
+                                                        "h-13 px-7",
                                                         link.appearance ===
                                                             "outline" &&
                                                             "border-brand-500/50 text-paper-0 hover:border-brand-500 hover:bg-brand-100 hover:text-paper-0",
@@ -170,10 +170,10 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         aria-label={
                             locale === "cs" ? "Přepnout snímek" : "Select slide"
                         }
-                        className="mt-14 flex items-center gap-3 md:mt-[3.55rem]"
+                        className="mt-14 flex items-center gap-3"
                         role="group"
                     >
-                        <div className="relative h-[3px] flex-1 overflow-hidden bg-[#282828]">
+                        <div className="relative h-1 flex-1 overflow-hidden bg-[#282828]">
                             <span
                                 className={cn(
                                     "homepage-hero-progress absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
@@ -196,7 +196,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                                     }
                                     aria-label={`${locale === "cs" ? "Snímek" : "Slide"} ${index + 1}`}
                                     className={cn(
-                                        "size-[13px] rounded-full border border-paper-0/70 transition-colors duration-fast",
+                                        "size-3.5 rounded-full border border-paper-0/70 transition-colors duration-fast",
                                         index === activeIndex &&
                                             "border-brand-500 bg-brand-500",
                                     )}
@@ -210,13 +210,13 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                 )}
 
                 {intro && (
-                    <div className="mx-auto mt-14 max-w-[62rem] text-center md:mt-[3.6rem]">
+                    <div className="mx-auto mt-14 max-w-[62rem] text-center">
                         {intro.eyebrow && (
                             <p className="text-eyebrow uppercase text-paper-0/80">
                                 {intro.eyebrow}
                             </p>
                         )}
-                        <h2 className="mt-5 text-[2rem] leading-tight font-bold tracking-[-0.03em] md:text-heading-lg">
+                        <h2 className="mt-5 text-3xl leading-tight font-bold tracking-tight md:text-heading-lg">
                             <HighlightedText
                                 highlightedText={intro.highlightedText}
                                 text={intro.heading}
@@ -229,7 +229,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                 )}
 
                 {Array.isArray(quickLinks) && quickLinks.length > 0 && (
-                    <div className="mt-12 grid gap-4 lg:mt-[3.7rem] lg:grid-cols-3">
+                    <div className="mt-12 grid gap-4 lg:mt-15 lg:grid-cols-3">
                         {quickLinks.map((item, index) => (
                             <QuickLinkCard
                                 fallback={

@@ -7,6 +7,7 @@ import { defaultLocale } from "@/i18n/config";
 import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { CenteredCTABlock } from "@/blocks/CenteredCTA/Component";
+import { CompanyTimelineBlock } from "@/blocks/CompanyTimeline/Component";
 import { ContentBlock } from "@/blocks/Content/Component";
 import { FormBlock } from "@/blocks/Form/Component";
 import { LogoMarqueeBlock } from "@/blocks/LogoMarquee/Component";
@@ -109,6 +110,11 @@ export const RenderBlocks: React.FC<{
                                     key={index}
                                     locale={locale}
                                 />
+                            );
+
+                        case "companyTimeline":
+                            return (
+                                <CompanyTimelineBlock {...block} key={index} />
                             );
 
                         case "processSteps":

@@ -8,6 +8,7 @@ import type {
 
 import { contactForm as contactFormData } from "./contact-form";
 import { contact as contactPageData } from "./contact-page";
+import { about as aboutPageData } from "./about";
 import { home } from "./home";
 import { createHomepageMedia } from "./homepage-media";
 import { image1 } from "./image-1";
@@ -252,6 +253,15 @@ export const seed = async ({
             collection: "pages",
             depth: 0,
             data: contactPageData({ contactForm: contactForm }),
+        }),
+        payload.create({
+            collection: "pages",
+            depth: 0,
+            data: aboutPageData({
+                contactForm,
+                media: homepageMedia,
+                metaImage: imageHomeDoc,
+            }),
         }),
     ]);
 

@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "build": "cross-env NODE_OPTIONS=--no-deprecation next build --webpack",
+        "cms:import-about": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/import-about-page.ts",
         "cms:import-homepage": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/import-homepage.ts",
         "postbuild": "next-sitemap --config next-sitemap.config.cjs",
         "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",

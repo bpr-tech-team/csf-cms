@@ -213,7 +213,7 @@ export async function Footer({
                     >
                         <Logo />
                     </Link>
-                    <p className="max-w-[17rem] text-body-sm leading-[1.421875rem] text-neutral-inverse-muted">
+                    <p className="max-w-68 text-body-sm leading-6 text-neutral-inverse-muted">
                         © {year} CSF ICT Solutions. All rights reserved.
                         <br />
                         {tagline}
@@ -226,7 +226,7 @@ export async function Footer({
                         className="flex flex-col items-start gap-4"
                         key={`${column.title}-${column.id || columnIndex}`}
                     >
-                        <h2 className="text-[0.75rem] font-bold leading-4 tracking-[0.1em] text-brand-400 uppercase">
+                        <h2 className="text-xs leading-4 font-bold tracking-widest text-brand-400 uppercase">
                             {column.title}
                         </h2>
                         <ul className="flex flex-col gap-4">

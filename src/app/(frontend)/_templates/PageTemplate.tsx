@@ -82,11 +82,18 @@ export async function PageTemplate({
 
     return (
         <article
-            className={cn("pt-16", hero.type === "homepage" ? "pb-0" : "pb-24")}
+            className={cn(
+                "pt-16",
+                hero.type === "homepage" || hero.type === "about"
+                    ? "pb-0"
+                    : "pb-24",
+            )}
         >
             <SetHeaderTheme
                 theme={
-                    hero.type === "homepage" || hero.type === "highImpact"
+                    hero.type === "homepage" ||
+                    hero.type === "highImpact" ||
+                    hero.type === "about"
                         ? "dark"
                         : "light"
                 }

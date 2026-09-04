@@ -31,7 +31,7 @@ type HomeArgs = {
     metaImage?: MediaRelationship;
 };
 
-const partnerNames = [
+export const partnerNames = [
     "HP",
     "AOC",
     "OKI",

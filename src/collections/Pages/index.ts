@@ -5,6 +5,7 @@ import { authenticatedOrPublished } from "../../access/authenticatedOrPublished"
 import { Archive } from "../../blocks/ArchiveBlock/config";
 import { CallToAction } from "../../blocks/CallToAction/config";
 import { CenteredCTA } from "../../blocks/CenteredCTA/config";
+import { CompanyTimeline } from "../../blocks/CompanyTimeline/config";
 import { Content } from "../../blocks/Content/config";
 import { FormBlock } from "../../blocks/Form/config";
 import { LogoMarquee } from "../../blocks/LogoMarquee/config";
@@ -98,6 +99,7 @@ export const Pages: CollectionConfig<"pages"> = {
                                 LogoMarquee,
                                 CenteredCTA,
                                 ProcessSteps,
+                                CompanyTimeline,
                             ],
                             required: true,
                             admin: {

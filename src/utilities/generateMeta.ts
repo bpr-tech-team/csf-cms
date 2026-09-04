@@ -32,8 +32,9 @@ export const generateMeta = async (args: {
     const ogImage = getImageURL(doc?.meta?.image);
     const description = doc?.meta?.description || messages.defaultDescription;
 
-    const title = doc?.meta?.title
-        ? doc?.meta?.title + seoConfig.titleSuffix
+    const pageTitle = doc?.meta?.title || messages.defaultTitle;
+    const socialTitle = doc?.meta?.title
+        ? `${doc.meta.title}${seoConfig.titleSuffix}`
         : messages.defaultTitle;
     const canonical = getCanonicalUrl(path);
 
@@ -54,17 +55,17 @@ export const generateMeta = async (args: {
                           },
                       ]
                     : undefined,
-                title,
+                title: socialTitle,
                 url: canonical,
             },
             locale,
         ),
-        title,
+        title: pageTitle,
         twitter: {
             card: "summary_large_image",
             description,
             images: [ogImage],
-            title,
+            title: socialTitle,
         },
     };
 };

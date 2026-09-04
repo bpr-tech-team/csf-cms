@@ -12,6 +12,8 @@ tsconfig.tsbuildinfo
 public/media/*
 !public/media/homepage/
 !public/media/homepage/**
+!public/media/about/
+!public/media/about/**
 
 public/robots.txt
 public/sitemap*.xml

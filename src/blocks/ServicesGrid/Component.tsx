@@ -24,10 +24,7 @@ export const ServicesGridBlock = ({
     locale = defaultLocale,
 }: ServicesGridBlockProps & { locale?: AppLocale }) => {
     return (
-        <section
-            className="bg-paper-0 py-20 md:py-28 xl:py-[7.5rem]"
-            id="sluzby"
-        >
+        <section className="bg-paper-0 py-20 md:py-28 xl:py-30" id="sluzby">
             <div className="container">
                 <SectionHeading
                     eyebrow={eyebrow}
@@ -77,7 +74,7 @@ export const ServicesGridBlock = ({
 
                         return (
                             <article
-                                className="flex min-h-[20rem] flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-[5px]"
+                                className="flex min-h-80 flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-sm"
                                 key={item.id ?? index}
                             >
                                 {content}

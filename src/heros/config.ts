@@ -57,6 +57,13 @@ export const hero: Field = {
                     },
                     value: "homepage",
                 },
+                {
+                    label: {
+                        cs: "O nás",
+                        en: "About",
+                    },
+                    value: "about",
+                },
             ],
             required: true,
         },

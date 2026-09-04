@@ -159,7 +159,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'homepage';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'homepage' | 'about';
     richText?: {
       root: {
         type: string;
@@ -283,6 +283,7 @@ export interface Page {
     | LogoMarqueeBlock
     | CenteredCtaBlock
     | ProcessStepsBlock
+    | CompanyTimelineBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1022,6 +1023,27 @@ export interface ProcessStepsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CompanyTimelineBlock".
+ */
+export interface CompanyTimelineBlock {
+  eyebrow?: string | null;
+  heading: string;
+  /**
+   * A substring of the heading highlighted in green.
+   */
+  highlightedText?: string | null;
+  items: {
+    year: string;
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'companyTimeline';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1388,6 +1410,7 @@ export interface PagesSelect<T extends boolean = true> {
         logoMarquee?: T | LogoMarqueeBlockSelect<T>;
         centeredCta?: T | CenteredCtaBlockSelect<T>;
         processSteps?: T | ProcessStepsBlockSelect<T>;
+        companyTimeline?: T | CompanyTimelineBlockSelect<T>;
       };
   meta?:
     | T
@@ -1614,6 +1637,25 @@ export interface ProcessStepsBlockSelect<T extends boolean = true> {
   items?:
     | T
     | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CompanyTimelineBlock_select".
+ */
+export interface CompanyTimelineBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  highlightedText?: T;
+  items?:
+    | T
+    | {
+        year?: T;
         title?: T;
         description?: T;
         id?: T;

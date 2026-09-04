@@ -31,7 +31,7 @@ export const CenteredCTABlock = ({
                 className="absolute inset-0 bg-[radial-gradient(circle_at_50%_70%,rgb(175_203_8/0.09),transparent_32%)]"
             />
             <div className="container relative z-10">
-                <h2 className="mx-auto max-w-[60rem] text-[2.25rem] leading-tight font-bold tracking-[-0.03em] text-balance md:text-heading-xl">
+                <h2 className="mx-auto max-w-[60rem] text-4xl leading-tight font-bold tracking-tight text-balance md:text-heading-xl">
                     {heading}
                 </h2>
                 {link && (

@@ -26,16 +26,18 @@ export const ProcessStepsBlock = ({
                     </p>
                 )}
 
-                <ol className="relative mx-auto mt-16 grid max-w-[62rem] gap-8 md:grid-cols-4 md:gap-4">
-                    <span
-                        aria-hidden
-                        className="absolute top-5 right-[12.5%] left-[12.5%] hidden h-0.5 bg-brand-500 md:block"
-                    />
+                <ol className="relative mx-auto mt-16 grid max-w-[62rem] gap-8 md:grid-cols-4 md:gap-0">
                     {items.map((item, index) => (
                         <li
-                            className="relative grid grid-cols-[2.5rem_1fr] items-start gap-4 md:block md:text-center"
+                            className="relative flex items-start gap-4 md:block md:px-2 md:text-center"
                             key={item.id ?? index}
                         >
+                            {index < items.length - 1 ? (
+                                <span
+                                    aria-hidden
+                                    className="absolute top-5 left-1/2 hidden h-0.5 w-full bg-brand-500 md:block"
+                                />
+                            ) : null}
                             <span className="relative z-10 flex size-10 items-center justify-center rounded-full bg-brand-500 text-body-sm font-bold text-ink-950 md:mx-auto">
                                 {index + 1}
                             </span>

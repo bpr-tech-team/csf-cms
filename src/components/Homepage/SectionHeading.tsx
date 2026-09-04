@@ -28,7 +28,7 @@ export const SectionHeading = ({
             )}
             <h2
                 className={cn(
-                    "mt-4 whitespace-pre-line text-[2.25rem] leading-[1.22] font-bold tracking-[-0.03em] text-ink-950 md:text-heading-xl",
+                    "mt-4 text-4xl leading-tight font-bold tracking-tight whitespace-pre-line text-ink-950 md:text-heading-xl",
                     align === "center" && "text-balance",
                 )}
             >

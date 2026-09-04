@@ -36,10 +36,7 @@ export const ProductsGridBlock = ({
     locale = defaultLocale,
 }: ProductsGridBlockProps & { locale?: AppLocale }) => {
     return (
-        <section
-            className="bg-paper-0 py-20 md:py-28 xl:py-[7.5rem]"
-            id="produkty"
-        >
+        <section className="bg-paper-0 py-20 md:py-28 xl:py-30" id="produkty">
             <div className="container">
                 <SectionHeading
                     eyebrow={eyebrow}
@@ -121,7 +118,7 @@ const ProductCard = ({
         </>
     );
     const className =
-        "group flex min-h-[28rem] flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-[5px] transition-[border-color,transform] duration-base hover:-translate-y-0.5 hover:border-brand-500/40";
+        "group flex min-h-112 flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-sm transition-[border-color,transform] duration-base hover:-translate-y-0.5 hover:border-brand-500/40";
 
     if (!item.link) {
         return <article className={className}>{content}</article>;

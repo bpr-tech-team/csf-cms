@@ -35,7 +35,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
             className="relative z-40 border-b border-white/20 bg-ink-900 text-white"
             data-theme="dark"
         >
-            <div className="container flex h-[6.4375rem] items-center justify-between">
+            <div className="container flex h-26 items-center justify-between">
                 <Link
                     aria-label={locale === "cs" ? "CSF — domů" : "CSF — home"}
                     className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-ink-900"

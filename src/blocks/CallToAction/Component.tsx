@@ -15,7 +15,7 @@ export const CallToActionBlock: React.FC<
     return (
         <div className="container">
             <div className="bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center">
-                <div className="max-w-[48rem] flex items-center">
+                <div className="flex max-w-3xl items-center">
                     {richText && (
                         <RichText
                             className="mb-0"
