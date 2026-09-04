@@ -18,7 +18,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({
 }) => {
     return (
         <section
-            className="relative -mt-42 min-h-208 overflow-hidden bg-ink-900 pt-58 pb-20 text-paper-0 md:pt-72 md:pb-24"
+            className="relative -mt-42 min-h-120 overflow-hidden bg-ink-900 pt-58 pb-20 text-paper-0 md:pt-72 md:pb-24"
             data-theme="dark"
         >
             <Image
