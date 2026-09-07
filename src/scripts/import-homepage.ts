@@ -110,10 +110,12 @@ const importHomepage = async () => {
             },
         });
 
+        const homepageHero = importedPage.layout[0];
         if (
-            importedPage.hero.type !== "homepage" ||
-            importedPage.hero.quickLinks?.length !== 3 ||
-            importedPage.layout.length !== 7
+            importedPage.hero.type !== "none" ||
+            homepageHero?.blockType !== "homepageHero" ||
+            homepageHero.quickLinks?.length !== 3 ||
+            importedPage.layout.length !== 8
         ) {
             throw new Error("Homepage verification failed after import.");
         }

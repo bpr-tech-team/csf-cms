@@ -7,29 +7,29 @@ import { SectionHeading } from "@/components/Homepage/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
-import type { Page } from "@/payload-types";
-import { useHeaderTheme } from "@/providers/HeaderTheme";
+import type { HomepageHeroBlock } from "@/payload-types";
 import { cn } from "@/utilities/ui";
 import NextImage from "next/image";
 import React, { useEffect, useMemo, useState } from "react";
 
 import styles from "./styles.module.css";
 
-type HomepageHeroProps = Page["hero"] & {
+type HomepageHeroProps = HomepageHeroBlock & {
+    isPageIntro?: boolean;
     locale?: AppLocale;
 };
 
-type QuickLink = NonNullable<Page["hero"]["quickLinks"]>[number];
+type QuickLink = NonNullable<HomepageHeroBlock["quickLinks"]>[number];
 
 export const HomepageHero: React.FC<HomepageHeroProps> = ({
     autoplay = true,
     autoplayInterval = 7000,
     intro,
+    isPageIntro = false,
     locale = defaultLocale,
     quickLinks,
     slides,
 }) => {
-    const { setHeaderTheme } = useHeaderTheme();
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -39,10 +39,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
         ? availableSlides[activeIndex % slideCount]
         : null;
     const interval = Math.min(Math.max(autoplayInterval ?? 7000, 3000), 20000);
-
-    useEffect(() => {
-        setHeaderTheme("dark");
-    }, [setHeaderTheme]);
+    const Heading = isPageIntro ? "h1" : "h2";
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(
@@ -85,7 +82,10 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
     return (
         <section
             aria-label={locale === "cs" ? "Úvodní prezentace" : "Introduction"}
-            className="relative -mt-42 overflow-hidden bg-ink-900 pt-58 pb-20 text-paper-0 md:pb-24 xl:pb-21"
+            className={cn(
+                "relative overflow-hidden bg-ink-900 pb-20 text-paper-0 md:pb-24 xl:pb-21",
+                isPageIntro ? "-mt-42 pt-58" : "pt-20 md:pt-24",
+            )}
             data-theme="dark"
             onBlurCapture={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -101,7 +101,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                 aria-hidden
                 className="pointer-events-none absolute inset-0 size-full object-cover object-center"
                 fill
-                priority
+                priority={isPageIntro}
                 sizes="100vw"
                 src="/media/homepage/hero/vector-02.svg"
             />
@@ -116,9 +116,9 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         className={styles.slide}
                         key={activeSlide.id ?? activeIndex}
                     >
-                        <h1 className="max-w-[62rem] text-5xl leading-[1.08] font-bold tracking-[-0.035em] text-balance sm:text-6xl md:text-7xl xl:text-display-xl">
+                        <Heading className="max-w-[62rem] text-5xl leading-[1.08] font-bold tracking-[-0.035em] text-balance sm:text-6xl md:text-7xl xl:text-display-xl">
                             {activeSlide.heading}
-                        </h1>
+                        </Heading>
                         <p className="mt-7 max-w-3xl text-body-md leading-8 font-normal text-paper-0/90 md:mt-9 md:text-body-lg">
                             {activeSlide.description}
                         </p>

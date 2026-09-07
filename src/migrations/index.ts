@@ -3,6 +3,7 @@ import * as migration_20260902_141737_homepage_content_model from "./20260902_14
 import * as migration_20260902_153634_homepage_content_model_alignment from "./20260902_153634_homepage_content_model_alignment";
 import * as migration_20260903_092246_header_footer_content_model from "./20260903_092246_header_footer_content_model";
 import * as migration_20260904_124442_about_page_template from "./20260904_124442_about_page_template";
+import * as migration_20260907_163636_homepage_hero_block from "./20260907_163636_homepage_hero_block";
 
 export const migrations = [
     {
@@ -29,5 +30,10 @@ export const migrations = [
         up: migration_20260904_124442_about_page_template.up,
         down: migration_20260904_124442_about_page_template.down,
         name: "20260904_124442_about_page_template",
+    },
+    {
+        up: migration_20260907_163636_homepage_hero_block.up,
+        down: migration_20260907_163636_homepage_hero_block.down,
+        name: "20260907_163636_homepage_hero_block",
     },
 ];

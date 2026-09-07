@@ -4,6 +4,7 @@ import type { Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
+import { HomepageHero } from "@/blocks/HomepageHero/Component";
 import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { CenteredCTABlock } from "@/blocks/CenteredCTA/Component";
@@ -20,8 +21,9 @@ import { ServicesGridBlock } from "@/blocks/ServicesGrid/Component";
 export const RenderBlocks: React.FC<{
     blocks: Page["layout"][0][];
     locale?: AppLocale;
+    isFirstSection?: boolean;
 }> = (props) => {
-    const { blocks, locale = defaultLocale } = props;
+    const { blocks, locale = defaultLocale, isFirstSection = false } = props;
 
     const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0;
 
@@ -32,6 +34,15 @@ export const RenderBlocks: React.FC<{
                     const { blockType } = block;
 
                     switch (blockType) {
+                        case "homepageHero":
+                            return (
+                                <HomepageHero
+                                    {...block}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                    isPageIntro={isFirstSection && index === 0}
+                                />
+                            );
                         case "archive":
                             return (
                                 <div className="my-16" key={index}>

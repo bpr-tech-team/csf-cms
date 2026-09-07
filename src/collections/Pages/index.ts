@@ -14,6 +14,7 @@ import { MetricsStrip } from "../../blocks/MetricsStrip/config";
 import { ProcessSteps } from "../../blocks/ProcessSteps/config";
 import { ProductsGrid } from "../../blocks/ProductsGrid/config";
 import { ServicesGrid } from "../../blocks/ServicesGrid/config";
+import { HomepageHero } from "@/blocks/HomepageHero/config";
 import { hero } from "@/heros/config";
 import { slugField } from "payload";
 import { populatePublishedAt } from "../../hooks/populatePublishedAt";
@@ -88,6 +89,7 @@ export const Pages: CollectionConfig<"pages"> = {
                             name: "layout",
                             type: "blocks",
                             blocks: [
+                                HomepageHero,
                                 CallToAction,
                                 Content,
                                 MediaBlock,

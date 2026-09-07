@@ -96,7 +96,8 @@ export default buildConfig({
                 : process.env.DATABASE_URL || "",
             max: 5,
         },
-        push: process.env.NODE_ENV !== "production",
+        // Use migrations locally too, so schema push cannot bypass data migrations.
+        push: false,
     }),
     ...(email ? { email } : {}),
     collections: [Pages, Posts, Media, Categories, Users],

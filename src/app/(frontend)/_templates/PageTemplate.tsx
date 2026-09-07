@@ -72,19 +72,21 @@ export async function PageTemplate({
     }
 
     const { hero, layout } = page;
+    const startsWithHomepageHero =
+        hero.type === "none" && layout[0]?.blockType === "homepageHero";
 
     return (
         <article
             className={cn(
                 "pt-16",
-                hero.type === "homepage" || hero.type === "about"
+                startsWithHomepageHero || hero.type === "about"
                     ? "pb-0"
                     : "pb-24",
             )}
         >
             <SetHeaderTheme
                 theme={
-                    hero.type === "homepage" ||
+                    startsWithHomepageHero ||
                     hero.type === "highImpact" ||
                     hero.type === "about"
                         ? "dark"
@@ -96,7 +98,11 @@ export async function PageTemplate({
             {draft && <LivePreviewListener />}
 
             <RenderHero {...hero} locale={locale} />
-            <RenderBlocks blocks={layout} locale={locale} />
+            <RenderBlocks
+                blocks={layout}
+                locale={locale}
+                isFirstSection={hero.type === "none"}
+            />
         </article>
     );
 }

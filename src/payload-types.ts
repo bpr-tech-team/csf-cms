@@ -159,7 +159,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'homepage' | 'about';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'about';
     richText?: {
       root: {
         type: string;
@@ -200,78 +200,9 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
-    slides?:
-      | {
-          heading: string;
-          description: string;
-          links?:
-            | {
-                link: {
-                  type?: ('reference' | 'custom') | null;
-                  newTab?: boolean | null;
-                  reference?:
-                    | ({
-                        relationTo: 'pages';
-                        value: number | Page;
-                      } | null)
-                    | ({
-                        relationTo: 'posts';
-                        value: number | Post;
-                      } | null);
-                  url?: string | null;
-                  label: string;
-                  /**
-                   * Choose how the link should be rendered.
-                   */
-                  appearance?: ('default' | 'outline') | null;
-                };
-                id?: string | null;
-              }[]
-            | null;
-          id?: string | null;
-        }[]
-      | null;
-    autoplay?: boolean | null;
-    /**
-     * Time between slides in milliseconds.
-     */
-    autoplayInterval?: number | null;
-    intro?: {
-      eyebrow?: string | null;
-      heading: string;
-      highlightedText?: string | null;
-      description: string;
-    };
-    quickLinks?:
-      | {
-          image: number | Media;
-          icon: number | Media;
-          title: string;
-          links?:
-            | {
-                link: {
-                  type?: ('reference' | 'custom') | null;
-                  newTab?: boolean | null;
-                  reference?:
-                    | ({
-                        relationTo: 'pages';
-                        value: number | Page;
-                      } | null)
-                    | ({
-                        relationTo: 'posts';
-                        value: number | Post;
-                      } | null);
-                  url?: string | null;
-                  label: string;
-                };
-                id?: string | null;
-              }[]
-            | null;
-          id?: string | null;
-        }[]
-      | null;
   };
   layout: (
+    | HomepageHeroBlock
     | CallToActionBlock
     | ContentBlock
     | MediaBlock
@@ -521,6 +452,85 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomepageHeroBlock".
+ */
+export interface HomepageHeroBlock {
+  slides?:
+    | {
+        heading: string;
+        description: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  autoplay?: boolean | null;
+  /**
+   * Time between slides in milliseconds.
+   */
+  autoplayInterval?: number | null;
+  intro: {
+    eyebrow?: string | null;
+    heading: string;
+    highlightedText?: string | null;
+    description: string;
+  };
+  quickLinks?:
+    | {
+        image: number | Media;
+        icon: number | Media;
+        title: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'homepageHero';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1341,64 +1351,11 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
-        slides?:
-          | T
-          | {
-              heading?: T;
-              description?: T;
-              links?:
-                | T
-                | {
-                    link?:
-                      | T
-                      | {
-                          type?: T;
-                          newTab?: T;
-                          reference?: T;
-                          url?: T;
-                          label?: T;
-                          appearance?: T;
-                        };
-                    id?: T;
-                  };
-              id?: T;
-            };
-        autoplay?: T;
-        autoplayInterval?: T;
-        intro?:
-          | T
-          | {
-              eyebrow?: T;
-              heading?: T;
-              highlightedText?: T;
-              description?: T;
-            };
-        quickLinks?:
-          | T
-          | {
-              image?: T;
-              icon?: T;
-              title?: T;
-              links?:
-                | T
-                | {
-                    link?:
-                      | T
-                      | {
-                          type?: T;
-                          newTab?: T;
-                          reference?: T;
-                          url?: T;
-                          label?: T;
-                        };
-                    id?: T;
-                  };
-              id?: T;
-            };
       };
   layout?:
     | T
     | {
+        homepageHero?: T | HomepageHeroBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1425,6 +1382,68 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HomepageHeroBlock_select".
+ */
+export interface HomepageHeroBlockSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
+  intro?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        highlightedText?: T;
+        description?: T;
+      };
+  quickLinks?:
+    | T
+    | {
+        image?: T;
+        icon?: T;
+        title?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

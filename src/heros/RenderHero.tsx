@@ -5,7 +5,6 @@ import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
 import { HighImpactHero } from "@/heros/HighImpact";
-import { HomepageHero } from "@/heros/Homepage";
 import { LowImpactHero } from "@/heros/LowImpact";
 import { MediumImpactHero } from "@/heros/MediumImpact";
 import { AboutHero } from "@/heros/About";
@@ -13,7 +12,6 @@ import { AboutHero } from "@/heros/About";
 const heroes = {
     about: AboutHero,
     highImpact: HighImpactHero,
-    homepage: HomepageHero,
     lowImpact: LowImpactHero,
     mediumImpact: MediumImpactHero,
 };

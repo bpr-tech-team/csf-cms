@@ -50,111 +50,112 @@ export const home = ({
 }: HomeArgs): RequiredDataFromCollectionSlug<"pages"> => ({
     slug: "home",
     _status: "published",
-    hero: {
-        type: "homepage",
-        slides: [
-            {
-                heading: "IT partner pro firmy,\nškoly a organizace",
-                description:
-                    "Pro komplexní ICT řešení, školy a organizace tentokrát nečekejte až do zítřka, spoléhejte se na stabilitu CSF.",
-                links: [
-                    {
-                        link: {
-                            type: "custom",
-                            appearance: "default",
-                            label: "Nezávazná konzultace",
-                            url: "#kontakt",
-                        },
-                    },
-                    {
-                        link: {
-                            type: "custom",
-                            appearance: "outline",
-                            label: "Naše služby",
-                            url: "#sluzby",
-                        },
-                    },
-                ],
-            },
-            {
-                heading: "Technologie, na které\nse můžete spolehnout",
-                description:
-                    "Navrhujeme, dodáváme a spravujeme stabilní IT infrastrukturu podle reálných potřeb vaší organizace.",
-                links: [
-                    {
-                        link: {
-                            type: "custom",
-                            appearance: "default",
-                            label: "Probrat vaše IT",
-                            url: "#kontakt",
-                        },
-                    },
-                    {
-                        link: {
-                            type: "custom",
-                            appearance: "outline",
-                            label: "Prohlédnout řešení",
-                            url: "#produkty",
-                        },
-                    },
-                ],
-            },
-        ],
-        autoplay: true,
-        autoplayInterval: 7000,
-        intro: {
-            eyebrow: "ŘEŠÍME IT NA MÍRU",
-            heading: "Spolehněte se na své IT.",
-            highlightedText: "IT.",
-            description:
-                "Dodáváme komplexní ICT řešení, která podporují váš růst, zjednodušují každodenní práci a zvyšují bezpečnost celé organizace.",
-        },
-        quickLinks: [
-            {
-                image: media.heroImages[0],
-                icon: media.heroIcons[0],
-                title: "Pronájem",
-                links: [
-                    {
-                        link: {
-                            type: "custom",
-                            label: "Pronájem",
-                            url: "/pronajem",
-                        },
-                    },
-                ],
-            },
-            {
-                image: media.heroImages[1],
-                icon: media.heroIcons[1],
-                title: "Servis",
-                links: [
-                    {
-                        link: {
-                            type: "custom",
-                            label: "Servis",
-                            url: "/servis",
-                        },
-                    },
-                ],
-            },
-            {
-                image: media.heroImages[2],
-                icon: media.heroIcons[2],
-                title: "Blog",
-                links: [
-                    {
-                        link: {
-                            type: "custom",
-                            label: "Blog",
-                            url: "/posts",
-                        },
-                    },
-                ],
-            },
-        ],
-    },
+    hero: { type: "none" },
     layout: [
+        {
+            blockType: "homepageHero",
+            slides: [
+                {
+                    heading: "IT partner pro firmy,\nškoly a organizace",
+                    description:
+                        "Pro komplexní ICT řešení, školy a organizace tentokrát nečekejte až do zítřka, spoléhejte se na stabilitu CSF.",
+                    links: [
+                        {
+                            link: {
+                                type: "custom",
+                                appearance: "default",
+                                label: "Nezávazná konzultace",
+                                url: "#kontakt",
+                            },
+                        },
+                        {
+                            link: {
+                                type: "custom",
+                                appearance: "outline",
+                                label: "Naše služby",
+                                url: "#sluzby",
+                            },
+                        },
+                    ],
+                },
+                {
+                    heading: "Technologie, na které\nse můžete spolehnout",
+                    description:
+                        "Navrhujeme, dodáváme a spravujeme stabilní IT infrastrukturu podle reálných potřeb vaší organizace.",
+                    links: [
+                        {
+                            link: {
+                                type: "custom",
+                                appearance: "default",
+                                label: "Probrat vaše IT",
+                                url: "#kontakt",
+                            },
+                        },
+                        {
+                            link: {
+                                type: "custom",
+                                appearance: "outline",
+                                label: "Prohlédnout řešení",
+                                url: "#produkty",
+                            },
+                        },
+                    ],
+                },
+            ],
+            autoplay: true,
+            autoplayInterval: 7000,
+            intro: {
+                eyebrow: "ŘEŠÍME IT NA MÍRU",
+                heading: "Spolehněte se na své IT.",
+                highlightedText: "IT.",
+                description:
+                    "Dodáváme komplexní ICT řešení, která podporují váš růst, zjednodušují každodenní práci a zvyšují bezpečnost celé organizace.",
+            },
+            quickLinks: [
+                {
+                    image: media.heroImages[0],
+                    icon: media.heroIcons[0],
+                    title: "Pronájem",
+                    links: [
+                        {
+                            link: {
+                                type: "custom",
+                                label: "Pronájem",
+                                url: "/pronajem",
+                            },
+                        },
+                    ],
+                },
+                {
+                    image: media.heroImages[1],
+                    icon: media.heroIcons[1],
+                    title: "Servis",
+                    links: [
+                        {
+                            link: {
+                                type: "custom",
+                                label: "Servis",
+                                url: "/servis",
+                            },
+                        },
+                    ],
+                },
+                {
+                    image: media.heroImages[2],
+                    icon: media.heroIcons[2],
+                    title: "Blog",
+                    links: [
+                        {
+                            link: {
+                                type: "custom",
+                                label: "Blog",
+                                url: "/posts",
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
         {
             blockType: "servicesGrid",
             eyebrow: "SLUŽBY",
