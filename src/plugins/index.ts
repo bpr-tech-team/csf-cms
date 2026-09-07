@@ -1,4 +1,6 @@
 import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
+import { cloudStoragePlugin } from "@payloadcms/plugin-cloud-storage";
+import { netlifyStorageAdapter } from "@/storage/netlify";
 import { nestedDocsPlugin } from "@payloadcms/plugin-nested-docs";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
@@ -47,6 +49,12 @@ const generateURL: GenerateURL<Post | Page> = ({
 };
 
 export const plugins: Plugin[] = [
+    cloudStoragePlugin({
+        enabled: Boolean(process.env.NETLIFY_STORAGE_CONTEXT),
+        collections: {
+            media: { adapter: netlifyStorageAdapter },
+        },
+    }),
     redirectsPlugin({
         collections: ["pages", "posts"],
         overrides: {

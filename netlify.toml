@@ -1,0 +1,17 @@
+[build]
+command = "pnpm run build:netlify"
+publish = ".next"
+
+[build.environment]
+NODE_VERSION = "24"
+PNPM_VERSION = "10.32.1"
+
+# Production branch is configured as main in Netlify's repository settings.
+[context.production.environment]
+NETLIFY_STORAGE_CONTEXT = "production"
+
+[context.deploy-preview.environment]
+NETLIFY_STORAGE_CONTEXT = "preview"
+
+[context.branch-deploy.environment]
+NETLIFY_STORAGE_CONTEXT = "preview"

@@ -26,14 +26,18 @@
         "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
         "test": "pnpm run test:int && pnpm run test:e2e",
         "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-        "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+        "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+        "build:netlify": "node scripts/netlify-build.mjs"
     },
     "dependencies": {
+        "@netlify/blobs": "^11.0.3",
+        "@netlify/database": "^2.0.1",
         "@payloadcms/admin-bar": "3.88.0",
         "@payloadcms/db-postgres": "3.88.0",
         "@payloadcms/email-nodemailer": "3.88.0",
         "@payloadcms/live-preview-react": "3.88.0",
         "@payloadcms/next": "3.88.0",
+        "@payloadcms/plugin-cloud-storage": "3.88.0",
         "@payloadcms/plugin-form-builder": "3.88.0",
         "@payloadcms/plugin-nested-docs": "3.88.0",
         "@payloadcms/plugin-redirects": "3.88.0",
@@ -101,5 +105,6 @@
         "patchedDependencies": {
             "@payloadcms/ui@3.88.0": "patches/@payloadcms__ui@3.88.0.patch"
         }
-    }
+    },
+    "packageManager": "pnpm@10.32.1"
 }
