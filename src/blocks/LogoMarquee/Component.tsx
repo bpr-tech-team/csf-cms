@@ -10,18 +10,6 @@ import styles from "./styles.module.css";
 
 type LogoItem = LogoMarqueeBlockProps["items"][number];
 
-const logoFallbacks = [
-    "/media/homepage/partners/logo-hp.png",
-    "/media/homepage/partners/logo-aoc.png",
-    "/media/homepage/partners/logo-oki.png",
-    "/media/homepage/partners/logo-philips.png",
-    "/media/homepage/partners/logo-dell.png",
-    "/media/homepage/partners/logo-huawei.png",
-    "/media/homepage/partners/logo-epson.png",
-    "/media/homepage/partners/logo-kyocera.png",
-    "/media/homepage/partners/logo-hpe.png",
-] as const;
-
 export const LogoMarqueeBlock = ({
     duration,
     eyebrow,
@@ -75,10 +63,7 @@ const LogoGroup = ({
                     <MediaAsset
                         alt={ariaHidden ? "" : item.name}
                         className="h-10 w-32 object-contain md:w-40"
-                        fallback={logoFallbacks[index % logoFallbacks.length]}
-                        height={64}
                         resource={item.logo}
-                        width={180}
                     />
                 );
 

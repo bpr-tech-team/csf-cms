@@ -8,12 +8,6 @@ import { defaultLocale } from "@/i18n/config";
 import { cn } from "@/utilities/ui";
 import React from "react";
 
-const iconFallbacks = Array.from(
-    { length: 6 },
-    (_, index) =>
-        `/media/homepage/services/card-icon-${String(index + 1).padStart(2, "0")}.svg`,
-);
-
 const framedIcons = new Set([0, 1, 5]);
 
 export const ServicesGridBlock = ({
@@ -51,16 +45,7 @@ export const ServicesGridBlock = ({
                                                 ? "size-16"
                                                 : "size-8",
                                         )}
-                                        fallback={
-                                            iconFallbacks[
-                                                index % iconFallbacks.length
-                                            ]
-                                        }
-                                        height={
-                                            framedIcons.has(index) ? 64 : 38
-                                        }
                                         resource={item.icon}
-                                        width={framedIcons.has(index) ? 64 : 38}
                                     />
                                 </span>
                                 <h3 className="mt-8 text-heading-md font-medium text-ink-950">

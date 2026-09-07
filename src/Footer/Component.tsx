@@ -6,172 +6,6 @@ import React from "react";
 
 import { CMSLink } from "@/components/Link";
 import { Logo } from "@/components/Logo/Logo";
-import type { Footer as FooterType } from "@/payload-types";
-
-type FooterColumn = NonNullable<FooterType["columns"]>[number];
-
-const defaultColumns: Record<AppLocale, FooterColumn[]> = {
-    cs: [
-        {
-            title: "Služby",
-            links: [
-                {
-                    link: {
-                        type: "custom",
-                        label: "Cloudové služby",
-                        url: "/cloudove-sluzby",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Bezpečnostní audit",
-                        url: "/it-sluzby",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "IT poradenství",
-                        url: "/it-sluzby",
-                    },
-                },
-            ],
-        },
-        {
-            title: "Společnost",
-            links: [
-                {
-                    link: {
-                        type: "custom",
-                        label: "O nás",
-                        url: "/o-nas",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Kariéra",
-                        url: "/kariera",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Kontakt",
-                        url: "/kontakt",
-                    },
-                },
-            ],
-        },
-        {
-            title: "Právní info",
-            links: [
-                {
-                    link: {
-                        type: "custom",
-                        label: "Ochrana osobních údajů",
-                        url: "/prohlaseni-osobni-udaje",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Obchodní podmínky",
-                        url: "/obchodni-podminky",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "SLA",
-                        url: "/sla",
-                    },
-                },
-            ],
-        },
-    ],
-    en: [
-        {
-            title: "Services",
-            links: [
-                {
-                    link: {
-                        type: "custom",
-                        label: "Cloud solutions",
-                        url: "/cloudove-sluzby",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Security audit",
-                        url: "/it-sluzby",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "IT consulting",
-                        url: "/it-sluzby",
-                    },
-                },
-            ],
-        },
-        {
-            title: "Company",
-            links: [
-                {
-                    link: {
-                        type: "custom",
-                        label: "About us",
-                        url: "/o-nas",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Careers",
-                        url: "/kariera",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Contact",
-                        url: "/kontakt",
-                    },
-                },
-            ],
-        },
-        {
-            title: "Legal",
-            links: [
-                {
-                    link: {
-                        type: "custom",
-                        label: "Privacy policy",
-                        url: "/prohlaseni-osobni-udaje",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "Terms of service",
-                        url: "/obchodni-podminky",
-                    },
-                },
-                {
-                    link: {
-                        type: "custom",
-                        label: "SLA",
-                        url: "/sla",
-                    },
-                },
-            ],
-        },
-    ],
-};
 
 export async function Footer({
     locale = defaultLocale,
@@ -189,13 +23,9 @@ export async function Footer({
                     links: legacyNavItems,
                 },
             ]
-          : defaultColumns[locale];
+          : [];
     const year = new Date().getFullYear();
-    const tagline =
-        footerData?.tagline ||
-        (locale === "cs"
-            ? "Precizní infrastruktura pro digitální suverenitu firem."
-            : "Precision infrastructure for enterprise sovereignty.");
+    const tagline = footerData?.tagline;
 
     return (
         <footer
@@ -215,8 +45,12 @@ export async function Footer({
                     </Link>
                     <p className="max-w-68 text-body-sm leading-6 font-normal text-neutral-inverse-muted">
                         © {year} CSF ICT Solutions. All rights reserved.
-                        <br />
-                        {tagline}
+                        {tagline && (
+                            <>
+                                <br />
+                                {tagline}
+                            </>
+                        )}
                     </p>
                 </div>
 

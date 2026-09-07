@@ -21,21 +21,6 @@ type HomepageHeroProps = Page["hero"] & {
 
 type QuickLink = NonNullable<Page["hero"]["quickLinks"]>[number];
 
-const quickLinkFallbacks = [
-    {
-        icon: "/media/homepage/hero/vector-04.svg",
-        image: "/media/homepage/hero/image-02.png",
-    },
-    {
-        icon: "/media/homepage/hero/vector-05.svg",
-        image: "/media/homepage/hero/image-01.jpg",
-    },
-    {
-        icon: "/media/homepage/hero/vector-06.svg",
-        image: "/media/homepage/hero/image-03.png",
-    },
-] as const;
-
 export const HomepageHero: React.FC<HomepageHeroProps> = ({
     autoplay = true,
     autoplayInterval = 7000,
@@ -233,11 +218,6 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                     <div className="mt-12 grid gap-4 lg:mt-15 lg:grid-cols-3">
                         {quickLinks.map((item, index) => (
                             <QuickLinkCard
-                                fallback={
-                                    quickLinkFallbacks[
-                                        index % quickLinkFallbacks.length
-                                    ]
-                                }
                                 item={item}
                                 key={item.id ?? index}
                                 locale={locale}
@@ -251,11 +231,9 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
 };
 
 const QuickLinkCard = ({
-    fallback,
     item,
     locale,
 }: {
-    fallback: (typeof quickLinkFallbacks)[number];
     item: QuickLink;
     locale: AppLocale;
 }) => {
@@ -264,7 +242,6 @@ const QuickLinkCard = ({
         <>
             <MediaAsset
                 className="absolute inset-0 size-full object-cover grayscale"
-                fallback={fallback.image}
                 fill
                 resource={item.image}
                 sizes="(max-width: 1024px) 100vw, 33vw"
@@ -277,7 +254,6 @@ const QuickLinkCard = ({
                 <span className="relative block size-11">
                     <MediaAsset
                         className="size-full object-contain"
-                        fallback={fallback.icon}
                         resource={item.icon}
                     />
                 </span>

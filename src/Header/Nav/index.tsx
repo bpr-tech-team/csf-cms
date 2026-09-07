@@ -10,21 +10,6 @@ import { cn } from "@/utilities/ui";
 
 type HeaderLink = NonNullable<HeaderType["navItems"]>[number]["link"];
 
-const defaultNavItems: Record<AppLocale, HeaderLink[]> = {
-    cs: [
-        { type: "custom", label: "O nás", url: "/o-nas" },
-        { type: "custom", label: "Produkty", url: "/produkty" },
-        { type: "custom", label: "Služby", url: "/sluzby" },
-        { type: "custom", label: "Case Studies", url: "/case-studies" },
-    ],
-    en: [
-        { type: "custom", label: "About us", url: "/o-nas" },
-        { type: "custom", label: "Products", url: "/produkty" },
-        { type: "custom", label: "Services", url: "/sluzby" },
-        { type: "custom", label: "Case Studies", url: "/case-studies" },
-    ],
-};
-
 const hasTarget = (link?: HeaderLink | null) =>
     Boolean(
         link?.url ||
@@ -42,23 +27,12 @@ export const HeaderNav: React.FC<{
     const configuredItems = (data?.navItems || []).filter(({ link }) =>
         hasTarget(link),
     );
-    const navItems = configuredItems.length
-        ? configuredItems.map(({ link }) => link)
-        : defaultNavItems[locale];
+    const navItems = configuredItems.map(({ link }) => link);
     const customerZoneLink = hasTarget(data.customerZoneLink)
         ? data.customerZoneLink
-        : {
-              type: "custom" as const,
-              label: locale === "cs" ? "Zákaznická zóna" : "Customer zone",
-              url: "/zakaznicka-zona",
-          };
-    const contactLink = hasTarget(data.contactLink)
-        ? data.contactLink
-        : {
-              type: "custom" as const,
-              label: locale === "cs" ? "Kontaktovat CSF" : "Contact CSF",
-              url: "/kontakt",
-          };
+        : null;
+    const contactLink = hasTarget(data.contactLink) ? data.contactLink : null;
+    if (!navItems.length && !customerZoneLink && !contactLink) return null;
     const isMobile = variant === "mobile";
 
     return (
@@ -96,20 +70,26 @@ export const HeaderNav: React.FC<{
                 ))}
             </div>
 
-            <CMSLink
-                {...customerZoneLink}
-                className={cn(
-                    "rounded-sm text-white no-underline transition-colors duration-fast hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary",
-                    isMobile ? "mt-4 flex min-h-11 items-center py-2" : "ml-40",
-                )}
-                locale={locale}
-            />
-            <CMSLink
-                {...contactLink}
-                appearance="default"
-                className={cn(isMobile ? "mt-4 w-full" : "ml-8")}
-                locale={locale}
-            />
+            {customerZoneLink && (
+                <CMSLink
+                    {...customerZoneLink}
+                    className={cn(
+                        "rounded-sm text-white no-underline transition-colors duration-fast hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary",
+                        isMobile
+                            ? "mt-4 flex min-h-11 items-center py-2"
+                            : "ml-40",
+                    )}
+                    locale={locale}
+                />
+            )}
+            {contactLink && (
+                <CMSLink
+                    {...contactLink}
+                    appearance="default"
+                    className={cn(isMobile ? "mt-4 w-full" : "ml-8")}
+                    locale={locale}
+                />
+            )}
         </nav>
     );
 };

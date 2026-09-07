@@ -7,13 +7,12 @@ import { RenderBlocks } from "@/blocks/RenderBlocks";
 import { RenderHero } from "@/heros/RenderHero";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
-import { homeStatic } from "@/endpoints/seed/home-static";
 import { generateMeta } from "@/utilities/generateMeta";
 import { cn } from "@/utilities/ui";
 import configPromise from "@payload-config";
 import { draftMode } from "next/headers";
 import React, { cache } from "react";
-import { getPayload, type RequiredDataFromCollectionSlug } from "payload";
+import { getPayload } from "payload";
 
 type PageParams = {
     slug?: string;
@@ -63,16 +62,10 @@ export async function PageTemplate({
     const decodedSlug = decodeURIComponent(slug);
     const path = decodedSlug === "home" ? "/" : `/${decodedSlug}`;
     const url = withLocalePrefix(path, locale);
-    let page: RequiredDataFromCollectionSlug<"pages"> | null;
-
-    page = await queryPageBySlug({
+    const page = await queryPageBySlug({
         locale,
         slug: decodedSlug,
     });
-
-    if (!page && locale === defaultLocale && slug === "home") {
-        page = homeStatic;
-    }
 
     if (!page) {
         return <PayloadRedirects locale={locale} url={url} />;
