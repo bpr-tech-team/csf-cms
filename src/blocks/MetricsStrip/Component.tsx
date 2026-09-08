@@ -13,7 +13,7 @@ export const MetricsStripBlock = ({
                 <h2 className="text-center text-heading-lg font-bold">
                     {heading}
                 </h2>
-                <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
+                <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 xl:grid-cols-4">
                     {items.map((item, index) => (
                         <div
                             className="flex flex-col text-center"

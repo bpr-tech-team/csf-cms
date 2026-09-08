@@ -63,12 +63,12 @@ export const SectionHeading = ({
     return (
         <div
             className={cn(
-                "grid items-center gap-8 lg:grid-cols-[minmax(0,32rem)_1fr] lg:gap-24",
+                "grid items-center gap-8 xl:grid-cols-[45fr_55fr]",
                 className,
             )}
         >
             {content}
-            <span aria-hidden className="hidden h-px bg-brand-500 lg:block" />
+            <span aria-hidden className="hidden h-px bg-brand-500 xl:block" />
         </div>
     );
 };

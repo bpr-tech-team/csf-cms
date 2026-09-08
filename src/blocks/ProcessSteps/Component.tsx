@@ -26,22 +26,16 @@ export const ProcessStepsBlock = ({
                     </p>
                 )}
 
-                <ol className="relative mx-auto mt-16 grid max-w-[62rem] gap-8 md:grid-cols-4 md:gap-0">
+                <ol className="relative mx-auto mt-16 grid max-w-[62rem] gap-10 lg:grid-cols-4 lg:gap-0">
                     {items.map((item, index) => (
                         <li
-                            className="relative flex items-start gap-4 md:block md:px-2 md:text-center"
+                            className="relative flex flex-col items-center text-center lg:px-2"
                             key={item.id ?? index}
                         >
-                            {index < items.length - 1 ? (
-                                <span
-                                    aria-hidden
-                                    className="absolute top-5 left-1/2 hidden h-0.5 w-full bg-brand-500 md:block"
-                                />
-                            ) : null}
-                            <span className="relative z-10 flex size-10 items-center justify-center rounded-full bg-brand-500 text-body-sm font-bold text-ink-950 md:mx-auto">
+                            <span className="relative z-10 flex size-10 items-center justify-center rounded-full bg-brand-500 text-body-sm font-bold text-ink-950">
                                 {index + 1}
                             </span>
-                            <span className="pt-2 md:block md:pt-5">
+                            <span className="block pt-5">
                                 <span className="block text-body-sm font-bold text-ink-950">
                                     {item.title}
                                 </span>
@@ -51,6 +45,12 @@ export const ProcessStepsBlock = ({
                                     </span>
                                 )}
                             </span>
+                            {index < items.length - 1 ? (
+                                <span
+                                    aria-hidden
+                                    className="hidden bg-brand-500 lg:absolute lg:top-5 lg:left-1/2 lg:block lg:h-0.5 lg:w-full"
+                                />
+                            ) : null}
                         </li>
                     ))}
                 </ol>
