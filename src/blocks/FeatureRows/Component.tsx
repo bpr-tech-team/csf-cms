@@ -1,6 +1,6 @@
 import type { FeatureRowsBlock as FeatureRowsBlockProps } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
+import { MediaAsset } from "@/components/MediaAsset";
 import RichText from "@/components/RichText";
 import { cn } from "@/utilities/ui";
 import React from "react";

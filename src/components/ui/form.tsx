@@ -61,7 +61,6 @@ const useFormField = () => {
     return {
         id,
         name: fieldContext.name,
-        formDescriptionId: `${id}-description`,
         formMessageId: `${id}-message`,
         formItemId: `${id}-control`,
         ...fieldState,
@@ -110,17 +109,12 @@ const FormControl = React.forwardRef<
     React.ElementRef<typeof Slot>,
     React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-    const { error, formDescriptionId, formItemId, formMessageId } =
-        useFormField();
+    const { error, formItemId, formMessageId } = useFormField();
 
     return (
         <Slot
             ref={ref}
-            aria-describedby={
-                error
-                    ? `${formDescriptionId} ${formMessageId}`
-                    : formDescriptionId
-            }
+            aria-describedby={error ? formMessageId : undefined}
             aria-invalid={Boolean(error)}
             data-slot="form-control"
             id={formItemId}
@@ -129,24 +123,6 @@ const FormControl = React.forwardRef<
     );
 });
 FormControl.displayName = "FormControl";
-
-const FormDescription = React.forwardRef<
-    HTMLParagraphElement,
-    React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-    const { formDescriptionId } = useFormField();
-
-    return (
-        <p
-            ref={ref}
-            className={cn("text-sm text-muted-foreground", className)}
-            data-slot="form-description"
-            id={formDescriptionId}
-            {...props}
-        />
-    );
-});
-FormDescription.displayName = "FormDescription";
 
 const FormMessage = React.forwardRef<
     HTMLParagraphElement,
@@ -181,7 +157,6 @@ const RequiredMark = () => (
 export {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,

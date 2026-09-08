@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { LogoMarqueeBlock as LogoMarqueeBlockProps } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
+import { MediaAsset } from "@/components/MediaAsset";
 import { Eyebrow } from "@/components/Eyebrow";
 import { cn } from "@/utilities/ui";
 import React from "react";

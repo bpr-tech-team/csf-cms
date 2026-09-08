@@ -1,8 +1,8 @@
 import type { ServicesGridBlock as ServicesGridBlockProps } from "@/payload-types";
 
 import { CMSLink } from "@/components/Link";
-import { CardIcon } from "@/components/Homepage/CardIcon";
-import { SectionHeading } from "@/components/Homepage/SectionHeading";
+import { CardIcon } from "@/components/CardIcon";
+import { SectionHeading } from "@/components/SectionHeading";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 import React from "react";

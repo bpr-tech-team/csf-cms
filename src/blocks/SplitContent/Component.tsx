@@ -1,7 +1,7 @@
 import type { SplitContentBlock as SplitContentBlockProps } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { MediaAsset } from "@/components/MediaAsset";
+import { HighlightedText } from "@/components/SectionHeading";
 import RichText from "@/components/RichText";
 import { cn } from "@/utilities/ui";
 import React from "react";

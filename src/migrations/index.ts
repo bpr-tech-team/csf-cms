@@ -7,6 +7,8 @@ import * as migration_20260907_163636_homepage_hero_block from "./20260907_16363
 import * as migration_20260908_191202_service_page_blocks from "./20260908_191202_service_page_blocks";
 import * as migration_20260908_200329_multiple_highlighted_fragments from "./20260908_200329_multiple_highlighted_fragments";
 import * as migration_20260908_204406 from "./20260908_204406";
+import * as migration_20260908_213232_remove_legacy_page_hero from "./20260908_213232_remove_legacy_page_hero";
+import * as migration_20260908_215142_add_about_hero_block from "./20260908_215142_add_about_hero_block";
 
 export const migrations = [
     {
@@ -53,5 +55,15 @@ export const migrations = [
         up: migration_20260908_204406.up,
         down: migration_20260908_204406.down,
         name: "20260908_204406",
+    },
+    {
+        up: migration_20260908_213232_remove_legacy_page_hero.up,
+        down: migration_20260908_213232_remove_legacy_page_hero.down,
+        name: "20260908_213232_remove_legacy_page_hero",
+    },
+    {
+        up: migration_20260908_215142_add_about_hero_block.up,
+        down: migration_20260908_215142_add_about_hero_block.down,
+        name: "20260908_215142_add_about_hero_block",
     },
 ];

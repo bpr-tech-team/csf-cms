@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 
 import { authenticated } from "../../access/authenticated";
 import { authenticatedOrPublished } from "../../access/authenticatedOrPublished";
+import { AboutHero } from "../../blocks/AboutHero/config";
 import { Archive } from "../../blocks/ArchiveBlock/config";
 import { CallToAction } from "../../blocks/CallToAction/config";
 import { CenteredCTA } from "../../blocks/CenteredCTA/config";
@@ -25,11 +26,11 @@ import { HomepageHero } from "@/blocks/HomepageHero/config";
 import { ServiceHero } from "@/blocks/ServiceHero/config";
 import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
 import { SplitContent } from "@/blocks/SplitContent/config";
-import { hero } from "@/heros/config";
 import { slugField } from "payload";
 import { populatePublishedAt } from "../../hooks/populatePublishedAt";
 import { generatePreviewPath } from "../../utilities/generatePreviewPath";
 import { revalidateDelete, revalidatePage } from "./hooks/revalidatePage";
+import { validatePageLayout } from "./validateLayout";
 
 import {
     MetaDescriptionField,
@@ -123,19 +124,13 @@ export const Pages: CollectionConfig<"pages"> = {
             type: "tabs",
             tabs: [
                 {
-                    fields: [hero],
-                    label: {
-                        cs: "Úvodní sekce",
-                        en: "Hero",
-                    },
-                },
-                {
                     fields: [
                         {
                             name: "layout",
                             type: "blocks",
                             blocks: [
                                 HomepageHero,
+                                AboutHero,
                                 CallToAction,
                                 Content,
                                 MediaBlock,
@@ -160,6 +155,7 @@ export const Pages: CollectionConfig<"pages"> = {
                                 EditorialColumns,
                             ],
                             required: true,
+                            validate: validatePageLayout,
                             admin: {
                                 initCollapsed: true,
                             },

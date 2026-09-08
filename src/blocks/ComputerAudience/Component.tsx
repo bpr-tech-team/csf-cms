@@ -2,7 +2,7 @@
 
 import type { ComputerAudienceBlock as ComputerAudienceBlockProps } from "@/payload-types";
 
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { HighlightedText } from "@/components/SectionHeading";
 import { cn } from "@/utilities/ui";
 import React, { useId, useState } from "react";
 

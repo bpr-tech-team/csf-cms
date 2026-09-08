@@ -1,7 +1,7 @@
 import type { MediaFeatureGridBlock as MediaFeatureGridBlockProps } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { MediaAsset } from "@/components/MediaAsset";
+import { HighlightedText } from "@/components/SectionHeading";
 import React from "react";
 
 export const MediaFeatureGridBlock = ({

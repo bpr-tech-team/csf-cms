@@ -11,12 +11,6 @@ const Select: React.FC<React.ComponentProps<typeof SelectPrimitive.Root>> = (
     return <SelectPrimitive.Root data-slot="select" {...props} />;
 };
 
-const SelectGroup: React.FC<
-    React.ComponentProps<typeof SelectPrimitive.Group>
-> = (props) => {
-    return <SelectPrimitive.Group data-slot="select-group" {...props} />;
-};
-
 const SelectValue: React.FC<
     React.ComponentProps<typeof SelectPrimitive.Value>
 > = (props) => {
@@ -75,18 +69,6 @@ const SelectContent: React.FC<
     );
 };
 
-const SelectLabel: React.FC<
-    React.ComponentProps<typeof SelectPrimitive.Label>
-> = ({ className, ...props }) => {
-    return (
-        <SelectPrimitive.Label
-            data-slot="select-label"
-            className={cn("px-2 py-1.5 text-sm font-semibold", className)}
-            {...props}
-        />
-    );
-};
-
 const SelectItem: React.FC<
     React.ComponentProps<typeof SelectPrimitive.Item>
 > = ({ children, className, ...props }) => {
@@ -106,21 +88,6 @@ const SelectItem: React.FC<
             </span>
             <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
         </SelectPrimitive.Item>
-    );
-};
-
-const SelectSeparator: React.FC<
-    React.ComponentProps<typeof SelectPrimitive.Separator>
-> = ({ className, ...props }) => {
-    return (
-        <SelectPrimitive.Separator
-            data-slot="select-separator"
-            className={cn(
-                "bg-border pointer-events-none -mx-1 my-1 h-px",
-                className,
-            )}
-            {...props}
-        />
     );
 };
 
@@ -161,12 +128,9 @@ const SelectScrollDownButton: React.FC<
 export {
     Select,
     SelectContent,
-    SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectScrollDownButton,
     SelectScrollUpButton,
-    SelectSeparator,
     SelectTrigger,
     SelectValue,
 };

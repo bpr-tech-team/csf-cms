@@ -12,9 +12,6 @@ export const contact: (
         pageType: "standard",
         slug: "contact",
         _status: "published",
-        hero: {
-            type: "none",
-        },
         layout: [
             {
                 blockType: "formBlock",

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import { AdminBar } from "@/components/AdminBar";
 import { CustomCursor } from "@/components/CustomCursor";
-import { Footer } from "@/Footer/Component";
-import { Header } from "@/Header/Component";
+import { Footer } from "@/globals/Footer/Component";
+import { Header } from "@/globals/Header/Component";
 import type { AppLocale } from "@/i18n/config";
 import { localeLanguages, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";

@@ -1,13 +1,13 @@
-import type { ComputerHeroBlock as ComputerHeroBlockProps } from "@/payload-types";
+import type { AboutHeroBlock as AboutHeroBlockProps } from "@/payload-types";
 
 import { ImmersiveHero } from "@/components/ImmersiveHero";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
-export const ComputerHeroBlock = ({
+export const AboutHeroBlock = ({
     locale = defaultLocale,
     ...props
-}: ComputerHeroBlockProps & {
+}: AboutHeroBlockProps & {
     isPageIntro?: boolean;
     locale?: AppLocale;
 }) => <ImmersiveHero {...props} locale={locale} />;

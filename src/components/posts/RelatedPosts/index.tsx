@@ -6,7 +6,7 @@ import type { Post } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
-import { Card } from "../../components/Card";
+import { Card } from "@/components/Card";
 import { DefaultTypedEditorState } from "@payloadcms/richtext-lexical";
 
 export type RelatedPostsProps = {

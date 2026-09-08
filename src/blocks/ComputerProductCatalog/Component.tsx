@@ -2,8 +2,8 @@
 
 import type { ComputerProductCatalogBlock as ComputerProductCatalogBlockProps } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { MediaAsset } from "@/components/MediaAsset";
+import { HighlightedText } from "@/components/SectionHeading";
 import { cn } from "@/utilities/ui";
 import React, { useId, useState } from "react";
 

@@ -72,7 +72,7 @@ export const Footer: GlobalConfig = {
                 hidden: true,
                 initCollapsed: true,
                 components: {
-                    RowLabel: "@/Footer/RowLabel#RowLabel",
+                    RowLabel: "@/globals/Footer/RowLabel#RowLabel",
                 },
             },
         },

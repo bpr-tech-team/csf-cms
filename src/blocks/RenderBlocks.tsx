@@ -4,6 +4,7 @@ import type { Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
+import { AboutHeroBlock } from "@/blocks/AboutHero/Component";
 import { HomepageHero } from "@/blocks/HomepageHero/Component";
 import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
@@ -51,6 +52,15 @@ export const RenderBlocks: React.FC<{
                                     key={block.id ?? index}
                                     locale={locale}
                                     isPageIntro={isFirstSection && index === 0}
+                                />
+                            );
+                        case "aboutHero":
+                            return (
+                                <AboutHeroBlock
+                                    {...block}
+                                    isPageIntro={isFirstSection && index === 0}
+                                    key={block.id ?? index}
+                                    locale={locale}
                                 />
                             );
                         case "archive":

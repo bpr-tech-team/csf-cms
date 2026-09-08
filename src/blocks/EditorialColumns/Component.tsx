@@ -1,6 +1,6 @@
 import type { EditorialColumnsBlock as EditorialColumnsBlockProps } from "@/payload-types";
 
-import { HighlightedText } from "@/components/Homepage/SectionHeading";
+import { HighlightedText } from "@/components/SectionHeading";
 import RichText from "@/components/RichText";
 import React from "react";
 

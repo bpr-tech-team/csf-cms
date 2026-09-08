@@ -19,11 +19,6 @@ export const localeOpenGraphLocales: Record<AppLocale, string> = {
     en: "en_US",
 };
 
-const alternateLocales: Record<AppLocale, AppLocale> = {
-    cs: "en",
-    en: "cs",
-};
-
 export const isLocale = (locale?: string): locale is AppLocale =>
     locales.includes(locale as AppLocale);
 
@@ -56,6 +51,3 @@ export const withLocalePrefix = (path: string, locale: AppLocale) => {
 
     return `${prefix}${pathWithoutLocale}${suffix}`;
 };
-
-export const getAlternateLocale = (locale: AppLocale): AppLocale =>
-    alternateLocales[locale];

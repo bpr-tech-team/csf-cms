@@ -2,7 +2,7 @@
 
 import type { CompanyTimelineBlock as CompanyTimelineBlockProps } from "@/payload-types";
 
-import { SectionHeading } from "@/components/Homepage/SectionHeading";
+import { SectionHeading } from "@/components/SectionHeading";
 import { cn } from "@/utilities/ui";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";

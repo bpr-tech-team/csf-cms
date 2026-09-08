@@ -1,8 +1,8 @@
 import type { ProductsGridBlock as ProductsGridBlockProps } from "@/payload-types";
 
-import { CardIcon } from "@/components/Homepage/CardIcon";
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
-import { SectionHeading } from "@/components/Homepage/SectionHeading";
+import { CardIcon } from "@/components/CardIcon";
+import { MediaAsset } from "@/components/MediaAsset";
+import { SectionHeading } from "@/components/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";

@@ -1,7 +1,7 @@
 import type { CenteredCtaBlock as CenteredCtaBlockProps } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
-import { SectionHeading } from "@/components/Homepage/SectionHeading";
+import { MediaAsset } from "@/components/MediaAsset";
+import { SectionHeading } from "@/components/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";

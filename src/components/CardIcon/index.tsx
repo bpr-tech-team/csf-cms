@@ -1,6 +1,6 @@
 import type { Media } from "@/payload-types";
 
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
+import { MediaAsset } from "@/components/MediaAsset";
 import { cn } from "@/utilities/ui";
 import React from "react";
 

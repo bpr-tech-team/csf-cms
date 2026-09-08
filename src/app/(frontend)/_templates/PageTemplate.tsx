@@ -4,7 +4,7 @@ import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { SetHeaderTheme } from "@/components/SetHeaderTheme";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { RenderBlocks } from "@/blocks/RenderBlocks";
-import { RenderHero } from "@/heros/RenderHero";
+import { PAGE_HERO_BLOCK_TYPES } from "@/collections/Pages/validateLayout";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { generateMeta } from "@/utilities/generateMeta";
@@ -76,45 +76,24 @@ export async function PageTemplate({
         return <PayloadRedirects locale={locale} url={url} />;
     }
 
-    const { hero, layout } = page;
-    const startsWithHomepageHero =
-        hero.type === "none" && layout[0]?.blockType === "homepageHero";
-    const startsWithServiceHero =
-        hero.type === "none" && layout[0]?.blockType === "serviceHero";
-    const startsWithComputerHero =
-        hero.type === "none" && layout[0]?.blockType === "computerHero";
-    const startsWithImmersiveHero =
-        startsWithHomepageHero ||
-        startsWithServiceHero ||
-        startsWithComputerHero;
+    const { layout } = page;
+    const firstBlock = layout[0];
+    const firstBlockType = firstBlock?.blockType;
+    const startsWithHero = PAGE_HERO_BLOCK_TYPES.some(
+        (blockType) => blockType === firstBlockType,
+    );
 
     return (
-        <article
-            className={cn(
-                "pt-16",
-                startsWithImmersiveHero || hero.type === "about"
-                    ? "pb-0"
-                    : "pb-24",
-            )}
-        >
-            <SetHeaderTheme
-                theme={
-                    startsWithImmersiveHero ||
-                    hero.type === "highImpact" ||
-                    hero.type === "about"
-                        ? "dark"
-                        : "light"
-                }
-            />
+        <article className={cn("pt-16", startsWithHero ? "pb-0" : "pb-24")}>
+            <SetHeaderTheme theme={startsWithHero ? "dark" : "light"} />
             <PayloadRedirects disableNotFound locale={locale} url={url} />
 
             {draft && <LivePreviewListener />}
 
-            <RenderHero {...hero} locale={locale} />
             <RenderBlocks
                 blocks={layout}
                 locale={locale}
-                isFirstSection={hero.type === "none"}
+                isFirstSection={startsWithHero}
             />
         </article>
     );

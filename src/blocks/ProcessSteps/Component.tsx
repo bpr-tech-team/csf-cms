@@ -1,6 +1,6 @@
 import type { ProcessStepsBlock as ProcessStepsBlockProps } from "@/payload-types";
 
-import { SectionHeading } from "@/components/Homepage/SectionHeading";
+import { SectionHeading } from "@/components/SectionHeading";
 import React from "react";
 
 export const ProcessStepsBlock = ({
