@@ -200,29 +200,43 @@ Note that often times when making big schema changes you can run the risk of los
 
 #### Local development
 
-Ideally we recommend running a local copy of your database so that schema updates are as fast as possible. By default the Postgres adapter has `push: true` for development environments. This will let you add, modify and remove fields and collections without needing to run any data migrations.
+Use a local Postgres database for development. This project sets `push: false` in every environment, so schema changes are always applied through Payload migrations.
 
-If your database is pointed to production you will want to set `push: false` otherwise you will risk losing data or having your migrations out of sync.
+For a new, empty database, configure `DATABASE_URL` in `.env` and run `pnpm payload migrate` before starting the app. If `NETLIFY_DB_URL` is set, it takes precedence over `DATABASE_URL`; check the target before running any database command.
 
 #### Migrations
 
-[Migrations](https://payloadcms.com/docs/database/migrations) are essentially SQL code versions that keeps track of your schema. When deploy with Postgres you will need to make sure you create and then run your migrations.
+[Payload migrations](https://payloadcms.com/docs/database/migrations) own the schema and migration history, including on Netlify. The history was consolidated into `20260908_222040_initial`, which creates the complete current schema in an empty database. Its `.ts` file contains the migration and its `.json` snapshot is needed to generate future schema changes. Keep both files and `src/migrations/index.ts` in Git.
 
 Locally create a migration
 
 ```bash
-pnpm payload migrate:create
+pnpm payload migrate:create describe_the_change
 ```
 
-This creates the migration files you will need to push alongside with your new configuration.
+Review the generated SQL, apply it to a local database, and include the migration and snapshot with the corresponding schema change. Add new migrations after the initial migration; do not regenerate the initial migration once a database uses it.
 
-On the server after building and before running `pnpm start` you will want to run your migrations
+Apply pending migrations:
 
 ```bash
 pnpm payload migrate
 ```
 
-This command will check for any migrations that have not yet been run and try to run them and it will keep a record of migrations that have been run in the database.
+Payload records applied migrations in `payload_migrations`, so subsequent runs only apply pending migrations. Netlify already runs this command before `next build` through `scripts/netlify-build.mjs`.
+
+#### One-time transition from the previous migration history
+
+The consolidated initial migration cannot be applied over a database created by the previous migrations. Each such database must either be replaced with an empty database or reset once. This deletes all CMS content, users, drafts, and migration history.
+
+After verifying that the connection points to the intended disposable database, reset it with the new migration files present:
+
+```bash
+pnpm payload migrate:fresh
+```
+
+This command asks for confirmation, recreates the Payload schema, and applies the initial migration. Use `migrate:fresh` only for this deliberate reset; normal builds must continue to use `migrate`.
+
+For the existing Netlify project, coordinate the production database reset with the deployment of the consolidated history. Prevent the old code from deploying during the transition, run the reset against the production database using the new migration, then deploy the matching code. The normal build will find the initial migration already applied. Recreate the first administrator through `/admin` after deployment. Resetting Postgres does not delete uploaded files from Netlify Blobs; those are managed separately.
 
 ### Docker
 
