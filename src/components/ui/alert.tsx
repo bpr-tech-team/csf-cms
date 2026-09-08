@@ -36,7 +36,7 @@ const AlertTitle: React.FC<React.ComponentProps<"div">> = ({
 }) => (
     <div
         className={cn(
-            "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
+            "col-start-2 line-clamp-1 min-h-4 font-medium tracking-normal",
             className,
         )}
         data-slot="alert-title"

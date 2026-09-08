@@ -53,7 +53,7 @@ export const CompanyTimelineBlock = ({
 
                                     <time
                                         className={cn(
-                                            "shrink-0 text-5xl leading-none font-bold tracking-[-0.04em] text-brand-500 md:text-display-xl",
+                                            "shrink-0 text-5xl leading-none font-bold tracking-normal text-brand-500 md:text-display-xl",
                                             alignRight
                                                 ? "mr-8 ml-11 justify-self-start md:ml-0"
                                                 : "mr-11 ml-8 justify-self-end md:mr-0",
@@ -64,7 +64,7 @@ export const CompanyTimelineBlock = ({
                                     </time>
                                     <h3
                                         className={cn(
-                                            "row-start-2 text-center text-4xl leading-relaxed font-bold tracking-tight whitespace-nowrap md:mx-0 md:pb-1 md:text-heading-md xl:text-heading-lg",
+                                            "row-start-2 text-center text-4xl leading-relaxed font-bold tracking-normal md:mx-0 md:pb-1 md:text-heading-md md:whitespace-nowrap xl:text-heading-lg",
                                             alignRight ? "ml-11" : "mr-11",
                                         )}
                                     >

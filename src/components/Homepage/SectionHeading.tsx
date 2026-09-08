@@ -38,7 +38,7 @@ export const SectionHeading = ({
             ) : null}
             <h2
                 className={cn(
-                    "leading-tight font-bold tracking-tight whitespace-pre-line",
+                    "leading-tight font-bold tracking-normal whitespace-pre-line",
                     size === "compact"
                         ? "text-3xl md:text-heading-lg"
                         : "text-4xl md:text-heading-xl",

@@ -46,13 +46,13 @@
     /* Site-wide type scale */
     --text-display-xl: 5.25rem;
     --text-display-xl--line-height: 5.46rem;
-    --text-display-xl--letter-spacing: -0.0396em;
+    --text-display-xl--letter-spacing: 0;
     --text-heading-xl: 3rem;
     --text-heading-xl--line-height: 4.5rem;
     --text-heading-xl--letter-spacing: 0;
     --text-heading-lg: 2.4rem;
     --text-heading-lg--line-height: 3.6rem;
-    --text-heading-lg--letter-spacing: -0.03em;
+    --text-heading-lg--letter-spacing: 0;
     --text-heading-md: 1.5rem;
     --text-heading-md--line-height: 2.1rem;
     --text-heading-md--letter-spacing: 0;
@@ -69,7 +69,7 @@
     --text-eyebrow--letter-spacing: 0.09em;
     --text-metric: 4rem;
     --text-metric--line-height: 4rem;
-    --text-metric--letter-spacing: -0.02em;
+    --text-metric--letter-spacing: 0;
 
     /* Shape, depth and motion */
     --radius-xs: 0.15625rem;

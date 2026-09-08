@@ -116,7 +116,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         className={styles.slide}
                         key={activeSlide.id ?? activeIndex}
                     >
-                        <Heading className="max-w-[62rem] text-5xl leading-[1.08] font-bold tracking-[-0.035em] text-balance sm:text-6xl md:text-7xl xl:text-display-xl">
+                        <Heading className="max-w-[62rem] text-4xl leading-[1.08] font-bold tracking-normal text-balance min-[375px]:text-5xl sm:text-6xl md:text-7xl xl:text-display-xl">
                             {activeSlide.heading}
                         </Heading>
                         <p className="mt-7 max-w-3xl text-body-md leading-8 font-normal text-paper-0/90 md:mt-9 md:text-body-lg">
