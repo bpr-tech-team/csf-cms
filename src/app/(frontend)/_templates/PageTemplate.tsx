@@ -81,8 +81,12 @@ export async function PageTemplate({
         hero.type === "none" && layout[0]?.blockType === "homepageHero";
     const startsWithServiceHero =
         hero.type === "none" && layout[0]?.blockType === "serviceHero";
+    const startsWithComputerHero =
+        hero.type === "none" && layout[0]?.blockType === "computerHero";
     const startsWithImmersiveHero =
-        startsWithHomepageHero || startsWithServiceHero;
+        startsWithHomepageHero ||
+        startsWithServiceHero ||
+        startsWithComputerHero;
 
     return (
         <article

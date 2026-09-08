@@ -9,10 +9,15 @@ import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { CenteredCTABlock } from "@/blocks/CenteredCTA/Component";
 import { CompanyTimelineBlock } from "@/blocks/CompanyTimeline/Component";
+import { ComputerAudienceBlock } from "@/blocks/ComputerAudience/Component";
+import { ComputerHeroBlock } from "@/blocks/ComputerHero/Component";
+import { ComputerProductCatalogBlock } from "@/blocks/ComputerProductCatalog/Component";
 import { ContentBlock } from "@/blocks/Content/Component";
+import { EditorialColumnsBlock } from "@/blocks/EditorialColumns/Component";
 import { FormBlock } from "@/blocks/Form/Component";
 import { LogoMarqueeBlock } from "@/blocks/LogoMarquee/Component";
 import { MediaBlock } from "@/blocks/MediaBlock/Component";
+import { MediaFeatureGridBlock } from "@/blocks/MediaFeatureGrid/Component";
 import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
 import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
@@ -21,6 +26,7 @@ import { FeatureRowsBlock } from "@/blocks/FeatureRows/Component";
 import { ServiceHeroBlock } from "@/blocks/ServiceHero/Component";
 import { ServiceSectionIntroBlock } from "@/blocks/ServiceSectionIntro/Component";
 import { SplitContentBlock } from "@/blocks/SplitContent/Component";
+import { TechnologySpotlightBlock } from "@/blocks/TechnologySpotlight/Component";
 
 export const RenderBlocks: React.FC<{
     blocks: Page["layout"][0][];
@@ -164,6 +170,56 @@ export const RenderBlocks: React.FC<{
                         case "featureRows":
                             return (
                                 <FeatureRowsBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "computerHero":
+                            return (
+                                <ComputerHeroBlock
+                                    {...block}
+                                    isPageIntro={isFirstSection && index === 0}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                />
+                            );
+
+                        case "computerAudience":
+                            return (
+                                <ComputerAudienceBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "computerProductCatalog":
+                            return (
+                                <ComputerProductCatalogBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "mediaFeatureGrid":
+                            return (
+                                <MediaFeatureGridBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "technologySpotlight":
+                            return (
+                                <TechnologySpotlightBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "editorialColumns":
+                            return (
+                                <EditorialColumnsBlock
                                     {...block}
                                     key={block.id ?? index}
                                 />

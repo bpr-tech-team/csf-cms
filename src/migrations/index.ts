@@ -6,6 +6,7 @@ import * as migration_20260904_124442_about_page_template from "./20260904_12444
 import * as migration_20260907_163636_homepage_hero_block from "./20260907_163636_homepage_hero_block";
 import * as migration_20260908_191202_service_page_blocks from "./20260908_191202_service_page_blocks";
 import * as migration_20260908_200329_multiple_highlighted_fragments from "./20260908_200329_multiple_highlighted_fragments";
+import * as migration_20260908_204406 from "./20260908_204406";
 
 export const migrations = [
     {
@@ -47,5 +48,10 @@ export const migrations = [
         up: migration_20260908_200329_multiple_highlighted_fragments.up,
         down: migration_20260908_200329_multiple_highlighted_fragments.down,
         name: "20260908_200329_multiple_highlighted_fragments",
+    },
+    {
+        up: migration_20260908_204406.up,
+        down: migration_20260908_204406.down,
+        name: "20260908_204406",
     },
 ];

@@ -2,13 +2,16 @@ import type { ArrayField, Condition } from "payload";
 
 type HighlightedTextsFieldOptions = {
     condition?: Condition;
+    dbName?: string;
 };
 
 export const highlightedTextsField = ({
     condition,
+    dbName,
 }: HighlightedTextsFieldOptions = {}): ArrayField => ({
     name: "highlightedTexts",
     type: "array",
+    dbName,
     admin: {
         condition,
         description: {

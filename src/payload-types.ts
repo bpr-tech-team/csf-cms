@@ -158,7 +158,7 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
-  pageType: 'standard' | 'service';
+  pageType: 'standard' | 'service' | 'computer';
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'about';
     richText?: {
@@ -220,6 +220,12 @@ export interface Page {
     | ServiceSectionIntroBlock
     | SplitContentBlock
     | FeatureRowsBlock
+    | ComputerHeroBlock
+    | ComputerAudienceBlock
+    | ComputerProductCatalogBlock
+    | MediaFeatureGridBlock
+    | TechnologySpotlightBlock
+    | EditorialColumnsBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1229,6 +1235,219 @@ export interface FeatureRowsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerHeroBlock".
+ */
+export interface ComputerHeroBlock {
+  heading: string;
+  description: string;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The image fills the hero and is cropped from the center.
+   */
+  backgroundMedia: number | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'computerHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerAudienceBlock".
+ */
+export interface ComputerAudienceBlock {
+  /**
+   * Optional link target for the block.
+   */
+  anchorId?: string | null;
+  items: {
+    title: string;
+    summary: string;
+    heading: string;
+    /**
+     * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+     */
+    highlightedTexts?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'computerAudience';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerProductCatalogBlock".
+ */
+export interface ComputerProductCatalogBlock {
+  /**
+   * Optional link target for the catalog.
+   */
+  anchorId?: string | null;
+  navigationHeading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  categories: {
+    label: string;
+    heading: string;
+    /**
+     * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+     */
+    highlightedTexts?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    products: {
+      image: number | Media;
+      name: string;
+      summary: string;
+      specifications?:
+        | {
+            label: string;
+            value: string;
+            id?: string | null;
+          }[]
+        | null;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'computerProductCatalog';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaFeatureGridBlock".
+ */
+export interface MediaFeatureGridBlock {
+  anchorId?: string | null;
+  heading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  description?: string | null;
+  items: {
+    /**
+     * An image or video cropped from the center.
+     */
+    media: number | Media;
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaFeatureGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TechnologySpotlightBlock".
+ */
+export interface TechnologySpotlightBlock {
+  anchorId?: string | null;
+  heading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  description?: string | null;
+  logos: {
+    logo: number | Media;
+    name: string;
+    id?: string | null;
+  }[];
+  supportingMedia?: (number | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'technologySpotlight';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EditorialColumnsBlock".
+ */
+export interface EditorialColumnsBlock {
+  anchorId?: string | null;
+  heading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  columns: {
+    richText: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'editorialColumns';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1548,6 +1767,12 @@ export interface PagesSelect<T extends boolean = true> {
         serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
         splitContent?: T | SplitContentBlockSelect<T>;
         featureRows?: T | FeatureRowsBlockSelect<T>;
+        computerHero?: T | ComputerHeroBlockSelect<T>;
+        computerAudience?: T | ComputerAudienceBlockSelect<T>;
+        computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
+        mediaFeatureGrid?: T | MediaFeatureGridBlockSelect<T>;
+        technologySpotlight?: T | TechnologySpotlightBlockSelect<T>;
+        editorialColumns?: T | EditorialColumnsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1958,6 +2183,172 @@ export interface FeatureRowsBlockSelect<T extends boolean = true> {
         richText?: T;
         media?: T;
         mediaPosition?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerHeroBlock_select".
+ */
+export interface ComputerHeroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  backgroundMedia?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerAudienceBlock_select".
+ */
+export interface ComputerAudienceBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        summary?: T;
+        heading?: T;
+        highlightedTexts?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerProductCatalogBlock_select".
+ */
+export interface ComputerProductCatalogBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  navigationHeading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  categories?:
+    | T
+    | {
+        label?: T;
+        heading?: T;
+        highlightedTexts?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        products?:
+          | T
+          | {
+              image?: T;
+              name?: T;
+              summary?: T;
+              specifications?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaFeatureGridBlock_select".
+ */
+export interface MediaFeatureGridBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  heading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  description?: T;
+  items?:
+    | T
+    | {
+        media?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TechnologySpotlightBlock_select".
+ */
+export interface TechnologySpotlightBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  heading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  description?: T;
+  logos?:
+    | T
+    | {
+        logo?: T;
+        name?: T;
+        id?: T;
+      };
+  supportingMedia?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EditorialColumnsBlock_select".
+ */
+export interface EditorialColumnsBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  heading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  columns?:
+    | T
+    | {
+        richText?: T;
         id?: T;
       };
   id?: T;
