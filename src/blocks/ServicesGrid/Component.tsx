@@ -1,14 +1,11 @@
 import type { ServicesGridBlock as ServicesGridBlockProps } from "@/payload-types";
 
 import { CMSLink } from "@/components/Link";
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
+import { CardIcon } from "@/components/Homepage/CardIcon";
 import { SectionHeading } from "@/components/Homepage/SectionHeading";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
-import { cn } from "@/utilities/ui";
 import React from "react";
-
-const framedIcons = new Set([0, 1, 5]);
 
 export const ServicesGridBlock = ({
     eyebrow,
@@ -30,25 +27,8 @@ export const ServicesGridBlock = ({
                     {items.map((item, index) => {
                         const content = (
                             <>
-                                <span
-                                    className={cn(
-                                        "relative flex size-16 items-center justify-center rounded-md",
-                                        !framedIcons.has(index) &&
-                                            "bg-brand-200",
-                                    )}
-                                >
-                                    <MediaAsset
-                                        alt=""
-                                        className={cn(
-                                            "object-contain",
-                                            framedIcons.has(index)
-                                                ? "size-16"
-                                                : "size-8",
-                                        )}
-                                        resource={item.icon}
-                                    />
-                                </span>
-                                <h3 className="mt-8 text-heading-md font-medium text-ink-950">
+                                <CardIcon resource={item.icon} />
+                                <h3 className="mt-6 text-heading-md font-medium text-ink-950">
                                     {item.title}
                                 </h3>
                                 <p className="mt-3 text-body-md font-normal text-ink-950">

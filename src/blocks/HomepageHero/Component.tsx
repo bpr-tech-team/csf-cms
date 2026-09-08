@@ -103,7 +103,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                 fill
                 priority={isPageIntro}
                 sizes="100vw"
-                src="/media/homepage/hero/vector-02.svg"
+                src="/media/block/homepage-hero/background.svg"
             />
             <div
                 aria-hidden

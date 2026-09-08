@@ -8,12 +8,8 @@ import type {
 
 import { contactForm as contactFormData } from "./contact-form";
 import { contact as contactPageData } from "./contact-page";
-import { about as aboutPageData } from "./about";
-import { home } from "./home";
-import { createHomepageMedia } from "./homepage-media";
 import { image1 } from "./image-1";
 import { image2 } from "./image-2";
-import { imageHero1 } from "./image-hero-1";
 import { post1 } from "./post-1";
 import { post2 } from "./post-2";
 import { post3 } from "./post-3";
@@ -104,64 +100,52 @@ export const seed = async ({
 
     payload.logger.info(`— Seeding media...`);
 
-    const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] =
-        await Promise.all([
-            fetchFileByURL(
-                "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post1.webp",
-            ),
-            fetchFileByURL(
-                "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post2.webp",
-            ),
-            fetchFileByURL(
-                "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post3.webp",
-            ),
-            fetchFileByURL(
-                "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-hero1.webp",
-            ),
-        ]);
+    const [image1Buffer, image2Buffer, image3Buffer] = await Promise.all([
+        fetchFileByURL(
+            "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post1.webp",
+        ),
+        fetchFileByURL(
+            "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post2.webp",
+        ),
+        fetchFileByURL(
+            "https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post3.webp",
+        ),
+    ]);
 
-    const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] =
-        await Promise.all([
+    const [demoAuthor, image1Doc, image2Doc, image3Doc] = await Promise.all([
+        payload.create({
+            collection: "users",
+            data: {
+                name: "Demo Author",
+                email: "demo-author@example.com",
+                password: "password",
+            },
+        }),
+        payload.create({
+            collection: "media",
+            data: image1,
+            file: image1Buffer,
+        }),
+        payload.create({
+            collection: "media",
+            data: image2,
+            file: image2Buffer,
+        }),
+        payload.create({
+            collection: "media",
+            data: image2,
+            file: image3Buffer,
+        }),
+        categories.map((category) =>
             payload.create({
-                collection: "users",
+                collection: "categories",
                 data: {
-                    name: "Demo Author",
-                    email: "demo-author@example.com",
-                    password: "password",
+                    title: category,
+                    slug: category,
                 },
             }),
-            payload.create({
-                collection: "media",
-                data: image1,
-                file: image1Buffer,
-            }),
-            payload.create({
-                collection: "media",
-                data: image2,
-                file: image2Buffer,
-            }),
-            payload.create({
-                collection: "media",
-                data: image2,
-                file: image3Buffer,
-            }),
-            payload.create({
-                collection: "media",
-                data: imageHero1,
-                file: hero1Buffer,
-            }),
-            categories.map((category) =>
-                payload.create({
-                    collection: "categories",
-                    data: {
-                        title: category,
-                        slug: category,
-                    },
-                }),
-            ),
-        ]);
-
-    const homepageMedia = await createHomepageMedia({ payload, req });
+        ),
+    ]);
 
     payload.logger.info(`— Seeding posts...`);
 
@@ -239,31 +223,11 @@ export const seed = async ({
 
     payload.logger.info(`— Seeding pages...`);
 
-    const [_, contactPage] = await Promise.all([
-        payload.create({
-            collection: "pages",
-            depth: 0,
-            data: home({
-                contactForm,
-                media: homepageMedia,
-                metaImage: imageHomeDoc,
-            }),
-        }),
-        payload.create({
-            collection: "pages",
-            depth: 0,
-            data: contactPageData({ contactForm: contactForm }),
-        }),
-        payload.create({
-            collection: "pages",
-            depth: 0,
-            data: aboutPageData({
-                contactForm,
-                media: homepageMedia,
-                metaImage: imageHomeDoc,
-            }),
-        }),
-    ]);
+    const contactPage = await payload.create({
+        collection: "pages",
+        depth: 0,
+        data: contactPageData({ contactForm }),
+    });
 
     payload.logger.info(`— Seeding globals...`);
 
@@ -272,13 +236,6 @@ export const seed = async ({
             slug: "header",
             data: {
                 navItems: [
-                    {
-                        link: {
-                            type: "custom",
-                            label: "O nás",
-                            url: "/o-nas",
-                        },
-                    },
                     {
                         link: {
                             type: "custom",
@@ -351,13 +308,6 @@ export const seed = async ({
                     {
                         title: "Společnost",
                         links: [
-                            {
-                                link: {
-                                    type: "custom",
-                                    label: "O nás",
-                                    url: "/o-nas",
-                                },
-                            },
                             {
                                 link: {
                                     type: "custom",

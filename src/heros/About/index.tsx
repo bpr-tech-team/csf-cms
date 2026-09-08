@@ -28,7 +28,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({
                 fill
                 priority
                 sizes="100vw"
-                src="/media/about/hero-gradient.svg"
+                src="/media/block/about-hero/background.svg"
             />
             <span
                 aria-hidden

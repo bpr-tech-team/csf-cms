@@ -879,6 +879,9 @@ export interface ServicesGridBlock {
    */
   highlightedText?: string | null;
   items: {
+    /**
+     * Icon without a background or outer padding. The website adds the colored background automatically.
+     */
     icon: number | Media;
     title: string;
     description: string;
@@ -933,6 +936,9 @@ export interface ProductsGridBlock {
   highlightedText?: string | null;
   items: {
     image?: (number | null) | Media;
+    /**
+     * Icon without a background or outer padding. The website adds the colored background automatically.
+     */
     icon: number | Media;
     title: string;
     description: string;

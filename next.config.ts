@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
                 pathname: "/api/media/file/**",
             },
             {
-                pathname: "/media/homepage/**",
+                pathname: "/media/block/**",
             },
         ],
         qualities: [100],

@@ -27,6 +27,12 @@ export const ProductsGrid: Block = {
                 {
                     name: "icon",
                     type: "upload",
+                    admin: {
+                        description: {
+                            cs: "Ikona bez pozadí a vnějších okrajů. Barevné pozadí přidává web automaticky.",
+                            en: "Icon without a background or outer padding. The website adds the colored background automatically.",
+                        },
+                    },
                     label: {
                         cs: "Ikona",
                         en: "Icon",

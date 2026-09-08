@@ -8,12 +8,10 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 .vercel
 
-# Payload default media upload directory. Keep bundled homepage assets versioned.
+# Payload default media upload directory. Keep bundled design assets versioned.
 public/media/*
-!public/media/homepage/
-!public/media/homepage/**
-!public/media/about/
-!public/media/about/**
+!public/media/block/
+!public/media/block/**
 
 public/robots.txt
 public/sitemap*.xml
@@ -28,3 +26,8 @@ node_modules/
 
 # Local Netlify folder
 .netlify
+
+.pnpm-store/
+.tmp/
+docs/
+tests/

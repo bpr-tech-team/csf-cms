@@ -1,14 +1,12 @@
 import type { ProductsGridBlock as ProductsGridBlockProps } from "@/payload-types";
 
+import { CardIcon } from "@/components/Homepage/CardIcon";
 import { MediaAsset } from "@/components/Homepage/MediaAsset";
 import { SectionHeading } from "@/components/Homepage/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
-import { cn } from "@/utilities/ui";
 import React from "react";
-
-const framedIcons = new Set([1, 4]);
 
 export const ProductsGridBlock = ({
     eyebrow,
@@ -29,7 +27,6 @@ export const ProductsGridBlock = ({
                 <div className="mt-16 grid gap-5 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-6">
                     {items.map((item, index) => (
                         <ProductCard
-                            framedIcon={framedIcons.has(index)}
                             item={item}
                             key={item.id ?? index}
                             locale={locale}
@@ -42,11 +39,9 @@ export const ProductsGridBlock = ({
 };
 
 const ProductCard = ({
-    framedIcon,
     item,
     locale,
 }: {
-    framedIcon: boolean;
     item: ProductsGridBlockProps["items"][number];
     locale: AppLocale;
 }) => {
@@ -63,22 +58,7 @@ const ProductCard = ({
                     />
                 )}
             </span>
-            <span
-                className={cn(
-                    "relative mt-7 flex size-16 items-center justify-center rounded-md",
-                    !framedIcon && "bg-brand-200",
-                )}
-            >
-                <MediaAsset
-                    alt=""
-                    className={
-                        framedIcon
-                            ? "size-16 object-contain"
-                            : "size-8 object-contain"
-                    }
-                    resource={item.icon}
-                />
-            </span>
+            <CardIcon className="mt-7" resource={item.icon} />
             <h3 className="mt-6 text-heading-md font-medium text-ink-950">
                 {item.title}
             </h3>
