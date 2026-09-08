@@ -9,7 +9,7 @@ type SectionHeadingProps = {
     eyebrow?: null | string;
     heading: string;
     headingClassName?: string;
-    highlightedText?: null | string;
+    highlightedTexts?: HighlightedFragment[] | null;
     showRule?: boolean;
     size?: "compact" | "default";
     tone?: "default" | "inverse";
@@ -21,7 +21,7 @@ export const SectionHeading = ({
     eyebrow,
     heading,
     headingClassName,
-    highlightedText,
+    highlightedTexts,
     showRule = true,
     size = "default",
     tone = "default",
@@ -49,7 +49,7 @@ export const SectionHeading = ({
                 )}
             >
                 <HighlightedText
-                    highlightedText={highlightedText}
+                    highlightedTexts={highlightedTexts}
                     text={heading}
                 />
             </h2>
@@ -74,22 +74,46 @@ export const SectionHeading = ({
 };
 
 export const HighlightedText = ({
-    highlightedText,
+    highlightedTexts,
     text,
 }: {
-    highlightedText?: null | string;
+    highlightedTexts?: HighlightedFragment[] | null;
     text: string;
 }) => {
-    if (!highlightedText) return text;
+    const fragments = Array.from(
+        new Set(
+            highlightedTexts
+                ?.map(({ text: fragment }) => fragment.trim())
+                .filter(Boolean),
+        ),
+    ).sort((first, second) => second.length - first.length);
 
-    const index = text.indexOf(highlightedText);
-    if (index < 0) return text;
+    if (fragments.length === 0) return text;
+
+    const highlightedFragments = new Set(fragments);
+    const pattern = fragments.map(escapeRegExp).join("|");
+    const parts = text.split(new RegExp(`(${pattern})`, "g"));
+
+    if (parts.length === 1) return text;
 
     return (
         <>
-            {text.slice(0, index)}
-            <span className="text-brand-500">{highlightedText}</span>
-            {text.slice(index + highlightedText.length)}
+            {parts.map((part, index) =>
+                highlightedFragments.has(part) ? (
+                    <span className="text-brand-500" key={index}>
+                        {part}
+                    </span>
+                ) : (
+                    part
+                ),
+            )}
         </>
     );
 };
+
+type HighlightedFragment = {
+    text: string;
+};
+
+const escapeRegExp = (value: string) =>
+    value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

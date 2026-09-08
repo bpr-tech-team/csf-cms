@@ -14,7 +14,11 @@ import { MetricsStrip } from "../../blocks/MetricsStrip/config";
 import { ProcessSteps } from "../../blocks/ProcessSteps/config";
 import { ProductsGrid } from "../../blocks/ProductsGrid/config";
 import { ServicesGrid } from "../../blocks/ServicesGrid/config";
+import { FeatureRows } from "@/blocks/FeatureRows/config";
 import { HomepageHero } from "@/blocks/HomepageHero/config";
+import { ServiceHero } from "@/blocks/ServiceHero/config";
+import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
+import { SplitContent } from "@/blocks/SplitContent/config";
 import { hero } from "@/heros/config";
 import { slugField } from "payload";
 import { populatePublishedAt } from "../../hooks/populatePublishedAt";
@@ -74,6 +78,35 @@ export const Pages: CollectionConfig<"pages"> = {
             required: true,
         },
         {
+            name: "pageType",
+            type: "select",
+            admin: {
+                position: "sidebar",
+            },
+            defaultValue: "standard",
+            label: {
+                cs: "Typ stránky",
+                en: "Page type",
+            },
+            options: [
+                {
+                    label: {
+                        cs: "Standardní stránka",
+                        en: "Standard page",
+                    },
+                    value: "standard",
+                },
+                {
+                    label: {
+                        cs: "Služba",
+                        en: "Service",
+                    },
+                    value: "service",
+                },
+            ],
+            required: true,
+        },
+        {
             type: "tabs",
             tabs: [
                 {
@@ -102,6 +135,10 @@ export const Pages: CollectionConfig<"pages"> = {
                                 CenteredCTA,
                                 ProcessSteps,
                                 CompanyTimeline,
+                                ServiceHero,
+                                ServiceSectionIntro,
+                                SplitContent,
+                                FeatureRows,
                             ],
                             required: true,
                             admin: {

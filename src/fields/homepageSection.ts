@@ -1,5 +1,7 @@
 import type { Field } from "payload";
 
+import { highlightedTextsField } from "@/fields/highlightedTexts";
+
 type HomepageSectionIntroOptions = {
     includeDescription?: boolean;
 };
@@ -25,20 +27,7 @@ export const homepageSectionIntro = ({
             },
             required: true,
         },
-        {
-            name: "highlightedText",
-            type: "text",
-            admin: {
-                description: {
-                    cs: "Část hlavního nadpisu zvýrazněná zelenou barvou.",
-                    en: "A substring of the heading highlighted in green.",
-                },
-            },
-            label: {
-                cs: "Zvýrazněný text",
-                en: "Highlighted text",
-            },
-        },
+        highlightedTextsField(),
     ];
 
     if (includeDescription) {

@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { highlightedTextsField } from "@/fields/highlightedTexts";
 import { linkGroup } from "@/fields/linkGroup";
 
 export const HomepageHero: Block = {
@@ -92,14 +93,7 @@ export const HomepageHero: Block = {
                     },
                     required: true,
                 },
-                {
-                    name: "highlightedText",
-                    type: "text",
-                    label: {
-                        cs: "Zvýrazněný text",
-                        en: "Highlighted text",
-                    },
-                },
+                highlightedTextsField(),
                 {
                     name: "description",
                     type: "textarea",

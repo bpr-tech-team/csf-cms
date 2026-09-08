@@ -27,9 +27,13 @@ export const MediaAsset = ({
                 fill={fill}
                 htmlElement={null}
                 imgClassName={className}
+                pictureClassName={
+                    fill ? "absolute inset-0 size-full" : undefined
+                }
                 priority={priority}
                 resource={resource}
                 size={sizes}
+                videoClassName={className}
             />
         );
     }

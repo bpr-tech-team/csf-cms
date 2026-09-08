@@ -17,6 +17,10 @@ import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
 import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
 import { ServicesGridBlock } from "@/blocks/ServicesGrid/Component";
+import { FeatureRowsBlock } from "@/blocks/FeatureRows/Component";
+import { ServiceHeroBlock } from "@/blocks/ServiceHero/Component";
+import { ServiceSectionIntroBlock } from "@/blocks/ServiceSectionIntro/Component";
+import { SplitContentBlock } from "@/blocks/SplitContent/Component";
 
 export const RenderBlocks: React.FC<{
     blocks: Page["layout"][0][];
@@ -130,6 +134,40 @@ export const RenderBlocks: React.FC<{
 
                         case "processSteps":
                             return <ProcessStepsBlock {...block} key={index} />;
+
+                        case "serviceHero":
+                            return (
+                                <ServiceHeroBlock
+                                    {...block}
+                                    isPageIntro={isFirstSection && index === 0}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                />
+                            );
+
+                        case "serviceSectionIntro":
+                            return (
+                                <ServiceSectionIntroBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "splitContent":
+                            return (
+                                <SplitContentBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "featureRows":
+                            return (
+                                <FeatureRowsBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
 
                         default:
                             return null;

@@ -158,6 +158,7 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
+  pageType: 'standard' | 'service';
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'about';
     richText?: {
@@ -215,6 +216,10 @@ export interface Page {
     | CenteredCtaBlock
     | ProcessStepsBlock
     | CompanyTimelineBlock
+    | ServiceHeroBlock
+    | ServiceSectionIntroBlock
+    | SplitContentBlock
+    | FeatureRowsBlock
   )[];
   meta?: {
     title?: string | null;
@@ -497,7 +502,15 @@ export interface HomepageHeroBlock {
   intro: {
     eyebrow?: string | null;
     heading: string;
-    highlightedText?: string | null;
+    /**
+     * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+     */
+    highlightedTexts?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
     description: string;
   };
   quickLinks?:
@@ -875,9 +888,14 @@ export interface ServicesGridBlock {
   eyebrow?: string | null;
   heading: string;
   /**
-   * A substring of the heading highlighted in green.
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
    */
-  highlightedText?: string | null;
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   items: {
     /**
      * Icon without a background or outer padding. The website adds the colored background automatically.
@@ -931,9 +949,14 @@ export interface ProductsGridBlock {
   eyebrow?: string | null;
   heading: string;
   /**
-   * A substring of the heading highlighted in green.
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
    */
-  highlightedText?: string | null;
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   items: {
     image?: (number | null) | Media;
     /**
@@ -1024,9 +1047,14 @@ export interface ProcessStepsBlock {
   eyebrow?: string | null;
   heading: string;
   /**
-   * A substring of the heading highlighted in green.
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
    */
-  highlightedText?: string | null;
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   description?: string | null;
   items: {
     title: string;
@@ -1045,9 +1073,14 @@ export interface CompanyTimelineBlock {
   eyebrow?: string | null;
   heading: string;
   /**
-   * A substring of the heading highlighted in green.
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
    */
-  highlightedText?: string | null;
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   items: {
     year: string;
     title: string;
@@ -1057,6 +1090,142 @@ export interface CompanyTimelineBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'companyTimeline';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceHeroBlock".
+ */
+export interface ServiceHeroBlock {
+  heading: string;
+  description: string;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The image fills the hero and is cropped from the center.
+   */
+  backgroundMedia: number | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'serviceHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceSectionIntroBlock".
+ */
+export interface ServiceSectionIntroBlock {
+  /**
+   * Optional link target, for example it-outsourcing.
+   */
+  anchorId?: string | null;
+  heading: string;
+  description: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'serviceSectionIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitContentBlock".
+ */
+export interface SplitContentBlock {
+  /**
+   * Optional link target for the block.
+   */
+  anchorId?: string | null;
+  theme: 'light' | 'dark';
+  sectionHeading?: string | null;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  heading: string;
+  richText: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * The media fills its area with centered cropping.
+   */
+  media: number | Media;
+  mediaPosition: 'left' | 'right';
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'splitContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureRowsBlock".
+ */
+export interface FeatureRowsBlock {
+  /**
+   * Optional link target for the block.
+   */
+  anchorId?: string | null;
+  heading: string;
+  items: {
+    richText: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    /**
+     * The media fills its area with centered cropping.
+     */
+    media: number | Media;
+    mediaPosition: 'left' | 'right';
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureRows';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1336,6 +1505,7 @@ export interface PayloadMigration {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  pageType?: T;
   hero?:
     | T
     | {
@@ -1374,6 +1544,10 @@ export interface PagesSelect<T extends boolean = true> {
         centeredCta?: T | CenteredCtaBlockSelect<T>;
         processSteps?: T | ProcessStepsBlockSelect<T>;
         companyTimeline?: T | CompanyTimelineBlockSelect<T>;
+        serviceHero?: T | ServiceHeroBlockSelect<T>;
+        serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
+        splitContent?: T | SplitContentBlockSelect<T>;
+        featureRows?: T | FeatureRowsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1423,7 +1597,12 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
     | {
         eyebrow?: T;
         heading?: T;
-        highlightedText?: T;
+        highlightedTexts?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
         description?: T;
       };
   quickLinks?:
@@ -1544,7 +1723,12 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface ServicesGridBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
-  highlightedText?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   items?:
     | T
     | {
@@ -1590,7 +1774,12 @@ export interface MetricsStripBlockSelect<T extends boolean = true> {
 export interface ProductsGridBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
-  highlightedText?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   items?:
     | T
     | {
@@ -1657,7 +1846,12 @@ export interface CenteredCtaBlockSelect<T extends boolean = true> {
 export interface ProcessStepsBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
-  highlightedText?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   description?: T;
   items?:
     | T
@@ -1676,13 +1870,94 @@ export interface ProcessStepsBlockSelect<T extends boolean = true> {
 export interface CompanyTimelineBlockSelect<T extends boolean = true> {
   eyebrow?: T;
   heading?: T;
-  highlightedText?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   items?:
     | T
     | {
         year?: T;
         title?: T;
         description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceHeroBlock_select".
+ */
+export interface ServiceHeroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  backgroundMedia?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceSectionIntroBlock_select".
+ */
+export interface ServiceSectionIntroBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  heading?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitContentBlock_select".
+ */
+export interface SplitContentBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  theme?: T;
+  sectionHeading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  heading?: T;
+  richText?: T;
+  media?: T;
+  mediaPosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureRowsBlock_select".
+ */
+export interface FeatureRowsBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  heading?: T;
+  items?:
+    | T
+    | {
+        richText?: T;
+        media?: T;
+        mediaPosition?: T;
         id?: T;
       };
   id?: T;

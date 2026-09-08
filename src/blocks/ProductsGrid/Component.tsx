@@ -11,7 +11,7 @@ import React from "react";
 export const ProductsGridBlock = ({
     eyebrow,
     heading,
-    highlightedText,
+    highlightedTexts,
     items,
     locale = defaultLocale,
 }: ProductsGridBlockProps & { locale?: AppLocale }) => {
@@ -21,7 +21,7 @@ export const ProductsGridBlock = ({
                 <SectionHeading
                     eyebrow={eyebrow}
                     heading={heading}
-                    highlightedText={highlightedText}
+                    highlightedTexts={highlightedTexts}
                 />
 
                 <div className="mt-16 grid gap-5 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-6">

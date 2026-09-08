@@ -9,6 +9,7 @@ export const contact: (
     args: ContactArgs,
 ) => RequiredDataFromCollectionSlug<"pages"> = ({ contactForm }) => {
     return {
+        pageType: "standard",
         slug: "contact",
         _status: "published",
         hero: {

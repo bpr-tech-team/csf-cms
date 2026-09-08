@@ -21,6 +21,7 @@ type PageParams = {
 export type PageTemplateArgs = {
     locale: AppLocale;
     params: Promise<PageParams>;
+    pathPrefix?: string;
 };
 
 export async function generatePageStaticParams(locale: AppLocale) {
@@ -56,11 +57,15 @@ export async function generatePageStaticParams(locale: AppLocale) {
 export async function PageTemplate({
     locale,
     params: paramsPromise,
+    pathPrefix,
 }: PageTemplateArgs) {
     const { isEnabled: draft } = await draftMode();
     const { slug = "home" } = await paramsPromise;
     const decodedSlug = decodeURIComponent(slug);
-    const path = decodedSlug === "home" ? "/" : `/${decodedSlug}`;
+    const path =
+        decodedSlug === "home"
+            ? "/"
+            : `/${pathPrefix ? `${pathPrefix}/` : ""}${decodedSlug}`;
     const url = withLocalePrefix(path, locale);
     const page = await queryPageBySlug({
         locale,
@@ -74,19 +79,23 @@ export async function PageTemplate({
     const { hero, layout } = page;
     const startsWithHomepageHero =
         hero.type === "none" && layout[0]?.blockType === "homepageHero";
+    const startsWithServiceHero =
+        hero.type === "none" && layout[0]?.blockType === "serviceHero";
+    const startsWithImmersiveHero =
+        startsWithHomepageHero || startsWithServiceHero;
 
     return (
         <article
             className={cn(
                 "pt-16",
-                startsWithHomepageHero || hero.type === "about"
+                startsWithImmersiveHero || hero.type === "about"
                     ? "pb-0"
                     : "pb-24",
             )}
         >
             <SetHeaderTheme
                 theme={
-                    startsWithHomepageHero ||
+                    startsWithImmersiveHero ||
                     hero.type === "highImpact" ||
                     hero.type === "about"
                         ? "dark"
@@ -110,6 +119,7 @@ export async function PageTemplate({
 export async function generatePageMetadata({
     locale,
     params: paramsPromise,
+    pathPrefix,
 }: PageTemplateArgs): Promise<Metadata> {
     const { slug = "home" } = await paramsPromise;
     const decodedSlug = decodeURIComponent(slug);
@@ -122,7 +132,9 @@ export async function generatePageMetadata({
         doc: page,
         locale,
         path: withLocalePrefix(
-            decodedSlug === "home" ? "/" : `/${decodedSlug}`,
+            decodedSlug === "home"
+                ? "/"
+                : `/${pathPrefix ? `${pathPrefix}/` : ""}${decodedSlug}`,
             locale,
         ),
     });

@@ -7,7 +7,7 @@ export const ProcessStepsBlock = ({
     description,
     eyebrow,
     heading,
-    highlightedText,
+    highlightedTexts,
     items,
 }: ProcessStepsBlockProps) => {
     return (
@@ -17,7 +17,7 @@ export const ProcessStepsBlock = ({
                     align="center"
                     eyebrow={eyebrow}
                     heading={heading}
-                    highlightedText={highlightedText}
+                    highlightedTexts={highlightedTexts}
                     showRule={false}
                 />
                 {description && (

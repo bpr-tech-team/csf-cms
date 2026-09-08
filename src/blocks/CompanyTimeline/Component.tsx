@@ -11,7 +11,7 @@ import React, { useEffect, useRef } from "react";
 
 export const CompanyTimelineBlock = ({
     heading,
-    highlightedText,
+    highlightedTexts,
     items,
 }: CompanyTimelineBlockProps) => {
     const pathRef = useRef<SVGPathElement>(null);
@@ -99,7 +99,7 @@ export const CompanyTimelineBlock = ({
                 <SectionHeading
                     heading={heading}
                     headingClassName="leading-snug text-balance md:text-heading-lg xl:text-heading-xl"
-                    highlightedText={highlightedText}
+                    highlightedTexts={highlightedTexts}
                     showRule={false}
                 />
             </div>
