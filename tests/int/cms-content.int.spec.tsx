@@ -1,9 +1,9 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Header, Media } from "@/payload-types";
-import { HeaderNav } from "@/Header/Nav";
-import { Footer } from "@/Footer/Component";
-import { MediaAsset } from "@/components/Homepage/MediaAsset";
+import { HeaderNav } from "@/globals/Header/Nav";
+import { Footer } from "@/globals/Footer/Component";
+import { MediaAsset } from "@/components/MediaAsset";
 
 const globals = vi.hoisted(() => ({
     footer: { columns: [], navItems: [], tagline: "" },
