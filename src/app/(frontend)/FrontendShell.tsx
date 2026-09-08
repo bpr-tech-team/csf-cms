@@ -5,7 +5,7 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/Footer/Component";
 import { Header } from "@/Header/Component";
 import type { AppLocale } from "@/i18n/config";
-import { localeLanguages } from "@/i18n/config";
+import { localeLanguages, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import { Providers } from "@/providers";
 import { InitTheme } from "@/providers/Theme/InitTheme";
@@ -76,7 +76,7 @@ export const getFrontendMetadata = (locale: AppLocale): Metadata => {
 
     return {
         alternates: {
-            canonical: getCanonicalUrl(locale === "cs" ? "/" : `/${locale}`),
+            canonical: getCanonicalUrl(withLocalePrefix("/", locale)),
         },
         description: messages.defaultDescription,
         metadataBase: new URL(getSiteUrl()),

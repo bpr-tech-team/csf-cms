@@ -6,12 +6,14 @@ import React from "react";
 
 import { CMSLink } from "@/components/Link";
 import { Logo } from "@/components/Logo/Logo";
+import { frontendMessages } from "@/i18n/frontend";
 
 export async function Footer({
     locale = defaultLocale,
 }: {
     locale?: AppLocale;
 }) {
+    const messages = frontendMessages[locale];
     const footerData = await getCachedGlobal("footer", 1, locale)();
     const legacyNavItems = footerData?.navItems || [];
     const columns = footerData?.columns?.length
@@ -19,12 +21,11 @@ export async function Footer({
         : legacyNavItems.length
           ? [
                 {
-                    title: locale === "cs" ? "Navigace" : "Navigation",
+                    title: messages.footerNavigation,
                     links: legacyNavItems,
                 },
             ]
           : [];
-    const year = new Date().getFullYear();
     const tagline = footerData?.tagline;
 
     return (
@@ -35,23 +36,17 @@ export async function Footer({
             <div className="container grid grid-cols-1 gap-x-6 gap-y-10 py-16 sm:grid-cols-2 md:grid-cols-4">
                 <div className="flex flex-col items-start gap-6 sm:col-span-2 md:col-span-1">
                     <Link
-                        aria-label={
-                            locale === "cs" ? "CSF — domů" : "CSF — home"
-                        }
+                        aria-label={messages.homeLinkLabel}
                         className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-olive-950"
                         href={withLocalePrefix("/", locale)}
                     >
                         <Logo />
                     </Link>
-                    <p className="max-w-68 text-body-sm leading-6 font-normal text-neutral-inverse-muted">
-                        © {year} CSF ICT Solutions. All rights reserved.
-                        {tagline && (
-                            <>
-                                <br />
-                                {tagline}
-                            </>
-                        )}
-                    </p>
+                    {tagline && (
+                        <p className="max-w-68 text-body-sm leading-6 font-normal text-neutral-inverse-muted">
+                            {tagline}
+                        </p>
+                    )}
                 </div>
 
                 {columns.map((column, columnIndex) => (

@@ -9,6 +9,7 @@ import React, { useEffect, useRef, useState } from "react";
 import type { Header } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { withLocalePrefix } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 
 import { Logo } from "@/components/Logo/Logo";
 import { HeaderNav } from "./Nav";
@@ -19,6 +20,7 @@ interface HeaderClientProps {
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
+    const messages = frontendMessages[locale];
     const { setHeaderTheme } = useHeaderTheme();
     const pathname = usePathname();
     const [openMenuPathname, setOpenMenuPathname] = useState<string | null>(
@@ -54,7 +56,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
         >
             <div className="container flex h-26 items-center justify-between">
                 <Link
-                    aria-label={locale === "cs" ? "CSF — domů" : "CSF — home"}
+                    aria-label={messages.homeLinkLabel}
                     className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-ink-900"
                     href={withLocalePrefix("/", locale)}
                 >
@@ -72,13 +74,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
                     aria-controls="site-navigation"
                     aria-expanded={isMenuOpen}
                     aria-label={
-                        isMenuOpen
-                            ? locale === "cs"
-                                ? "Zavřít menu"
-                                : "Close menu"
-                            : locale === "cs"
-                              ? "Otevřít menu"
-                              : "Open menu"
+                        isMenuOpen ? messages.menuClose : messages.menuOpen
                     }
                     className="flex size-12 items-center justify-center rounded-pill border border-white/20 text-white transition-colors duration-fast hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary xl:hidden"
                     onClick={() =>

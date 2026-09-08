@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/Homepage/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 import type { HomepageHeroBlock } from "@/payload-types";
 import { cn } from "@/utilities/ui";
 import NextImage from "next/image";
@@ -40,6 +41,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
         : null;
     const interval = Math.min(Math.max(autoplayInterval ?? 7000, 3000), 20000);
     const Heading = isPageIntro ? "h1" : "h2";
+    const messages = frontendMessages[locale];
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(
@@ -81,7 +83,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
 
     return (
         <section
-            aria-label={locale === "cs" ? "Úvodní prezentace" : "Introduction"}
+            aria-label={messages.heroPresentation}
             className={cn(
                 "relative overflow-hidden bg-ink-900 pb-20 text-paper-0 md:pb-24 xl:pb-21",
                 isPageIntro ? "-mt-42 pt-58" : "pt-20 md:pt-24",
@@ -154,9 +156,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
 
                 {slideCount > 1 && (
                     <div
-                        aria-label={
-                            locale === "cs" ? "Přepnout snímek" : "Select slide"
-                        }
+                        aria-label={messages.selectSlide}
                         className="mt-14 flex items-center gap-3"
                         role="group"
                     >
@@ -182,7 +182,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                                             ? "true"
                                             : undefined
                                     }
-                                    aria-label={`${locale === "cs" ? "Snímek" : "Slide"} ${index + 1}`}
+                                    aria-label={`${messages.slide} ${index + 1}`}
                                     className={cn(
                                         "size-3.5 rounded-full border border-paper-0/70 transition-colors duration-fast",
                                         index === activeIndex &&

@@ -7,6 +7,7 @@ import type {
 
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 import { cn } from "@/utilities/ui";
 import { useSelectedLayoutSegments } from "next/navigation";
 import { PayloadAdminBar } from "@payloadcms/admin-bar";
@@ -43,7 +44,7 @@ const collectionLabels = {
 };
 
 const Title: React.FC<{ locale: AppLocale }> = ({ locale }) => (
-    <span>{locale === "cs" ? "Administrace" : "Dashboard"}</span>
+    <span>{frontendMessages[locale].adminDashboard}</span>
 );
 
 export const AdminBar: React.FC<{

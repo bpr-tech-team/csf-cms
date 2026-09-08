@@ -6,6 +6,7 @@ import type { Header as HeaderType } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 
 import { CMSLink } from "@/components/Link";
+import { frontendMessages } from "@/i18n/frontend";
 import { cn } from "@/utilities/ui";
 
 type HeaderLink = NonNullable<HeaderType["navItems"]>[number]["link"];
@@ -24,6 +25,7 @@ export const HeaderNav: React.FC<{
     onNavigate?: () => void;
     variant: "desktop" | "mobile";
 }> = ({ className, data, locale, onNavigate, variant }) => {
+    const messages = frontendMessages[locale];
     const configuredItems = (data?.navItems || []).filter(({ link }) =>
         hasTarget(link),
     );
@@ -37,7 +39,7 @@ export const HeaderNav: React.FC<{
 
     return (
         <nav
-            aria-label={locale === "cs" ? "Hlavní navigace" : "Main navigation"}
+            aria-label={messages.mainNavigation}
             className={cn(
                 isMobile
                     ? "flex flex-col items-stretch gap-1"

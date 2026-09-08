@@ -104,7 +104,7 @@ export function generatePostsArchiveMetadata({
               }
             : undefined,
         title: pageNumber
-            ? `${messages.postsTitle} – ${locale === "cs" ? "strana" : "page"} ${pageNumber || ""}${seoConfig.titleSuffix}`
+            ? `${messages.postsTitle} – ${messages.page} ${pageNumber || ""}${seoConfig.titleSuffix}`
             : `${messages.postsTitle}${seoConfig.titleSuffix}`,
     };
 }
