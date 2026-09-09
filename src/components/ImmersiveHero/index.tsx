@@ -58,7 +58,15 @@ export const ImmersiveHero = ({
                     <ul className="mt-10 flex flex-col items-start gap-3 sm:flex-row md:mt-12">
                         {links.map(({ id, link }, index) => (
                             <li key={id ?? index}>
-                                <CMSLink {...link} locale={locale} size="lg" />
+                                <CMSLink
+                                    {...link}
+                                    className={cn(
+                                        link.appearance === "outline" &&
+                                            "border-brand-500/60 text-paper-0 hover:border-brand-500 hover:bg-brand-100 hover:text-paper-0",
+                                    )}
+                                    locale={locale}
+                                    size="lg"
+                                />
                             </li>
                         ))}
                     </ul>
