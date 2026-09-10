@@ -4,6 +4,7 @@ import type { MetricsStripBlock as MetricsStripBlockProps } from "@/payload-type
 
 import { Eyebrow } from "@/components/Eyebrow";
 import React from "react";
+import { AnimatedMetric } from "./AnimatedMetric";
 
 export const MetricsStripBlock = ({
     locale = defaultLocale,
@@ -32,11 +33,11 @@ export const MetricsStripBlock = ({
                                 {item.label}
                             </Eyebrow>
                             <dd className="text-4xl leading-none font-bold tracking-normal text-brand-500 sm:text-5xl md:text-metric">
-                                {item.prefix}
-                                {new Intl.NumberFormat("cs-CZ").format(
-                                    item.value,
-                                )}
-                                {item.suffix}
+                                <AnimatedMetric
+                                    value={item.value}
+                                    prefix={item.prefix}
+                                    suffix={item.suffix}
+                                />
                             </dd>
                         </div>
                     ))}
