@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import type { ServiceHeroBlock } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
@@ -48,10 +49,10 @@ export const ImmersiveHero = ({
 
             <div className="container relative z-10">
                 <Heading className="m-0 text-5xl leading-[1.08] font-bold tracking-normal md:text-display-xl">
-                    {heading}
+                    {applyTypography(heading, { locale })}
                 </Heading>
                 <p className="mt-5 max-w-4xl text-body-md leading-7 font-normal text-paper-0 md:mt-16 md:text-body-lg md:leading-8">
-                    {description}
+                    {applyTypography(description, { locale })}
                 </p>
 
                 {Array.isArray(links) && links.length > 0 ? (

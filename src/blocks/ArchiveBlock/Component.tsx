@@ -70,6 +70,7 @@ export const ArchiveBlock: React.FC<
             {introContent && (
                 <div className="container mb-16">
                     <RichText
+                        locale={locale}
                         className="ms-0 max-w-3xl"
                         data={introContent}
                         enableGutter={false}

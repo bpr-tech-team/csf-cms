@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import type { Metadata } from "next/types";
 
 import { CollectionArchive } from "@/components/CollectionArchive";
@@ -77,7 +78,9 @@ export async function SearchTemplate({
             <SetHeaderTheme theme="light" />
             <div className="container mb-16">
                 <div className="prose dark:prose-invert max-w-none text-center">
-                    <h1 className="mb-8 lg:mb-16">{messages.searchTitle}</h1>
+                    <h1 className="mb-8 lg:mb-16">
+                        {applyTypography(messages.searchTitle, { locale })}
+                    </h1>
 
                     <div className="max-w-[50rem] mx-auto">
                         <Search locale={locale} />
@@ -91,7 +94,9 @@ export async function SearchTemplate({
                     posts={posts.docs as CardPostData[]}
                 />
             ) : (
-                <div className="container">{messages.noResultsFound}</div>
+                <div className="container">
+                    {applyTypography(messages.noResultsFound, { locale })}
+                </div>
             )}
         </div>
     );

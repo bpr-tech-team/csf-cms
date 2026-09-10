@@ -1,7 +1,9 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
 import React from "react";
 
 import { Eyebrow } from "@/components/Eyebrow";
 import { cn } from "@/utilities/ui";
+import { applyTypographyToSegments } from "@/utilities/typographySegments";
 
 type SectionHeadingProps = {
     align?: "center" | "left";
@@ -13,6 +15,8 @@ type SectionHeadingProps = {
     showRule?: boolean;
     size?: "compact" | "default";
     tone?: "default" | "inverse";
+    typography?: boolean;
+    locale?: AppLocale;
 };
 
 export const SectionHeading = ({
@@ -25,11 +29,15 @@ export const SectionHeading = ({
     showRule = true,
     size = "default",
     tone = "default",
+    typography = true,
+    locale = defaultLocale,
 }: SectionHeadingProps) => {
     const content = (
         <div className={cn(align === "center" && "text-center")}>
             {eyebrow ? (
                 <Eyebrow
+                    locale={locale}
+                    typography={typography}
                     align={align}
                     tone={tone === "inverse" ? "inverse" : "neutral"}
                 >
@@ -49,6 +57,8 @@ export const SectionHeading = ({
                 )}
             >
                 <HighlightedText
+                    locale={locale}
+                    typography={typography}
                     highlightedTexts={highlightedTexts}
                     text={heading}
                 />
@@ -76,9 +86,13 @@ export const SectionHeading = ({
 export const HighlightedText = ({
     highlightedTexts,
     text,
+    typography = true,
+    locale = defaultLocale,
 }: {
     highlightedTexts?: HighlightedFragment[] | null;
     text: string;
+    typography?: boolean;
+    locale?: AppLocale;
 }) => {
     const fragments = Array.from(
         new Set(
@@ -88,23 +102,27 @@ export const HighlightedText = ({
         ),
     ).sort((first, second) => second.length - first.length);
 
-    if (fragments.length === 0) return text;
-
     const highlightedFragments = new Set(fragments);
     const pattern = fragments.map(escapeRegExp).join("|");
-    const parts = text.split(new RegExp(`(${pattern})`, "g"));
+    const parts = fragments.length
+        ? text.split(new RegExp(`(${pattern})`, "g"))
+        : [text];
+    const formattedParts = applyTypographyToSegments(parts, {
+        locale,
+        enabled: typography,
+    });
 
-    if (parts.length === 1) return text;
+    if (parts.length === 1) return formattedParts[0];
 
     return (
         <>
             {parts.map((part, index) =>
                 highlightedFragments.has(part) ? (
                     <span className="text-brand-500" key={index}>
-                        {part}
+                        {formattedParts[index]}
                     </span>
                 ) : (
-                    part
+                    formattedParts[index]
                 ),
             )}
         </>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
+import { applyTypography } from "@/utilities/typography";
 
 export default function NotFound() {
     return (
@@ -11,7 +12,7 @@ export default function NotFound() {
                 <p className="mb-4">Tato stránka nebyla nalezena.</p>
             </div>
             <Button asChild variant="default">
-                <Link href="/">Zpět na úvod</Link>
+                <Link href="/">{applyTypography("Zpět na úvod")}</Link>
             </Button>
         </div>
     );

@@ -53,7 +53,7 @@ export async function FrontendShell({
                 <JsonLd data={professionalServiceJsonLd()} />
             </head>
             <body>
-                <Providers>
+                <Providers locale={locale}>
                     <AdminBar
                         adminBarProps={{
                             preview: isEnabled,

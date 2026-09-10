@@ -1,19 +1,23 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { applyTypography } from "@/utilities/typography";
 import type { ProcessStepsBlock as ProcessStepsBlockProps } from "@/payload-types";
 
 import { SectionHeading } from "@/components/SectionHeading";
 import React from "react";
 
 export const ProcessStepsBlock = ({
+    locale = defaultLocale,
     description,
     eyebrow,
     heading,
     highlightedTexts,
     items,
-}: ProcessStepsBlockProps) => {
+}: ProcessStepsBlockProps & { locale?: AppLocale }) => {
     return (
         <section className="bg-paper-0 py-20 md:py-24">
             <div className="container">
                 <SectionHeading
+                    locale={locale}
                     align="center"
                     eyebrow={eyebrow}
                     heading={heading}
@@ -22,7 +26,7 @@ export const ProcessStepsBlock = ({
                 />
                 {description && (
                     <p className="mx-auto mt-5 max-w-[46rem] text-center text-body-md font-normal text-neutral-secondary">
-                        {description}
+                        {applyTypography(description, { locale })}
                     </p>
                 )}
 
@@ -37,11 +41,13 @@ export const ProcessStepsBlock = ({
                             </span>
                             <span className="block pt-5">
                                 <span className="block text-body-sm font-bold text-ink-950">
-                                    {item.title}
+                                    {applyTypography(item.title, { locale })}
                                 </span>
                                 {item.description && (
                                     <span className="mt-1 block text-xs font-bold text-brand-600">
-                                        {item.description}
+                                        {applyTypography(item.description, {
+                                            locale,
+                                        })}
                                     </span>
                                 )}
                             </span>

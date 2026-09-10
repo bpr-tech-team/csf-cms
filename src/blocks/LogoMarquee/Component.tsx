@@ -1,3 +1,4 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
 import type { CSSProperties } from "react";
 import type { LogoMarqueeBlock as LogoMarqueeBlockProps } from "@/payload-types";
 
@@ -11,11 +12,12 @@ import styles from "./styles.module.css";
 type LogoItem = LogoMarqueeBlockProps["items"][number];
 
 export const LogoMarqueeBlock = ({
+    locale = defaultLocale,
     duration,
     eyebrow,
     items,
     pauseOnHover,
-}: LogoMarqueeBlockProps) => {
+}: LogoMarqueeBlockProps & { locale?: AppLocale }) => {
     const animationStyle = {
         "--homepage-marquee-duration": `${duration ?? 40}s`,
     } as CSSProperties;
@@ -26,7 +28,12 @@ export const LogoMarqueeBlock = ({
             className="overflow-hidden border-b border-brand-500 bg-ink-950 py-9 text-paper-0"
             data-theme="dark"
         >
-            <Eyebrow align="center" className="mb-9" tone="brand">
+            <Eyebrow
+                locale={locale}
+                align="center"
+                className="mb-9"
+                tone="brand"
+            >
                 {eyebrow}
             </Eyebrow>
             <div className="relative overflow-hidden">

@@ -80,6 +80,7 @@ export async function PostTemplate({
             <div className="flex flex-col items-center gap-4 pt-8">
                 <div className="container">
                     <RichText
+                        locale={locale}
                         className="mx-auto max-w-3xl"
                         data={post.content}
                         enableGutter={false}

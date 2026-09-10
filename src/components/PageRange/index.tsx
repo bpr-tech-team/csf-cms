@@ -2,6 +2,7 @@ import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import React from "react";
+import { applyTypography } from "@/utilities/typography";
 
 const defaultLabels = {
     plural: "Docs",
@@ -53,12 +54,15 @@ export const PageRange: React.FC<{
     return (
         <div className={[className, "font-semibold"].filter(Boolean).join(" ")}>
             {(typeof totalDocs === "undefined" || totalDocs === 0) &&
-                messages.pageRangeEmpty}
+                applyTypography(messages.pageRangeEmpty, { locale })}
             {typeof totalDocs !== "undefined" &&
                 totalDocs > 0 &&
-                `${messages.pageRangeShowing} ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ""} ${messages.pageRangeOf} ${totalDocs} ${
-                    totalDocs > 1 ? plural : singular
-                }`}
+                applyTypography(
+                    `${messages.pageRangeShowing} ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ""} ${messages.pageRangeOf} ${totalDocs} ${
+                        totalDocs > 1 ? plural : singular
+                    }`,
+                    { locale },
+                )}
         </div>
     );
 };

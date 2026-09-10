@@ -1,4 +1,7 @@
 "use client";
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+
+import { applyTypography } from "@/utilities/typography";
 
 import type { ComputerProductCatalogBlock as ComputerProductCatalogBlockProps } from "@/payload-types";
 
@@ -8,11 +11,12 @@ import { cn } from "@/utilities/ui";
 import React, { useId, useState } from "react";
 
 export const ComputerProductCatalogBlock = ({
+    locale = defaultLocale,
     anchorId,
     categories,
     highlightedTexts,
     navigationHeading,
-}: ComputerProductCatalogBlockProps) => {
+}: ComputerProductCatalogBlockProps & { locale?: AppLocale }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const componentId = useId();
     const selectedIndex = activeIndex < categories.length ? activeIndex : 0;
@@ -26,6 +30,7 @@ export const ComputerProductCatalogBlock = ({
                 <div className="container">
                     <h2 className="text-4xl leading-tight font-bold tracking-normal whitespace-pre-line md:text-heading-xl">
                         <HighlightedText
+                            locale={locale}
                             highlightedTexts={highlightedTexts}
                             text={navigationHeading}
                         />
@@ -54,7 +59,9 @@ export const ComputerProductCatalogBlock = ({
                                     role="tab"
                                     type="button"
                                 >
-                                    {category.label}
+                                    {applyTypography(category.label, {
+                                        locale,
+                                    })}
                                 </button>
                             );
                         })}
@@ -71,6 +78,7 @@ export const ComputerProductCatalogBlock = ({
                 <div className="container">
                     <h3 className="max-w-4xl text-4xl leading-tight font-bold tracking-normal whitespace-pre-line text-ink-950 md:text-heading-xl">
                         <HighlightedText
+                            locale={locale}
                             highlightedTexts={activeCategory.highlightedTexts}
                             text={activeCategory.heading}
                         />
@@ -89,10 +97,12 @@ export const ComputerProductCatalogBlock = ({
                                     />
                                 </div>
                                 <h4 className="mt-6 text-xl leading-7 font-bold whitespace-pre-line text-ink-950">
-                                    {product.name}
+                                    {applyTypography(product.name, { locale })}
                                 </h4>
                                 <p className="mt-5 text-body-sm leading-6 whitespace-pre-line text-neutral-secondary">
-                                    {product.summary}
+                                    {applyTypography(product.summary, {
+                                        locale,
+                                    })}
                                 </p>
 
                                 {product.specifications?.length ? (
@@ -109,10 +119,16 @@ export const ComputerProductCatalogBlock = ({
                                                     }
                                                 >
                                                     <dt className="font-bold text-ink-950">
-                                                        {specification.label}
+                                                        {applyTypography(
+                                                            specification.label,
+                                                            { locale },
+                                                        )}
                                                     </dt>
                                                     <dd className="m-0 whitespace-pre-line text-neutral-secondary">
-                                                        {specification.value}
+                                                        {applyTypography(
+                                                            specification.value,
+                                                            { locale },
+                                                        )}
                                                     </dd>
                                                 </div>
                                             ),

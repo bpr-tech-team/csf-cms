@@ -1,3 +1,4 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import {
     DefaultNodeTypes,
@@ -21,6 +22,7 @@ import type {
 import { BannerBlock } from "@/blocks/Banner/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { cn } from "@/utilities/ui";
+import { applyRichTextTypography } from "@/utilities/richTextTypography";
 
 type NodeTypes =
     | DefaultNodeTypes
@@ -37,36 +39,45 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
     return relationTo === "posts" ? `/posts/${slug}` : `/${slug}`;
 };
 
-const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
-    defaultConverters,
-}) => ({
-    ...defaultConverters,
-    ...LinkJSXConverter({ internalDocToHref }),
-    blocks: {
-        banner: ({ node }) => (
-            <BannerBlock className="col-start-2 mb-4" {...node.fields} />
-        ),
-        mediaBlock: ({ node }) => (
-            <MediaBlock
-                className="col-start-1 col-span-3"
-                imgClassName="m-0"
-                {...node.fields}
-                captionClassName="mx-auto max-w-3xl"
-                enableGutter={false}
-                disableInnerContainer={true}
-            />
-        ),
-        code: ({ node }) => (
-            <CodeBlock className="col-start-2" {...node.fields} />
-        ),
-        cta: ({ node }) => <CallToActionBlock {...node.fields} />,
-    },
-});
+const jsxConverters =
+    (locale: AppLocale): JSXConvertersFunction<NodeTypes> =>
+    ({ defaultConverters }) => ({
+        ...defaultConverters,
+        ...LinkJSXConverter({ internalDocToHref }),
+        blocks: {
+            banner: ({ node }) => (
+                <BannerBlock
+                    className="col-start-2 mb-4"
+                    {...node.fields}
+                    locale={locale}
+                />
+            ),
+            mediaBlock: ({ node }) => (
+                <MediaBlock
+                    className="col-start-1 col-span-3"
+                    imgClassName="m-0"
+                    {...node.fields}
+                    locale={locale}
+                    captionClassName="mx-auto max-w-3xl"
+                    enableGutter={false}
+                    disableInnerContainer={true}
+                />
+            ),
+            code: ({ node }) => (
+                <CodeBlock className="col-start-2" {...node.fields} />
+            ),
+            cta: ({ node }) => (
+                <CallToActionBlock {...node.fields} locale={locale} />
+            ),
+        },
+    });
 
 type Props = {
     data: DefaultTypedEditorState;
+    locale?: AppLocale;
     enableGutter?: boolean;
     enableProse?: boolean;
+    typography?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function RichText(props: Props) {
@@ -74,11 +85,14 @@ export default function RichText(props: Props) {
         className,
         enableProse = true,
         enableGutter = true,
+        data,
+        locale = defaultLocale,
+        typography = true,
         ...rest
     } = props;
     return (
         <ConvertRichText
-            converters={jsxConverters}
+            converters={jsxConverters(locale)}
             className={cn(
                 "payload-richtext",
                 {
@@ -89,6 +103,9 @@ export default function RichText(props: Props) {
                 className,
             )}
             {...rest}
+            data={
+                !typography ? data : applyRichTextTypography(data, { locale })
+            }
         />
     );
 }

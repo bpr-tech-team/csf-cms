@@ -1,3 +1,4 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
 import type { StaticImageData } from "next/image";
 
 import { cn } from "@/utilities/ui";
@@ -10,6 +11,7 @@ import { Media } from "../../components/Media";
 
 type Props = MediaBlockProps & {
     breakout?: boolean;
+    locale?: AppLocale;
     captionClassName?: string;
     className?: string;
     enableGutter?: boolean;
@@ -21,6 +23,7 @@ type Props = MediaBlockProps & {
 export const MediaBlock: React.FC<Props> = (props) => {
     const {
         captionClassName,
+        locale = defaultLocale,
         className,
         enableGutter = true,
         imgClassName,
@@ -62,7 +65,11 @@ export const MediaBlock: React.FC<Props> = (props) => {
                         captionClassName,
                     )}
                 >
-                    <RichText data={caption} enableGutter={false} />
+                    <RichText
+                        locale={locale}
+                        data={caption}
+                        enableGutter={false}
+                    />
                 </div>
             )}
         </div>

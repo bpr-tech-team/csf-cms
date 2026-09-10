@@ -1,3 +1,5 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { applyTypography } from "@/utilities/typography";
 import type { TechnologySpotlightBlock as TechnologySpotlightBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
@@ -5,13 +7,14 @@ import { HighlightedText } from "@/components/SectionHeading";
 import React from "react";
 
 export const TechnologySpotlightBlock = ({
+    locale = defaultLocale,
     anchorId,
     description,
     heading,
     highlightedTexts,
     logos,
     supportingMedia,
-}: TechnologySpotlightBlockProps) => {
+}: TechnologySpotlightBlockProps & { locale?: AppLocale }) => {
     return (
         <section
             className="scroll-mt-24 bg-ink-950 py-20 text-paper-0 md:py-24 xl:py-28"
@@ -23,13 +26,14 @@ export const TechnologySpotlightBlock = ({
                     <div>
                         <h2 className="text-4xl leading-tight font-bold tracking-normal whitespace-pre-line md:text-heading-xl">
                             <HighlightedText
+                                locale={locale}
                                 highlightedTexts={highlightedTexts}
                                 text={heading}
                             />
                         </h2>
                         {description ? (
                             <p className="mt-6 max-w-3xl text-body-md leading-7 whitespace-pre-line text-paper-0/75 md:text-body-lg md:leading-8">
-                                {description}
+                                {applyTypography(description, { locale })}
                             </p>
                         ) : null}
                     </div>

@@ -1,4 +1,6 @@
 "use client";
+import { applyTypography } from "@/utilities/typography";
+
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
@@ -39,7 +41,6 @@ export const Card: React.FC<{
     const hasCategories =
         categories && Array.isArray(categories) && categories.length > 0;
     const titleToUse = titleFromProps || title;
-    const sanitizedDescription = description?.replace(/\s/g, " "); // replace non-breaking space with white space
     const href = withLocalePrefix(`/${relationTo}/${slug}`, locale);
 
     return (
@@ -51,7 +52,11 @@ export const Card: React.FC<{
             ref={cardRef}
         >
             <div className="relative w-full ">
-                {!metaImage && <div className="">{messages.noImage}</div>}
+                {!metaImage && (
+                    <div className="">
+                        {applyTypography(messages.noImage, { locale })}
+                    </div>
+                )}
                 {metaImage && typeof metaImage !== "string" && (
                     <Media resource={metaImage} size="33vw" />
                 )}
@@ -71,7 +76,9 @@ export const Card: React.FC<{
 
                                 return (
                                     <Fragment key={index}>
-                                        {categoryTitle}
+                                        {applyTypography(categoryTitle, {
+                                            locale,
+                                        })}
                                         {!isLast && (
                                             <Fragment>, &nbsp;</Fragment>
                                         )}
@@ -91,14 +98,14 @@ export const Card: React.FC<{
                                 href={href}
                                 ref={linkRef}
                             >
-                                {titleToUse}
+                                {applyTypography(titleToUse, { locale })}
                             </Link>
                         </h3>
                     </div>
                 )}
                 {description && (
                     <div className="mt-2">
-                        {description && <p>{sanitizedDescription}</p>}
+                        <p>{applyTypography(description, { locale })}</p>
                     </div>
                 )}
             </div>

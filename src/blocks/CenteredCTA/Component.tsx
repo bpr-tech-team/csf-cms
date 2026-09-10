@@ -33,6 +33,7 @@ export const CenteredCTABlock = ({
             />
             <div className="container relative z-10">
                 <SectionHeading
+                    locale={locale}
                     align="center"
                     className="mx-auto max-w-[60rem]"
                     heading={heading}

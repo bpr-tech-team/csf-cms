@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/utilities/ui";
+import { useLocale } from "@/providers/Locale";
+import { typographyChildren } from "@/utilities/typographyChildren";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import * as React from "react";
@@ -13,8 +15,15 @@ const Select: React.FC<React.ComponentProps<typeof SelectPrimitive.Root>> = (
 
 const SelectValue: React.FC<
     React.ComponentProps<typeof SelectPrimitive.Value>
-> = (props) => {
-    return <SelectPrimitive.Value data-slot="select-value" {...props} />;
+> = ({ placeholder, ...props }) => {
+    const locale = useLocale();
+    return (
+        <SelectPrimitive.Value
+            data-slot="select-value"
+            {...props}
+            placeholder={typographyChildren(placeholder, { locale })}
+        />
+    );
 };
 
 const SelectTrigger: React.FC<
@@ -72,6 +81,7 @@ const SelectContent: React.FC<
 const SelectItem: React.FC<
     React.ComponentProps<typeof SelectPrimitive.Item>
 > = ({ children, className, ...props }) => {
+    const locale = useLocale();
     return (
         <SelectPrimitive.Item
             data-slot="select-item"
@@ -86,7 +96,9 @@ const SelectItem: React.FC<
                     <Check className="size-4" />
                 </SelectPrimitive.ItemIndicator>
             </span>
-            <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+            <SelectPrimitive.ItemText>
+                {typographyChildren(children, { locale })}
+            </SelectPrimitive.ItemText>
         </SelectPrimitive.Item>
     );
 };

@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import type { Metadata } from "next/types";
 
 import { CollectionArchive } from "@/components/CollectionArchive";
@@ -50,7 +51,7 @@ export async function PostsArchiveTemplate({
             <SetHeaderTheme theme="light" />
             <div className="container mb-16">
                 <div className="prose dark:prose-invert max-w-none">
-                    <h1>{messages.postsTitle}</h1>
+                    <h1>{applyTypography(messages.postsTitle, { locale })}</h1>
                 </div>
             </div>
 

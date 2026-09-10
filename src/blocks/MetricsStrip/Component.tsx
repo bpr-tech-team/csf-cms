@@ -1,17 +1,20 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { applyTypography } from "@/utilities/typography";
 import type { MetricsStripBlock as MetricsStripBlockProps } from "@/payload-types";
 
 import { Eyebrow } from "@/components/Eyebrow";
 import React from "react";
 
 export const MetricsStripBlock = ({
+    locale = defaultLocale,
     heading,
     items,
-}: MetricsStripBlockProps) => {
+}: MetricsStripBlockProps & { locale?: AppLocale }) => {
     return (
         <section className="bg-ink-950 py-16 text-paper-0" data-theme="dark">
             <div className="container">
                 <h2 className="text-center text-heading-lg font-bold">
-                    {heading}
+                    {applyTypography(heading, { locale })}
                 </h2>
                 <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 xl:grid-cols-4">
                     {items.map((item, index) => (
@@ -20,6 +23,7 @@ export const MetricsStripBlock = ({
                             key={item.id ?? index}
                         >
                             <Eyebrow
+                                locale={locale}
                                 align="center"
                                 as="dt"
                                 className="order-1 mt-3"

@@ -1,4 +1,7 @@
 "use client";
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+
+import { applyTypography } from "@/utilities/typography";
 
 import type { ComputerAudienceBlock as ComputerAudienceBlockProps } from "@/payload-types";
 
@@ -7,9 +10,10 @@ import { cn } from "@/utilities/ui";
 import React, { useId, useState } from "react";
 
 export const ComputerAudienceBlock = ({
+    locale = defaultLocale,
     anchorId,
     items,
-}: ComputerAudienceBlockProps) => {
+}: ComputerAudienceBlockProps & { locale?: AppLocale }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const componentId = useId();
     const selectedIndex = activeIndex < items.length ? activeIndex : 0;
@@ -48,10 +52,10 @@ export const ComputerAudienceBlock = ({
                                 type="button"
                             >
                                 <span className="block text-heading-md leading-tight font-bold text-ink-950">
-                                    {item.title}
+                                    {applyTypography(item.title, { locale })}
                                 </span>
                                 <span className="mt-2 block text-body-sm leading-6 text-neutral-secondary">
-                                    {item.summary}
+                                    {applyTypography(item.summary, { locale })}
                                 </span>
                             </button>
                         );
@@ -65,12 +69,13 @@ export const ComputerAudienceBlock = ({
                 >
                     <h2 className="text-4xl leading-tight font-bold tracking-normal whitespace-pre-line text-ink-950 md:text-heading-xl">
                         <HighlightedText
+                            locale={locale}
                             highlightedTexts={activeItem.highlightedTexts}
                             text={activeItem.heading}
                         />
                     </h2>
                     <p className="mt-6 max-w-2xl text-body-md leading-7 whitespace-pre-line text-neutral-secondary md:text-body-lg md:leading-8">
-                        {activeItem.description}
+                        {applyTypography(activeItem.description, { locale })}
                     </p>
                 </div>
             </div>

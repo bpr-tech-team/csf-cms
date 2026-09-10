@@ -13,6 +13,8 @@ import {
 
 import { Label } from "@/components/ui/label";
 import { cn } from "@/utilities/ui";
+import { useLocale } from "@/providers/Locale";
+import { typographyChildren } from "@/utilities/typographyChildren";
 
 const Form = FormProvider;
 
@@ -129,6 +131,7 @@ const FormMessage = React.forwardRef<
     React.HTMLAttributes<HTMLParagraphElement>
 >(({ children, className, ...props }, ref) => {
     const { error, formMessageId } = useFormField();
+    const locale = useLocale();
     const body = error ? String(error.message ?? "") : children;
 
     if (!body) return null;
@@ -142,7 +145,7 @@ const FormMessage = React.forwardRef<
             role={error ? "alert" : undefined}
             {...props}
         >
-            {body}
+            {typographyChildren(body, { locale })}
         </p>
     );
 });

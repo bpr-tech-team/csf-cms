@@ -1,3 +1,5 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { applyTypography } from "@/utilities/typography";
 import type { MediaFeatureGridBlock as MediaFeatureGridBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
@@ -5,12 +7,13 @@ import { HighlightedText } from "@/components/SectionHeading";
 import React from "react";
 
 export const MediaFeatureGridBlock = ({
+    locale = defaultLocale,
     anchorId,
     description,
     heading,
     highlightedTexts,
     items,
-}: MediaFeatureGridBlockProps) => {
+}: MediaFeatureGridBlockProps & { locale?: AppLocale }) => {
     return (
         <section
             className="scroll-mt-24 bg-ink-950 py-20 text-paper-0 md:py-24 xl:py-28"
@@ -20,13 +23,14 @@ export const MediaFeatureGridBlock = ({
             <div className="container">
                 <h2 className="max-w-4xl text-4xl leading-tight font-bold tracking-normal whitespace-pre-line md:text-heading-xl">
                     <HighlightedText
+                        locale={locale}
                         highlightedTexts={highlightedTexts}
                         text={heading}
                     />
                 </h2>
                 {description ? (
                     <p className="mt-6 max-w-4xl text-body-md leading-7 whitespace-pre-line text-paper-0/75 md:text-body-lg md:leading-8">
-                        {description}
+                        {applyTypography(description, { locale })}
                     </p>
                 ) : null}
 
@@ -43,10 +47,10 @@ export const MediaFeatureGridBlock = ({
                                 />
                             </div>
                             <h3 className="mt-6 text-xl leading-7 font-bold uppercase">
-                                {item.title}
+                                {applyTypography(item.title, { locale })}
                             </h3>
                             <p className="mt-4 text-body-sm leading-6 whitespace-pre-line text-paper-0/75">
-                                {item.description}
+                                {applyTypography(item.description, { locale })}
                             </p>
                         </article>
                     ))}

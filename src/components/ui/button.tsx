@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/utilities/ui";
+import { useLocale } from "@/providers/Locale";
+import { typographyChildren } from "@/utilities/typographyChildren";
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
 import * as React from "react";
@@ -41,6 +43,7 @@ export interface ButtonProps
         React.ComponentProps<"button">,
         VariantProps<typeof buttonVariants> {
     asChild?: boolean;
+    typography?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -48,8 +51,11 @@ const Button: React.FC<ButtonProps> = ({
     className,
     size,
     variant,
+    children,
+    typography = true,
     ...props
 }) => {
+    const locale = useLocale();
     const Comp = asChild ? Slot : "button";
 
     return (
@@ -57,7 +63,9 @@ const Button: React.FC<ButtonProps> = ({
             data-slot="button"
             className={cn(buttonVariants({ variant, size, className }))}
             {...props}
-        />
+        >
+            {typographyChildren(children, { enabled: typography, locale })}
+        </Comp>
     );
 };
 

@@ -1,3 +1,4 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
 import type { BannerBlock as BannerBlockProps } from "src/payload-types";
 
 import { cn } from "@/utilities/ui";
@@ -6,9 +7,15 @@ import RichText from "@/components/RichText";
 
 type Props = {
     className?: string;
+    locale?: AppLocale;
 } & BannerBlockProps;
 
-export const BannerBlock: React.FC<Props> = ({ className, content, style }) => {
+export const BannerBlock: React.FC<Props> = ({
+    className,
+    content,
+    style,
+    locale = defaultLocale,
+}) => {
     return (
         <div className={cn("mx-auto my-8 w-full", className)}>
             <div
@@ -20,6 +27,7 @@ export const BannerBlock: React.FC<Props> = ({ className, content, style }) => {
                 })}
             >
                 <RichText
+                    locale={locale}
                     data={content}
                     enableGutter={false}
                     enableProse={false}

@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import { formatDateTime } from "@/utilities/formatDateTime";
 import React from "react";
 
@@ -41,7 +42,9 @@ export const PostHero: React.FC<{
 
                                 return (
                                     <React.Fragment key={index}>
-                                        {titleToUse}
+                                        {applyTypography(titleToUse, {
+                                            locale,
+                                        })}
                                         {!isLast && (
                                             <React.Fragment>
                                                 , &nbsp;
@@ -56,7 +59,7 @@ export const PostHero: React.FC<{
 
                     <div className="">
                         <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl">
-                            {title}
+                            {applyTypography(title, { locale })}
                         </h1>
                     </div>
 
@@ -64,16 +67,27 @@ export const PostHero: React.FC<{
                         {hasAuthors && (
                             <div className="flex flex-col gap-4">
                                 <div className="flex flex-col gap-1">
-                                    <p className="text-sm">{messages.author}</p>
+                                    <p className="text-sm">
+                                        {applyTypography(messages.author, {
+                                            locale,
+                                        })}
+                                    </p>
 
-                                    <p>{formatAuthors(populatedAuthors)}</p>
+                                    <p>
+                                        {applyTypography(
+                                            formatAuthors(populatedAuthors),
+                                            { locale },
+                                        )}
+                                    </p>
                                 </div>
                             </div>
                         )}
                         {publishedAt && (
                             <div className="flex flex-col gap-1">
                                 <p className="text-sm">
-                                    {messages.datePublished}
+                                    {applyTypography(messages.datePublished, {
+                                        locale,
+                                    })}
                                 </p>
 
                                 <time dateTime={publishedAt}>

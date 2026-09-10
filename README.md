@@ -184,6 +184,35 @@ Core features:
 - Redirects
 - Live preview
 
+### Text rendering and typography
+
+Use the shared typography tools when rendering user-facing text in new components and layout blocks. They apply Typopo consistently to headings, descriptions, labels, and rich text, including non-breaking spaces, quotation marks, dashes, and ellipses.
+
+For plain strings, use `applyTypography` and pass the page locale explicitly:
+
+```tsx
+import { applyTypography } from "@/utilities/typography";
+
+<h2>{applyTypography(heading, { locale })}</h2>
+<p>{applyTypography(description, { locale })}</p>
+```
+
+For Payload Lexical content, use the project's `RichText` component:
+
+```tsx
+import RichText from "@/components/RichText";
+
+<RichText data={content} locale={locale} />;
+```
+
+The adapter preserves links and formatting even when Typopo changes text length. Use `HighlightedText` or `SectionHeading` for headings with highlighted fragments instead of formatting each fragment separately.
+
+`SectionHeading`, `HighlightedText`, `Eyebrow`, and `CMSLink` already apply typography; pass their `locale` prop without pre-formatting their text. Shared client controls such as `Button` and `Label` inherit the locale from `LocaleProvider` in the site shell. This automatic handling covers direct text children, not text inside arbitrary nested components.
+
+The site locales map to Typopo's `cs` and `en-us` rules. Keep formatting at the rendering boundary: store original text in Payload and render the result as React text, without `dangerouslySetInnerHTML`. Do not add separate typography rules or call Typopo directly in individual components. For technical strings that must remain verbatim, skip processing or use `{ enabled: false }` with `applyTypography`; the shared components listed above, `RichText`, `Button`, and `Label` also support `typography={false}`.
+
+See the [typography integration notes](src/utilities/typography.md) and [tests](src/utilities/typography.int.spec.tsx) for implementation details and examples.
+
 ### Cache
 
 Although Next.js includes a robust set of caching strategies out of the box, Payload Cloud proxies and caches all files through Cloudflare using the [Official Cloud Plugin](https://www.npmjs.com/package/@payloadcms/payload-cloud). This means that Next.js caching is not needed and is disabled by default. If you are hosting your app outside of Payload Cloud, you can easily reenable the Next.js caching mechanisms by removing the `no-store` directive from all fetch requests in `./src/app/_api` and then removing all instances of `export const dynamic = 'force-dynamic'` from pages files, such as `./src/app/(pages)/[slug]/page.tsx`. For more details, see the official [Next.js Caching Docs](https://nextjs.org/docs/app/building-your-application/caching).

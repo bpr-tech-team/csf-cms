@@ -43,6 +43,7 @@ export const ContentBlock: React.FC<
                             >
                                 {richText && (
                                     <RichText
+                                        locale={locale}
                                         data={richText}
                                         enableGutter={false}
                                     />

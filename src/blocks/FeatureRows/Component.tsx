@@ -1,3 +1,5 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { applyTypography } from "@/utilities/typography";
 import type { FeatureRowsBlock as FeatureRowsBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
@@ -6,10 +8,11 @@ import { cn } from "@/utilities/ui";
 import React from "react";
 
 export const FeatureRowsBlock = ({
+    locale = defaultLocale,
     anchorId,
     heading,
     items,
-}: FeatureRowsBlockProps) => {
+}: FeatureRowsBlockProps & { locale?: AppLocale }) => {
     return (
         <section
             className="scroll-mt-24 border-b border-brand-500 bg-paper-0 py-20 md:py-24 xl:py-28"
@@ -17,7 +20,7 @@ export const FeatureRowsBlock = ({
         >
             <div className="container">
                 <h2 className="text-4xl leading-tight font-bold tracking-normal text-ink-950 md:text-heading-xl">
-                    {heading}
+                    {applyTypography(heading, { locale })}
                 </h2>
 
                 <div className="mt-12 space-y-12 md:mt-16 md:space-y-16">
@@ -30,6 +33,7 @@ export const FeatureRowsBlock = ({
                                 key={item.id ?? index}
                             >
                                 <RichText
+                                    locale={locale}
                                     className={cn(
                                         "text-body-md leading-7 text-neutral-secondary [&_li]:my-2 [&_ul]:my-0",
                                         isMediaLeft

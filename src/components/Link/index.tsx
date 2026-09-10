@@ -7,6 +7,8 @@ import React from "react";
 
 import type { Page, Post } from "@/payload-types";
 import { SmoothHashLink } from "./SmoothHashLink";
+import { applyTypography } from "@/utilities/typography";
+import { typographyChildren } from "@/utilities/typographyChildren";
 
 type CMSLinkType = {
     appearance?: "inline" | ButtonProps["variant"];
@@ -22,6 +24,7 @@ type CMSLinkType = {
     size?: ButtonProps["size"] | null;
     type?: "custom" | "reference" | null;
     url?: string | null;
+    typography?: boolean;
 };
 
 export const CMSLink: React.FC<CMSLinkType> = (props) => {
@@ -36,6 +39,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         reference,
         size: sizeFromProps,
         url,
+        typography = true,
     } = props;
 
     const referenceHref =
@@ -60,8 +64,8 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     const LinkComponent = href.startsWith("#") ? SmoothHashLink : Link;
     const renderedLink = (
         <LinkComponent className={cn(className)} href={href} {...newTabProps}>
-            {label && label}
-            {children && children}
+            {applyTypography(label, { locale, enabled: typography })}
+            {typographyChildren(children, { locale, enabled: typography })}
         </LinkComponent>
     );
 

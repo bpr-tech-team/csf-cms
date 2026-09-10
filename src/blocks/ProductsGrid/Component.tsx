@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import type { ProductsGridBlock as ProductsGridBlockProps } from "@/payload-types";
 
 import { CardIcon } from "@/components/CardIcon";
@@ -19,6 +20,7 @@ export const ProductsGridBlock = ({
         <section className="bg-paper-0 py-20 md:py-28 xl:py-30" id="produkty">
             <div className="container">
                 <SectionHeading
+                    locale={locale}
                     eyebrow={eyebrow}
                     heading={heading}
                     highlightedTexts={highlightedTexts}
@@ -60,10 +62,10 @@ const ProductCard = ({
             </span>
             <CardIcon className="mt-7" resource={item.icon} />
             <h3 className="mt-6 text-heading-md font-medium text-ink-950">
-                {item.title}
+                {applyTypography(item.title, { locale })}
             </h3>
             <p className="mt-3 text-body-md font-normal text-ink-950">
-                {item.description}
+                {applyTypography(item.description, { locale })}
             </p>
         </>
     );

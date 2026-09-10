@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import type { ServicesGridBlock as ServicesGridBlockProps } from "@/payload-types";
 
 import { CMSLink } from "@/components/Link";
@@ -18,6 +19,7 @@ export const ServicesGridBlock = ({
         <section className="bg-paper-0 py-20 md:py-28 xl:py-30" id="sluzby">
             <div className="container">
                 <SectionHeading
+                    locale={locale}
                     eyebrow={eyebrow}
                     heading={heading}
                     highlightedTexts={highlightedTexts}
@@ -29,10 +31,12 @@ export const ServicesGridBlock = ({
                             <>
                                 <CardIcon resource={item.icon} />
                                 <h3 className="mt-6 text-heading-md font-medium text-ink-950">
-                                    {item.title}
+                                    {applyTypography(item.title, { locale })}
                                 </h3>
                                 <p className="mt-3 text-body-md font-normal text-ink-950">
-                                    {item.description}
+                                    {applyTypography(item.description, {
+                                        locale,
+                                    })}
                                 </p>
                             </>
                         );

@@ -1,4 +1,5 @@
 "use client";
+import { applyTypography } from "@/utilities/typography";
 
 import type { CSSProperties } from "react";
 
@@ -119,10 +120,12 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         key={activeSlide.id ?? activeIndex}
                     >
                         <Heading className="max-w-[62rem] text-4xl leading-[1.08] font-bold tracking-normal text-balance min-[375px]:text-5xl sm:text-6xl md:text-7xl xl:text-display-xl">
-                            {activeSlide.heading}
+                            {applyTypography(activeSlide.heading, { locale })}
                         </Heading>
                         <p className="mt-7 max-w-3xl text-body-md leading-8 font-normal text-paper-0/90 md:mt-9 md:text-body-lg">
-                            {activeSlide.description}
+                            {applyTypography(activeSlide.description, {
+                                locale,
+                            })}
                         </p>
 
                         {Array.isArray(activeSlide.links) &&
@@ -200,6 +203,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                 {intro && (
                     <div className="mx-auto mt-14 max-w-[62rem] text-center">
                         <SectionHeading
+                            locale={locale}
                             align="center"
                             eyebrow={intro.eyebrow}
                             heading={intro.heading}
@@ -209,7 +213,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                             tone="inverse"
                         />
                         <p className="mx-auto mt-5 max-w-[59rem] text-body-md font-normal text-paper-0/80 md:text-body-lg md:leading-8">
-                            {intro.description}
+                            {applyTypography(intro.description, { locale })}
                         </p>
                     </div>
                 )}
@@ -258,7 +262,7 @@ const QuickLinkCard = ({
                     />
                 </span>
                 <span className="text-heading-md font-medium text-paper-0">
-                    {item.title}
+                    {applyTypography(item.title, { locale })}
                 </span>
             </span>
         </>

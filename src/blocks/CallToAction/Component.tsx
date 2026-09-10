@@ -18,6 +18,7 @@ export const CallToActionBlock: React.FC<
                 <div className="flex max-w-3xl items-center">
                     {richText && (
                         <RichText
+                            locale={locale}
                             className="mb-0"
                             data={richText}
                             enableGutter={false}

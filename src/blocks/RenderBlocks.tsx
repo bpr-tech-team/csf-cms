@@ -97,6 +97,7 @@ export const RenderBlocks: React.FC<{
 
                             return (
                                 <FormBlock
+                                    locale={locale}
                                     {...block}
                                     form={block.form}
                                     key={index}
@@ -106,7 +107,7 @@ export const RenderBlocks: React.FC<{
                         case "mediaBlock":
                             return (
                                 <div className="my-16" key={index}>
-                                    <MediaBlock {...block} />
+                                    <MediaBlock locale={locale} {...block} />
                                 </div>
                             );
 
@@ -120,7 +121,13 @@ export const RenderBlocks: React.FC<{
                             );
 
                         case "metricsStrip":
-                            return <MetricsStripBlock {...block} key={index} />;
+                            return (
+                                <MetricsStripBlock
+                                    locale={locale}
+                                    {...block}
+                                    key={index}
+                                />
+                            );
 
                         case "productsGrid":
                             return (
@@ -132,7 +139,13 @@ export const RenderBlocks: React.FC<{
                             );
 
                         case "logoMarquee":
-                            return <LogoMarqueeBlock {...block} key={index} />;
+                            return (
+                                <LogoMarqueeBlock
+                                    locale={locale}
+                                    {...block}
+                                    key={index}
+                                />
+                            );
 
                         case "centeredCta":
                             return (
@@ -145,11 +158,21 @@ export const RenderBlocks: React.FC<{
 
                         case "companyTimeline":
                             return (
-                                <CompanyTimelineBlock {...block} key={index} />
+                                <CompanyTimelineBlock
+                                    locale={locale}
+                                    {...block}
+                                    key={index}
+                                />
                             );
 
                         case "processSteps":
-                            return <ProcessStepsBlock {...block} key={index} />;
+                            return (
+                                <ProcessStepsBlock
+                                    locale={locale}
+                                    {...block}
+                                    key={index}
+                                />
+                            );
 
                         case "serviceHero":
                             return (
@@ -164,6 +187,7 @@ export const RenderBlocks: React.FC<{
                         case "serviceSectionIntro":
                             return (
                                 <ServiceSectionIntroBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -172,6 +196,7 @@ export const RenderBlocks: React.FC<{
                         case "splitContent":
                             return (
                                 <SplitContentBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -180,6 +205,7 @@ export const RenderBlocks: React.FC<{
                         case "featureRows":
                             return (
                                 <FeatureRowsBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -198,6 +224,7 @@ export const RenderBlocks: React.FC<{
                         case "computerAudience":
                             return (
                                 <ComputerAudienceBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -206,6 +233,7 @@ export const RenderBlocks: React.FC<{
                         case "computerProductCatalog":
                             return (
                                 <ComputerProductCatalogBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -214,6 +242,7 @@ export const RenderBlocks: React.FC<{
                         case "mediaFeatureGrid":
                             return (
                                 <MediaFeatureGridBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -222,6 +251,7 @@ export const RenderBlocks: React.FC<{
                         case "technologySpotlight":
                             return (
                                 <TechnologySpotlightBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />
@@ -230,6 +260,7 @@ export const RenderBlocks: React.FC<{
                         case "editorialColumns":
                             return (
                                 <EditorialColumnsBlock
+                                    locale={locale}
                                     {...block}
                                     key={block.id ?? index}
                                 />

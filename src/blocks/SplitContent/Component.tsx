@@ -1,3 +1,5 @@
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { applyTypography } from "@/utilities/typography";
 import type { SplitContentBlock as SplitContentBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
@@ -7,6 +9,7 @@ import { cn } from "@/utilities/ui";
 import React from "react";
 
 export const SplitContentBlock = ({
+    locale = defaultLocale,
     anchorId,
     heading,
     highlightedTexts,
@@ -15,7 +18,7 @@ export const SplitContentBlock = ({
     richText,
     sectionHeading,
     theme,
-}: SplitContentBlockProps) => {
+}: SplitContentBlockProps & { locale?: AppLocale }) => {
     const isDark = theme === "dark";
     const isMediaLeft = mediaPosition === "left";
 
@@ -33,6 +36,7 @@ export const SplitContentBlock = ({
                     <div className="mb-12 md:mb-16">
                         <h2 className="text-4xl leading-tight font-bold tracking-normal whitespace-pre-line md:text-heading-xl">
                             <HighlightedText
+                                locale={locale}
                                 highlightedTexts={highlightedTexts}
                                 text={sectionHeading}
                             />
@@ -51,9 +55,10 @@ export const SplitContentBlock = ({
                         )}
                     >
                         <h3 className="text-3xl leading-tight font-bold tracking-normal md:text-heading-lg">
-                            {heading}
+                            {applyTypography(heading, { locale })}
                         </h3>
                         <RichText
+                            locale={locale}
                             className={cn(
                                 "mt-6 text-body-md leading-7 [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_li]:my-2 [&_ul]:my-0",
                                 isDark

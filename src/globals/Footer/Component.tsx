@@ -1,3 +1,4 @@
+import { applyTypography } from "@/utilities/typography";
 import { getCachedGlobal } from "@/utilities/getGlobals";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
@@ -44,7 +45,7 @@ export async function Footer({
                     </Link>
                     {tagline && (
                         <p className="max-w-68 text-body-sm leading-6 font-normal text-neutral-inverse-muted">
-                            {tagline}
+                            {applyTypography(tagline, { locale })}
                         </p>
                     )}
                 </div>
@@ -56,7 +57,7 @@ export async function Footer({
                         key={`${column.title}-${column.id || columnIndex}`}
                     >
                         <h2 className="text-xs leading-4 font-bold tracking-widest text-brand-400 uppercase">
-                            {column.title}
+                            {applyTypography(column.title, { locale })}
                         </h2>
                         <ul className="flex flex-col gap-4">
                             {(column.links || []).map(({ link, id }, index) => (

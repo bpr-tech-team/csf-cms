@@ -1,4 +1,6 @@
 "use client";
+import { applyTypography } from "@/utilities/typography";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { AppLocale } from "@/i18n/config";
@@ -32,8 +34,8 @@ export const Search: React.FC<{
                     e.preventDefault();
                 }}
             >
-                <Label htmlFor="search" className="sr-only">
-                    {messages.searchLabel}
+                <Label htmlFor="search" className="sr-only" typography={false}>
+                    {applyTypography(messages.searchLabel, { locale })}
                 </Label>
                 <Input
                     id="search"
@@ -43,7 +45,7 @@ export const Search: React.FC<{
                     placeholder={messages.searchPlaceholder}
                 />
                 <button type="submit" className="sr-only">
-                    {messages.searchSubmit}
+                    {applyTypography(messages.searchSubmit, { locale })}
                 </button>
             </form>
         </div>

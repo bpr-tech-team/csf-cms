@@ -1,4 +1,7 @@
 "use client";
+import { defaultLocale, type AppLocale } from "@/i18n/config";
+
+import { applyTypography } from "@/utilities/typography";
 
 import type { CompanyTimelineBlock as CompanyTimelineBlockProps } from "@/payload-types";
 
@@ -10,10 +13,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useEffect, useRef } from "react";
 
 export const CompanyTimelineBlock = ({
+    locale = defaultLocale,
     heading,
     highlightedTexts,
     items,
-}: CompanyTimelineBlockProps) => {
+}: CompanyTimelineBlockProps & { locale?: AppLocale }) => {
     const pathRef = useRef<SVGPathElement>(null);
     const timelineRef = useRef<HTMLDivElement>(null);
     const timelineBallRef = useRef<HTMLDivElement>(null);
@@ -97,6 +101,7 @@ export const CompanyTimelineBlock = ({
         <section className="overflow-hidden bg-paper-0 py-20 text-ink-900 xl:pt-24 xl:pb-28">
             <div className="container">
                 <SectionHeading
+                    locale={locale}
                     heading={heading}
                     headingClassName="leading-snug text-balance md:text-heading-lg xl:text-heading-xl"
                     highlightedTexts={highlightedTexts}
@@ -173,7 +178,9 @@ export const CompanyTimelineBlock = ({
                                             )}
                                             data-timeline-heading
                                         >
-                                            {item.title}
+                                            {applyTypography(item.title, {
+                                                locale,
+                                            })}
                                         </h3>
                                     </div>
 
@@ -186,7 +193,9 @@ export const CompanyTimelineBlock = ({
                                         )}
                                     >
                                         <p className="text-body-md leading-6 font-normal xl:text-body-lg">
-                                            {item.description}
+                                            {applyTypography(item.description, {
+                                                locale,
+                                            })}
                                         </p>
                                     </div>
                                 </div>
