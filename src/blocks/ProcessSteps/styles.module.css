@@ -1,0 +1,80 @@
+.steps {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: fit-content;
+    max-width: 100%;
+    margin: 4rem auto 0;
+    padding: 0;
+    list-style: none;
+}
+
+.step {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    min-width: 0;
+    text-align: left;
+}
+
+.circle {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    min-height: 2.5rem;
+}
+
+.line {
+    position: absolute;
+    top: 1.25rem;
+    left: calc(1.25rem - 1px);
+    width: 2px;
+    bottom: calc(-2.5rem - 1.25rem);
+    transform-origin: top;
+}
+
+@media (min-width: 64rem) {
+    .steps {
+        flex-direction: row;
+        gap: 0;
+        width: 100%;
+        max-width: 62rem;
+    }
+
+    .step {
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding-inline: 0.5rem;
+        text-align: center;
+    }
+
+    .label {
+        padding-top: 1.25rem;
+    }
+
+    .line {
+        top: calc(1.25rem - 1px);
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        bottom: auto;
+        transform-origin: left;
+    }
+}
