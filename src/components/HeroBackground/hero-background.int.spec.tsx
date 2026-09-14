@@ -21,7 +21,6 @@ class MediaPreference extends EventTarget {
 }
 
 let reducedMotion: MediaPreference;
-let hover: MediaPreference;
 let hidden = false;
 let observers: {
     callback: IntersectionObserverCallback;
@@ -30,13 +29,10 @@ let observers: {
 
 beforeEach(() => {
     reducedMotion = new MediaPreference();
-    hover = new MediaPreference();
     hidden = false;
     observers = [];
     vi.spyOn(document, "hidden", "get").mockImplementation(() => hidden);
-    vi.stubGlobal("matchMedia", (query: string) =>
-        query.includes("prefers-reduced-motion") ? reducedMotion : hover,
-    );
+    vi.stubGlobal("matchMedia", () => reducedMotion);
     vi.stubGlobal(
         "IntersectionObserver",
         class {
@@ -97,19 +93,29 @@ const homepage: HomepageHeroBlock = {
 };
 
 describe("Hero background", () => {
-    test("resumes the remaining slide interval after the hero leaves and reenters the viewport", () => {
-        vi.useFakeTimers();
-        render(<HomepageHero {...homepage} locale="en" />);
+    test("resumes the same progress animation after the hero leaves and reenters the viewport", () => {
+        const { container } = render(
+            <HomepageHero {...homepage} locale="en" />,
+        );
+        const progress = container.querySelector<HTMLSpanElement>(
+            'span[style*="--homepage-hero-progress-duration"]',
+        )!;
+        expect(progress.style.animationPlayState).toBe("paused");
         intersect(true);
-        act(() => vi.advanceTimersByTime(3000));
+        expect(progress.style.animationPlayState).toBe("running");
         intersect(false);
-        act(() => vi.advanceTimersByTime(10000));
+        expect(progress.style.animationPlayState).toBe("paused");
         intersect(true);
-        act(() => vi.advanceTimersByTime(3999));
+        expect(progress.style.animationPlayState).toBe("running");
+        expect(
+            container.querySelector(
+                'span[style*="--homepage-hero-progress-duration"]',
+            ),
+        ).toBe(progress);
         expect(
             screen.getByRole("heading", { name: "First slide" }),
         ).toBeTruthy();
-        act(() => vi.advanceTimersByTime(1));
+        fireEvent.animationEnd(progress);
         expect(
             screen.getByRole("heading", { name: "Second slide" }),
         ).toBeTruthy();
@@ -156,8 +162,7 @@ describe("Hero background", () => {
         ).toBe(true);
     });
 
-    test("keeps particles moving during hover and focus while pausing only autoplay", () => {
-        hover.matches = true;
+    test("keeps autoplay running on hover and pauses only slide changes on focus", () => {
         const { motion, onAutoplayChange } = mountHero();
         intersect(true);
         const hero = screen.getByRole("region", { name: "Hero" });
@@ -165,9 +170,10 @@ describe("Hero background", () => {
 
         fireEvent.mouseEnter(hero);
         expect(motion.dataset.running).toBe("true");
-        expect(onAutoplayChange).toHaveBeenLastCalledWith(false);
+        expect(onAutoplayChange).toHaveBeenLastCalledWith(true);
         act(() => link.focus());
         expect(motion.dataset.running).toBe("true");
+        expect(onAutoplayChange).toHaveBeenLastCalledWith(false);
         fireEvent.mouseLeave(hero);
         expect(motion.dataset.running).toBe("true");
         expect(onAutoplayChange).toHaveBeenLastCalledWith(false);
@@ -203,7 +209,6 @@ describe("Hero background", () => {
     });
 
     test("keeps particles moving while selecting slides and resumes autoplay after focus leaves", () => {
-        vi.useFakeTimers();
         const { container } = render(
             <HomepageHero {...homepage} locale="en" />,
         );
@@ -216,13 +221,17 @@ describe("Hero background", () => {
         fireEvent.click(slideButton);
         expect(container.querySelector("[data-running]")).toBe(motion);
         expect(motion.dataset.running).toBe("true");
-        act(() => vi.advanceTimersByTime(21000));
+        const progress = container.querySelector<HTMLSpanElement>(
+            'span[style*="--homepage-hero-progress-duration"]',
+        )!;
+        expect(progress.style.animationPlayState).toBe("paused");
         expect(
             screen.getByRole("heading", { name: "Second slide" }),
         ).toBeTruthy();
 
         act(() => slideButton.blur());
-        act(() => vi.advanceTimersByTime(7000));
+        expect(progress.style.animationPlayState).toBe("running");
+        fireEvent.animationEnd(progress);
         expect(
             screen.getByRole("heading", { name: "First slide" }),
         ).toBeTruthy();

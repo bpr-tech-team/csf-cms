@@ -50,9 +50,7 @@ export const HeroParticles = ({ onAutoplayChange }: HeroParticlesProps) => {
         const preference = window.matchMedia(
             "(prefers-reduced-motion: reduce)",
         );
-        const hover = window.matchMedia("(hover: hover)");
         let isVisible = false;
-        let isHovered = hover.matches && hero.matches(":hover");
         let hasFocus = hero.contains(document.activeElement);
 
         const updateMotion = () => {
@@ -60,18 +58,10 @@ export const HeroParticles = ({ onAutoplayChange }: HeroParticlesProps) => {
                 isVisible && !document.hidden && !preference.matches;
 
             motion.dataset.running = String(running);
-            // Hover and keyboard focus pause slide changes, not ambient motion.
-            onAutoplayChange?.(running && !isHovered && !hasFocus);
+            // Focus pauses slide changes, not ambient motion.
+            onAutoplayChange?.(running && !hasFocus);
         };
 
-        const onMouseEnter = () => {
-            isHovered = hover.matches;
-            updateMotion();
-        };
-        const onMouseLeave = () => {
-            isHovered = false;
-            updateMotion();
-        };
         const onFocusIn = () => {
             hasFocus = true;
             updateMotion();
@@ -96,8 +86,6 @@ export const HeroParticles = ({ onAutoplayChange }: HeroParticlesProps) => {
 
         preference.addEventListener("change", updateMotion);
         document.addEventListener("visibilitychange", updateMotion);
-        hero.addEventListener("mouseenter", onMouseEnter);
-        hero.addEventListener("mouseleave", onMouseLeave);
         hero.addEventListener("focusin", onFocusIn);
         hero.addEventListener("focusout", onFocusOut);
         updateMotion();
@@ -106,8 +94,6 @@ export const HeroParticles = ({ onAutoplayChange }: HeroParticlesProps) => {
             observer?.disconnect();
             preference.removeEventListener("change", updateMotion);
             document.removeEventListener("visibilitychange", updateMotion);
-            hero.removeEventListener("mouseenter", onMouseEnter);
-            hero.removeEventListener("mouseleave", onMouseLeave);
             hero.removeEventListener("focusin", onFocusIn);
             hero.removeEventListener("focusout", onFocusOut);
             motion.dataset.running = "false";

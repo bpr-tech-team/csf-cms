@@ -12,7 +12,7 @@ import { defaultLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import type { HomepageHeroBlock } from "@/payload-types";
 import { cn } from "@/utilities/ui";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import styles from "./styles.module.css";
 
@@ -41,48 +41,16 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
         ? availableSlides[activeIndex % slideCount]
         : null;
     const interval = Math.min(Math.max(autoplayInterval ?? 7000, 3000), 20000);
-    const autoplayTiming = useRef({
-        activeIndex,
-        interval,
-        remaining: interval,
-    });
     const Heading = isPageIntro ? "h1" : "h2";
     const messages = frontendMessages[locale];
-
-    useEffect(() => {
-        const timing = autoplayTiming.current;
-        if (
-            timing.activeIndex !== activeIndex ||
-            timing.interval !== interval
-        ) {
-            timing.activeIndex = activeIndex;
-            timing.interval = interval;
-            timing.remaining = interval;
-        }
-
-        if (!autoplay || !isAutoplayRunning || slideCount < 2) {
-            return;
-        }
-
-        const startedAt = performance.now();
-        const timer = window.setTimeout(() => {
-            setActiveIndex((current) => (current + 1) % slideCount);
-        }, timing.remaining);
-
-        return () => {
-            window.clearTimeout(timer);
-            // Resume from the same point as the paused CSS progress indicator.
-            timing.remaining = Math.max(
-                0,
-                timing.remaining - (performance.now() - startedAt),
-            );
-        };
-    }, [activeIndex, autoplay, interval, isAutoplayRunning, slideCount]);
 
     if (!activeSlide) return null;
 
     const progressStyle = {
         "--homepage-hero-progress-duration": `${interval}ms`,
+        // Inline state takes precedence over the CSS module's animation shorthand.
+        animationPlayState:
+            autoplay && isAutoplayRunning ? "running" : "paused",
     } as CSSProperties;
 
     return (
@@ -155,10 +123,13 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                                 className={cn(
                                     styles.progress,
                                     "absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
-                                    (!autoplay || !isAutoplayRunning) &&
-                                        "[animation-play-state:paused]",
                                 )}
                                 key={`progress-${activeIndex}-${interval}`}
+                                onAnimationEnd={() =>
+                                    setActiveIndex(
+                                        (current) => (current + 1) % slideCount,
+                                    )
+                                }
                                 style={progressStyle}
                             />
                         </div>
