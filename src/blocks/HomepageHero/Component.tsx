@@ -4,6 +4,7 @@ import { applyTypography } from "@/utilities/typography";
 import type { CSSProperties } from "react";
 
 import { MediaAsset } from "@/components/MediaAsset";
+import { HeroBackground } from "@/components/HeroBackground";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
@@ -11,8 +12,7 @@ import { defaultLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import type { HomepageHeroBlock } from "@/payload-types";
 import { cn } from "@/utilities/ui";
-import NextImage from "next/image";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import styles from "./styles.module.css";
 
@@ -26,6 +26,7 @@ type QuickLink = NonNullable<HomepageHeroBlock["quickLinks"]>[number];
 export const HomepageHero: React.FC<HomepageHeroProps> = ({
     autoplay = true,
     autoplayInterval = 7000,
+    backgroundMedia,
     intro,
     isPageIntro = false,
     locale = defaultLocale,
@@ -33,48 +34,50 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
     slides,
 }) => {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+    const [isAutoplayRunning, setIsAutoplayRunning] = useState(false);
     const availableSlides = useMemo(() => slides ?? [], [slides]);
     const slideCount = availableSlides.length;
     const activeSlide = slideCount
         ? availableSlides[activeIndex % slideCount]
         : null;
     const interval = Math.min(Math.max(autoplayInterval ?? 7000, 3000), 20000);
+    const autoplayTiming = useRef({
+        activeIndex,
+        interval,
+        remaining: interval,
+    });
     const Heading = isPageIntro ? "h1" : "h2";
     const messages = frontendMessages[locale];
 
     useEffect(() => {
-        const mediaQuery = window.matchMedia(
-            "(prefers-reduced-motion: reduce)",
-        );
-        const updatePreference = () =>
-            setPrefersReducedMotion(mediaQuery.matches);
+        const timing = autoplayTiming.current;
+        if (
+            timing.activeIndex !== activeIndex ||
+            timing.interval !== interval
+        ) {
+            timing.activeIndex = activeIndex;
+            timing.interval = interval;
+            timing.remaining = interval;
+        }
 
-        updatePreference();
-        mediaQuery.addEventListener("change", updatePreference);
-
-        return () => mediaQuery.removeEventListener("change", updatePreference);
-    }, []);
-
-    useEffect(() => {
-        if (!autoplay || isPaused || prefersReducedMotion || slideCount < 2) {
+        if (!autoplay || !isAutoplayRunning || slideCount < 2) {
             return;
         }
 
+        const startedAt = performance.now();
         const timer = window.setTimeout(() => {
             setActiveIndex((current) => (current + 1) % slideCount);
-        }, interval);
+        }, timing.remaining);
 
-        return () => window.clearTimeout(timer);
-    }, [
-        activeIndex,
-        autoplay,
-        interval,
-        isPaused,
-        prefersReducedMotion,
-        slideCount,
-    ]);
+        return () => {
+            window.clearTimeout(timer);
+            // Resume from the same point as the paused CSS progress indicator.
+            timing.remaining = Math.max(
+                0,
+                timing.remaining - (performance.now() - startedAt),
+            );
+        };
+    }, [activeIndex, autoplay, interval, isAutoplayRunning, slideCount]);
 
     if (!activeSlide) return null;
 
@@ -86,31 +89,15 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
         <section
             aria-label={messages.heroPresentation}
             className={cn(
-                "relative overflow-hidden bg-ink-900 pb-20 text-paper-0 md:pb-24 xl:pb-21",
+                "relative isolate overflow-hidden bg-ink-900 pb-20 text-paper-0 md:pb-24 xl:pb-21",
                 isPageIntro ? "-mt-42 pt-58" : "pt-20 md:pt-24",
             )}
             data-theme="dark"
-            onBlurCapture={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget)) {
-                    setIsPaused(false);
-                }
-            }}
-            onFocusCapture={() => setIsPaused(true)}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
         >
-            <NextImage
-                alt=""
-                aria-hidden
-                className="pointer-events-none absolute inset-0 size-full object-cover object-center"
-                fill
-                priority={isPageIntro}
-                sizes="100vw"
-                src="/media/block/homepage-hero/background.svg"
-            />
-            <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_44%_at_71%_28%,rgb(175_203_8/0.18),transparent_72%)]"
+            <HeroBackground
+                isPageIntro={isPageIntro}
+                onAutoplayChange={setIsAutoplayRunning}
+                resource={backgroundMedia}
             />
 
             <div className="container relative z-10">
@@ -168,12 +155,10 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                                 className={cn(
                                     styles.progress,
                                     "absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
-                                    (!autoplay ||
-                                        isPaused ||
-                                        prefersReducedMotion) &&
+                                    (!autoplay || !isAutoplayRunning) &&
                                         "[animation-play-state:paused]",
                                 )}
-                                key={`progress-${activeIndex}`}
+                                key={`progress-${activeIndex}-${interval}`}
                                 style={progressStyle}
                             />
                         </div>

@@ -1,7 +1,7 @@
 import { applyTypography } from "@/utilities/typography";
 import type { ServiceHeroBlock } from "@/payload-types";
 
-import { MediaAsset } from "@/components/MediaAsset";
+import { HeroBackground } from "@/components/HeroBackground";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
@@ -29,22 +29,14 @@ export const ImmersiveHero = ({
     return (
         <section
             className={cn(
-                "relative min-h-120 overflow-hidden bg-ink-900 py-20 text-paper-0 md:py-24",
+                "relative isolate min-h-120 overflow-hidden bg-ink-900 py-20 text-paper-0 md:py-24",
                 isPageIntro && "-mt-42 pt-58 md:pt-72",
             )}
             data-theme="dark"
         >
-            <MediaAsset
-                alt=""
-                className="pointer-events-none absolute inset-0 size-full object-cover object-center opacity-45"
-                fill
-                priority={isPageIntro}
+            <HeroBackground
+                isPageIntro={isPageIntro}
                 resource={backgroundMedia}
-                sizes="100vw"
-            />
-            <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_70%_30%,rgb(175_203_8/0.13),transparent_70%)]"
             />
 
             <div className="container relative z-10">

@@ -84,6 +84,9 @@ export const Posts: CollectionConfig<"posts"> = {
                         {
                             name: "heroImage",
                             type: "upload",
+                            filterOptions: {
+                                mimeType: { contains: "image/" },
+                            },
                             label: {
                                 cs: "Úvodní obrázek",
                                 en: "Hero image",

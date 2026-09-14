@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
                 pathname: "/media/block/**",
             },
         ],
-        qualities: [100],
+        qualities: [75, 100],
         remotePatterns: [
             ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map(
                 (item) => {

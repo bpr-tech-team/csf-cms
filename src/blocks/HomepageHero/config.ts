@@ -1,5 +1,6 @@
 import type { Block } from "payload";
 import { highlightedTextsField } from "@/fields/highlightedTexts";
+import { heroBackgroundField } from "@/fields/heroBackground";
 import { linkGroup } from "@/fields/linkGroup";
 
 export const HomepageHero: Block = {
@@ -7,6 +8,7 @@ export const HomepageHero: Block = {
     interfaceName: "HomepageHeroBlock",
     labels: { singular: "Homepage hero", plural: "Homepage hero" },
     fields: [
+        heroBackgroundField(false),
         {
             name: "slides",
             type: "array",

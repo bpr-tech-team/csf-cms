@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { JsonLd, blogPostingJsonLd } from "@/seo/structuredData";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { PayloadRedirects } from "@/components/PayloadRedirects";
-import { PostHero } from "@/components/posts/PostHero";
 import { RelatedPosts } from "@/components/posts/RelatedPosts";
 import { SetHeaderTheme } from "@/components/SetHeaderTheme";
 import type { AppLocale } from "@/i18n/config";
@@ -68,14 +67,13 @@ export async function PostTemplate({
 
     return (
         <article className="pt-16 pb-16">
-            <SetHeaderTheme theme="dark" />
+            <SetHeaderTheme theme="light" />
 
             <PayloadRedirects disableNotFound locale={locale} url={url} />
 
             {draft && <LivePreviewListener />}
 
             <JsonLd data={blogPostingJsonLd(post, locale, url)} />
-            <PostHero locale={locale} post={post} />
 
             <div className="flex flex-col items-center gap-4 pt-8">
                 <div className="container">

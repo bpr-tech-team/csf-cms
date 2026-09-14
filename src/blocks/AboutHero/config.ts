@@ -1,6 +1,7 @@
 import type { Block } from "payload";
 
 import { linkGroup } from "@/fields/linkGroup";
+import { heroBackgroundField } from "@/fields/heroBackground";
 
 export const AboutHero: Block = {
     slug: "aboutHero",
@@ -29,22 +30,7 @@ export const AboutHero: Block = {
                 maxRows: 2,
             },
         }),
-        {
-            name: "backgroundMedia",
-            type: "upload",
-            admin: {
-                description: {
-                    cs: "Obrázek se zobrazí přes celou plochu s ořezem na střed.",
-                    en: "The image fills the hero and is cropped from the center.",
-                },
-            },
-            label: {
-                cs: "Obrázek na pozadí",
-                en: "Background image",
-            },
-            relationTo: "media",
-            required: true,
-        },
+        heroBackgroundField(),
     ],
     labels: {
         plural: {
