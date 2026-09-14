@@ -64,13 +64,13 @@ const ProductCard = ({
             <h3 className="mt-6 text-heading-md font-medium text-ink-950">
                 {applyTypography(item.title, { locale })}
             </h3>
-            <p className="mt-3 text-body-md font-normal text-ink-950">
+            <p className="mt-3 text-body-md font-normal text-ink-950 transition-colors duration-base group-hover:text-white">
                 {applyTypography(item.description, { locale })}
             </p>
         </>
     );
     const className =
-        "group flex min-h-112 flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-sm transition-[border-color,transform] duration-base hover:-translate-y-0.5 hover:border-brand-500/40";
+        "group flex min-h-112 flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-sm transition-[background-color,border-color,transform] duration-base hover:-translate-y-0.5 hover:border-brand-500/40 hover:bg-brand-500";
 
     if (!item.link) {
         return <article className={className}>{content}</article>;
