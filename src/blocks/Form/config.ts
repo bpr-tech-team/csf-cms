@@ -1,4 +1,5 @@
-import type { Block } from "payload";
+import type { Block, TextFieldSingleValidation } from "payload";
+import { text, textarea } from "payload/shared";
 
 import {
     FixedToolbarFeature,
@@ -6,6 +7,9 @@ import {
     InlineToolbarFeature,
     lexicalEditor,
 } from "@payloadcms/richtext-lexical";
+
+const validateEmployeeText: TextFieldSingleValidation = (value, options) =>
+    text(typeof value === "string" ? value.trim() : "", options);
 
 export const FormBlock: Block = {
     slug: "formBlock",
@@ -57,6 +61,96 @@ export const FormBlock: Block = {
             },
             relationTo: "forms",
             required: true,
+        },
+        {
+            name: "enableEmployee",
+            type: "checkbox",
+            defaultValue: false,
+            label: {
+                cs: "Zobrazit kontaktní osobu",
+                en: "Show employee",
+            },
+        },
+        {
+            name: "employee",
+            type: "group",
+            label: {
+                cs: "Kontaktní osoba",
+                en: "Employee",
+            },
+            admin: {
+                condition: (_, { enableEmployee } = {}) =>
+                    Boolean(enableEmployee),
+                description: {
+                    cs: "Vyplňte všechny údaje. E-mail slouží pouze k zobrazení kontaktu; příjemci zpráv se nastavují ve formuláři.",
+                    en: "Complete all employee details. The email is for display only; submission recipients are configured in the form.",
+                },
+            },
+            fields: [
+                {
+                    name: "photo",
+                    type: "upload",
+                    relationTo: "media",
+                    required: true,
+                    filterOptions: {
+                        mimeType: { contains: "image/" },
+                    },
+                    label: {
+                        cs: "Fotografie",
+                        en: "Photo",
+                    },
+                },
+                {
+                    name: "name",
+                    type: "text",
+                    required: true,
+                    validate: validateEmployeeText,
+                    label: {
+                        cs: "Jméno a příjmení",
+                        en: "Full name",
+                    },
+                },
+                {
+                    name: "position",
+                    type: "text",
+                    required: true,
+                    validate: validateEmployeeText,
+                    label: {
+                        cs: "Pracovní pozice",
+                        en: "Position",
+                    },
+                },
+                {
+                    name: "phone",
+                    type: "text",
+                    required: true,
+                    validate: validateEmployeeText,
+                    label: {
+                        cs: "Telefon",
+                        en: "Phone",
+                    },
+                },
+                {
+                    name: "email",
+                    type: "email",
+                    required: true,
+                    label: {
+                        cs: "E-mail",
+                        en: "Email",
+                    },
+                },
+                {
+                    name: "address",
+                    type: "textarea",
+                    required: true,
+                    validate: (value, options) =>
+                        textarea(value?.trim(), options),
+                    label: {
+                        cs: "Adresa",
+                        en: "Address",
+                    },
+                },
+            ],
         },
         {
             name: "enableIntro",

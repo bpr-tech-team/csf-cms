@@ -702,6 +702,18 @@ export interface FormBlock {
   appearance?: ('default' | 'homepageDark') | null;
   eyebrow?: string | null;
   form: number | Form;
+  enableEmployee?: boolean | null;
+  /**
+   * Complete all employee details. The email is for display only; submission recipients are configured in the form.
+   */
+  employee?: {
+    photo: number | Media;
+    name: string;
+    position: string;
+    phone: string;
+    email: string;
+    address: string;
+  };
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -1943,6 +1955,17 @@ export interface FormBlockSelect<T extends boolean = true> {
   appearance?: T;
   eyebrow?: T;
   form?: T;
+  enableEmployee?: T;
+  employee?:
+    | T
+    | {
+        photo?: T;
+        name?: T;
+        position?: T;
+        phone?: T;
+        email?: T;
+        address?: T;
+      };
   enableIntro?: T;
   introContent?: T;
   id?: T;

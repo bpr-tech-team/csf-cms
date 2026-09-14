@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 import { LocaleProvider } from "@/providers/Locale";
 
 import { fields } from "./fields";
+import { EmployeeCard } from "./EmployeeCard";
 
 export type FormBlockType = Omit<GeneratedFormBlock, "form"> & {
     form: FormType;
@@ -38,6 +39,8 @@ export const FormBlock: React.FC<
     const {
         appearance,
         locale = defaultLocale,
+        employee,
+        enableEmployee,
         enableIntro,
         eyebrow,
         form: formFromProps,
@@ -64,6 +67,7 @@ export const FormBlock: React.FC<
     const [error, setError] = useState<string>();
     const router = useRouter();
     const isHomepageDark = appearance === "homepageDark";
+    const showEmployee = Boolean(enableEmployee && employee);
 
     const onSubmit = useCallback(
         async (data: FieldValues) => {
@@ -122,7 +126,12 @@ export const FormBlock: React.FC<
                 data-theme={isHomepageDark ? "dark" : undefined}
                 id={isHomepageDark ? "kontakt" : undefined}
             >
-                <div className="container lg:max-w-[46rem]">
+                <div
+                    className={cn(
+                        "container",
+                        !showEmployee && "lg:max-w-[46rem]!",
+                    )}
+                >
                     {eyebrow && isHomepageDark && !hasSubmitted && (
                         <Eyebrow
                             locale={locale}
@@ -148,121 +157,139 @@ export const FormBlock: React.FC<
                     <div
                         className={cn(
                             "rounded-md border border-border p-4 lg:p-6",
+                            showEmployee &&
+                                "grid items-start gap-8 md:gap-10 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]",
                             isHomepageDark &&
                                 "border-brand-500/20 bg-olive-950 p-6 md:p-10 [&_input]:h-12 [&_input]:rounded-xs [&_input]:border-brand-500/20 [&_input]:bg-olive-850 [&_label]:text-eyebrow [&_label]:font-medium [&_label]:uppercase [&_textarea]:min-h-28 [&_textarea]:rounded-xs [&_textarea]:border-brand-500/20 [&_textarea]:bg-olive-850",
                         )}
                     >
-                        <Form {...formMethods}>
-                            {hasSubmitted &&
-                                confirmationType === "message" &&
-                                confirmationMessage && (
+                        {showEmployee && employee && (
+                            <EmployeeCard
+                                employee={employee}
+                                inverse={isHomepageDark}
+                                locale={locale}
+                            />
+                        )}
+                        <div
+                            className={cn(
+                                "min-w-0",
+                                showEmployee && "xl:col-start-1 xl:row-start-1",
+                            )}
+                        >
+                            <Form {...formMethods}>
+                                {hasSubmitted &&
+                                    confirmationType === "message" &&
+                                    confirmationMessage && (
+                                        <Alert
+                                            aria-live="polite"
+                                            className="mb-6"
+                                            role="status"
+                                            variant="success"
+                                        >
+                                            <CircleCheck aria-hidden />
+                                            <AlertTitle>
+                                                Formulář byl odeslán
+                                            </AlertTitle>
+                                            <AlertDescription>
+                                                <RichText
+                                                    locale={locale}
+                                                    data={confirmationMessage}
+                                                />
+                                            </AlertDescription>
+                                        </Alert>
+                                    )}
+                                {error && (
                                     <Alert
-                                        aria-live="polite"
                                         className="mb-6"
-                                        role="status"
-                                        variant="success"
+                                        role="alert"
+                                        variant="destructive"
                                     >
-                                        <CircleCheck aria-hidden />
+                                        <CircleAlert aria-hidden />
                                         <AlertTitle>
-                                            Formulář byl odeslán
+                                            Odeslání se nezdařilo
                                         </AlertTitle>
                                         <AlertDescription>
-                                            <RichText
-                                                locale={locale}
-                                                data={confirmationMessage}
-                                            />
+                                            {applyTypography(error, { locale })}
                                         </AlertDescription>
                                     </Alert>
                                 )}
-                            {error && (
-                                <Alert
-                                    className="mb-6"
-                                    role="alert"
-                                    variant="destructive"
-                                >
-                                    <CircleAlert aria-hidden />
-                                    <AlertTitle>
-                                        Odeslání se nezdařilo
-                                    </AlertTitle>
-                                    <AlertDescription>
-                                        {applyTypography(error, { locale })}
-                                    </AlertDescription>
-                                </Alert>
-                            )}
-                            {!hasSubmitted && (
-                                <form
-                                    aria-busy={isSubmitting}
-                                    id={formID}
-                                    onSubmit={handleSubmit(onSubmit)}
-                                >
-                                    <fieldset
-                                        className="m-0 min-w-0 border-0 p-0"
-                                        disabled={isSubmitting}
+                                {!hasSubmitted && (
+                                    <form
+                                        aria-busy={isSubmitting}
+                                        id={formID}
+                                        onSubmit={handleSubmit(onSubmit)}
                                     >
-                                        <div className="-mx-2 -mb-6 flex flex-wrap">
-                                            {formFromProps.fields?.map(
-                                                (field, index) => {
-                                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                                    const Field: React.FC<any> =
-                                                        fields?.[
-                                                            field.blockType as keyof typeof fields
-                                                        ];
-                                                    if (Field) {
-                                                        const width =
-                                                            "width" in field &&
-                                                            field.width
-                                                                ? field.width
-                                                                : 100;
-
-                                                        return (
-                                                            <div
-                                                                className="mb-6 w-full px-2 sm:w-[var(--form-field-width)]"
-                                                                key={index}
-                                                                style={
-                                                                    {
-                                                                        "--form-field-width": `${width}%`,
-                                                                    } as React.CSSProperties
-                                                                }
-                                                            >
-                                                                <Field
-                                                                    form={
-                                                                        formFromProps
-                                                                    }
-                                                                    {...field}
-                                                                    {...formMethods}
-                                                                    control={
-                                                                        control
-                                                                    }
-                                                                />
-                                                            </div>
-                                                        );
-                                                    }
-                                                    return null;
-                                                },
-                                            )}
-                                        </div>
-
-                                        <Button
-                                            className={cn(
-                                                isHomepageDark && "mt-8 w-full",
-                                            )}
-                                            type="submit"
-                                            variant="default"
+                                        <fieldset
+                                            className="m-0 min-w-0 border-0 p-0"
+                                            disabled={isSubmitting}
                                         >
-                                            {isSubmitting && (
-                                                <LoaderCircle
-                                                    aria-hidden
-                                                    className="animate-spin"
-                                                />
-                                            )}
-                                            {isSubmitting
-                                                ? "Odesílání…"
-                                                : submitButtonLabel}
-                                        </Button>
-                                    </fieldset>
-                                </form>
-                            )}
-                        </Form>
+                                            <div className="-mx-2 -mb-6 flex flex-wrap">
+                                                {formFromProps.fields?.map(
+                                                    (field, index) => {
+                                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                        const Field: React.FC<any> =
+                                                            fields?.[
+                                                                field.blockType as keyof typeof fields
+                                                            ];
+                                                        if (Field) {
+                                                            const width =
+                                                                "width" in
+                                                                    field &&
+                                                                field.width
+                                                                    ? field.width
+                                                                    : 100;
+
+                                                            return (
+                                                                <div
+                                                                    className="mb-6 w-full px-2 sm:w-[var(--form-field-width)]"
+                                                                    key={index}
+                                                                    style={
+                                                                        {
+                                                                            "--form-field-width": `${width}%`,
+                                                                        } as React.CSSProperties
+                                                                    }
+                                                                >
+                                                                    <Field
+                                                                        form={
+                                                                            formFromProps
+                                                                        }
+                                                                        {...field}
+                                                                        {...formMethods}
+                                                                        control={
+                                                                            control
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            );
+                                                        }
+                                                        return null;
+                                                    },
+                                                )}
+                                            </div>
+
+                                            <Button
+                                                className={cn(
+                                                    isHomepageDark &&
+                                                        "mt-8 w-full",
+                                                )}
+                                                type="submit"
+                                                variant="default"
+                                            >
+                                                {isSubmitting && (
+                                                    <LoaderCircle
+                                                        aria-hidden
+                                                        className="animate-spin"
+                                                    />
+                                                )}
+                                                {isSubmitting
+                                                    ? "Odesílání…"
+                                                    : submitButtonLabel}
+                                            </Button>
+                                        </fieldset>
+                                    </form>
+                                )}
+                            </Form>
+                        </div>
                     </div>
                 </div>
             </section>
