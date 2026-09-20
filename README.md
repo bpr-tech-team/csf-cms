@@ -1,358 +1,83 @@
-# Payload Website Template
+# CSF CMS
 
-This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/3.x/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
+Сайт CSF и административная панель на Payload CMS 3.88, Next.js 16.3, React 19 и PostgreSQL. Контент доступен на чешском и английском языках.
 
-This template is right for you if you are working on:
+Эта версия предназначена для демонстрации клиенту. Рекомендация по инфраструктуре и подготовке контейнеров: [KUBERNETES.md](KUBERNETES.md).
 
-- A personal or enterprise-grade website, blog, or portfolio
-- A content publishing platform with a fully featured publication workflow
-- Exploring the capabilities of Payload
+## Локальный запуск
 
-Core features:
-
-- [Pre-configured Payload Config](#how-it-works)
-- [Authentication](#users-authentication)
-- [Access Control](#access-control)
-- [Layout Builder](#layout-builder)
-- [Draft Preview](#draft-preview)
-- [Live Preview](#live-preview)
-- [On-demand Revalidation](#on-demand-revalidation)
-- [SEO](#seo)
-- [Search](#search)
-- [Redirects](#redirects)
-- [Jobs and Scheduled Publishing](#jobs-and-scheduled-publish)
-- [Website](#website)
-
-## Quick Start
-
-To spin up this example locally, follow these steps:
-
-### Clone
-
-If you have not done so already, you need to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
-
-Use the `create-payload-app` CLI to clone this template directly to your machine:
+Используйте Node.js 22.12+ в ветке 22 либо Node.js 24, pnpm 10.32.1 и PostgreSQL 16.
 
 ```bash
-pnpx create-payload-app my-project -t website
+cp .env.example .env
+pnpm install --frozen-lockfile
+docker compose up -d postgres
 ```
 
-### Development
-
-1. First [clone the repo](#clone) if you have not done so already
-1. `cd my-project && cp .env.example .env` to copy the example environment variables
-1. `pnpm install && pnpm dev` to install dependencies and start the dev server
-1. open `http://localhost:3000` to open the app in your browser
-
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
-
-## How it works
-
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
-
-### Collections
-
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
-
-- #### Users (Authentication)
-
-    Users are auth-enabled collections that have access to the admin panel and unpublished content. See [Access Control](#access-control) for more details.
-
-    For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Posts
-
-    Posts are used to generate blog posts, news articles, or any other type of content that is published over time. All posts are layout builder enabled so you can generate unique layouts for each post using layout-building blocks, see [Layout Builder](#layout-builder) for more details. Posts are also draft-enabled so you can preview them before publishing them to your website, see [Draft Preview](#draft-preview) for more details.
-
-- #### Pages
-
-    All pages are layout builder enabled so you can generate unique layouts for each page using layout-building blocks, see [Layout Builder](#layout-builder) for more details. Pages are also draft-enabled so you can preview them before publishing them to your website, see [Draft Preview](#draft-preview) for more details.
-
-- #### Media
-
-    This is the uploads enabled collection used by pages, posts, and projects to contain media like images, videos, downloads, and other assets. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
-
-- #### Categories
-
-    A taxonomy used to group posts together. Categories can be nested inside of one another, for example "News > Technology". See the official [Payload Nested Docs Plugin](https://payloadcms.com/docs/plugins/nested-docs) for more details.
-
-### Globals
-
-See the [Globals](https://payloadcms.com/docs/configuration/globals) docs for details on how to extend this functionality.
-
-- `Header`
-
-    The data required by the header on your front-end like nav links.
-
-- `Footer`
-
-    Same as above but for the footer of your site.
-
-### Payload global locale-copy patch
-
-Payload Admin UI `3.88.0` contains a bug in the `Copy to locale` action for Globals. The action tries to resolve a Global configuration through `globals[globalSlug]`, although Payload stores Global configurations in `globals.config`. As a result, copying localized data for `Header`, `Footer`, or any other Global fails with:
-
-```text
-Cannot read properties of undefined (reading 'config')
-```
-
-This project applies a temporary pnpm patch from [`patches/@payloadcms__ui@3.88.0.patch`](patches/@payloadcms__ui@3.88.0.patch). The patch resolves the Global configuration from `globals.config` and is registered under `pnpm.patchedDependencies` in `package.json`. It is applied automatically by `pnpm install`; do not edit the installed file in `node_modules` directly.
-
-After upgrading to a Payload release that includes an official fix, update `payload` and all `@payloadcms/*` packages together, verify the locale-copy action for both `Header` and `Footer`, and then remove the patch file and its `pnpm.patchedDependencies` entry.
-
-## Access control
-
-Basic access control is setup to limit access to various content based based on publishing status.
-
-- `users`: Users can access the admin panel and create or edit content.
-- `posts`: Everyone can access published posts, but only users can create, update, or delete them.
-- `pages`: Everyone can access published pages, but only users can create, update, or delete them.
-
-For more details on how to extend this functionality, see the [Payload Access Control](https://payloadcms.com/docs/access-control/overview#access-control) docs.
-
-## Layout Builder
-
-Create unique page layouts for any type of content using a powerful layout builder. This template comes pre-configured with the following layout building blocks:
-
-- Hero
-- Content
-- Media
-- Call To Action
-- Archive
-
-Each block is fully designed and built into the front-end website that comes with this template. See [Website](#website) for more details.
-
-## Lexical editor
-
-A deep editorial experience that allows complete freedom to focus just on writing content without breaking out of the flow with support for Payload blocks, media, links and other features provided out of the box. See [Lexical](https://payloadcms.com/docs/rich-text/overview) docs.
-
-## Draft Preview
-
-All posts and pages are draft-enabled so you can preview them before publishing them to your website. To do this, these collections use [Versions](https://payloadcms.com/docs/configuration/collections#versions) with `drafts` set to `true`. This means that when you create a new post, project, or page, it will be saved as a draft and will not be visible on your website until you publish it. This also means that you can preview your draft before publishing it to your website. To do this, we automatically format a custom URL which redirects to your front-end to securely fetch the draft version of your content.
-
-Since the front-end of this template is statically generated, this also means that pages, posts, and projects will need to be regenerated as changes are made to published documents. To do this, we use an `afterChange` hook to regenerate the front-end when a document has changed and its `_status` is `published`.
-
-For more details on how to extend this functionality, see the official [Draft Preview Example](https://github.com/payloadcms/payload/tree/3.x/examples/draft-preview).
-
-## Live preview
-
-In addition to draft previews you can also enable live preview to view your end resulting page as you're editing content with full support for SSR rendering. See [Live preview docs](https://payloadcms.com/docs/live-preview/overview) for more details.
-
-## On-demand Revalidation
-
-We've added hooks to collections and globals so that all of your pages, posts, footer, or header changes will automatically be updated in the frontend via on-demand revalidation supported by Nextjs.
-
-> Note: if an image has been changed, for example it's been cropped, you will need to republish the page it's used on in order to be able to revalidate the Nextjs image cache.
-
-## SEO
-
-This template comes pre-configured with the official [Payload SEO Plugin](https://payloadcms.com/docs/plugins/seo) for complete SEO control from the admin panel. All SEO data is fully integrated into the front-end website that comes with this template. See [Website](#website) for more details.
-
-## Search
-
-This template also pre-configured with the official [Payload Search Plugin](https://payloadcms.com/docs/plugins/search) to showcase how SSR search features can easily be implemented into Next.js with Payload. See [Website](#website) for more details.
-
-## Redirects
-
-If you are migrating an existing site or moving content to a new URL, you can use the `redirects` collection to create a proper redirect from old URLs to new ones. This will ensure that proper request status codes are returned to search engines and that your users are not left with a broken link. This template comes pre-configured with the official [Payload Redirects Plugin](https://payloadcms.com/docs/plugins/redirects) for complete redirect control from the admin panel. All redirects are fully integrated into the front-end website that comes with this template. See [Website](#website) for more details.
-
-## Jobs and Scheduled Publish
-
-We have configured [Scheduled Publish](https://payloadcms.com/docs/versions/drafts#scheduled-publish) which uses the [jobs queue](https://payloadcms.com/docs/jobs-queue/jobs) in order to publish or unpublish your content on a scheduled time. The tasks are run on a cron schedule and can also be run as a separate instance if needed.
-
-> Note: When deployed on Vercel, depending on the plan tier, you may be limited to daily cron only.
-
-## Website
-
-This template includes a beautifully designed, production-ready front-end built with the [Next.js App Router](https://nextjs.org), served right alongside your Payload app in a instance. This makes it so that you can deploy both your backend and website where you need it.
-
-Core features:
-
-- [Next.js App Router](https://nextjs.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [React Hook Form](https://react-hook-form.com)
-- [Payload Admin Bar](https://github.com/payloadcms/payload/tree/3.x/packages/admin-bar)
-- [TailwindCSS styling](https://tailwindcss.com/)
-- [shadcn/ui components](https://ui.shadcn.com/)
-- User Accounts and Authentication
-- Fully featured blog
-- Publication workflow
-- Dark mode
-- Pre-made layout building blocks
-- SEO
-- Search
-- Redirects
-- Live preview
-
-### Text rendering and typography
-
-Use the shared typography tools when rendering user-facing text in new components and layout blocks. They apply Typopo consistently to headings, descriptions, labels, and rich text, including non-breaking spaces, quotation marks, dashes, and ellipses.
-
-For plain strings, use `applyTypography` and pass the page locale explicitly:
-
-```tsx
-import { applyTypography } from "@/utilities/typography";
-
-<h2>{applyTypography(heading, { locale })}</h2>
-<p>{applyTypography(description, { locale })}</p>
-```
-
-For Payload Lexical content, use the project's `RichText` component:
-
-```tsx
-import RichText from "@/components/RichText";
-
-<RichText data={content} locale={locale} />;
-```
-
-The adapter preserves links and formatting even when Typopo changes text length. Use `HighlightedText` or `SectionHeading` for headings with highlighted fragments instead of formatting each fragment separately.
-
-`SectionHeading`, `HighlightedText`, `Eyebrow`, and `CMSLink` already apply typography; pass their `locale` prop without pre-formatting their text. Shared client controls such as `Button` and `Label` inherit the locale from `LocaleProvider` in the site shell. This automatic handling covers direct text children, not text inside arbitrary nested components.
-
-The site locales map to Typopo's `cs` and `en-us` rules. Keep formatting at the rendering boundary: store original text in Payload and render the result as React text, without `dangerouslySetInnerHTML`. Do not add separate typography rules or call Typopo directly in individual components. For technical strings that must remain verbatim, skip processing or use `{ enabled: false }` with `applyTypography`; the shared components listed above, `RichText`, `Button`, and `Label` also support `typography={false}`.
-
-See the [typography integration notes](src/utilities/typography.md) and [tests](src/utilities/typography.int.spec.tsx) for implementation details and examples.
-
-### Cache
-
-Although Next.js includes a robust set of caching strategies out of the box, Payload Cloud proxies and caches all files through Cloudflare using the [Official Cloud Plugin](https://www.npmjs.com/package/@payloadcms/payload-cloud). This means that Next.js caching is not needed and is disabled by default. If you are hosting your app outside of Payload Cloud, you can easily reenable the Next.js caching mechanisms by removing the `no-store` directive from all fetch requests in `./src/app/_api` and then removing all instances of `export const dynamic = 'force-dynamic'` from pages files, such as `./src/app/(pages)/[slug]/page.tsx`. For more details, see the official [Next.js Caching Docs](https://nextjs.org/docs/app/building-your-application/caching).
-
-## Development
-
-To spin up this example locally, follow the [Quick Start](#quick-start). Then [Seed](#seed) the database with a few pages, posts, and projects.
-
-### Working with Postgres
-
-Postgres and other SQL-based databases follow a strict schema for managing your data. In comparison to our MongoDB adapter, this means that there's a few extra steps to working with Postgres.
-
-Note that often times when making big schema changes you can run the risk of losing data if you're not manually migrating it.
-
-#### Local development
-
-Use a local Postgres database for development. This project sets `push: false` in every environment, so schema changes are always applied through Payload migrations.
-
-For a new, empty database, configure `DATABASE_URL` in `.env` and run `pnpm payload migrate` before starting the app. If `NETLIFY_DB_URL` is set, it takes precedence over `DATABASE_URL`; check the target before running any database command.
-
-#### Migrations
-
-[Payload migrations](https://payloadcms.com/docs/database/migrations) own the schema and migration history, including on Netlify. The history was consolidated into `20260908_222040_initial`, which creates the complete current schema in an empty database. Its `.ts` file contains the migration and its `.json` snapshot is needed to generate future schema changes. Keep both files and `src/migrations/index.ts` in Git.
-
-Locally create a migration
-
-```bash
-pnpm payload migrate:create describe_the_change
-```
-
-Review the generated SQL, apply it to a local database, and include the migration and snapshot with the corresponding schema change. Add new migrations after the initial migration; do not regenerate the initial migration once a database uses it.
-
-Apply pending migrations:
+В `.env` задайте `DATABASE_URL`, `PAYLOAD_SECRET`, `PREVIEW_SECRET` и `NEXT_PUBLIC_SERVER_URL`. Для секретов используйте отдельные случайные значения. Если отправка почты не нужна, удалите из `.env` пример `SMTP_HOST`; остальные SMTP-параметры описаны в `.env.example`.
 
 ```bash
 pnpm payload migrate
+pnpm dev
 ```
 
-Payload records applied migrations in `payload_migrations`, so subsequent runs only apply pending migrations. Netlify already runs this command before `next build` through `scripts/netlify-build.mjs`.
+Сайт: [localhost:3000](http://localhost:3000). Админка: [localhost:3000/admin](http://localhost:3000/admin). На новой базе создайте первого администратора и добавьте контент через CMS.
 
-#### One-time transition from the previous migration history
+В `docker-compose.yml` также есть сервис `payload` для локальной разработки. При его использовании сначала примените миграции через `docker compose run --rm payload sh -c 'corepack enable && pnpm install --frozen-lockfile && pnpm payload migrate'`, затем выполните `docker compose up payload`.
 
-The consolidated initial migration cannot be applied over a database created by the previous migrations. Each such database must either be replaced with an empty database or reset once. This deletes all CMS content, users, drafts, and migration history.
+## Команды
 
-After verifying that the connection points to the intended disposable database, reset it with the new migration files present:
+| Команда                   | Назначение                                                       |
+| ------------------------- | ---------------------------------------------------------------- |
+| `pnpm dev`                | Локальный сервер с обновлением при изменении исходников          |
+| `pnpm build`              | Сборка приложения и генерация sitemap/robots.txt                 |
+| `pnpm start`              | Запуск собранного приложения на порту 3000                       |
+| `pnpm check`              | Проверка форматирования, ESLint и TypeScript                     |
+| `pnpm test:int`           | Тесты Vitest; API-тесту нужна настроенная база                   |
+| `pnpm test:e2e`           | Браузерные тесты Playwright; нужны база и установленный Chromium |
+| `pnpm generate:types`     | Генерация типов Payload после изменения схемы                    |
+| `pnpm generate:importmap` | Обновление карты компонентов админки                             |
+
+`pnpm build` обращается к базе при генерации страниц. До сборки база должна быть доступна, а миграции — применены. Сборка сама миграции не запускает. Для демонстрационного сервера используйте `NODE_ENV=production` и собранное приложение.
+
+## База данных и миграции
+
+Подключение PostgreSQL задаёт `DATABASE_URL`. Во всех окружениях установлен `push: false`: изменения схемы применяются только через [миграции Payload](https://payloadcms.com/docs/database/migrations).
 
 ```bash
-pnpm payload migrate:fresh
+pnpm payload migrate:create describe_the_change
+pnpm payload migrate
 ```
 
-This command asks for confirmation, recreates the Payload schema, and applies the initial migration. Use `migrate:fresh` only for this deliberate reset; normal builds must continue to use `migrate`.
+Проверяйте сгенерированный SQL и сохраняйте вместе изменение схемы, `.ts`-миграцию, `.json`-снимок и обновлённый `src/migrations/index.ts`. Типы обновляйте через `pnpm generate:types`.
 
-For the existing Netlify project, coordinate the production database reset with the deployment of the consolidated history. Prevent the old code from deploying during the transition, run the reset against the production database using the new migration, then deploy the matching code. The normal build will find the initial migration already applied. Recreate the first administrator through `/admin` after deployment. Resetting Postgres does not delete uploaded files from Netlify Blobs; those are managed separately.
+История начинается с объединённой миграции `20260908_222040_initial`, создающей схему в пустой базе. После неё добавляются новые миграции. Не применяйте эту начальную миграцию поверх базы со старой историей и не изменяйте уже применённые миграции. Команда `migrate:fresh` удаляет данные; для обычных обновлений используется `migrate`.
 
-### Docker
+## Загружаемые файлы
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+По умолчанию Payload сохраняет загрузки в `public/media` и выдаёт их через `/api/media/file/<filename>`. Записи о файлах находятся в PostgreSQL; сами файлы хранятся отдельно.
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+Для контейнера задайте абсолютный путь `MEDIA_UPLOAD_DIR=/data/media` и подключите к нему постоянный том. Встроенные изображения `public/media/block` входят в репозиторий: том для пользовательских загрузок не должен перекрывать этот каталог. При переносе уже заполненной базы отдельно перенесите оригиналы загрузок и все сгенерированные размеры.
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+## Структура
 
-### Seed
+- `src/collections` — страницы, статьи, медиа, категории и пользователи.
+- `src/globals` — общие данные шапки и подвала.
+- `src/blocks` — блоки страниц.
+- `src/app` — сайт, админка и API.
+- `src/migrations` — схема PostgreSQL и история изменений.
+- `src/email/smtp.ts` — настройка SMTP.
 
-To seed the database with a few pages, posts, and projects you can click the 'seed database' link from the admin panel.
+## Особенности проекта
 
-The seed script will also create a demo user for demonstration purposes only:
+### Копирование локализации Globals
 
-- Demo Author
-    - Email: `demo-author@payloadcms.com`
-    - Password: `password`
+Для Payload UI 3.88.0 применяется [pnpm-патч](patches/@payloadcms__ui@3.88.0.patch), исправляющий поиск конфигурации Global в действии `Copy to locale`. Он зарегистрирован в `pnpm.patchedDependencies` и применяется при установке зависимостей. Каталог `patches` должен быть доступен и при сборке Docker-образа.
 
-> NOTICE: seeding the database is destructive because it drops your current database to populate a fresh one from the seed template. Only run this command if you are starting a new project or can afford to lose your current data.
+При обновлении Payload обновляйте `payload` и пакеты `@payloadcms/*` вместе. Удаляйте патч только после проверки официального исправления и копирования локализации для Header и Footer.
 
-## Production
+### Типографика
 
-To run Payload in production, you need to build and start the Admin panel. To do so, follow these steps:
+Форматируйте текст при отображении: `applyTypography(text, { locale })` для строк и общий `RichText` для Lexical. `SectionHeading`, `HighlightedText`, `Eyebrow` и `CMSLink` уже обрабатывают типографику — передавайте им локаль без повторного форматирования. В CMS сохраняется исходный текст.
 
-1. Invoke the `next build` script by running `pnpm build` or `npm run build` in your project root. This creates a `.next` directory with a production-ready admin bundle.
-1. Finally run `pnpm start` or `npm run start` to run Node in production and serve Payload from the `.build` directory.
-1. When you're ready to go live, see Deployment below for more details.
-
-### Deploying to Vercel
-
-This template can also be deployed to Vercel for free. You can get started by choosing the Vercel DB adapter during the setup of the template or by manually installing and configuring it:
-
-```bash
-pnpm add @payloadcms/db-vercel-postgres
-```
-
-```ts
-// payload.config.ts
-import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
-
-export default buildConfig({
-  // ...
-  db: vercelPostgresAdapter({
-    pool: {
-      connectionString: process.env.POSTGRES_URL || '',
-    },
-  }),
-  // ...
-```
-
-We also support Vercel's blob storage:
-
-```bash
-pnpm add @payloadcms/storage-vercel-blob
-```
-
-```ts
-// payload.config.ts
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
-
-export default buildConfig({
-  // ...
-  plugins: [
-    vercelBlobStorage({
-      collections: {
-        [Media.slug]: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
-    }),
-  ],
-  // ...
-```
-
-There is also a simplified [one click deploy](https://github.com/payloadcms/payload/tree/3.x/templates/with-vercel-postgres) to Vercel should you need it.
-
-### Self-hosting
-
-Before deploying your app, you need to:
-
-1. Ensure your app builds and serves in production. See [Production](#production) for more details.
-2. You can then deploy Payload as you would any other Node.js or Next.js application either directly on a VPS, DigitalOcean's Apps Platform, via Coolify or more. More guides coming soon.
-
-You can also deploy your app manually, check out the [deployment documentation](https://payloadcms.com/docs/production/deployment) for full details.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+Подробности: [типографика](src/utilities/typography.md), [UI-компоненты](src/components/ui/README.md).

@@ -9,7 +9,6 @@
         "build": "cross-env NODE_OPTIONS=--no-deprecation next build --webpack",
         "postbuild": "next-sitemap --config next-sitemap.config.cjs",
         "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-        "build:netlify": "node scripts/netlify-build.mjs",
         "payload": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/payload-cli.mjs",
         "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/payload-cli.mjs generate:importmap",
         "generate:types": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/payload-cli.mjs generate:types",
@@ -24,14 +23,11 @@
         "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts"
     },
     "dependencies": {
-        "@netlify/blobs": "^11.0.3",
-        "@netlify/database": "^2.0.1",
         "@payloadcms/admin-bar": "3.88.0",
         "@payloadcms/db-postgres": "3.88.0",
         "@payloadcms/email-nodemailer": "3.88.0",
         "@payloadcms/live-preview-react": "3.88.0",
         "@payloadcms/next": "3.88.0",
-        "@payloadcms/plugin-cloud-storage": "3.88.0",
         "@payloadcms/plugin-form-builder": "3.88.0",
         "@payloadcms/plugin-nested-docs": "3.88.0",
         "@payloadcms/plugin-redirects": "3.88.0",

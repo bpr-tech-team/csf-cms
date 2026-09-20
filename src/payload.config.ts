@@ -1,5 +1,4 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { getConnectionString } from "@netlify/database";
 import sharp from "sharp";
 import path from "path";
 import { buildConfig, PayloadRequest } from "payload";
@@ -91,9 +90,7 @@ export default buildConfig({
     db: postgresAdapter({
         migrationDir: path.resolve(dirname, "migrations"),
         pool: {
-            connectionString: process.env.NETLIFY_DB_URL
-                ? getConnectionString()
-                : process.env.DATABASE_URL || "",
+            connectionString: process.env.DATABASE_URL || "",
             max: 5,
         },
         // Use migrations locally too, so schema push cannot bypass data migrations.
