@@ -9,6 +9,7 @@ import type { Page, Post } from "@/payload-types";
 import { SmoothHashLink } from "./SmoothHashLink";
 import { applyTypography } from "@/utilities/typography";
 import { typographyChildren } from "@/utilities/typographyChildren";
+import { getPagePath } from "@/utilities/getPagePath";
 
 type CMSLinkType = {
     appearance?: "inline" | ButtonProps["variant"];
@@ -46,9 +47,9 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         type === "reference" &&
         typeof reference?.value === "object" &&
         reference.value.slug
-            ? `${reference?.relationTo !== "pages" ? `/${reference?.relationTo}` : ""}/${
-                  reference.value.slug
-              }`
+            ? reference.relationTo === "pages"
+                ? getPagePath(reference.value as Page)
+                : `/${reference.relationTo}/${reference.value.slug}`
             : url;
     const href =
         referenceHref && referenceHref.startsWith("/")

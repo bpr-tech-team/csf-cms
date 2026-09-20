@@ -17,6 +17,7 @@ import { beforeSyncWithSearch } from "@/search/beforeSync";
 import { Page, Post } from "@/payload-types";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import { getCanonicalUrl, seoConfig } from "@/seo/config";
+import { getPagePath } from "@/utilities/getPagePath";
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
     return doc?.title
@@ -29,7 +30,7 @@ const generateURL: GenerateURL<Post | Page> = ({
     doc,
     locale: incomingLocale,
 }) => {
-    if (!doc?.slug || doc.slug === "home") {
+    if (!doc?.slug) {
         const locale = isLocale(incomingLocale)
             ? incomingLocale
             : defaultLocale;
@@ -40,7 +41,7 @@ const generateURL: GenerateURL<Post | Page> = ({
     const path =
         collectionConfig?.slug === "posts"
             ? `/posts/${doc.slug}`
-            : `/${doc.slug}`;
+            : getPagePath(doc as Page);
     const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
 
     return getCanonicalUrl(withLocalePrefix(path, locale));

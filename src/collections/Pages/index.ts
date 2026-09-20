@@ -1,8 +1,14 @@
 import type { CollectionConfig } from "payload";
+import type { Page } from "@/payload-types";
 
 import { authenticated } from "../../access/authenticated";
 import { authenticatedOrPublished } from "../../access/authenticatedOrPublished";
 import { AboutHero } from "../../blocks/AboutHero/config";
+import { ContactHero } from "@/blocks/ContactHero/config";
+import { BranchHero } from "@/blocks/BranchHero/config";
+import { BranchesGrid } from "@/blocks/BranchesGrid/config";
+import { BranchDetails } from "@/blocks/BranchDetails/config";
+import { branchInfo } from "@/fields/branchInfo";
 import { Archive } from "../../blocks/ArchiveBlock/config";
 import { CallToAction } from "../../blocks/CallToAction/config";
 import { CenteredCTA } from "../../blocks/CenteredCTA/config";
@@ -54,6 +60,7 @@ export const Pages: CollectionConfig<"pages"> = {
     defaultPopulate: {
         title: true,
         slug: true,
+        pageType: true,
     },
     admin: {
         defaultColumns: ["title", "slug", "updatedAt"],
@@ -61,6 +68,7 @@ export const Pages: CollectionConfig<"pages"> = {
             url: ({ data, req }) =>
                 generatePreviewPath({
                     slug: data?.slug,
+                    pageType: data?.pageType,
                     collection: "pages",
                     req,
                 }),
@@ -68,6 +76,7 @@ export const Pages: CollectionConfig<"pages"> = {
         preview: (data, { req }) =>
             generatePreviewPath({
                 slug: data?.slug as string,
+                pageType: data?.pageType as Page["pageType"],
                 collection: "pages",
                 req,
             }),
@@ -96,6 +105,10 @@ export const Pages: CollectionConfig<"pages"> = {
                 en: "Page type",
             },
             options: [
+                {
+                    label: { cs: "Pobočka", en: "Branch" },
+                    value: "branch",
+                },
                 {
                     label: {
                         cs: "Standardní stránka",
@@ -131,6 +144,10 @@ export const Pages: CollectionConfig<"pages"> = {
                             blocks: [
                                 HomepageHero,
                                 AboutHero,
+                                ContactHero,
+                                BranchHero,
+                                BranchesGrid,
+                                BranchDetails,
                                 CallToAction,
                                 Content,
                                 MediaBlock,
@@ -170,6 +187,11 @@ export const Pages: CollectionConfig<"pages"> = {
                         cs: "Obsah",
                         en: "Content",
                     },
+                },
+                {
+                    label: { cs: "Pobočka", en: "Branch" },
+                    admin: { condition: (data) => data?.pageType === "branch" },
+                    fields: [branchInfo],
                 },
                 {
                     name: "meta",

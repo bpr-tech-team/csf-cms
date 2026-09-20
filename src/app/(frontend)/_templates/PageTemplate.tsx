@@ -13,6 +13,7 @@ import configPromise from "@payload-config";
 import { draftMode } from "next/headers";
 import React, { cache } from "react";
 import { getPayload } from "payload";
+import type { Page } from "@/payload-types";
 
 type PageParams = {
     slug?: string;
@@ -22,9 +23,13 @@ export type PageTemplateArgs = {
     locale: AppLocale;
     params: Promise<PageParams>;
     pathPrefix?: string;
+    pageType?: "branch";
 };
 
-export async function generatePageStaticParams(locale: AppLocale) {
+export async function generatePageStaticParams(
+    locale: AppLocale,
+    pageType?: "branch",
+) {
     const payload = await getPayload({ config: configPromise });
     const pages = await payload.find({
         collection: "pages",
@@ -33,6 +38,11 @@ export async function generatePageStaticParams(locale: AppLocale) {
         locale: "all",
         overrideAccess: false,
         pagination: false,
+        where: {
+            pageType: pageType
+                ? { equals: pageType }
+                : { not_equals: "branch" },
+        },
         select: {
             slug: true,
         },
@@ -58,6 +68,7 @@ export async function PageTemplate({
     locale,
     params: paramsPromise,
     pathPrefix,
+    pageType,
 }: PageTemplateArgs) {
     const { isEnabled: draft } = await draftMode();
     const { slug = "home" } = await paramsPromise;
@@ -70,6 +81,7 @@ export async function PageTemplate({
     const page = await queryPageBySlug({
         locale,
         slug: decodedSlug,
+        pageType,
     });
 
     if (!page) {
@@ -94,6 +106,8 @@ export async function PageTemplate({
                 blocks={layout}
                 locale={locale}
                 isFirstSection={startsWithHero}
+                page={page}
+                draft={draft}
             />
         </article>
     );
@@ -103,12 +117,14 @@ export async function generatePageMetadata({
     locale,
     params: paramsPromise,
     pathPrefix,
+    pageType,
 }: PageTemplateArgs): Promise<Metadata> {
     const { slug = "home" } = await paramsPromise;
     const decodedSlug = decodeURIComponent(slug);
     const page = await queryPageBySlug({
         locale,
         slug: decodedSlug,
+        pageType,
     });
 
     return generateMeta({
@@ -124,7 +140,15 @@ export async function generatePageMetadata({
 }
 
 const queryPageBySlug = cache(
-    async ({ locale, slug }: { locale: AppLocale; slug: string }) => {
+    async ({
+        locale,
+        slug,
+        pageType,
+    }: {
+        locale: AppLocale;
+        slug: string;
+        pageType?: "branch";
+    }): Promise<Page | null> => {
         const { isEnabled: draft } = await draftMode();
         const payload = await getPayload({ config: configPromise });
 
@@ -137,6 +161,9 @@ const queryPageBySlug = cache(
             overrideAccess: draft,
             pagination: false,
             where: {
+                pageType: pageType
+                    ? { equals: pageType }
+                    : { not_equals: "branch" },
                 slug: {
                     equals: slug,
                 },
@@ -159,6 +186,9 @@ const queryPageBySlug = cache(
             overrideAccess: draft,
             pagination: false,
             where: {
+                pageType: pageType
+                    ? { equals: pageType }
+                    : { not_equals: "branch" },
                 slug: {
                     equals: slug,
                 },

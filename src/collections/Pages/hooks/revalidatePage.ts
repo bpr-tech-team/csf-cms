@@ -5,43 +5,48 @@ import type {
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
+import { locales, withLocalePrefix } from "@/i18n/config";
 import type { Page } from "../../../payload-types";
+import { getPagePath } from "@/utilities/getPagePath";
+import { BRANCHES_CACHE_TAG } from "@/utilities/branchData";
 
 export const revalidatePage: CollectionAfterChangeHook<Page> = ({
     doc,
     previousDoc,
-    req: { payload, context, locale: reqLocale },
+    req: { payload, context },
 }) => {
     if (!context.disableRevalidate) {
-        const locale = isLocale(reqLocale) ? reqLocale : defaultLocale;
-
         if (doc._status === "published") {
-            const path = withLocalePrefix(
-                doc.slug === "home" ? "/" : `/${doc.slug}`,
-                locale,
-            );
-
-            payload.logger.info(`Revalidating page at path: ${path}`);
-
-            revalidatePath(path);
+            for (const locale of locales) {
+                const path = withLocalePrefix(getPagePath(doc), locale);
+                payload.logger.info(`Revalidating page at path: ${path}`);
+                revalidatePath(path);
+            }
             revalidateTag("pages-sitemap", "max");
         }
 
         // If the page was previously published, we need to revalidate the old path
         if (
             previousDoc?._status === "published" &&
-            doc._status !== "published"
+            (doc._status !== "published" ||
+                doc.slug !== previousDoc.slug ||
+                doc.pageType !== previousDoc.pageType)
         ) {
-            const oldPath = withLocalePrefix(
-                previousDoc.slug === "home" ? "/" : `/${previousDoc.slug}`,
-                locale,
-            );
-
-            payload.logger.info(`Revalidating old page at path: ${oldPath}`);
-
-            revalidatePath(oldPath);
+            for (const locale of locales) {
+                revalidatePath(
+                    withLocalePrefix(getPagePath(previousDoc), locale),
+                );
+            }
             revalidateTag("pages-sitemap", "max");
+        }
+
+        if (doc.pageType === "branch" || previousDoc?.pageType === "branch") {
+            // Both languages and all grids share this data; expire immediately
+            // so publication, unpublication and edits appear on the next request.
+            revalidateTag(BRANCHES_CACHE_TAG, { expire: 0 });
+            revalidateTag(`pages_${doc.id}`, { expire: 0 });
+            revalidateTag("global_header", { expire: 0 });
+            revalidateTag("global_footer", { expire: 0 });
         }
     }
     return doc;
@@ -49,17 +54,19 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({
     doc,
-    req: { context, locale: reqLocale },
+    req: { context },
 }) => {
     if (!context.disableRevalidate) {
-        const locale = isLocale(reqLocale) ? reqLocale : defaultLocale;
-        const path = withLocalePrefix(
-            doc?.slug === "home" ? "/" : `/${doc?.slug}`,
-            locale,
-        );
-
-        revalidatePath(path);
+        for (const locale of locales) {
+            revalidatePath(withLocalePrefix(getPagePath(doc), locale));
+        }
         revalidateTag("pages-sitemap", "max");
+        if (doc.pageType === "branch") {
+            revalidateTag(BRANCHES_CACHE_TAG, { expire: 0 });
+            revalidateTag(`pages_${doc.id}`, { expire: 0 });
+            revalidateTag("global_header", { expire: 0 });
+            revalidateTag("global_footer", { expire: 0 });
+        }
     }
 
     return doc;

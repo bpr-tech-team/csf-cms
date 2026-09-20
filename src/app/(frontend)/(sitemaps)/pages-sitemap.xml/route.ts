@@ -4,6 +4,7 @@ import config from "@payload-config";
 import { locales, defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { unstable_cache } from "next/cache";
 import { getCanonicalUrl, getSiteUrl } from "@/seo/config";
+import { getPagePath } from "@/utilities/getPagePath";
 
 const getPagesSitemap = unstable_cache(
     async () => {
@@ -25,6 +26,7 @@ const getPagesSitemap = unstable_cache(
             },
             select: {
                 slug: true,
+                pageType: true,
                 updatedAt: true,
             },
         });
@@ -55,7 +57,10 @@ const getPagesSitemap = unstable_cache(
                           return {
                               loc: getCanonicalUrl(
                                   withLocalePrefix(
-                                      slug === "home" ? "/" : `/${slug}`,
+                                      getPagePath({
+                                          slug,
+                                          pageType: page.pageType,
+                                      }),
                                       locale,
                                   ),
                               ),

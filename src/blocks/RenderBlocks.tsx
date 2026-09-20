@@ -5,6 +5,10 @@ import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
 import { AboutHeroBlock } from "@/blocks/AboutHero/Component";
+import { ContactHeroBlock } from "@/blocks/ContactHero/Component";
+import { BranchHeroBlock } from "@/blocks/BranchHero/Component";
+import { BranchesGridBlock } from "@/blocks/BranchesGrid/Component";
+import { BranchDetailsBlock } from "@/blocks/BranchDetails/Component";
 import { HomepageHero } from "@/blocks/HomepageHero/Component";
 import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
@@ -33,8 +37,16 @@ export const RenderBlocks: React.FC<{
     blocks: Page["layout"][0][];
     locale?: AppLocale;
     isFirstSection?: boolean;
+    page?: Page;
+    draft?: boolean;
 }> = (props) => {
-    const { blocks, locale = defaultLocale, isFirstSection = false } = props;
+    const {
+        blocks,
+        locale = defaultLocale,
+        isFirstSection = false,
+        page,
+        draft = false,
+    } = props;
 
     const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0;
 
@@ -45,6 +57,42 @@ export const RenderBlocks: React.FC<{
                     const { blockType } = block;
 
                     switch (blockType) {
+                        case "contactHero":
+                            return (
+                                <ContactHeroBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                    isPageIntro={isFirstSection && index === 0}
+                                />
+                            );
+                        case "branchHero":
+                            return (
+                                <BranchHeroBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                    isPageIntro={isFirstSection && index === 0}
+                                />
+                            );
+                        case "branchesGrid":
+                            return (
+                                <BranchesGridBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                    draft={draft}
+                                />
+                            );
+                        case "branchDetails":
+                            return (
+                                <BranchDetailsBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                    page={page}
+                                />
+                            );
                         case "homepageHero":
                             return (
                                 <HomepageHero

@@ -1,6 +1,8 @@
 import { PreviewSearchParams } from "@/app/(frontend)/next/preview/route";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import { PayloadRequest, CollectionSlug } from "payload";
+import type { Page } from "@/payload-types";
+import { getPagePath } from "./getPagePath";
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
     posts: "/posts",
@@ -11,9 +13,15 @@ type Props = {
     collection: keyof typeof collectionPrefixMap;
     slug: string;
     req: PayloadRequest;
+    pageType?: Page["pageType"];
 };
 
-export const generatePreviewPath = ({ collection, req, slug }: Props) => {
+export const generatePreviewPath = ({
+    collection,
+    req,
+    slug,
+    pageType,
+}: Props) => {
     if (slug === undefined || slug === null) {
         return null;
     }
@@ -23,8 +31,8 @@ export const generatePreviewPath = ({ collection, req, slug }: Props) => {
 
     const locale = isLocale(req.locale) ? req.locale : defaultLocale;
     const path = withLocalePrefix(
-        collection === "pages" && slug === "home"
-            ? "/"
+        collection === "pages"
+            ? getPagePath({ slug, pageType })
             : `${collectionPrefixMap[collection]}/${encodedSlug}`,
         locale,
     );

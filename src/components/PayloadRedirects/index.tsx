@@ -6,6 +6,7 @@ import { getCachedRedirects } from "@/utilities/getRedirects";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { notFound, redirect } from "next/navigation";
+import { getPagePath } from "@/utilities/getPagePath";
 
 interface Props {
     disableNotFound?: boolean;
@@ -32,35 +33,27 @@ export const PayloadRedirects: React.FC<Props> = async ({
             );
         }
 
-        let redirectUrl: string;
-
-        if (typeof redirectItem.to?.reference?.value === "string") {
-            const collection = redirectItem.to?.reference?.relationTo;
-            const id = redirectItem.to?.reference?.value;
-
-            const document = (await getCachedDocument(
-                collection,
-                id,
-                locale,
-            )()) as Page | Post;
-            redirectUrl = withLocalePrefix(
-                `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
-                    document?.slug
-                }`,
-                locale,
-            );
-        } else {
-            redirectUrl = withLocalePrefix(
-                `${redirectItem.to?.reference?.relationTo !== "pages" ? `/${redirectItem.to?.reference?.relationTo}` : ""}/${
-                    typeof redirectItem.to?.reference?.value === "object"
-                        ? redirectItem.to?.reference?.value?.slug
-                        : ""
-                }`,
-                locale,
-            );
+        const reference = redirectItem.to?.reference;
+        if (reference?.value != null) {
+            const document =
+                typeof reference.value === "object"
+                    ? reference.value
+                    : ((await getCachedDocument(
+                          reference.relationTo,
+                          reference.value,
+                          locale,
+                      )()) as Page | Post);
+            if (document?.slug) {
+                redirect(
+                    withLocalePrefix(
+                        reference.relationTo === "pages"
+                            ? getPagePath(document as Page)
+                            : `/posts/${document.slug}`,
+                        locale,
+                    ),
+                );
+            }
         }
-
-        if (redirectUrl) redirect(redirectUrl);
     }
 
     if (disableNotFound) return null;

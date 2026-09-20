@@ -1,6 +1,7 @@
 import * as migration_20260908_222040_initial from "./20260908_222040_initial";
 import * as migration_20260914_094542_hero_background from "./20260914_094542_hero_background";
 import * as migration_20260914_133628_form_employee from "./20260914_133628_form_employee";
+import * as migration_20260920_135809_contact_and_branch_blocks from "./20260920_135809_contact_and_branch_blocks";
 
 export const migrations = [
     {
@@ -17,5 +18,10 @@ export const migrations = [
         up: migration_20260914_133628_form_employee.up,
         down: migration_20260914_133628_form_employee.down,
         name: "20260914_133628_form_employee",
+    },
+    {
+        up: migration_20260920_135809_contact_and_branch_blocks.up,
+        down: migration_20260920_135809_contact_and_branch_blocks.down,
+        name: "20260920_135809_contact_and_branch_blocks",
     },
 ];

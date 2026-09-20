@@ -1,4 +1,4 @@
-import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { defaultLocale, withLocalePrefix, type AppLocale } from "@/i18n/config";
 import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import {
     DefaultNodeTypes,
@@ -18,11 +18,13 @@ import type {
     BannerBlock as BannerBlockProps,
     CallToActionBlock as CTABlockProps,
     MediaBlock as MediaBlockProps,
+    Page,
 } from "@/payload-types";
 import { BannerBlock } from "@/blocks/Banner/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { cn } from "@/utilities/ui";
 import { applyRichTextTypography } from "@/utilities/richTextTypography";
+import { getPagePath } from "@/utilities/getPagePath";
 
 type NodeTypes =
     | DefaultNodeTypes
@@ -30,20 +32,33 @@ type NodeTypes =
           CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps
       >;
 
-const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
+const internalDocToHref = (
+    { linkNode }: { linkNode: SerializedLinkNode },
+    locale: AppLocale,
+) => {
     const { value, relationTo } = linkNode.fields.doc!;
     if (typeof value !== "object") {
         throw new Error("Expected value to be an object");
     }
     const slug = value.slug;
-    return relationTo === "posts" ? `/posts/${slug}` : `/${slug}`;
+    return withLocalePrefix(
+        relationTo === "posts"
+            ? `/posts/${slug}`
+            : getPagePath({
+                  slug: slug as string,
+                  pageType: value.pageType as Page["pageType"],
+              }),
+        locale,
+    );
 };
 
 const jsxConverters =
     (locale: AppLocale): JSXConvertersFunction<NodeTypes> =>
     ({ defaultConverters }) => ({
         ...defaultConverters,
-        ...LinkJSXConverter({ internalDocToHref }),
+        ...LinkJSXConverter({
+            internalDocToHref: (args) => internalDocToHref(args, locale),
+        }),
         blocks: {
             banner: ({ node }) => (
                 <BannerBlock

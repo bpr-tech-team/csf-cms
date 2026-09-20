@@ -13,6 +13,7 @@
 .image {
     object-fit: cover;
     object-position: center;
+    opacity: var(--hero-image-opacity, 1);
 }
 
 .background::after {

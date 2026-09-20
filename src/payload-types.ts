@@ -158,10 +158,14 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
-  pageType: 'standard' | 'service' | 'computer';
+  pageType: 'branch' | 'standard' | 'service' | 'computer';
   layout: (
     | HomepageHeroBlock
     | AboutHeroBlock
+    | ContactHeroBlock
+    | BranchHeroBlock
+    | BranchesGridBlock
+    | BranchDetailsBlock
     | CallToActionBlock
     | ContentBlock
     | MediaBlock
@@ -185,6 +189,35 @@ export interface Page {
     | TechnologySpotlightBlock
     | EditorialColumnsBlock
   )[];
+  /**
+   * These details are shared by the branch page and branch grids.
+   */
+  branchInfo?: {
+    address: string;
+    phones: {
+      number: string;
+      id?: string | null;
+    }[];
+    email: string;
+    companyName?: string | null;
+    companyId?: string | null;
+    vatId?: string | null;
+    /**
+     * Optional. Each row can describe one day or a group of days.
+     */
+    openingHours?:
+      | {
+          days: string;
+          hours: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * In Google Maps choose Share → Embed a map. Paste only the src URL, not the full HTML code.
+     */
+    mapEmbedUrl?: string | null;
+    icon?: (number | null) | Media;
+  };
   meta?: {
     title?: string | null;
     /**
@@ -551,6 +584,107 @@ export interface AboutHeroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'aboutHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactHeroBlock".
+ */
+export interface ContactHeroBlock {
+  heading: string;
+  description: string;
+  /**
+   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
+   */
+  backgroundMedia: number | Media;
+  phone: string;
+  callLabel?: string | null;
+  formLabel?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BranchHeroBlock".
+ */
+export interface BranchHeroBlock {
+  heading: string;
+  description: string;
+  /**
+   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
+   */
+  backgroundMedia: number | Media;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'branchHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BranchesGridBlock".
+ */
+export interface BranchesGridBlock {
+  anchorId?: string | null;
+  heading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  items: {
+    branch: number | Page;
+    width: 'standard' | 'wide';
+    showOpeningHours?: boolean | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'branchesGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BranchDetailsBlock".
+ */
+export interface BranchDetailsBlock {
+  anchorId?: string | null;
+  /**
+   * Default: Contact details
+   */
+  contactHeading?: string | null;
+  /**
+   * Default: Opening hours
+   */
+  hoursHeading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'branchDetails';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1743,6 +1877,10 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         homepageHero?: T | HomepageHeroBlockSelect<T>;
         aboutHero?: T | AboutHeroBlockSelect<T>;
+        contactHero?: T | ContactHeroBlockSelect<T>;
+        branchHero?: T | BranchHeroBlockSelect<T>;
+        branchesGrid?: T | BranchesGridBlockSelect<T>;
+        branchDetails?: T | BranchDetailsBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1765,6 +1903,30 @@ export interface PagesSelect<T extends boolean = true> {
         mediaFeatureGrid?: T | MediaFeatureGridBlockSelect<T>;
         technologySpotlight?: T | TechnologySpotlightBlockSelect<T>;
         editorialColumns?: T | EditorialColumnsBlockSelect<T>;
+      };
+  branchInfo?:
+    | T
+    | {
+        address?: T;
+        phones?:
+          | T
+          | {
+              number?: T;
+              id?: T;
+            };
+        email?: T;
+        companyName?: T;
+        companyId?: T;
+        vatId?: T;
+        openingHours?:
+          | T
+          | {
+              days?: T;
+              hours?: T;
+              id?: T;
+            };
+        mapEmbedUrl?: T;
+        icon?: T;
       };
   meta?:
     | T
@@ -1871,6 +2033,81 @@ export interface AboutHeroBlockSelect<T extends boolean = true> {
         id?: T;
       };
   backgroundMedia?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactHeroBlock_select".
+ */
+export interface ContactHeroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  backgroundMedia?: T;
+  phone?: T;
+  callLabel?: T;
+  formLabel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BranchHeroBlock_select".
+ */
+export interface BranchHeroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  backgroundMedia?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BranchesGridBlock_select".
+ */
+export interface BranchesGridBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  heading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  items?:
+    | T
+    | {
+        branch?: T;
+        width?: T;
+        showOpeningHours?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BranchDetailsBlock_select".
+ */
+export interface BranchDetailsBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  contactHeading?: T;
+  hoursHeading?: T;
   id?: T;
   blockName?: T;
 }
