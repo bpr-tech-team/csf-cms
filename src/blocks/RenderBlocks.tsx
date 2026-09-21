@@ -4,18 +4,15 @@ import type { Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 
-import { AboutHeroBlock } from "@/blocks/AboutHero/Component";
-import { ContactHeroBlock } from "@/blocks/ContactHero/Component";
-import { BranchHeroBlock } from "@/blocks/BranchHero/Component";
 import { BranchesGridBlock } from "@/blocks/BranchesGrid/Component";
 import { BranchDetailsBlock } from "@/blocks/BranchDetails/Component";
+import { HeroBlock } from "@/blocks/Hero/Component";
 import { HomepageHero } from "@/blocks/HomepageHero/Component";
 import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
 import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { CenteredCTABlock } from "@/blocks/CenteredCTA/Component";
 import { CompanyTimelineBlock } from "@/blocks/CompanyTimeline/Component";
 import { ComputerAudienceBlock } from "@/blocks/ComputerAudience/Component";
-import { ComputerHeroBlock } from "@/blocks/ComputerHero/Component";
 import { ComputerProductCatalogBlock } from "@/blocks/ComputerProductCatalog/Component";
 import { ContentBlock } from "@/blocks/Content/Component";
 import { EditorialColumnsBlock } from "@/blocks/EditorialColumns/Component";
@@ -28,7 +25,6 @@ import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
 import { ServicesGridBlock } from "@/blocks/ServicesGrid/Component";
 import { FeatureRowsBlock } from "@/blocks/FeatureRows/Component";
-import { ServiceHeroBlock } from "@/blocks/ServiceHero/Component";
 import { ServiceSectionIntroBlock } from "@/blocks/ServiceSectionIntro/Component";
 import { SplitContentBlock } from "@/blocks/SplitContent/Component";
 import { TechnologySpotlightBlock } from "@/blocks/TechnologySpotlight/Component";
@@ -57,18 +53,9 @@ export const RenderBlocks: React.FC<{
                     const { blockType } = block;
 
                     switch (blockType) {
-                        case "contactHero":
+                        case "hero":
                             return (
-                                <ContactHeroBlock
-                                    {...block}
-                                    key={block.id ?? index}
-                                    locale={locale}
-                                    isPageIntro={isFirstSection && index === 0}
-                                />
-                            );
-                        case "branchHero":
-                            return (
-                                <BranchHeroBlock
+                                <HeroBlock
                                     {...block}
                                     key={block.id ?? index}
                                     locale={locale}
@@ -100,15 +87,6 @@ export const RenderBlocks: React.FC<{
                                     key={block.id ?? index}
                                     locale={locale}
                                     isPageIntro={isFirstSection && index === 0}
-                                />
-                            );
-                        case "aboutHero":
-                            return (
-                                <AboutHeroBlock
-                                    {...block}
-                                    isPageIntro={isFirstSection && index === 0}
-                                    key={block.id ?? index}
-                                    locale={locale}
                                 />
                             );
                         case "archive":
@@ -222,16 +200,6 @@ export const RenderBlocks: React.FC<{
                                 />
                             );
 
-                        case "serviceHero":
-                            return (
-                                <ServiceHeroBlock
-                                    {...block}
-                                    isPageIntro={isFirstSection && index === 0}
-                                    key={block.id ?? index}
-                                    locale={locale}
-                                />
-                            );
-
                         case "serviceSectionIntro":
                             return (
                                 <ServiceSectionIntroBlock
@@ -256,16 +224,6 @@ export const RenderBlocks: React.FC<{
                                     locale={locale}
                                     {...block}
                                     key={block.id ?? index}
-                                />
-                            );
-
-                        case "computerHero":
-                            return (
-                                <ComputerHeroBlock
-                                    {...block}
-                                    isPageIntro={isFirstSection && index === 0}
-                                    key={block.id ?? index}
-                                    locale={locale}
                                 />
                             );
 

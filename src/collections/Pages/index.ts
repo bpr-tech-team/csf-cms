@@ -3,9 +3,6 @@ import type { Page } from "@/payload-types";
 
 import { authenticated } from "../../access/authenticated";
 import { authenticatedOrPublished } from "../../access/authenticatedOrPublished";
-import { AboutHero } from "../../blocks/AboutHero/config";
-import { ContactHero } from "@/blocks/ContactHero/config";
-import { BranchHero } from "@/blocks/BranchHero/config";
 import { BranchesGrid } from "@/blocks/BranchesGrid/config";
 import { BranchDetails } from "@/blocks/BranchDetails/config";
 import { branchInfo } from "@/fields/branchInfo";
@@ -16,7 +13,6 @@ import { CenteredCTA } from "../../blocks/CenteredCTA/config";
 import { CompanyTimeline } from "../../blocks/CompanyTimeline/config";
 import { Content } from "../../blocks/Content/config";
 import { ComputerAudience } from "../../blocks/ComputerAudience/config";
-import { ComputerHero } from "../../blocks/ComputerHero/config";
 import { ComputerProductCatalog } from "../../blocks/ComputerProductCatalog/config";
 import { EditorialColumns } from "../../blocks/EditorialColumns/config";
 import { FormBlock } from "../../blocks/Form/config";
@@ -29,8 +25,8 @@ import { ProductsGrid } from "../../blocks/ProductsGrid/config";
 import { ServicesGrid } from "../../blocks/ServicesGrid/config";
 import { TechnologySpotlight } from "../../blocks/TechnologySpotlight/config";
 import { FeatureRows } from "@/blocks/FeatureRows/config";
+import { Hero } from "@/blocks/Hero/config";
 import { HomepageHero } from "@/blocks/HomepageHero/config";
-import { ServiceHero } from "@/blocks/ServiceHero/config";
 import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
 import { SplitContent } from "@/blocks/SplitContent/config";
 import { slugField } from "payload";
@@ -104,10 +100,8 @@ export const Pages: CollectionConfig<"pages"> = {
                             name: "layout",
                             type: "blocks",
                             blocks: [
+                                Hero,
                                 HomepageHero,
-                                AboutHero,
-                                ContactHero,
-                                BranchHero,
                                 BranchesGrid,
                                 BranchDetails,
                                 CallToAction,
@@ -122,11 +116,9 @@ export const Pages: CollectionConfig<"pages"> = {
                                 CenteredCTA,
                                 ProcessSteps,
                                 CompanyTimeline,
-                                ServiceHero,
                                 ServiceSectionIntro,
                                 SplitContent,
                                 FeatureRows,
-                                ComputerHero,
                                 ComputerAudience,
                                 ComputerProductCatalog,
                                 MediaFeatureGrid,

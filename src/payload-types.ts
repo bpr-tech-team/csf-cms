@@ -158,12 +158,13 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
+  /**
+   * The page type cannot be changed after the first save, including a draft.
+   */
   pageType: 'branch' | 'standard' | 'service' | 'computer';
   layout: (
+    | HeroBlock
     | HomepageHeroBlock
-    | AboutHeroBlock
-    | ContactHeroBlock
-    | BranchHeroBlock
     | BranchesGridBlock
     | BranchDetailsBlock
     | CallToActionBlock
@@ -178,11 +179,9 @@ export interface Page {
     | CenteredCtaBlock
     | ProcessStepsBlock
     | CompanyTimelineBlock
-    | ServiceHeroBlock
     | ServiceSectionIntroBlock
     | SplitContentBlock
     | FeatureRowsBlock
-    | ComputerHeroBlock
     | ComputerAudienceBlock
     | ComputerProductCatalogBlock
     | MediaFeatureGridBlock
@@ -238,94 +237,93 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HomepageHeroBlock".
+ * via the `definition` "HeroBlock".
  */
-export interface HomepageHeroBlock {
+export interface HeroBlock {
+  eyebrow?: string | null;
+  heading: string;
+  description?: string | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
    */
-  backgroundMedia?: (number | null) | Media;
-  slides?:
-    | {
-        heading: string;
-        description: string;
-        links?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
-                url?: string | null;
-                label: string;
-                /**
-                 * Choose how the link should be rendered.
-                 */
-                appearance?: ('default' | 'outline') | null;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  autoplay?: boolean | null;
-  /**
-   * Time between slides in milliseconds.
-   */
-  autoplayInterval?: number | null;
-  intro: {
-    eyebrow?: string | null;
-    heading: string;
-    /**
-     * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
-     */
-    highlightedTexts?:
-      | {
-          text: string;
-          id?: string | null;
-        }[]
-      | null;
-    description: string;
-  };
-  quickLinks?:
-    | {
-        image: number | Media;
-        icon: number | Media;
-        title: string;
-        links?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
-                url?: string | null;
-                label: string;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
+  backgroundMedia: number | Media;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'homepageHero';
+  blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  heroImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -448,56 +446,6 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -548,99 +496,95 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutHeroBlock".
+ * via the `definition` "HomepageHeroBlock".
  */
-export interface AboutHeroBlock {
-  heading: string;
-  description: string;
-  links?:
+export interface HomepageHeroBlock {
+  /**
+   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
+   */
+  backgroundMedia?: (number | null) | Media;
+  slides?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
+        eyebrow?: string | null;
+        heading: string;
+        description?: string | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
+  autoplay?: boolean | null;
   /**
-   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
+   * Time between slides in milliseconds.
    */
-  backgroundMedia: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'aboutHero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactHeroBlock".
- */
-export interface ContactHeroBlock {
-  heading: string;
-  description: string;
-  /**
-   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
-   */
-  backgroundMedia: number | Media;
-  phone: string;
-  callLabel?: string | null;
-  formLabel?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'contactHero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BranchHeroBlock".
- */
-export interface BranchHeroBlock {
-  heading: string;
-  description: string;
-  /**
-   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
-   */
-  backgroundMedia: number | Media;
-  links?:
+  autoplayInterval?: number | null;
+  intro: {
+    eyebrow?: string | null;
+    heading: string;
+    /**
+     * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+     */
+    highlightedTexts?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    description: string;
+  };
+  quickLinks?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
+        image: number | Media;
+        icon: number | Media;
+        title: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'branchHero';
+  blockType: 'homepageHero';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1246,45 +1190,6 @@ export interface CompanyTimelineBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ServiceHeroBlock".
- */
-export interface ServiceHeroBlock {
-  heading: string;
-  description: string;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
-   */
-  backgroundMedia: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'serviceHero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ServiceSectionIntroBlock".
  */
 export interface ServiceSectionIntroBlock {
@@ -1379,45 +1284,6 @@ export interface FeatureRowsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'featureRows';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ComputerHeroBlock".
- */
-export interface ComputerHeroBlock {
-  heading: string;
-  description: string;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
-   */
-  backgroundMedia: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'computerHero';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1875,10 +1741,8 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        hero?: T | HeroBlockSelect<T>;
         homepageHero?: T | HomepageHeroBlockSelect<T>;
-        aboutHero?: T | AboutHeroBlockSelect<T>;
-        contactHero?: T | ContactHeroBlockSelect<T>;
-        branchHero?: T | BranchHeroBlockSelect<T>;
         branchesGrid?: T | BranchesGridBlockSelect<T>;
         branchDetails?: T | BranchDetailsBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
@@ -1893,11 +1757,9 @@ export interface PagesSelect<T extends boolean = true> {
         centeredCta?: T | CenteredCtaBlockSelect<T>;
         processSteps?: T | ProcessStepsBlockSelect<T>;
         companyTimeline?: T | CompanyTimelineBlockSelect<T>;
-        serviceHero?: T | ServiceHeroBlockSelect<T>;
         serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
         splitContent?: T | SplitContentBlockSelect<T>;
         featureRows?: T | FeatureRowsBlockSelect<T>;
-        computerHero?: T | ComputerHeroBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
         mediaFeatureGrid?: T | MediaFeatureGridBlockSelect<T>;
@@ -1944,6 +1806,33 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock_select".
+ */
+export interface HeroBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  description?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  backgroundMedia?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "HomepageHeroBlock_select".
  */
 export interface HomepageHeroBlockSelect<T extends boolean = true> {
@@ -1951,6 +1840,7 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
   slides?:
     | T
     | {
+        eyebrow?: T;
         heading?: T;
         description?: T;
         links?:
@@ -2004,72 +1894,6 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
                     label?: T;
                   };
               id?: T;
-            };
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutHeroBlock_select".
- */
-export interface AboutHeroBlockSelect<T extends boolean = true> {
-  heading?: T;
-  description?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  backgroundMedia?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactHeroBlock_select".
- */
-export interface ContactHeroBlockSelect<T extends boolean = true> {
-  heading?: T;
-  description?: T;
-  backgroundMedia?: T;
-  phone?: T;
-  callLabel?: T;
-  formLabel?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BranchHeroBlock_select".
- */
-export interface BranchHeroBlockSelect<T extends boolean = true> {
-  heading?: T;
-  description?: T;
-  backgroundMedia?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
             };
         id?: T;
       };
@@ -2381,32 +2205,6 @@ export interface CompanyTimelineBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ServiceHeroBlock_select".
- */
-export interface ServiceHeroBlockSelect<T extends boolean = true> {
-  heading?: T;
-  description?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  backgroundMedia?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ServiceSectionIntroBlock_select".
  */
 export interface ServiceSectionIntroBlockSelect<T extends boolean = true> {
@@ -2452,32 +2250,6 @@ export interface FeatureRowsBlockSelect<T extends boolean = true> {
         mediaPosition?: T;
         id?: T;
       };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ComputerHeroBlock_select".
- */
-export interface ComputerHeroBlockSelect<T extends boolean = true> {
-  heading?: T;
-  description?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  backgroundMedia?: T;
   id?: T;
   blockName?: T;
 }

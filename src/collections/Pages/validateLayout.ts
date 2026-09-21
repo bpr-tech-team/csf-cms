@@ -1,13 +1,6 @@
 import type { BlocksFieldValidation } from "payload";
 
-export const PAGE_HERO_BLOCK_TYPES = [
-    "homepageHero",
-    "aboutHero",
-    "serviceHero",
-    "computerHero",
-    "contactHero",
-    "branchHero",
-] as const;
+export const PAGE_HERO_BLOCK_TYPES = ["hero", "homepageHero"] as const;
 
 const pageHeroBlockTypes = new Set<string>(PAGE_HERO_BLOCK_TYPES);
 
@@ -37,23 +30,20 @@ export const validatePageLayout: BlocksFieldValidation = (value, { data }) => {
         return "Úvodní blok musí být na prvním místě.";
     }
 
-    const branchBlocks = value.filter(
+    const branchDetailsBlocks = value.filter(
         (block) =>
             block &&
             typeof block === "object" &&
             "blockType" in block &&
-            ["branchHero", "branchDetails"].includes(String(block.blockType)),
+            block.blockType === "branchDetails",
     );
     if (
-        branchBlocks.length &&
+        branchDetailsBlocks.length &&
         (!data || !("pageType" in data) || data.pageType !== "branch")
     ) {
         return "Bloky pobočky lze použít pouze na stránce typu Pobočka.";
     }
-    if (
-        branchBlocks.filter((block) => block.blockType === "branchDetails")
-            .length > 1
-    ) {
+    if (branchDetailsBlocks.length > 1) {
         return "Kontakty a mapu pobočky lze na stránku přidat pouze jednou.";
     }
 

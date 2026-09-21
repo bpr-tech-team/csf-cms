@@ -4,7 +4,8 @@ import { applyTypography } from "@/utilities/typography";
 import type { CSSProperties } from "react";
 
 import { MediaAsset } from "@/components/MediaAsset";
-import { HeroBackground } from "@/components/HeroBackground";
+import { HeroContent } from "@/components/HeroContent";
+import { HeroSection } from "@/components/HeroSection";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
@@ -41,7 +42,6 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
         ? availableSlides[activeIndex % slideCount]
         : null;
     const interval = Math.min(Math.max(autoplayInterval ?? 7000, 3000), 20000);
-    const Heading = isPageIntro ? "h1" : "h2";
     const messages = frontendMessages[locale];
 
     if (!activeSlide) return null;
@@ -54,139 +54,97 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
     } as CSSProperties;
 
     return (
-        <section
-            aria-label={messages.heroPresentation}
-            className={cn(
-                "relative isolate overflow-hidden bg-ink-900 pb-20 text-paper-0 md:pb-24 xl:pb-21",
-                isPageIntro ? "-mt-42 pt-58" : "pt-20 md:pt-24",
-            )}
-            data-theme="dark"
+        <HeroSection
+            backgroundMedia={backgroundMedia}
+            isPageIntro={isPageIntro}
+            label={messages.heroPresentation}
+            onAutoplayChange={setIsAutoplayRunning}
         >
-            <HeroBackground
-                isPageIntro={isPageIntro}
-                onAutoplayChange={setIsAutoplayRunning}
-                resource={backgroundMedia}
-            />
-
-            <div className="container relative z-10">
-                <div aria-live="polite" className="max-w-[68rem]">
-                    <div
-                        className={styles.slide}
-                        key={activeSlide.id ?? activeIndex}
-                    >
-                        <Heading className="max-w-[62rem] text-4xl leading-[1.08] font-bold tracking-normal text-balance min-[375px]:text-5xl sm:text-6xl md:text-7xl xl:text-display-xl">
-                            {applyTypography(activeSlide.heading, { locale })}
-                        </Heading>
-                        <p className="mt-7 max-w-3xl text-body-md leading-8 font-normal text-paper-0/90 md:mt-9 md:text-body-lg">
-                            {applyTypography(activeSlide.description, {
-                                locale,
-                            })}
-                        </p>
-
-                        {Array.isArray(activeSlide.links) &&
-                            activeSlide.links.length > 0 && (
-                                <ul className="mt-8 flex flex-wrap gap-3 md:mt-10">
-                                    {activeSlide.links.map(
-                                        ({ id, link }, index) => (
-                                            <li key={id ?? index}>
-                                                <CMSLink
-                                                    {...link}
-                                                    appearance={
-                                                        link.appearance ??
-                                                        "default"
-                                                    }
-                                                    className={cn(
-                                                        "h-13 px-7",
-                                                        link.appearance ===
-                                                            "outline" &&
-                                                            "border-brand-500/50 text-paper-0 hover:border-brand-500 hover:bg-brand-100 hover:text-paper-0",
-                                                    )}
-                                                    locale={locale}
-                                                    size="lg"
-                                                />
-                                            </li>
-                                        ),
-                                    )}
-                                </ul>
-                            )}
-                    </div>
+            <div aria-live="polite">
+                <div
+                    className={styles.slide}
+                    key={activeSlide.id ?? activeIndex}
+                >
+                    <HeroContent
+                        {...activeSlide}
+                        isPageIntro={isPageIntro}
+                        locale={locale}
+                    />
                 </div>
+            </div>
 
-                {slideCount > 1 && (
-                    <div
-                        aria-label={messages.selectSlide}
-                        className="mt-14 flex items-center gap-3"
-                        role="group"
-                    >
-                        <div className="relative h-1 flex-1 overflow-hidden bg-[#282828]">
-                            <span
-                                className={cn(
-                                    styles.progress,
-                                    "absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
-                                )}
-                                key={`progress-${activeIndex}-${interval}`}
-                                onAnimationEnd={() =>
-                                    setActiveIndex(
-                                        (current) => (current + 1) % slideCount,
-                                    )
-                                }
-                                style={progressStyle}
-                            />
-                        </div>
-                        <div className="flex items-center gap-3">
-                            {availableSlides.map((slide, index) => (
-                                <button
-                                    aria-current={
-                                        index === activeIndex
-                                            ? "true"
-                                            : undefined
-                                    }
-                                    aria-label={`${messages.slide} ${index + 1}`}
-                                    className={cn(
-                                        "size-3.5 rounded-full border border-paper-0/70 transition-colors duration-fast",
-                                        index === activeIndex &&
-                                            "border-brand-500 bg-brand-500",
-                                    )}
-                                    key={slide.id ?? index}
-                                    onClick={() => setActiveIndex(index)}
-                                    type="button"
-                                />
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {intro && (
-                    <div className="mx-auto mt-14 max-w-[62rem] text-center">
-                        <SectionHeading
-                            locale={locale}
-                            align="center"
-                            eyebrow={intro.eyebrow}
-                            heading={intro.heading}
-                            highlightedTexts={intro.highlightedTexts}
-                            showRule={false}
-                            size="compact"
-                            tone="inverse"
+            {slideCount > 1 && (
+                <div
+                    aria-label={messages.selectSlide}
+                    className="mt-14 flex items-center gap-3"
+                    role="group"
+                >
+                    <div className="relative h-1 flex-1 overflow-hidden bg-[#282828]">
+                        <span
+                            className={cn(
+                                styles.progress,
+                                "absolute inset-y-0 left-0 w-full origin-left bg-brand-500",
+                            )}
+                            key={`progress-${activeIndex}-${interval}`}
+                            onAnimationEnd={() =>
+                                setActiveIndex(
+                                    (current) => (current + 1) % slideCount,
+                                )
+                            }
+                            style={progressStyle}
                         />
-                        <p className="mx-auto mt-5 max-w-[59rem] text-body-md font-normal text-paper-0/80 md:text-body-lg md:leading-8">
-                            {applyTypography(intro.description, { locale })}
-                        </p>
                     </div>
-                )}
-
-                {Array.isArray(quickLinks) && quickLinks.length > 0 && (
-                    <div className="mt-12 grid gap-4 lg:mt-15 lg:grid-cols-3">
-                        {quickLinks.map((item, index) => (
-                            <QuickLinkCard
-                                item={item}
-                                key={item.id ?? index}
-                                locale={locale}
+                    <div className="flex items-center gap-3">
+                        {availableSlides.map((slide, index) => (
+                            <button
+                                aria-current={
+                                    index === activeIndex ? "true" : undefined
+                                }
+                                aria-label={`${messages.slide} ${index + 1}`}
+                                className={cn(
+                                    "size-3.5 rounded-full border border-paper-0/70 transition-colors duration-fast",
+                                    index === activeIndex &&
+                                        "border-brand-500 bg-brand-500",
+                                )}
+                                key={slide.id ?? index}
+                                onClick={() => setActiveIndex(index)}
+                                type="button"
                             />
                         ))}
                     </div>
-                )}
-            </div>
-        </section>
+                </div>
+            )}
+
+            {intro && (
+                <div className="mx-auto mt-14 max-w-[62rem] text-center">
+                    <SectionHeading
+                        locale={locale}
+                        align="center"
+                        eyebrow={intro.eyebrow}
+                        heading={intro.heading}
+                        highlightedTexts={intro.highlightedTexts}
+                        showRule={false}
+                        size="compact"
+                        tone="inverse"
+                    />
+                    <p className="mx-auto mt-5 max-w-[59rem] text-body-md font-normal text-paper-0/80 md:text-body-lg md:leading-8">
+                        {applyTypography(intro.description, { locale })}
+                    </p>
+                </div>
+            )}
+
+            {Array.isArray(quickLinks) && quickLinks.length > 0 && (
+                <div className="mt-12 grid gap-4 lg:mt-15 lg:grid-cols-3">
+                    {quickLinks.map((item, index) => (
+                        <QuickLinkCard
+                            item={item}
+                            key={item.id ?? index}
+                            locale={locale}
+                        />
+                    ))}
+                </div>
+            )}
+        </HeroSection>
     );
 };
 

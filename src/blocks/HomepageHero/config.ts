@@ -1,6 +1,7 @@
 import type { Block } from "payload";
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 import { heroBackgroundField } from "@/fields/heroBackground";
+import { heroContentFields } from "@/fields/heroContent";
 import { linkGroup } from "@/fields/linkGroup";
 
 export const HomepageHero: Block = {
@@ -15,31 +16,7 @@ export const HomepageHero: Block = {
             admin: {
                 initCollapsed: true,
             },
-            fields: [
-                {
-                    name: "heading",
-                    type: "textarea",
-                    label: {
-                        cs: "Nadpis",
-                        en: "Heading",
-                    },
-                    required: true,
-                },
-                {
-                    name: "description",
-                    type: "textarea",
-                    label: {
-                        cs: "Popis",
-                        en: "Description",
-                    },
-                    required: true,
-                },
-                linkGroup({
-                    overrides: {
-                        maxRows: 2,
-                    },
-                }),
-            ],
+            fields: heroContentFields(),
             label: {
                 cs: "Snímky hero sekce",
                 en: "Hero slides",
