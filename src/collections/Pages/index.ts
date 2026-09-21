@@ -9,6 +9,7 @@ import { BranchHero } from "@/blocks/BranchHero/config";
 import { BranchesGrid } from "@/blocks/BranchesGrid/config";
 import { BranchDetails } from "@/blocks/BranchDetails/config";
 import { branchInfo } from "@/fields/branchInfo";
+import { pageType } from "@/fields/pageType";
 import { Archive } from "../../blocks/ArchiveBlock/config";
 import { CallToAction } from "../../blocks/CallToAction/config";
 import { CenteredCTA } from "../../blocks/CenteredCTA/config";
@@ -93,46 +94,7 @@ export const Pages: CollectionConfig<"pages"> = {
             localized: true,
             required: true,
         },
-        {
-            name: "pageType",
-            type: "select",
-            admin: {
-                position: "sidebar",
-            },
-            defaultValue: "standard",
-            label: {
-                cs: "Typ stránky",
-                en: "Page type",
-            },
-            options: [
-                {
-                    label: { cs: "Pobočka", en: "Branch" },
-                    value: "branch",
-                },
-                {
-                    label: {
-                        cs: "Standardní stránka",
-                        en: "Standard page",
-                    },
-                    value: "standard",
-                },
-                {
-                    label: {
-                        cs: "Služba",
-                        en: "Service",
-                    },
-                    value: "service",
-                },
-                {
-                    label: {
-                        cs: "Počítače",
-                        en: "Computers",
-                    },
-                    value: "computer",
-                },
-            ],
-            required: true,
-        },
+        pageType,
         {
             type: "tabs",
             tabs: [

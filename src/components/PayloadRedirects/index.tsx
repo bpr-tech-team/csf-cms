@@ -1,7 +1,7 @@
 import type React from "react";
-import type { Page, Post } from "@/payload-types";
+import type { Page } from "@/payload-types";
 
-import { getCachedDocument } from "@/utilities/getDocument";
+import { getDocument } from "@/utilities/getDocument";
 import { getCachedRedirects } from "@/utilities/getRedirects";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
@@ -25,7 +25,7 @@ export const PayloadRedirects: React.FC<Props> = async ({
     const redirectItem = redirects.find((redirect) => redirect.from === url);
 
     if (redirectItem) {
-        if (redirectItem.to?.url) {
+        if (redirectItem.to?.type === "custom" && redirectItem.to.url) {
             redirect(
                 redirectItem.to.url.startsWith("/")
                     ? withLocalePrefix(redirectItem.to.url, locale)
@@ -34,15 +34,16 @@ export const PayloadRedirects: React.FC<Props> = async ({
         }
 
         const reference = redirectItem.to?.reference;
-        if (reference?.value != null) {
-            const document =
+        if (redirectItem.to?.type !== "custom" && reference?.value != null) {
+            const id =
                 typeof reference.value === "object"
-                    ? reference.value
-                    : ((await getCachedDocument(
-                          reference.relationTo,
-                          reference.value,
-                          locale,
-                      )()) as Page | Post);
+                    ? reference.value.id
+                    : reference.value;
+            const document = await getDocument(
+                reference.relationTo,
+                id,
+                locale,
+            );
             if (document?.slug) {
                 redirect(
                     withLocalePrefix(

@@ -27,4 +27,8 @@ node_modules/
 .pnpm-store/
 .tmp/
 docs/
-tests/
+tests/*
+!tests/int/
+tests/int/*
+!tests/int/branches.int.spec.tsx
+!tests/int/branch-query.int.spec.ts
