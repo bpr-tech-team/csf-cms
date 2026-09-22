@@ -4,6 +4,14 @@ import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const ComputerAudience: Block = {
     slug: "computerAudience",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/computer-audience.webp",
+                alt: "Přepínač cílových skupin",
+            },
+        },
+    },
     interfaceName: "ComputerAudienceBlock",
     fields: [
         {

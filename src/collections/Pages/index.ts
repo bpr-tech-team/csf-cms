@@ -7,17 +7,13 @@ import { BranchesGrid } from "@/blocks/BranchesGrid/config";
 import { BranchDetails } from "@/blocks/BranchDetails/config";
 import { branchInfo } from "@/fields/branchInfo";
 import { pageType } from "@/fields/pageType";
-import { Archive } from "../../blocks/ArchiveBlock/config";
-import { CallToAction } from "../../blocks/CallToAction/config";
 import { CenteredCTA } from "../../blocks/CenteredCTA/config";
 import { CompanyTimeline } from "../../blocks/CompanyTimeline/config";
-import { Content } from "../../blocks/Content/config";
 import { ComputerAudience } from "../../blocks/ComputerAudience/config";
 import { ComputerProductCatalog } from "../../blocks/ComputerProductCatalog/config";
 import { EditorialColumns } from "../../blocks/EditorialColumns/config";
 import { FormBlock } from "../../blocks/Form/config";
 import { LogoMarquee } from "../../blocks/LogoMarquee/config";
-import { MediaBlock } from "../../blocks/MediaBlock/config";
 import { MediaFeatureGrid } from "../../blocks/MediaFeatureGrid/config";
 import { MetricsStrip } from "../../blocks/MetricsStrip/config";
 import { ProcessSteps } from "../../blocks/ProcessSteps/config";
@@ -104,10 +100,6 @@ export const Pages: CollectionConfig<"pages"> = {
                                 HomepageHero,
                                 BranchesGrid,
                                 BranchDetails,
-                                CallToAction,
-                                Content,
-                                MediaBlock,
-                                Archive,
                                 FormBlock,
                                 ServicesGrid,
                                 MetricsStrip,

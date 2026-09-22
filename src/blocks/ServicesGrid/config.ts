@@ -5,6 +5,14 @@ import { link } from "@/fields/link";
 
 export const ServicesGrid: Block = {
     slug: "servicesGrid",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/homepage.services.webp",
+                alt: "Mřížka služeb",
+            },
+        },
+    },
     interfaceName: "ServicesGridBlock",
     fields: [
         ...homepageSectionIntro(),

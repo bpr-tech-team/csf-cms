@@ -4,6 +4,14 @@ import { homepageSectionIntro } from "@/fields/homepageSection";
 
 export const ProcessSteps: Block = {
     slug: "processSteps",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/process-steps.webp",
+                alt: "Procesní kroky",
+            },
+        },
+    },
     interfaceName: "ProcessStepsBlock",
     fields: [
         ...homepageSectionIntro({ includeDescription: true }),

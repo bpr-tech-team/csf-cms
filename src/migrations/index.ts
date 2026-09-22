@@ -3,6 +3,8 @@ import * as migration_20260914_094542_hero_background from "./20260914_094542_he
 import * as migration_20260914_133628_form_employee from "./20260914_133628_form_employee";
 import * as migration_20260920_135809_contact_and_branch_blocks from "./20260920_135809_contact_and_branch_blocks";
 import * as migration_20260921_082638_unified_hero from "./20260921_082638_unified_hero";
+import * as migration_20260922_103148_remove_legacy_cta from "./20260922_103148_remove_legacy_cta";
+import * as migration_20260922_110836_remove_content_media_archive from "./20260922_110836_remove_content_media_archive";
 
 export const migrations = [
     {
@@ -29,5 +31,15 @@ export const migrations = [
         up: migration_20260921_082638_unified_hero.up,
         down: migration_20260921_082638_unified_hero.down,
         name: "20260921_082638_unified_hero",
+    },
+    {
+        up: migration_20260922_103148_remove_legacy_cta.up,
+        down: migration_20260922_103148_remove_legacy_cta.down,
+        name: "20260922_103148_remove_legacy_cta",
+    },
+    {
+        up: migration_20260922_110836_remove_content_media_archive.up,
+        down: migration_20260922_110836_remove_content_media_archive.down,
+        name: "20260922_110836_remove_content_media_archive",
     },
 ];

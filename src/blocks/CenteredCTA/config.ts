@@ -4,6 +4,14 @@ import { link } from "@/fields/link";
 
 export const CenteredCTA: Block = {
     slug: "centeredCta",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/cta.webp",
+                alt: "Výzva k akci",
+            },
+        },
+    },
     interfaceName: "CenteredCtaBlock",
     fields: [
         {
@@ -34,12 +42,12 @@ export const CenteredCTA: Block = {
     ],
     labels: {
         plural: {
-            cs: "Centrované výzvy k akci",
-            en: "Centered calls to action",
+            cs: "Výzvy k akci",
+            en: "Calls to Action",
         },
         singular: {
-            cs: "Centrovaná výzva k akci",
-            en: "Centered call to action",
+            cs: "Výzva k akci",
+            en: "Call to Action",
         },
     },
 };

@@ -13,6 +13,14 @@ const validateEmployeeText: TextFieldSingleValidation = (value, options) =>
 
 export const FormBlock: Block = {
     slug: "formBlock",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/form-simple.webp",
+                alt: "Formulářový blok",
+            },
+        },
+    },
     interfaceName: "FormBlock",
     fields: [
         {

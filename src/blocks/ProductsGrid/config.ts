@@ -5,6 +5,14 @@ import { link } from "@/fields/link";
 
 export const ProductsGrid: Block = {
     slug: "productsGrid",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/homepage.products.webp",
+                alt: "Mřížka produktů",
+            },
+        },
+    },
     interfaceName: "ProductsGridBlock",
     fields: [
         ...homepageSectionIntro(),

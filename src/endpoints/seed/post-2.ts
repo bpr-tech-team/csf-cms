@@ -3,11 +3,7 @@ import type { PostArgs } from "./post-1";
 
 export const post2: (
     args: PostArgs,
-) => RequiredDataFromCollectionSlug<"posts"> = ({
-    heroImage,
-    blockImage,
-    author,
-}) => {
+) => RequiredDataFromCollectionSlug<"posts"> = ({ heroImage, author }) => {
     return {
         slug: "global-gaze",
         _status: "published",
@@ -144,16 +140,6 @@ export const post2: (
                         indent: 0,
                         textFormat: 0,
                         version: 1,
-                    },
-                    {
-                        type: "block",
-                        fields: {
-                            blockName: "",
-                            blockType: "mediaBlock",
-                            media: blockImage.id,
-                        },
-                        format: "",
-                        version: 2,
                     },
                     {
                         type: "paragraph",

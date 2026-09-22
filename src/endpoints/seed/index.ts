@@ -159,7 +159,6 @@ export const seed = async ({
         },
         data: post1({
             heroImage: image1Doc,
-            blockImage: image2Doc,
             author: demoAuthor,
         }),
     });
@@ -172,7 +171,6 @@ export const seed = async ({
         },
         data: post2({
             heroImage: image2Doc,
-            blockImage: image3Doc,
             author: demoAuthor,
         }),
     });
@@ -185,7 +183,6 @@ export const seed = async ({
         },
         data: post3({
             heroImage: image3Doc,
-            blockImage: image1Doc,
             author: demoAuthor,
         }),
     });

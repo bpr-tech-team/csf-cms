@@ -8,17 +8,13 @@ import { BranchesGridBlock } from "@/blocks/BranchesGrid/Component";
 import { BranchDetailsBlock } from "@/blocks/BranchDetails/Component";
 import { HeroBlock } from "@/blocks/Hero/Component";
 import { HomepageHero } from "@/blocks/HomepageHero/Component";
-import { ArchiveBlock } from "@/blocks/ArchiveBlock/Component";
-import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { CenteredCTABlock } from "@/blocks/CenteredCTA/Component";
 import { CompanyTimelineBlock } from "@/blocks/CompanyTimeline/Component";
 import { ComputerAudienceBlock } from "@/blocks/ComputerAudience/Component";
 import { ComputerProductCatalogBlock } from "@/blocks/ComputerProductCatalog/Component";
-import { ContentBlock } from "@/blocks/Content/Component";
 import { EditorialColumnsBlock } from "@/blocks/EditorialColumns/Component";
 import { FormBlock } from "@/blocks/Form/Component";
 import { LogoMarqueeBlock } from "@/blocks/LogoMarquee/Component";
-import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import { MediaFeatureGridBlock } from "@/blocks/MediaFeatureGrid/Component";
 import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
 import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
@@ -89,30 +85,6 @@ export const RenderBlocks: React.FC<{
                                     isPageIntro={isFirstSection && index === 0}
                                 />
                             );
-                        case "archive":
-                            return (
-                                <div className="my-16" key={index}>
-                                    <ArchiveBlock {...block} locale={locale} />
-                                </div>
-                            );
-
-                        case "content":
-                            return (
-                                <div className="my-16" key={index}>
-                                    <ContentBlock {...block} locale={locale} />
-                                </div>
-                            );
-
-                        case "cta":
-                            return (
-                                <div className="my-16" key={index}>
-                                    <CallToActionBlock
-                                        {...block}
-                                        locale={locale}
-                                    />
-                                </div>
-                            );
-
                         case "formBlock":
                             if (
                                 typeof block.form !== "object" ||
@@ -128,13 +100,6 @@ export const RenderBlocks: React.FC<{
                                     form={block.form}
                                     key={index}
                                 />
-                            );
-
-                        case "mediaBlock":
-                            return (
-                                <div className="my-16" key={index}>
-                                    <MediaBlock locale={locale} {...block} />
-                                </div>
                             );
 
                         case "servicesGrid":

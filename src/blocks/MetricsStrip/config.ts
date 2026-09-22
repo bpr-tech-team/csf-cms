@@ -2,6 +2,14 @@ import type { Block } from "payload";
 
 export const MetricsStrip: Block = {
     slug: "metricsStrip",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/metrics-strip.webp",
+                alt: "Pás metrik",
+            },
+        },
+    },
     interfaceName: "MetricsStripBlock",
     fields: [
         {

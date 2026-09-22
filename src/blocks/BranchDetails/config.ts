@@ -2,6 +2,14 @@ import type { Block } from "payload";
 
 export const BranchDetails: Block = {
     slug: "branchDetails",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/branch-details.webp",
+                alt: "Kontakty a mapa pobočky",
+            },
+        },
+    },
     interfaceName: "BranchDetailsBlock",
     labels: {
         singular: {

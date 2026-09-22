@@ -2,6 +2,14 @@ import type { Block } from "payload";
 
 export const LogoMarquee: Block = {
     slug: "logoMarquee",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/partners-carousel.webp",
+                alt: "Pás log partnerů",
+            },
+        },
+    },
     interfaceName: "LogoMarqueeBlock",
     fields: [
         {

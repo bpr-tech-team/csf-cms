@@ -3,6 +3,14 @@ import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const BranchesGrid: Block = {
     slug: "branchesGrid",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/branches-grid.webp",
+                alt: "Přehled poboček",
+            },
+        },
+    },
     interfaceName: "BranchesGridBlock",
     labels: {
         singular: { cs: "Přehled poboček", en: "Branches grid" },

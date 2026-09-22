@@ -4,6 +4,14 @@ import { homepageSectionIntro } from "@/fields/homepageSection";
 
 export const CompanyTimeline: Block = {
     slug: "companyTimeline",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/company-timeline.webp",
+                alt: "Časová osa společnosti",
+            },
+        },
+    },
     interfaceName: "CompanyTimelineBlock",
     fields: [
         ...homepageSectionIntro(),

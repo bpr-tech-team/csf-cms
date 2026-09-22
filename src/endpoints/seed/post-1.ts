@@ -3,17 +3,12 @@ import { RequiredDataFromCollectionSlug } from "payload";
 
 export type PostArgs = {
     heroImage: Media;
-    blockImage: Media;
     author: User;
 };
 
 export const post1: (
     args: PostArgs,
-) => RequiredDataFromCollectionSlug<"posts"> = ({
-    heroImage,
-    blockImage,
-    author,
-}) => {
+) => RequiredDataFromCollectionSlug<"posts"> = ({ heroImage, author }) => {
     return {
         slug: "digital-horizons",
         _status: "published",
@@ -246,16 +241,6 @@ export const post1: (
                         indent: 0,
                         textFormat: 0,
                         version: 1,
-                    },
-                    {
-                        type: "block",
-                        fields: {
-                            blockName: "",
-                            blockType: "mediaBlock",
-                            media: blockImage.id,
-                        },
-                        format: "",
-                        version: 2,
                     },
                     {
                         type: "block",

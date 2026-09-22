@@ -6,6 +6,14 @@ import { linkGroup } from "@/fields/linkGroup";
 
 export const HomepageHero: Block = {
     slug: "homepageHero",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/homepage.hero.webp",
+                alt: "Homepage hero",
+            },
+        },
+    },
     interfaceName: "HomepageHeroBlock",
     labels: { singular: "Homepage hero", plural: "Homepage hero" },
     fields: [

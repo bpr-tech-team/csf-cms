@@ -4,6 +4,14 @@ import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const MediaFeatureGrid: Block = {
     slug: "mediaFeatureGrid",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/media-feature-grid.webp",
+                alt: "Mediální přehled vlastností",
+            },
+        },
+    },
     interfaceName: "MediaFeatureGridBlock",
     fields: [
         {

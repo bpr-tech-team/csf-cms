@@ -4,6 +4,14 @@ import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const ComputerProductCatalog: Block = {
     slug: "computerProductCatalog",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/computer-product-catalog.webp",
+                alt: "Katalog počítačů",
+            },
+        },
+    },
     interfaceName: "ComputerProductCatalogBlock",
     fields: [
         {

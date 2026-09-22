@@ -1,5 +1,4 @@
 import { defaultLocale, withLocalePrefix, type AppLocale } from "@/i18n/config";
-import { MediaBlock } from "@/blocks/MediaBlock/Component";
 import {
     DefaultNodeTypes,
     SerializedBlockNode,
@@ -14,23 +13,14 @@ import {
 
 import { CodeBlock, CodeBlockProps } from "@/blocks/Code/Component";
 
-import type {
-    BannerBlock as BannerBlockProps,
-    CallToActionBlock as CTABlockProps,
-    MediaBlock as MediaBlockProps,
-    Page,
-} from "@/payload-types";
+import type { BannerBlock as BannerBlockProps, Page } from "@/payload-types";
 import { BannerBlock } from "@/blocks/Banner/Component";
-import { CallToActionBlock } from "@/blocks/CallToAction/Component";
 import { cn } from "@/utilities/ui";
 import { applyRichTextTypography } from "@/utilities/richTextTypography";
 import { getPagePath } from "@/utilities/getPagePath";
 
 type NodeTypes =
-    | DefaultNodeTypes
-    | SerializedBlockNode<
-          CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps
-      >;
+    DefaultNodeTypes | SerializedBlockNode<BannerBlockProps | CodeBlockProps>;
 
 const internalDocToHref = (
     { linkNode }: { linkNode: SerializedLinkNode },
@@ -67,22 +57,8 @@ const jsxConverters =
                     locale={locale}
                 />
             ),
-            mediaBlock: ({ node }) => (
-                <MediaBlock
-                    className="col-start-1 col-span-3"
-                    imgClassName="m-0"
-                    {...node.fields}
-                    locale={locale}
-                    captionClassName="mx-auto max-w-3xl"
-                    enableGutter={false}
-                    disableInnerContainer={true}
-                />
-            ),
             code: ({ node }) => (
                 <CodeBlock className="col-start-2" {...node.fields} />
-            ),
-            cta: ({ node }) => (
-                <CallToActionBlock {...node.fields} locale={locale} />
             ),
         },
     });

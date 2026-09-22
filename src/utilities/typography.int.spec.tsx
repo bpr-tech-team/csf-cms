@@ -13,9 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RenderBlocks } from "@/blocks/RenderBlocks";
 const NBSP = "\u00a0";
-vi.mock("@/blocks/ArchiveBlock/Component", () => ({
-    ArchiveBlock: () => null,
-}));
 
 // The code block imports Payload admin SCSS, which Node cannot load in Vitest.
 // Code preservation is checked on the Lexical tree below.

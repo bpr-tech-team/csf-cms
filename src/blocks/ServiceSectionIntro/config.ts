@@ -2,6 +2,14 @@ import type { Block } from "payload";
 
 export const ServiceSectionIntro: Block = {
     slug: "serviceSectionIntro",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/heading-description.png",
+                alt: "Nadpis a popis",
+            },
+        },
+    },
     interfaceName: "ServiceSectionIntroBlock",
     fields: [
         {
@@ -39,12 +47,12 @@ export const ServiceSectionIntro: Block = {
     ],
     labels: {
         plural: {
-            cs: "Úvody sekcí služby",
-            en: "Service section intros",
+            cs: "Nadpisy a popisy",
+            en: "Headings and descriptions",
         },
         singular: {
-            cs: "Úvod sekce služby",
-            en: "Service section intro",
+            cs: "Nadpis a popis",
+            en: "Heading and description",
         },
     },
 };
