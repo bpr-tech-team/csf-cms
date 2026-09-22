@@ -15,6 +15,10 @@
 
 @plugin "@tailwindcss/typography";
 
+.payload-richtext .richtext-color * {
+    color: inherit;
+}
+
 @theme {
     --breakpoint-sm: 40rem;
     --breakpoint-md: 48rem;

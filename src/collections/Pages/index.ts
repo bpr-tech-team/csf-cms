@@ -20,7 +20,7 @@ import { ProcessSteps } from "../../blocks/ProcessSteps/config";
 import { ProductsGrid } from "../../blocks/ProductsGrid/config";
 import { ServicesGrid } from "../../blocks/ServicesGrid/config";
 import { TechnologySpotlight } from "../../blocks/TechnologySpotlight/config";
-import { FeatureRows } from "@/blocks/FeatureRows/config";
+import { FlexibleContent } from "@/blocks/FlexibleContent/config";
 import { Hero } from "@/blocks/Hero/config";
 import { HomepageHero } from "@/blocks/HomepageHero/config";
 import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
@@ -110,7 +110,7 @@ export const Pages: CollectionConfig<"pages"> = {
                                 CompanyTimeline,
                                 ServiceSectionIntro,
                                 SplitContent,
-                                FeatureRows,
+                                FlexibleContent,
                                 ComputerAudience,
                                 ComputerProductCatalog,
                                 MediaFeatureGrid,

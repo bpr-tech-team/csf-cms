@@ -9,6 +9,7 @@ import {
     JSXConvertersFunction,
     LinkJSXConverter,
     RichText as ConvertRichText,
+    TextJSXConverter,
 } from "@payloadcms/richtext-lexical/react";
 
 import { CodeBlock, CodeBlockProps } from "@/blocks/Code/Component";
@@ -18,6 +19,7 @@ import { BannerBlock } from "@/blocks/Banner/Component";
 import { cn } from "@/utilities/ui";
 import { applyRichTextTypography } from "@/utilities/richTextTypography";
 import { getPagePath } from "@/utilities/getPagePath";
+import { getTextColor } from "@/fields/TextColorFeature/colors";
 
 type NodeTypes =
     DefaultNodeTypes | SerializedBlockNode<BannerBlockProps | CodeBlockProps>;
@@ -46,6 +48,21 @@ const jsxConverters =
     (locale: AppLocale): JSXConvertersFunction<NodeTypes> =>
     ({ defaultConverters }) => ({
         ...defaultConverters,
+        text: (args) => {
+            const converter = TextJSXConverter.text;
+            const content =
+                typeof converter === "function"
+                    ? converter(args)
+                    : args.node.text;
+            const color = getTextColor(args.node.style);
+            return color ? (
+                <span className="richtext-color" style={{ color }}>
+                    {content}
+                </span>
+            ) : (
+                content
+            );
+        },
         ...LinkJSXConverter({
             internalDocToHref: (args) => internalDocToHref(args, locale),
         }),
@@ -89,7 +106,8 @@ export default function RichText(props: Props) {
                 {
                     container: enableGutter,
                     "max-w-none": !enableGutter,
-                    "mx-auto prose md:prose-md dark:prose-invert": enableProse,
+                    "mx-auto prose md:prose-md dark:prose-invert prose-headings:text-current prose-strong:text-current":
+                        enableProse,
                 },
                 className,
             )}

@@ -1,13 +1,6 @@
 import type { Block, TextFieldSingleValidation } from "payload";
 import { text, textarea } from "payload/shared";
 
-import {
-    FixedToolbarFeature,
-    HeadingFeature,
-    InlineToolbarFeature,
-    lexicalEditor,
-} from "@payloadcms/richtext-lexical";
-
 const validateEmployeeText: TextFieldSingleValidation = (value, options) =>
     text(typeof value === "string" ? value.trim() : "", options);
 
@@ -174,18 +167,6 @@ export const FormBlock: Block = {
             admin: {
                 condition: (_, { enableIntro }) => Boolean(enableIntro),
             },
-            editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                    return [
-                        ...rootFeatures,
-                        HeadingFeature({
-                            enabledHeadingSizes: ["h1", "h2", "h3", "h4"],
-                        }),
-                        FixedToolbarFeature(),
-                        InlineToolbarFeature(),
-                    ];
-                },
-            }),
             label: {
                 cs: "Úvodní obsah",
                 en: "Intro Content",

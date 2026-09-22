@@ -1,7 +1,6 @@
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
-import { serviceRichText } from "@/fields/serviceRichText";
 
 export const EditorialColumns: Block = {
     slug: "editorialColumns",
@@ -35,7 +34,6 @@ export const EditorialColumns: Block = {
                 {
                     name: "richText",
                     type: "richText",
-                    editor: serviceRichText,
                     label: {
                         cs: "Obsah sloupce",
                         en: "Column content",

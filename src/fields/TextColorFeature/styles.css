@@ -1,0 +1,76 @@
+.text-color-picker__icon {
+    display: inline-block;
+    border-bottom: 3px solid #afcb08;
+    font-weight: 700;
+    line-height: 1;
+}
+.text-color-picker__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.text-color-picker__panel {
+    display: grid;
+    gap: 12px;
+    width: 260px;
+    padding: 16px;
+}
+
+.text-color-picker .popup__scroll-container {
+    max-height: min(70vh, 420px);
+}
+.text-color-picker__palette {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+}
+.text-color-picker__palette button {
+    aspect-ratio: 1;
+    border: 1px solid var(--theme-elevation-300);
+    border-radius: 4px;
+    cursor: pointer;
+}
+.text-color-picker__custom,
+.text-color-picker__actions {
+    display: flex;
+    gap: 8px;
+}
+.text-color-picker__custom input {
+    min-width: 0;
+    height: 36px;
+    border: 1px solid var(--theme-elevation-300);
+    border-radius: 4px;
+    color: var(--theme-text);
+    background: var(--theme-input-bg);
+}
+.text-color-picker__custom input[type="color"] {
+    width: 40px;
+    flex-shrink: 0;
+    padding: 2px;
+}
+.text-color-picker__custom input[type="text"] {
+    width: 100%;
+    padding: 6px 8px;
+}
+.text-color-picker__actions button {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--theme-elevation-300);
+    border-radius: 4px;
+    background: var(--theme-elevation-100);
+    color: var(--theme-text);
+    cursor: pointer;
+}
+.text-color-picker__panel p {
+    margin: 0;
+    color: var(--theme-error-500);
+    font-size: 12px;
+}
+.text-color-picker__panel :is(button, input):focus-visible {
+    outline: 2px solid var(--theme-text);
+    outline-offset: 2px;
+}

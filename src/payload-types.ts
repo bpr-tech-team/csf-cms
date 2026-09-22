@@ -177,7 +177,7 @@ export interface Page {
     | CompanyTimelineBlock
     | ServiceSectionIntroBlock
     | SplitContentBlock
-    | FeatureRowsBlock
+    | FlexibleContentBlock
     | ComputerAudienceBlock
     | ComputerProductCatalogBlock
     | MediaFeatureGridBlock
@@ -1104,40 +1104,138 @@ export interface SplitContentBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FeatureRowsBlock".
+ * via the `definition` "FlexibleContentBlock".
  */
-export interface FeatureRowsBlock {
-  /**
-   * Optional link target for the block.
-   */
+export interface FlexibleContentBlock {
   anchorId?: string | null;
-  heading: string;
-  items: {
-    richText: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
+  theme: 'light' | 'dark';
+  heading?: string | null;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
         version: number;
-      };
-      [k: string]: unknown;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
     };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Applies below 1024 px. Moves entire columns and preserves the order of elements within each column.
+   */
+  mobileColumnOrder?: ('default' | 'reverse') | null;
+  /**
+   * One full-width column or two equal columns. Columns stack on mobile.
+   */
+  columns: {
+    horizontalAlign: 'left' | 'center' | 'right';
+    verticalAlign: 'top' | 'center' | 'bottom';
     /**
-     * The media fills its area with centered cropping.
+     * Applies to the entire column below 1024 px.
      */
-    media: number | Media;
-    mediaPosition: 'left' | 'right';
+    mobileHorizontalAlign?: ('inherit' | 'left' | 'center' | 'right') | null;
+    elements: (
+      FlexibleHeadingElement | FlexibleTextElement | FlexibleButtonElement | FlexibleMediaElement | FlexibleHtmlElement
+    )[];
     id?: string | null;
   }[];
   id?: string | null;
   blockName?: string | null;
-  blockType: 'featureRows';
+  blockType: 'flexibleContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleHeadingElement".
+ */
+export interface FlexibleHeadingElement {
+  heading: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexHeading';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleTextElement".
+ */
+export interface FlexibleTextElement {
+  richText: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleButtonElement".
+ */
+export interface FlexibleButtonElement {
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexButton';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleMediaElement".
+ */
+export interface FlexibleMediaElement {
+  media: number | Media;
+  aspectRatio: 'original' | 'square' | 'landscape' | 'wide';
+  fit?: ('cover' | 'contain') | null;
+  position?:
+    ('topLeft' | 'top' | 'topRight' | 'left' | 'center' | 'right' | 'bottomLeft' | 'bottom' | 'bottomRight') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexMedia';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleHtmlElement".
+ */
+export interface FlexibleHtmlElement {
+  /**
+   * HTML and embedded iframes. Scripts and event handler attributes are removed.
+   */
+  html: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexHtml';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1609,7 +1707,7 @@ export interface PagesSelect<T extends boolean = true> {
         companyTimeline?: T | CompanyTimelineBlockSelect<T>;
         serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
         splitContent?: T | SplitContentBlockSelect<T>;
-        featureRows?: T | FeatureRowsBlockSelect<T>;
+        flexibleContent?: T | FlexibleContentBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
         mediaFeatureGrid?: T | MediaFeatureGridBlockSelect<T>;
@@ -2014,19 +2112,88 @@ export interface SplitContentBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FeatureRowsBlock_select".
+ * via the `definition` "FlexibleContentBlock_select".
  */
-export interface FeatureRowsBlockSelect<T extends boolean = true> {
+export interface FlexibleContentBlockSelect<T extends boolean = true> {
   anchorId?: T;
+  theme?: T;
   heading?: T;
-  items?:
+  intro?: T;
+  mobileColumnOrder?: T;
+  columns?:
     | T
     | {
-        richText?: T;
-        media?: T;
-        mediaPosition?: T;
+        horizontalAlign?: T;
+        verticalAlign?: T;
+        mobileHorizontalAlign?: T;
+        elements?:
+          | T
+          | {
+              flexHeading?: T | FlexibleHeadingElementSelect<T>;
+              flexText?: T | FlexibleTextElementSelect<T>;
+              flexButton?: T | FlexibleButtonElementSelect<T>;
+              flexMedia?: T | FlexibleMediaElementSelect<T>;
+              flexHtml?: T | FlexibleHtmlElementSelect<T>;
+            };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleHeadingElement_select".
+ */
+export interface FlexibleHeadingElementSelect<T extends boolean = true> {
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleTextElement_select".
+ */
+export interface FlexibleTextElementSelect<T extends boolean = true> {
+  richText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleButtonElement_select".
+ */
+export interface FlexibleButtonElementSelect<T extends boolean = true> {
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleMediaElement_select".
+ */
+export interface FlexibleMediaElementSelect<T extends boolean = true> {
+  media?: T;
+  aspectRatio?: T;
+  fit?: T;
+  position?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleHtmlElement_select".
+ */
+export interface FlexibleHtmlElementSelect<T extends boolean = true> {
+  html?: T;
   id?: T;
   blockName?: T;
 }

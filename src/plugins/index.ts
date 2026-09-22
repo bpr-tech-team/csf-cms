@@ -6,11 +6,6 @@ import { searchPlugin } from "@payloadcms/plugin-search";
 import { Plugin } from "payload";
 import { revalidateRedirects } from "@/hooks/revalidateRedirects";
 import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
-import {
-    FixedToolbarFeature,
-    HeadingFeature,
-    lexicalEditor,
-} from "@payloadcms/richtext-lexical";
 import { searchFields } from "@/search/fieldOverrides";
 import { beforeSyncWithSearch } from "@/search/beforeSync";
 
@@ -18,6 +13,7 @@ import { Page, Post } from "@/payload-types";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import { getCanonicalUrl, seoConfig } from "@/seo/config";
 import { getPagePath } from "@/utilities/getPagePath";
+import { preserveFormEmailColors } from "@/email/richText";
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
     return doc?.title
@@ -94,6 +90,7 @@ export const plugins: Plugin[] = [
         generateURL,
     }),
     formBuilderPlugin({
+        beforeEmail: preserveFormEmailColors,
         fields: {
             payment: false,
         },
@@ -107,35 +104,6 @@ export const plugins: Plugin[] = [
                     cs: "Formulář",
                     en: "Form",
                 },
-            },
-            fields: ({ defaultFields }) => {
-                return defaultFields.map((field) => {
-                    if (
-                        "name" in field &&
-                        field.name === "confirmationMessage"
-                    ) {
-                        return {
-                            ...field,
-                            editor: lexicalEditor({
-                                features: ({ rootFeatures }) => {
-                                    return [
-                                        ...rootFeatures,
-                                        FixedToolbarFeature(),
-                                        HeadingFeature({
-                                            enabledHeadingSizes: [
-                                                "h1",
-                                                "h2",
-                                                "h3",
-                                                "h4",
-                                            ],
-                                        }),
-                                    ];
-                                },
-                            }),
-                        };
-                    }
-                    return field;
-                });
             },
         },
         formSubmissionOverrides: {

@@ -1,7 +1,6 @@
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
-import { serviceRichText } from "@/fields/serviceRichText";
 
 export const SplitContent: Block = {
     slug: "splitContent",
@@ -70,7 +69,6 @@ export const SplitContent: Block = {
         {
             name: "richText",
             type: "richText",
-            editor: serviceRichText,
             label: {
                 cs: "Obsah",
                 en: "Content",

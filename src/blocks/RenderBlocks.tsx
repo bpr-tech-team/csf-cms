@@ -20,7 +20,7 @@ import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
 import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
 import { ServicesGridBlock } from "@/blocks/ServicesGrid/Component";
-import { FeatureRowsBlock } from "@/blocks/FeatureRows/Component";
+import { FlexibleContentBlock } from "@/blocks/FlexibleContent/Component";
 import { ServiceSectionIntroBlock } from "@/blocks/ServiceSectionIntro/Component";
 import { SplitContentBlock } from "@/blocks/SplitContent/Component";
 import { TechnologySpotlightBlock } from "@/blocks/TechnologySpotlight/Component";
@@ -183,9 +183,9 @@ export const RenderBlocks: React.FC<{
                                 />
                             );
 
-                        case "featureRows":
+                        case "flexibleContent":
                             return (
-                                <FeatureRowsBlock
+                                <FlexibleContentBlock
                                     locale={locale}
                                     {...block}
                                     key={block.id ?? index}
