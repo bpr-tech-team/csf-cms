@@ -1,113 +1,173 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
 import { useHeaderTheme } from "@/providers/HeaderTheme";
-import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
-
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { Header } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
-
 import { Logo } from "@/components/Logo/Logo";
-import { HeaderNav } from "./Nav";
+import { HeaderNav, headerFocus } from "./Nav";
 
 interface HeaderClientProps {
     data: Header;
     locale: AppLocale;
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
-    const messages = frontendMessages[locale];
-    const { setHeaderTheme } = useHeaderTheme();
+export const HeaderClient: React.FC<HeaderClientProps> = (props) => {
     const pathname = usePathname();
-    const [openMenuPathname, setOpenMenuPathname] = useState<string | null>(
-        null,
-    );
-    const menuButtonRef = useRef<HTMLButtonElement>(null);
-    const isMenuOpen = openMenuPathname === pathname;
-
+    const { setHeaderTheme } = useHeaderTheme();
     useEffect(() => {
         setHeaderTheme(null);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pathname]);
+    }, [pathname, setHeaderTheme]);
+    return <HeaderNavigation key={pathname} {...props} pathname={pathname} />;
+};
 
-    useEffect(() => {
-        if (!isMenuOpen) return;
-
-        const closeMenuOnEscape = (event: KeyboardEvent) => {
-            if (event.key !== "Escape") return;
-
-            setOpenMenuPathname(null);
-            menuButtonRef.current?.focus();
-        };
-
-        window.addEventListener("keydown", closeMenuOnEscape);
-
-        return () => window.removeEventListener("keydown", closeMenuOnEscape);
-    }, [isMenuOpen]);
+function HeaderNavigation({
+    data,
+    locale,
+    pathname,
+}: HeaderClientProps & { pathname: string }) {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuButtonRef = useRef<HTMLButtonElement>(null);
+    const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+    const messages = frontendMessages[locale];
+    const logo = (
+        <Link
+            aria-label={messages.homeLinkLabel}
+            className={`shrink-0 rounded-sm ${headerFocus}`}
+            href={withLocalePrefix("/", locale)}
+            onClick={() => setIsMenuOpen(false)}
+        >
+            <Logo
+                loading="eager"
+                priority="high"
+                className="w-[82px] xl:w-25"
+            />
+        </Link>
+    );
 
     return (
         <header
-            className="relative z-40 border-b border-white/20 bg-ink-900 text-white"
+            className="relative z-40 border-b border-paper-0/20 bg-ink-900 text-paper-0"
             data-theme="dark"
         >
-            <div className="container flex h-26 items-center justify-between">
-                <Link
-                    aria-label={messages.homeLinkLabel}
-                    className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-ink-900"
-                    href={withLocalePrefix("/", locale)}
-                >
-                    <Logo loading="eager" priority="high" />
-                </Link>
-
+            <div className="container flex h-[71px] items-center justify-between pr-3 xl:h-[103px] xl:gap-16 xl:pr-8">
+                {logo}
                 <HeaderNav
                     className="ml-auto hidden xl:flex"
                     data={data}
                     locale={locale}
+                    pathname={pathname}
                     variant="desktop"
                 />
-
-                <Button
+                <button
+                    ref={menuButtonRef}
+                    type="button"
                     aria-controls="site-navigation"
                     aria-expanded={isMenuOpen}
-                    aria-label={
-                        isMenuOpen ? messages.menuClose : messages.menuOpen
-                    }
-                    className="flex size-12 items-center justify-center rounded-pill border border-white/20 text-white transition-colors duration-fast hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary xl:hidden"
-                    onClick={() =>
-                        setOpenMenuPathname(isMenuOpen ? null : pathname)
-                    }
-                    ref={menuButtonRef}
-                    size="icon"
-                    type="button"
-                    variant="ghost"
+                    aria-label={messages.menuOpen}
+                    className={`size-12 shrink-0 rounded-sm xl:hidden ${headerFocus}`}
+                    onClick={() => setIsMenuOpen(true)}
                 >
-                    {isMenuOpen ? (
-                        <X aria-hidden className="size-5" />
-                    ) : (
-                        <Menu aria-hidden className="size-5" />
-                    )}
-                </Button>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/media/block/header/menu.svg"
+                        alt=""
+                        width={48}
+                        height={48}
+                    />
+                </button>
             </div>
-
-            {isMenuOpen ? (
-                <div
-                    className="absolute inset-x-0 top-full border-b border-white/20 bg-ink-900 shadow-floating xl:hidden"
-                    id="site-navigation"
-                >
-                    <div className="container py-6">
-                        <HeaderNav
-                            data={data}
-                            locale={locale}
-                            onNavigate={() => setOpenMenuPathname(null)}
-                            variant="mobile"
-                        />
-                    </div>
-                </div>
-            ) : null}
+            {isMenuOpen && (
+                <MobileMenu
+                    data={data}
+                    locale={locale}
+                    pathname={pathname}
+                    onClose={closeMenu}
+                    returnFocusRef={menuButtonRef}
+                    logo={logo}
+                />
+            )}
         </header>
     );
-};
+}
+
+function MobileMenu({
+    data,
+    locale,
+    pathname,
+    onClose,
+    returnFocusRef,
+    logo,
+}: HeaderClientProps & {
+    pathname: string;
+    onClose: () => void;
+    returnFocusRef: React.RefObject<HTMLButtonElement | null>;
+    logo: React.ReactNode;
+}) {
+    const dialogRef = useRef<HTMLDialogElement>(null);
+    useEffect(() => {
+        const dialog = dialogRef.current;
+        const trigger = returnFocusRef.current;
+        const previousOverflow = document.body.style.overflow;
+        dialog?.showModal();
+        document.body.style.overflow = "hidden";
+        const desktop = window.matchMedia("(min-width: 80rem)");
+        const closeAtDesktop = () => {
+            if (desktop.matches) onClose();
+        };
+        desktop.addEventListener("change", closeAtDesktop);
+        closeAtDesktop();
+        return () => {
+            desktop.removeEventListener("change", closeAtDesktop);
+            dialog?.close();
+            document.body.style.overflow = previousOverflow;
+            trigger?.focus();
+        };
+    }, [returnFocusRef, onClose]);
+    const messages = frontendMessages[locale];
+    return (
+        <dialog
+            ref={dialogRef}
+            id="site-navigation"
+            aria-label={messages.mainNavigation}
+            className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto overscroll-contain border-0 bg-ink-900 p-0 text-paper-0 backdrop:bg-ink-900 cursor-auto! [&_*]:cursor-auto!"
+            data-theme="dark"
+            onCancel={(event) => {
+                event.preventDefault();
+                onClose();
+            }}
+        >
+            <div className="flex min-h-full flex-col">
+                <div className="flex h-18 shrink-0 items-center justify-between border-b border-paper-0/20 pl-5 pr-3">
+                    {logo}
+                    <button
+                        type="button"
+                        aria-label={messages.menuClose}
+                        className={`size-12 rounded-sm ${headerFocus}`}
+                        onClick={onClose}
+                        autoFocus
+                    >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/media/block/header/close.svg"
+                            alt=""
+                            width={48}
+                            height={48}
+                        />
+                    </button>
+                </div>
+                <HeaderNav
+                    data={data}
+                    locale={locale}
+                    pathname={pathname}
+                    onNavigate={onClose}
+                    variant="mobile"
+                />
+            </div>
+        </dialog>
+    );
+}

@@ -46,7 +46,7 @@ export const withLocalePrefix = (path: string, locale: AppLocale) => {
     const prefix = getLocalePrefix(locale);
 
     if (pathWithoutLocale === "/") {
-        return prefix || "/";
+        return `${prefix || "/"}${suffix}`;
     }
 
     return `${prefix}${pathWithoutLocale}${suffix}`;

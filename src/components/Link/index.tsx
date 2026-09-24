@@ -1,6 +1,6 @@
 import { Button, type ButtonProps } from "@/components/ui/button";
 import type { AppLocale } from "@/i18n/config";
-import { defaultLocale, withLocalePrefix } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import { cn } from "@/utilities/ui";
 import Link from "next/link";
 import React from "react";
@@ -9,9 +9,10 @@ import type { Page, Post } from "@/payload-types";
 import { SmoothHashLink } from "./SmoothHashLink";
 import { applyTypography } from "@/utilities/typography";
 import { typographyChildren } from "@/utilities/typographyChildren";
-import { getPagePath } from "@/utilities/getPagePath";
+import { getLinkHref } from "@/utilities/getLinkHref";
 
 type CMSLinkType = {
+    "aria-current"?: React.AriaAttributes["aria-current"];
     appearance?: "inline" | ButtonProps["variant"];
     children?: React.ReactNode;
     className?: string;
@@ -43,18 +44,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         typography = true,
     } = props;
 
-    const referenceHref =
-        type === "reference" &&
-        typeof reference?.value === "object" &&
-        reference.value.slug
-            ? reference.relationTo === "pages"
-                ? getPagePath(reference.value as Page)
-                : `/${reference.relationTo}/${reference.value.slug}`
-            : url;
-    const href =
-        referenceHref && referenceHref.startsWith("/")
-            ? withLocalePrefix(referenceHref, locale)
-            : referenceHref;
+    const href = getLinkHref({ type, reference, url }, locale);
 
     if (!href) return null;
 
@@ -64,7 +54,12 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         : {};
     const LinkComponent = href.startsWith("#") ? SmoothHashLink : Link;
     const renderedLink = (
-        <LinkComponent className={cn(className)} href={href} {...newTabProps}>
+        <LinkComponent
+            className={cn(className)}
+            href={href}
+            aria-current={props["aria-current"]}
+            {...newTabProps}
+        >
             {applyTypography(label, { locale, enabled: typography })}
             {typographyChildren(children, { locale, enabled: typography })}
         </LinkComponent>

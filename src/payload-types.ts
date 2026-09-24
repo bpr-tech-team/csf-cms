@@ -2812,7 +2812,46 @@ export interface Header {
   id: number;
   navItems?:
     | {
-        link: {
+        itemType: 'link' | 'dropdown';
+        link?: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        label?: string | null;
+        children?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              icon: ContentIcon;
+              id?: string | null;
+            }[]
+          | null;
+        showOverviewLink?: boolean | null;
+        overviewLink?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -2927,7 +2966,34 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
+        itemType?: T;
         link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        label?: T;
+        children?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              icon?: T | ContentIconSelect<T>;
+              id?: T;
+            };
+        showOverviewLink?: T;
+        overviewLink?:
           | T
           | {
               type?: T;
