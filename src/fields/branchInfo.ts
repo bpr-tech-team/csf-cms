@@ -1,3 +1,4 @@
+import { contentIcon } from "@/fields/contentIcon";
 import type { GroupField, TextFieldSingleValidation } from "payload";
 import { text, textarea } from "payload/shared";
 
@@ -114,12 +115,8 @@ export const branchInfo: GroupField = {
             },
             validate: validateMapURL,
         },
-        {
-            name: "icon",
-            type: "upload",
-            relationTo: "media",
-            filterOptions: { mimeType: { contains: "image/" } },
+        contentIcon({
             label: { cs: "Ikona v přehledu poboček", en: "Branch card icon" },
-        },
+        }),
     ],
 };

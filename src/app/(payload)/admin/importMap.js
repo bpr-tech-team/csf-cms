@@ -1,3 +1,5 @@
+import { FontAwesomePicker as FontAwesomePicker_72030f86826405d3379ecf8285abe3f3 } from '@/fields/ContentIcon/FontAwesomePicker'
+import { IconPreview as IconPreview_9ea817ff3f036c560ce90227882054bf } from '@/fields/ContentIcon/Preview'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -34,6 +36,8 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "@/fields/ContentIcon/FontAwesomePicker#FontAwesomePicker": FontAwesomePicker_72030f86826405d3379ecf8285abe3f3,
+  "@/fields/ContentIcon/Preview#IconPreview": IconPreview_9ea817ff3f036c560ce90227882054bf,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,

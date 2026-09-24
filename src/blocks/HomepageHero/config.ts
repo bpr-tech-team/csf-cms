@@ -1,3 +1,4 @@
+import { contentIcon } from "@/fields/contentIcon";
 import type { Block } from "payload";
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 import { heroBackgroundField } from "@/fields/heroBackground";
@@ -113,16 +114,7 @@ export const HomepageHero: Block = {
                     relationTo: "media",
                     required: true,
                 },
-                {
-                    name: "icon",
-                    type: "upload",
-                    label: {
-                        cs: "Ikona",
-                        en: "Icon",
-                    },
-                    relationTo: "media",
-                    required: true,
-                },
+                contentIcon({ required: true }),
                 {
                     name: "title",
                     type: "text",

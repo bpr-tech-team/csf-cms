@@ -1,28 +1,21 @@
-import type { Media } from "@/payload-types";
-
-import { MediaAsset } from "@/components/MediaAsset";
+import { ContentIcon } from "@/components/ContentIcon";
+import type { ContentIconValue } from "@/utilities/contentIcon";
 import { cn } from "@/utilities/ui";
-import React from "react";
 
-type CardIconProps = {
+export const CardIcon = ({
+    className,
+    icon,
+}: {
     className?: string;
-    resource?: Media | number | null;
-};
-
-export const CardIcon = ({ className, resource }: CardIconProps) => (
+    icon?: ContentIconValue | null;
+}) => (
     <span
         aria-hidden="true"
         className={cn(
-            "relative flex size-16 shrink-0 items-center justify-center rounded-md bg-brand-200 transition-colors duration-base group-hover:bg-border-light",
+            "relative flex size-16 shrink-0 items-center justify-center rounded-md bg-brand-200 text-brand-600 transition-colors duration-base group-hover:bg-border-light group-hover:text-ink-900/75",
             className,
         )}
     >
-        {/* Recolor uploaded icons to #0E0E0EBF while preserving transparency. */}
-        <MediaAsset
-            alt=""
-            className="size-8 object-contain transition-[filter] duration-base group-hover:[filter:brightness(0)_invert(0.054902)_opacity(0.74902)]"
-            resource={resource}
-            sizes="32px"
-        />
+        <ContentIcon icon={icon} className="size-8" />
     </span>
 );

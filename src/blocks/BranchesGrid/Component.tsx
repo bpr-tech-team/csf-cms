@@ -62,7 +62,7 @@ export const BranchesGridBlock = async ({
                                         : "xl:col-span-2",
                                 )}
                             >
-                                <CardIcon resource={info.icon} />
+                                <CardIcon icon={info.icon} />
                                 <h3 className="mt-8 text-heading-md font-bold uppercase">
                                     <CMSLink
                                         type="custom"

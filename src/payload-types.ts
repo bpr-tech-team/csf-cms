@@ -211,7 +211,7 @@ export interface Page {
      * In Google Maps choose Share → Embed a map. Paste only the src URL, not the full HTML code.
      */
     mapEmbedUrl?: string | null;
-    icon?: (number | null) | Media;
+    icon: ContentIcon;
   };
   meta?: {
     title?: string | null;
@@ -554,7 +554,7 @@ export interface HomepageHeroBlock {
   quickLinks?:
     | {
         image: number | Media;
-        icon: number | Media;
+        icon: ContentIcon;
         title: string;
         links?:
           | {
@@ -582,6 +582,23 @@ export interface HomepageHeroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'homepageHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentIcon".
+ */
+export interface ContentIcon {
+  source: 'image' | 'fontawesome';
+  /**
+   * SVG or PNG without a background or excess transparent padding. The block controls the size and background.
+   */
+  image?: (number | null) | Media;
+  fontAwesome?: string | null;
+  imageColor?: ('original' | 'monochrome') | null;
+  /**
+   * Optical correction only. The icon slot stays the same size.
+   */
+  scale?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -849,10 +866,7 @@ export interface ServicesGridBlock {
       }[]
     | null;
   items: {
-    /**
-     * Icon without a background or outer padding. The website adds the colored background automatically.
-     */
-    icon: number | Media;
+    icon: ContentIcon;
     title: string;
     description: string;
     link: {
@@ -911,10 +925,7 @@ export interface ProductsGridBlock {
     | null;
   items: {
     image?: (number | null) | Media;
-    /**
-     * Icon without a background or outer padding. The website adds the colored background automatically.
-     */
-    icon: number | Media;
+    icon: ContentIcon;
     title: string;
     description: string;
     link?: {
@@ -1737,7 +1748,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         mapEmbedUrl?: T;
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
       };
   meta?:
     | T
@@ -1828,7 +1839,7 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
         title?: T;
         links?:
           | T
@@ -1848,6 +1859,17 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
       };
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentIcon_select".
+ */
+export interface ContentIconSelect<T extends boolean = true> {
+  source?: T;
+  image?: T;
+  fontAwesome?: T;
+  imageColor?: T;
+  scale?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1924,7 +1946,7 @@ export interface ServicesGridBlockSelect<T extends boolean = true> {
   items?:
     | T
     | {
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
         title?: T;
         description?: T;
         link?:
@@ -1976,7 +1998,7 @@ export interface ProductsGridBlockSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
         title?: T;
         description?: T;
         link?:

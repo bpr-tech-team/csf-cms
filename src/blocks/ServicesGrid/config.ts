@@ -1,3 +1,4 @@
+import { contentIcon } from "@/fields/contentIcon";
 import type { Block } from "payload";
 
 import { homepageSectionIntro } from "@/fields/homepageSection";
@@ -23,22 +24,7 @@ export const ServicesGrid: Block = {
                 initCollapsed: true,
             },
             fields: [
-                {
-                    name: "icon",
-                    type: "upload",
-                    admin: {
-                        description: {
-                            cs: "Ikona bez pozadí a vnějších okrajů. Barevné pozadí přidává web automaticky.",
-                            en: "Icon without a background or outer padding. The website adds the colored background automatically.",
-                        },
-                    },
-                    label: {
-                        cs: "Ikona",
-                        en: "Icon",
-                    },
-                    relationTo: "media",
-                    required: true,
-                },
+                contentIcon({ required: true }),
                 {
                     name: "title",
                     type: "text",
