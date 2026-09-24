@@ -8,6 +8,7 @@ import * as migration_20260922_110836_remove_content_media_archive from "./20260
 import * as migration_20260922_144732_flexible_content from "./20260922_144732_flexible_content";
 import * as migration_20260922_154825_flexible_content_theme from "./20260922_154825_flexible_content_theme";
 import * as migration_20260922_160319_flexible_content_mobile from "./20260922_160319_flexible_content_mobile";
+import * as migration_20260924_145734_vercel_blob from "./20260924_145734_vercel_blob";
 
 export const migrations = [
     {
@@ -59,5 +60,10 @@ export const migrations = [
         up: migration_20260922_160319_flexible_content_mobile.up,
         down: migration_20260922_160319_flexible_content_mobile.down,
         name: "20260922_160319_flexible_content_mobile",
+    },
+    {
+        up: migration_20260924_145734_vercel_blob.up,
+        down: migration_20260924_145734_vercel_blob.down,
+        name: "20260924_145734_vercel_blob",
     },
 ];

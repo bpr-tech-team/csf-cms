@@ -1,0 +1,14 @@
+.env
+.env.*
+test.env
+.vercel
+.tmp
+.agents
+.codex
+.vscode
+docs
+tests
+test-results
+playwright-report
+tsconfig.tsbuildinfo
+public/media/*.*

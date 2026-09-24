@@ -5,6 +5,8 @@ declare global {
             DATABASE_URL: string;
             NEXT_PUBLIC_SERVER_URL: string;
             VERCEL_PROJECT_PRODUCTION_URL: string;
+            BLOB_READ_WRITE_TOKEN?: string;
+            BLOB_PUBLIC_URL?: string;
             SMTP_FROM_ADDRESS?: string;
             SMTP_FROM_NAME?: string;
             SMTP_HOST?: string;

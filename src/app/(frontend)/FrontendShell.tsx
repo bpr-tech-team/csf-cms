@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { AdminBar } from "@/components/AdminBar";
 import { CustomCursor } from "@/components/CustomCursor";
@@ -66,6 +68,13 @@ export async function FrontendShell({
                     {children}
                     <Footer locale={locale} />
                 </Providers>
+                {(process.env.VERCEL_ENV === "preview" ||
+                    process.env.VERCEL_ENV === "production") && (
+                    <SpeedInsights />
+                )}
+                {process.env.VERCEL_ENV === "production" && !isEnabled && (
+                    <Analytics />
+                )}
             </body>
         </html>
     );
