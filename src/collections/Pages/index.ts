@@ -188,9 +188,9 @@ export const Pages: CollectionConfig<"pages"> = {
     },
     versions: {
         drafts: {
-            autosave: {
-                interval: 100, // We set this interval for optimal live preview
-            },
+            // Autosave creates a draft on opening the create form, which locks
+            // pageType before the editor can choose it. Require a manual save.
+            autosave: false,
             schedulePublish: true,
         },
         maxPerDoc: 50,
