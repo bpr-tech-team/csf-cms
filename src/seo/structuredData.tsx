@@ -104,7 +104,10 @@ export const blogPostingJsonLd = (
 
 export const JsonLd = ({ data }: { data: unknown }) => (
     <script
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+        dangerouslySetInnerHTML={{
+            // Keep CMS text from closing the script tag in the HTML parser.
+            __html: JSON.stringify(data)?.replace(/</g, "\\u003c"),
+        }}
         type="application/ld+json"
     />
 );
