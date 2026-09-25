@@ -70,7 +70,7 @@ export const IconPreview: UIFieldClientComponent = ({ path }) => {
                             style={{ width: 44, height: 44 }}
                         />
                     </div>
-                    <small>Hero · 44 px</small>
+                    <small>{cs ? "Úvodní blok · 44 px" : "Hero · 44 px"}</small>
                 </div>
             </div>
         </div>

@@ -31,6 +31,10 @@ export const ComputerAudience: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Cílová skupina", en: "Audience" },
+                plural: { cs: "Cílové skupiny", en: "Audiences" },
+            },
             admin: {
                 initCollapsed: true,
             },

@@ -57,11 +57,10 @@ export const contentIcon = ({
                     "fontawesome"
                 )
                     return true;
-                if (!value)
-                    return !required || "Vyberte ikonu / Select an icon.";
+                if (!value) return !required || "Vyberte ikonu.";
                 return (
                     hasFontAwesomeIcon(value) ||
-                    "Vyberte platnou bezplatnou ikonu / Select a valid free icon."
+                    "Vyberte platnou bezplatnou ikonu."
                 );
             }) as TextFieldSingleValidation,
         },
@@ -114,6 +113,7 @@ export const contentIcon = ({
         {
             name: "preview",
             type: "ui",
+            label: { cs: "Náhled", en: "Preview" },
             admin: {
                 components: {
                     Field: "@/fields/ContentIcon/Preview#IconPreview",

@@ -215,7 +215,7 @@ export interface Page {
   meta?: {
     title?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Recommended image file size is less than 500 kB.
      */
     image?: (number | null) | Media;
     description?: string | null;
@@ -298,7 +298,7 @@ export interface Post {
   meta?: {
     title?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Recommended image file size is less than 500 kB.
      */
     image?: (number | null) | Media;
     description?: string | null;

@@ -23,14 +23,9 @@ import {
     revalidateNavigationAfterDelete,
 } from "@/hooks/revalidateNavigation";
 
-import {
-    MetaDescriptionField,
-    MetaImageField,
-    MetaTitleField,
-    OverviewField,
-    PreviewField,
-} from "@payloadcms/plugin-seo/fields";
+import { seoFields } from "@/fields/seo";
 import { slugField } from "payload";
+import { withCzechLabels } from "@/i18n/lexical";
 
 export const Posts: CollectionConfig<"posts"> = {
     slug: "posts",
@@ -105,10 +100,25 @@ export const Posts: CollectionConfig<"posts"> = {
                                 features: ({ rootFeatures }) => {
                                     return [
                                         ...rootFeatures,
-                                        BlocksFeature({
-                                            blocks: [Banner, Code],
-                                        }),
-                                        HorizontalRuleFeature(),
+                                        withCzechLabels(
+                                            BlocksFeature({
+                                                blocks: [Banner, Code],
+                                            }),
+                                            {
+                                                inlineBlocks: {
+                                                    create: "Vytvořit: {{label}}",
+                                                    edit: "Upravit: {{label}}",
+                                                    label: "Bloky v řádku",
+                                                    remove: "Odstranit: {{label}}",
+                                                },
+                                            },
+                                        ),
+                                        withCzechLabels(
+                                            HorizontalRuleFeature(),
+                                            {
+                                                label: "Vodorovná čára",
+                                            },
+                                        ),
                                     ];
                                 },
                             }),
@@ -166,29 +176,7 @@ export const Posts: CollectionConfig<"posts"> = {
                 {
                     name: "meta",
                     label: "SEO",
-                    fields: [
-                        OverviewField({
-                            titlePath: "meta.title",
-                            descriptionPath: "meta.description",
-                            imagePath: "meta.image",
-                        }),
-                        MetaTitleField({
-                            hasGenerateFn: true,
-                        }),
-                        MetaImageField({
-                            relationTo: "media",
-                        }),
-
-                        MetaDescriptionField({}),
-                        PreviewField({
-                            // if the `generateUrl` function is configured
-                            hasGenerateFn: true,
-
-                            // field paths to match the target field for data
-                            titlePath: "meta.title",
-                            descriptionPath: "meta.description",
-                        }),
-                    ],
+                    fields: seoFields(),
                 },
             ],
         },

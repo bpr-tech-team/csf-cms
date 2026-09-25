@@ -24,6 +24,10 @@ export const LogoMarquee: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Partner", en: "Partner" },
+                plural: { cs: "Partneři", en: "Partners" },
+            },
             admin: {
                 initCollapsed: true,
             },

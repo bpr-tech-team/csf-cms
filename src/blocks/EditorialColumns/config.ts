@@ -27,6 +27,10 @@ export const EditorialColumns: Block = {
         {
             name: "columns",
             type: "array",
+            labels: {
+                singular: { cs: "Sloupec", en: "Column" },
+                plural: { cs: "Sloupce", en: "Columns" },
+            },
             admin: {
                 initCollapsed: true,
             },

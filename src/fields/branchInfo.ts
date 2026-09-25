@@ -34,6 +34,10 @@ export const branchInfo: GroupField = {
         {
             name: "phones",
             type: "array",
+            labels: {
+                singular: { cs: "Telefon", en: "Phone" },
+                plural: { cs: "Telefony", en: "Phones" },
+            },
             minRows: 1,
             required: true,
             label: { cs: "Telefony", en: "Phone numbers" },
@@ -76,6 +80,16 @@ export const branchInfo: GroupField = {
         {
             name: "openingHours",
             type: "array",
+            labels: {
+                singular: {
+                    cs: "Záznam provozní doby",
+                    en: "Opening hours entry",
+                },
+                plural: {
+                    cs: "Záznamy provozní doby",
+                    en: "Opening hours entries",
+                },
+            },
             label: { cs: "Provozní doba", en: "Opening hours" },
             admin: {
                 description: {

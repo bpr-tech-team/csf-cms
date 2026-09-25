@@ -35,6 +35,10 @@ export const TechnologySpotlight: Block = {
         {
             name: "logos",
             type: "array",
+            labels: {
+                singular: { cs: "Logo", en: "Logo" },
+                plural: { cs: "Loga", en: "Logos" },
+            },
             admin: {
                 initCollapsed: true,
             },

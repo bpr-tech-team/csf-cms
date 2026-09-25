@@ -1,3 +1,5 @@
+import { frontendMessages } from "@/i18n/frontend";
+import { useLocale } from "@/providers/Locale";
 import type { EmailField } from "@payloadcms/plugin-form-builder/types";
 import type { Control, FieldValues } from "react-hook-form";
 
@@ -17,6 +19,8 @@ export const Email: React.FC<
         control: Control<FieldValues>;
     }
 > = ({ name, defaultValue, label, control, required }) => {
+    const messages = frontendMessages[useLocale()].form;
+
     return (
         <FormField
             control={control}
@@ -36,10 +40,10 @@ export const Email: React.FC<
             )}
             rules={{
                 pattern: {
-                    message: "Zadejte platnou e-mailovou adresu.",
+                    message: messages.invalidEmail,
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 },
-                required: required ? "Toto pole je povinné." : false,
+                required: required ? messages.required : false,
             }}
         />
     );

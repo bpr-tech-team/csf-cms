@@ -1,3 +1,5 @@
+import { frontendMessages } from "@/i18n/frontend";
+import { useLocale } from "@/providers/Locale";
 import type { TextAreaField } from "@payloadcms/plugin-form-builder/types";
 import type { Control, FieldValues } from "react-hook-form";
 
@@ -18,6 +20,8 @@ export const Textarea: React.FC<
         rows?: number;
     }
 > = ({ name, defaultValue, label, control, required, rows = 3 }) => {
+    const messages = frontendMessages[useLocale()].form;
+
     return (
         <FormField
             control={control}
@@ -35,7 +39,7 @@ export const Textarea: React.FC<
                     <FormMessage />
                 </FormItem>
             )}
-            rules={{ required: required ? "Toto pole je povinné." : false }}
+            rules={{ required: required ? messages.required : false }}
         />
     );
 };

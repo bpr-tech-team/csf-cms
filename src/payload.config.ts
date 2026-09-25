@@ -2,6 +2,7 @@ import sharp from "sharp";
 import path from "path";
 import { buildConfig, PayloadRequest } from "payload";
 import { cs } from "payload/i18n/cs";
+import { adminTranslations } from "@/i18n/admin";
 import { fileURLToPath } from "url";
 
 import { Categories } from "./collections/Categories";
@@ -21,19 +22,6 @@ import { accentInsensitivePostgresAdapter } from "./db/accentInsensitivePostgres
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const email = createSMTPEmailAdapter();
-
-const adminTranslations = {
-    cs: {
-        "plugin-redirects": {
-            customUrl: "Vlastní URL",
-            documentToRedirect: "Dokument, na který přesměrovat",
-            fromUrl: "Zdrojová URL",
-            internalLink: "Interní odkaz",
-            redirectType: "Typ přesměrování",
-            toUrlType: "Typ cílové URL",
-        },
-    },
-};
 
 export default buildConfig({
     admin: {
@@ -65,7 +53,7 @@ export default buildConfig({
                     height: 1024,
                 },
                 {
-                    label: "Desktop",
+                    label: "Počítač",
                     name: "desktop",
                     width: 1440,
                     height: 900,

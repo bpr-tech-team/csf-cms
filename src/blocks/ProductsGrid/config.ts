@@ -20,6 +20,10 @@ export const ProductsGrid: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Produkt", en: "Product" },
+                plural: { cs: "Produkty", en: "Products" },
+            },
             admin: {
                 initCollapsed: true,
             },

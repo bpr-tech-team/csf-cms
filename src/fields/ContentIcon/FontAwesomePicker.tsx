@@ -23,6 +23,11 @@ export const FontAwesomePicker: TextFieldClientComponent = ({
         useField<string>({ path });
     const { i18n } = useTranslation();
     const cs = i18n.language === "cs";
+    const styleLabels = {
+        solid: cs ? "Plné" : "solid",
+        regular: cs ? "Obrysové" : "regular",
+        brands: cs ? "Značky" : "brands",
+    };
     const id = useId();
     const dialog = useRef<HTMLDialogElement>(null);
     const [catalog, setCatalog] = useState<IconCatalogEntry[]>([]);
@@ -139,9 +144,15 @@ export const FontAwesomePicker: TextFieldClientComponent = ({
                             <option value="all">
                                 {cs ? "Všechny styly" : "All styles"}
                             </option>
-                            <option value="solid">Solid</option>
-                            <option value="regular">Regular</option>
-                            <option value="brands">Brands</option>
+                            <option value="solid">
+                                {cs ? "Plné" : "Solid"}
+                            </option>
+                            <option value="regular">
+                                {cs ? "Obrysové" : "Regular"}
+                            </option>
+                            <option value="brands">
+                                {cs ? "Značky" : "Brands"}
+                            </option>
                         </select>
                     </label>
                 </div>
@@ -173,7 +184,7 @@ export const FontAwesomePicker: TextFieldClientComponent = ({
                                 key={icon.id}
                                 disabled={locked}
                                 aria-pressed={value === icon.id}
-                                aria-label={`${icon.name} (${icon.style})`}
+                                aria-label={`${icon.name} (${styleLabels[icon.style]})`}
                                 onClick={() => {
                                     setValue(icon.id);
                                     dialog.current?.close();
@@ -187,7 +198,7 @@ export const FontAwesomePicker: TextFieldClientComponent = ({
                                     style={{ width: 28, height: 28 }}
                                 />
                                 <span>{icon.name}</span>
-                                <small>{icon.style}</small>
+                                <small>{styleLabels[icon.style]}</small>
                             </button>
                         ))}
                 </div>

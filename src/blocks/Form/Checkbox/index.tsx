@@ -1,3 +1,5 @@
+import { frontendMessages } from "@/i18n/frontend";
+import { useLocale } from "@/providers/Locale";
 import type { CheckboxField } from "@payloadcms/plugin-form-builder/types";
 import type { Control, FieldValues } from "react-hook-form";
 
@@ -17,6 +19,8 @@ export const Checkbox: React.FC<
         control: Control<FieldValues>;
     }
 > = ({ name, defaultValue, label, control, required }) => {
+    const messages = frontendMessages[useLocale()].form;
+
     return (
         <FormField
             control={control}
@@ -42,7 +46,7 @@ export const Checkbox: React.FC<
                     <FormMessage />
                 </FormItem>
             )}
-            rules={{ required: required ? "Toto pole je povinné." : false }}
+            rules={{ required: required ? messages.required : false }}
         />
     );
 };

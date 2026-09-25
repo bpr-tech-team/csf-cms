@@ -20,6 +20,10 @@ export const ServicesGrid: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Služba", en: "Service" },
+                plural: { cs: "Služby", en: "Services" },
+            },
             admin: {
                 initCollapsed: true,
             },

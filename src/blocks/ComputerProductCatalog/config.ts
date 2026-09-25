@@ -41,6 +41,10 @@ export const ComputerProductCatalog: Block = {
         {
             name: "categories",
             type: "array",
+            labels: {
+                singular: { cs: "Kategorie", en: "Category" },
+                plural: { cs: "Kategorie", en: "Categories" },
+            },
             dbName: "pages_computer_catalog_categories",
             admin: {
                 initCollapsed: true,
@@ -70,6 +74,10 @@ export const ComputerProductCatalog: Block = {
                 {
                     name: "products",
                     type: "array",
+                    labels: {
+                        singular: { cs: "Produkt", en: "Product" },
+                        plural: { cs: "Produkty", en: "Products" },
+                    },
                     dbName: "pages_computer_catalog_products",
                     admin: {
                         initCollapsed: true,
@@ -106,6 +114,16 @@ export const ComputerProductCatalog: Block = {
                         {
                             name: "specifications",
                             type: "array",
+                            labels: {
+                                singular: {
+                                    cs: "Parametr",
+                                    en: "Specification",
+                                },
+                                plural: {
+                                    cs: "Parametry",
+                                    en: "Specifications",
+                                },
+                            },
                             dbName: "pages_computer_catalog_specs",
                             admin: {
                                 initCollapsed: true,

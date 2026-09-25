@@ -1,3 +1,5 @@
+import { frontendMessages } from "@/i18n/frontend";
+import { useLocale } from "@/providers/Locale";
 import type { SelectField } from "@payloadcms/plugin-form-builder/types";
 import type { Control, FieldValues } from "react-hook-form";
 
@@ -31,6 +33,8 @@ export const Select: React.FC<
     required,
     defaultValue,
 }) => {
+    const messages = frontendMessages[useLocale()].form;
+
     return (
         <FormField
             control={control}
@@ -65,7 +69,7 @@ export const Select: React.FC<
                     <FormMessage />
                 </FormItem>
             )}
-            rules={{ required: required ? "Toto pole je povinné." : false }}
+            rules={{ required: required ? messages.required : false }}
         />
     );
 };

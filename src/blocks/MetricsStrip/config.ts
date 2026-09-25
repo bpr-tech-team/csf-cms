@@ -24,6 +24,10 @@ export const MetricsStrip: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Metrika", en: "Metric" },
+                plural: { cs: "Metriky", en: "Metrics" },
+            },
             admin: {
                 initCollapsed: true,
             },

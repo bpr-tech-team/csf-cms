@@ -18,6 +18,10 @@ export const ProcessSteps: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Krok", en: "Step" },
+                plural: { cs: "Kroky", en: "Steps" },
+            },
             admin: {
                 initCollapsed: true,
             },

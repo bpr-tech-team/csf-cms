@@ -1,5 +1,6 @@
 "use client";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
+import { frontendMessages } from "@/i18n/frontend";
 
 import { applyTypography } from "@/utilities/typography";
 
@@ -53,6 +54,7 @@ export const FormBlock: React.FC<
         submitButtonLabel,
     } = formFromProps;
     const formID = String(formFromProps.id);
+    const messages = frontendMessages[locale].form;
 
     const formMethods = useForm({
         defaultValues: formFromProps.fields || [],
@@ -94,9 +96,7 @@ export const FormBlock: React.FC<
                 );
 
                 if (!response.ok) {
-                    setError(
-                        "Formulář se nepodařilo odeslat. Zkuste to prosím znovu.",
-                    );
+                    setError(messages.submissionError);
                     return;
                 }
 
@@ -107,12 +107,10 @@ export const FormBlock: React.FC<
                 }
             } catch (submissionError) {
                 console.warn(submissionError);
-                setError(
-                    "Při odesílání formuláře došlo k chybě. Zkuste to prosím znovu.",
-                );
+                setError(messages.networkError);
             }
         },
-        [router, formID, redirect, confirmationType],
+        [router, formID, redirect, confirmationType, messages],
     );
 
     return (
@@ -188,7 +186,7 @@ export const FormBlock: React.FC<
                                         >
                                             <CircleCheck aria-hidden />
                                             <AlertTitle>
-                                                Formulář byl odeslán
+                                                {messages.successTitle}
                                             </AlertTitle>
                                             <AlertDescription>
                                                 <RichText
@@ -206,7 +204,7 @@ export const FormBlock: React.FC<
                                     >
                                         <CircleAlert aria-hidden />
                                         <AlertTitle>
-                                            Odeslání se nezdařilo
+                                            {messages.errorTitle}
                                         </AlertTitle>
                                         <AlertDescription>
                                             {applyTypography(error, { locale })}
@@ -217,6 +215,7 @@ export const FormBlock: React.FC<
                                     <form
                                         aria-busy={isSubmitting}
                                         id={formID}
+                                        noValidate
                                         onSubmit={handleSubmit(onSubmit)}
                                     >
                                         <fieldset
@@ -282,8 +281,9 @@ export const FormBlock: React.FC<
                                                     />
                                                 )}
                                                 {isSubmitting
-                                                    ? "Odesílání…"
-                                                    : submitButtonLabel}
+                                                    ? messages.submitting
+                                                    : submitButtonLabel ||
+                                                      messages.submit}
                                             </Button>
                                         </fieldset>
                                     </form>

@@ -11,23 +11,30 @@ export const HomepageHero: Block = {
         images: {
             thumbnail: {
                 url: "/block-previews/homepage.hero.webp",
-                alt: "Homepage hero",
+                alt: "Úvodní blok domovské stránky",
             },
         },
     },
     interfaceName: "HomepageHeroBlock",
-    labels: { singular: "Homepage hero", plural: "Homepage hero" },
+    labels: {
+        singular: { cs: "Úvodní blok domovské stránky", en: "Homepage hero" },
+        plural: { cs: "Úvodní bloky domovské stránky", en: "Homepage heroes" },
+    },
     fields: [
         heroBackgroundField(false),
         {
             name: "slides",
             type: "array",
+            labels: {
+                singular: { cs: "Snímek", en: "Slide" },
+                plural: { cs: "Snímky", en: "Slides" },
+            },
             admin: {
                 initCollapsed: true,
             },
             fields: heroContentFields(),
             label: {
-                cs: "Snímky hero sekce",
+                cs: "Snímky úvodní sekce",
                 en: "Hero slides",
             },
             maxRows: 5,
@@ -100,6 +107,10 @@ export const HomepageHero: Block = {
         {
             name: "quickLinks",
             type: "array",
+            labels: {
+                singular: { cs: "Rychlý odkaz", en: "Quick link" },
+                plural: { cs: "Rychlé odkazy", en: "Quick links" },
+            },
             admin: {
                 initCollapsed: true,
             },

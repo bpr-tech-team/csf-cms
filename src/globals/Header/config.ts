@@ -14,7 +14,7 @@ export const Header: GlobalConfig = {
             name: "navItems",
             type: "array",
             labels: {
-                singular: { cs: "položku navigace", en: "navigation item" },
+                singular: { cs: "Položka navigace", en: "navigation item" },
                 plural: { cs: "Položky navigace", en: "Navigation items" },
             },
             fields: [
@@ -58,7 +58,7 @@ export const Header: GlobalConfig = {
                     name: "children",
                     type: "array",
                     labels: {
-                        singular: { cs: "odkaz", en: "link" },
+                        singular: { cs: "Odkaz", en: "link" },
                         plural: { cs: "Odkazy", en: "Links" },
                     },
                     label: { cs: "Odkazy v menu", en: "Submenu links" },

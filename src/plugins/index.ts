@@ -13,6 +13,7 @@ import { getCanonicalUrl } from "@/seo/config";
 import { getSeoTitle } from "@/seo/getSeoTitle";
 import { getPagePath } from "@/utilities/getPagePath";
 import { preserveFormEmailColors } from "@/email/richText";
+import { formLabels, formSubmissionLabels } from "./formLabels";
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc, locale }) =>
     getSeoTitle(doc?.title, isLocale(locale) ? locale : defaultLocale);
@@ -97,6 +98,7 @@ export const plugins: Plugin[] = [
             payment: false,
         },
         formOverrides: {
+            fields: formLabels,
             labels: {
                 plural: {
                     cs: "Formuláře",
@@ -109,6 +111,7 @@ export const plugins: Plugin[] = [
             },
         },
         formSubmissionOverrides: {
+            fields: formSubmissionLabels,
             labels: {
                 plural: {
                     cs: "Odeslání formulářů",
