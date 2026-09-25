@@ -1,6 +1,6 @@
 # Accent-insensitive search
 
-`accentInsensitivePostgresAdapter` wraps Payload 3.88's SQL operators. Text
+`accentInsensitivePostgresAdapter` wraps Payload 3.90.2's SQL operators. Text
 `like`, `contains`, and `not_like` compare `unaccent(column)` with
 `unaccent(pattern)`. PostgreSQL's `ILIKE` still handles case, and Payload still
 handles word splitting and wildcards. Parameters remain bound SQL parameters.
@@ -18,7 +18,7 @@ that it is available; it must run before deployment. No content backfill or
 schema snapshot is needed because no tables change. Rollback intentionally
 retains the extension, which may be shared with other consumers.
 
-Restart the dev server after changing the adapter factory: Payload 3.88's hot
+Restart the dev server after changing the adapter factory: Payload 3.90.2's hot
 reload reuses the existing database adapter instance.
 
 This is a version-specific compatibility layer, not a public Payload query-hook
@@ -31,4 +31,4 @@ query measurements show it is necessary.
 References:
 
 - <https://www.postgresql.org/docs/current/unaccent.html>
-- <https://github.com/payloadcms/payload/blob/v3.88.0/packages/drizzle/src/queries/operatorMap.ts>
+- <https://github.com/payloadcms/payload/blob/v3.90.2/packages/drizzle/src/queries/operatorMap.ts>

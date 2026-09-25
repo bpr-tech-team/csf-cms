@@ -30,6 +30,7 @@ node_modules/
 .tmp/
 docs/
 tests/*
+!tests/e2e/
 !tests/int/
 tests/int/*
 !tests/int/branches.int.spec.tsx

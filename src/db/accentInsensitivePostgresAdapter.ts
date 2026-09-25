@@ -22,7 +22,7 @@ function withoutAccents(original: Operator, compare: typeof ilike): Operator {
     };
 }
 
-/** Compatibility layer for Payload 3.88, which has no query.operatorHandlers API. */
+/** Compatibility layer for Payload 3.90.2, which has no query.operatorHandlers API. */
 export function accentInsensitivePostgresAdapter(args: PostgresAdapterArgs) {
     const base = postgresAdapter({
         ...args,
