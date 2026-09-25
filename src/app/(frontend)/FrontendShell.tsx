@@ -96,10 +96,7 @@ export const getFrontendMetadata = (locale: AppLocale): Metadata => {
             },
             locale,
         ),
-        title: {
-            default: messages.defaultTitle,
-            template: `%s${seoConfig.titleSuffix}`,
-        },
+        title: messages.defaultTitle,
         twitter: {
             card: "summary_large_image",
             description: messages.defaultDescription,

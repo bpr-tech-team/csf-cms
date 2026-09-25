@@ -6,6 +6,7 @@ import type { AppLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import { mergeOpenGraph } from "./mergeOpenGraph";
 import { getAbsoluteUrl, getCanonicalUrl, seoConfig } from "@/seo/config";
+import { getSeoTitle } from "@/seo/getSeoTitle";
 
 const getImageURL = (image?: Media | Config["db"]["defaultIDType"] | null) => {
     let url = getCanonicalUrl(seoConfig.defaultOgImagePath);
@@ -32,10 +33,8 @@ export const generateMeta = async (args: {
     const ogImage = getImageURL(doc?.meta?.image);
     const description = doc?.meta?.description || messages.defaultDescription;
 
-    const pageTitle = doc?.meta?.title || messages.defaultTitle;
-    const socialTitle = doc?.meta?.title
-        ? `${doc.meta.title}${seoConfig.titleSuffix}`
-        : messages.defaultTitle;
+    // The SEO field is the complete title shown in Payload's preview.
+    const title = doc?.meta?.title?.trim() || getSeoTitle(doc?.title, locale);
     const canonical = getCanonicalUrl(path);
 
     return {
@@ -55,17 +54,17 @@ export const generateMeta = async (args: {
                           },
                       ]
                     : undefined,
-                title: socialTitle,
+                title,
                 url: canonical,
             },
             locale,
         ),
-        title: pageTitle,
+        title: { absolute: title },
         twitter: {
             card: "summary_large_image",
             description,
             images: [ogImage],
-            title: socialTitle,
+            title,
         },
     };
 };

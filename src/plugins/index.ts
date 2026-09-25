@@ -9,15 +9,13 @@ import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
 
 import { Page, Post } from "@/payload-types";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
-import { getCanonicalUrl, seoConfig } from "@/seo/config";
+import { getCanonicalUrl } from "@/seo/config";
+import { getSeoTitle } from "@/seo/getSeoTitle";
 import { getPagePath } from "@/utilities/getPagePath";
 import { preserveFormEmailColors } from "@/email/richText";
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-    return doc?.title
-        ? `${doc.title}${seoConfig.titleSuffix}`
-        : seoConfig.defaultTitle;
-};
+const generateTitle: GenerateTitle<Post | Page> = ({ doc, locale }) =>
+    getSeoTitle(doc?.title, isLocale(locale) ? locale : defaultLocale);
 
 const generateURL: GenerateURL<Post | Page> = ({
     collectionConfig,
