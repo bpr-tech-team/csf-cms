@@ -13,6 +13,7 @@ import * as migration_20260924_163153_content_icons from "./20260924_163153_cont
 import * as migration_20260924_172116_header_navigation from "./20260924_172116_header_navigation";
 import * as migration_20260925_064813_client_service from "./20260925_064813_client_service";
 import * as migration_20260925_090044_remove_search from "./20260925_090044_remove_search";
+import * as migration_20260925_110000_enable_unaccent from "./20260925_110000_enable_unaccent";
 
 export const migrations = [
     {
@@ -89,5 +90,10 @@ export const migrations = [
         up: migration_20260925_090044_remove_search.up,
         down: migration_20260925_090044_remove_search.down,
         name: "20260925_090044_remove_search",
+    },
+    {
+        up: migration_20260925_110000_enable_unaccent.up,
+        down: migration_20260925_110000_enable_unaccent.down,
+        name: "20260925_110000_enable_unaccent",
     },
 ];

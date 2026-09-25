@@ -1,4 +1,3 @@
-import { postgresAdapter } from "@payloadcms/db-postgres";
 import sharp from "sharp";
 import path from "path";
 import { buildConfig, PayloadRequest } from "payload";
@@ -17,6 +16,7 @@ import { defaultLexical } from "@/fields/defaultLexical";
 import { getServerSideURL } from "./utilities/getURL";
 import { defaultLocale, localeLabels, locales } from "@/i18n/config";
 import { createSMTPEmailAdapter } from "@/email/smtp";
+import { accentInsensitivePostgresAdapter } from "./db/accentInsensitivePostgresAdapter";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -88,7 +88,7 @@ export default buildConfig({
             label: localeLabels[locale],
         })),
     },
-    db: postgresAdapter({
+    db: accentInsensitivePostgresAdapter({
         migrationDir: path.resolve(dirname, "migrations"),
         pool: {
             connectionString: process.env.DATABASE_URL || "",
