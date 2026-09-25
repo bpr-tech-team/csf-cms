@@ -11,6 +11,7 @@ import * as migration_20260922_160319_flexible_content_mobile from "./20260922_1
 import * as migration_20260924_145734_vercel_blob from "./20260924_145734_vercel_blob";
 import * as migration_20260924_163153_content_icons from "./20260924_163153_content_icons";
 import * as migration_20260924_172116_header_navigation from "./20260924_172116_header_navigation";
+import * as migration_20260925_064813_client_service from "./20260925_064813_client_service";
 
 export const migrations = [
     {
@@ -77,5 +78,10 @@ export const migrations = [
         up: migration_20260924_172116_header_navigation.up,
         down: migration_20260924_172116_header_navigation.down,
         name: "20260924_172116_header_navigation",
+    },
+    {
+        up: migration_20260925_064813_client_service.up,
+        down: migration_20260925_064813_client_service.down,
+        name: "20260925_064813_client_service",
     },
 ];

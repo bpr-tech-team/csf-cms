@@ -13,6 +13,7 @@ import { ComputerAudience } from "../../blocks/ComputerAudience/config";
 import { ComputerProductCatalog } from "../../blocks/ComputerProductCatalog/config";
 import { EditorialColumns } from "../../blocks/EditorialColumns/config";
 import { FormBlock } from "../../blocks/Form/config";
+import { ClientService } from "@/blocks/ClientService/config";
 import { LogoMarquee } from "../../blocks/LogoMarquee/config";
 import { MediaFeatureGrid } from "../../blocks/MediaFeatureGrid/config";
 import { MetricsStrip } from "../../blocks/MetricsStrip/config";
@@ -101,6 +102,7 @@ export const Pages: CollectionConfig<"pages"> = {
                                 BranchesGrid,
                                 BranchDetails,
                                 FormBlock,
+                                ClientService,
                                 ServicesGrid,
                                 MetricsStrip,
                                 ProductsGrid,

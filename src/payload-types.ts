@@ -168,6 +168,7 @@ export interface Page {
     | BranchesGridBlock
     | BranchDetailsBlock
     | FormBlock
+    | ClientServiceBlock
     | ServicesGridBlock
     | MetricsStripBlock
     | ProductsGridBlock
@@ -848,6 +849,23 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientServiceBlock".
+ */
+export interface ClientServiceBlock {
+  eyebrow?: string | null;
+  heading: string;
+  description?: string | null;
+  loginLabel: string;
+  loginPlaceholder?: string | null;
+  passwordLabel: string;
+  passwordPlaceholder?: string | null;
+  submitButtonLabel: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'clientService';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1710,6 +1728,7 @@ export interface PagesSelect<T extends boolean = true> {
         branchesGrid?: T | BranchesGridBlockSelect<T>;
         branchDetails?: T | BranchDetailsBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        clientService?: T | ClientServiceBlockSelect<T>;
         servicesGrid?: T | ServicesGridBlockSelect<T>;
         metricsStrip?: T | MetricsStripBlockSelect<T>;
         productsGrid?: T | ProductsGridBlockSelect<T>;
@@ -1927,6 +1946,22 @@ export interface FormBlockSelect<T extends boolean = true> {
       };
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientServiceBlock_select".
+ */
+export interface ClientServiceBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  description?: T;
+  loginLabel?: T;
+  loginPlaceholder?: T;
+  passwordLabel?: T;
+  passwordPlaceholder?: T;
+  submitButtonLabel?: T;
   id?: T;
   blockName?: T;
 }
