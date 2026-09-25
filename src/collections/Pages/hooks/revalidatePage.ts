@@ -49,8 +49,6 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = async ({
             // Both languages and all grids share this data; expire immediately
             // so publication, unpublication and edits appear on the next request.
             revalidateTag(BRANCHES_CACHE_TAG, { expire: 0 });
-            revalidateTag("global_header", { expire: 0 });
-            revalidateTag("global_footer", { expire: 0 });
         }
     }
     return doc;
@@ -67,8 +65,6 @@ export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({
         revalidateTag("pages-sitemap", "max");
         if (doc.pageType === "branch") {
             revalidateTag(BRANCHES_CACHE_TAG, { expire: 0 });
-            revalidateTag("global_header", { expire: 0 });
-            revalidateTag("global_footer", { expire: 0 });
         }
     }
 

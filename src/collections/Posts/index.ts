@@ -18,6 +18,10 @@ import {
     revalidatePost,
 } from "./hooks/revalidatePost";
 import { captureDocumentPathsBeforeDelete } from "@/utilities/getDocumentRevalidationPaths";
+import {
+    revalidateNavigation,
+    revalidateNavigationAfterDelete,
+} from "@/hooks/revalidateNavigation";
 
 import {
     MetaDescriptionField,
@@ -261,10 +265,10 @@ export const Posts: CollectionConfig<"posts"> = {
     ],
     hooks: {
         beforeChange: [capturePostPathsBeforeChange],
-        afterChange: [revalidatePost],
+        afterChange: [revalidatePost, revalidateNavigation],
         beforeDelete: [captureDocumentPathsBeforeDelete("posts")],
         afterRead: [populateAuthors],
-        afterDelete: [revalidateDelete],
+        afterDelete: [revalidateDelete, revalidateNavigationAfterDelete],
     },
     versions: {
         drafts: {

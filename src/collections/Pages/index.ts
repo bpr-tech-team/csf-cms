@@ -31,6 +31,10 @@ import { populatePublishedAt } from "../../hooks/populatePublishedAt";
 import { generatePreviewPath } from "../../utilities/generatePreviewPath";
 import { revalidateDelete, revalidatePage } from "./hooks/revalidatePage";
 import { captureDocumentPathsBeforeDelete } from "@/utilities/getDocumentRevalidationPaths";
+import {
+    revalidateNavigation,
+    revalidateNavigationAfterDelete,
+} from "@/hooks/revalidateNavigation";
 import { validatePageLayout } from "./validateLayout";
 
 import {
@@ -188,10 +192,10 @@ export const Pages: CollectionConfig<"pages"> = {
         slugField({ localized: true }),
     ],
     hooks: {
-        afterChange: [revalidatePage],
+        afterChange: [revalidatePage, revalidateNavigation],
         beforeChange: [populatePublishedAt],
         beforeDelete: [captureDocumentPathsBeforeDelete("pages")],
-        afterDelete: [revalidateDelete],
+        afterDelete: [revalidateDelete, revalidateNavigationAfterDelete],
     },
     versions: {
         drafts: {
