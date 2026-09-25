@@ -57,7 +57,10 @@ export const Pages: CollectionConfig<"pages"> = {
         pageType: true,
     },
     admin: {
-        defaultColumns: ["title", "slug", "updatedAt"],
+        components: {
+            beforeListTable: ["@/components/PageTypeViews#PageTypeTabs"],
+        },
+        defaultColumns: ["title", "pageType", "slug", "updatedAt"],
         livePreview: {
             url: ({ data, req }) =>
                 generatePreviewPath({

@@ -38,6 +38,7 @@ const adminTranslations = {
 export default buildConfig({
     admin: {
         components: {
+            beforeNavLinks: ["@/components/PageTypeViews#PageTypeNav"],
             // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
             // Feel free to delete this at any time. Simply remove the line below.
             beforeLogin: ["@/components/BeforeLogin"],
@@ -99,6 +100,9 @@ export default buildConfig({
     ...(email ? { email } : {}),
     collections: [Pages, Posts, Media, Categories, Users],
     cors: [getServerSideURL()].filter(Boolean),
+    folders: {
+        browseByFolder: false,
+    },
     globals: [Header, Footer],
     plugins,
     secret: process.env.PAYLOAD_SECRET,
