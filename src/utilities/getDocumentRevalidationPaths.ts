@@ -8,7 +8,7 @@ import {
     type AppLocale,
 } from "@/i18n/config";
 import type { Page } from "@/payload-types";
-import { getPagePath } from "@/utilities/getPagePath";
+import { getPageRoutePaths } from "@/utilities/getPagePath";
 
 type DocumentCollection = "pages" | "posts";
 type Slugs = Partial<Record<AppLocale, string | null>>;
@@ -28,8 +28,8 @@ const documentPaths = (collection: DocumentCollection, doc: DocumentPaths) => {
     const paths = new Set<string>();
 
     for (const locale of locales) {
-        // The frontend also resolves the default-language slug under /en,
-        // even when an English translation has its own slug.
+        // Also invalidate the default-language slug under /en: it may be a
+        // cached fallback page or a redirect to the translated slug.
         const localeSlugs = new Set([
             slugs[locale],
             ...(locale !== defaultLocale ? [slugs[defaultLocale]] : []),
@@ -42,19 +42,11 @@ const documentPaths = (collection: DocumentCollection, doc: DocumentPaths) => {
             if (collection === "posts") {
                 paths.add(withLocalePrefix(`/posts/${encodedSlug}`, locale));
             } else {
-                paths.add(
-                    withLocalePrefix(
-                        getPagePath({ slug, pageType: doc.pageType }),
-                        locale,
-                    ),
-                );
-                if (doc.pageType !== "branch") {
-                    paths.add(withLocalePrefix(`/${encodedSlug}`, locale));
-                    // Existing Czech aliases render the same standard page.
-                    if (locale === defaultLocale) {
-                        paths.add(`/sluzby/${encodedSlug}`);
-                        paths.add(`/pocitace/${encodedSlug}`);
-                    }
+                for (const path of getPageRoutePaths(
+                    { slug, pageType: doc.pageType },
+                    locale,
+                )) {
+                    paths.add(path);
                 }
             }
         }

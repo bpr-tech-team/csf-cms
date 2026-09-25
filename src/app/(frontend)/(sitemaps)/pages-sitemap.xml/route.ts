@@ -56,11 +56,11 @@ const getPagesSitemap = unstable_cache(
 
                           return {
                               loc: getCanonicalUrl(
-                                  withLocalePrefix(
-                                      getPagePath({
+                                  getPagePath(
+                                      {
                                           slug,
                                           pageType: page.pageType,
-                                      }),
+                                      },
                                       locale,
                                   ),
                               ),

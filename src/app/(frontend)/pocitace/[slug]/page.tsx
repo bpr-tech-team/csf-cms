@@ -4,24 +4,16 @@ import {
     PageTemplate,
 } from "@/app/(frontend)/_templates/PageTemplate";
 
-type Args = {
-    params: Promise<{
-        slug?: string;
-    }>;
-};
+type Args = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-    return generatePageStaticParams("cs");
+    return generatePageStaticParams("cs", "computer");
 }
 
 export default async function Page({ params }: Args) {
-    return <PageTemplate locale="cs" params={params} pathPrefix="pocitace" />;
+    return <PageTemplate locale="cs" params={params} pageType="computer" />;
 }
 
 export async function generateMetadata({ params }: Args) {
-    return generatePageMetadata({
-        locale: "cs",
-        params,
-        pathPrefix: "pocitace",
-    });
+    return generatePageMetadata({ locale: "cs", params, pageType: "computer" });
 }

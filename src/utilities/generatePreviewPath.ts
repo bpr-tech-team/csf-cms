@@ -32,7 +32,7 @@ export const generatePreviewPath = ({
     const locale = isLocale(req.locale) ? req.locale : defaultLocale;
     const path = withLocalePrefix(
         collection === "pages"
-            ? getPagePath({ slug, pageType })
+            ? getPagePath({ slug, pageType }, locale)
             : `${collectionPrefixMap[collection]}/${encodedSlug}`,
         locale,
     );

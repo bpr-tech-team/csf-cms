@@ -32,11 +32,11 @@ const generateURL: GenerateURL<Post | Page> = ({
         return getCanonicalUrl(withLocalePrefix("/", locale));
     }
 
+    const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
     const path =
         collectionConfig?.slug === "posts"
             ? `/posts/${doc.slug}`
-            : getPagePath(doc as Page);
-    const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
+            : getPagePath(doc as Page, locale);
 
     return getCanonicalUrl(withLocalePrefix(path, locale));
 };

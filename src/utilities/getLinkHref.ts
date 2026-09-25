@@ -22,7 +22,7 @@ export function getLinkHref(
             ? typeof link.reference?.value === "object" &&
               link.reference.value.slug
                 ? link.reference.relationTo === "pages"
-                    ? getPagePath(link.reference.value as Page)
+                    ? getPagePath(link.reference.value as Page, locale)
                     : `/posts/${link.reference.value.slug}`
                 : null
             : link.url;

@@ -7,13 +7,13 @@ import {
 type Args = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-    return generatePageStaticParams("cs", "branch");
+    return generatePageStaticParams("en", "computer");
 }
 
 export default async function Page({ params }: Args) {
-    return <PageTemplate locale="cs" params={params} pageType="branch" />;
+    return <PageTemplate locale="en" params={params} pageType="computer" />;
 }
 
 export async function generateMetadata({ params }: Args) {
-    return generatePageMetadata({ locale: "cs", params, pageType: "branch" });
+    return generatePageMetadata({ locale: "en", params, pageType: "computer" });
 }
