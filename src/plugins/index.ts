@@ -2,13 +2,10 @@ import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
 import { nestedDocsPlugin } from "@payloadcms/plugin-nested-docs";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
-import { searchPlugin } from "@payloadcms/plugin-search";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { Plugin } from "payload";
 import { revalidateRedirects } from "@/hooks/revalidateRedirects";
 import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
-import { searchFields } from "@/search/fieldOverrides";
-import { beforeSyncWithSearch } from "@/search/beforeSync";
 
 import { Page, Post } from "@/payload-types";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
@@ -123,31 +120,6 @@ export const plugins: Plugin[] = [
                     cs: "Odeslání formuláře",
                     en: "Form Submission",
                 },
-            },
-        },
-    }),
-    searchPlugin({
-        collections: ["posts"],
-        beforeSync: beforeSyncWithSearch,
-        searchOverrides: {
-            admin: {
-                description: {
-                    cs: "Automaticky vytvářené výsledky pro globální vyhledávání na webu. Aktualizují se při změnách dokumentů v CMS.",
-                    en: "This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.",
-                },
-            },
-            labels: {
-                plural: {
-                    cs: "Výsledky vyhledávání",
-                    en: "Search Results",
-                },
-                singular: {
-                    cs: "Výsledek vyhledávání",
-                    en: "Search Result",
-                },
-            },
-            fields: ({ defaultFields }) => {
-                return [...defaultFields, ...searchFields];
             },
         },
     }),

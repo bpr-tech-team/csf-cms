@@ -25,8 +25,6 @@ module.exports = {
                     "/next/preview",
                     "/next/exit-preview",
                     "/next/seed",
-                    "/search",
-                    "/en/search",
                 ],
             },
         ],

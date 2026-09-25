@@ -15,7 +15,6 @@ export const frontendMessages: Record<
         menuClose: string;
         menuOpen: string;
         noImage: string;
-        noResultsFound: string;
         page: string;
         pageRangeEmpty: string;
         pageRangeOf: string;
@@ -24,10 +23,6 @@ export const frontendMessages: Record<
         postsPlural: string;
         postsSingular: string;
         postsTitle: string;
-        searchLabel: string;
-        searchPlaceholder: string;
-        searchSubmit: string;
-        searchTitle: string;
         selectSlide: string;
         slide: string;
         untitledCategory: string;
@@ -47,7 +42,6 @@ export const frontendMessages: Record<
         menuClose: "Zavřít menu",
         menuOpen: "Otevřít menu",
         noImage: "Bez obrázku",
-        noResultsFound: "Nebyly nalezeny žádné výsledky.",
         page: "strana",
         pageRangeEmpty: "Vyhledávání nevrátilo žádné výsledky.",
         pageRangeOf: "z",
@@ -57,10 +51,6 @@ export const frontendMessages: Record<
         postsPlural: "článků",
         postsSingular: "článek",
         postsTitle: "Novinky",
-        searchLabel: "Vyhledávání",
-        searchPlaceholder: "Hledat",
-        searchSubmit: "Odeslat",
-        searchTitle: "Vyhledávání",
         selectSlide: "Přepnout snímek",
         slide: "Snímek",
         untitledCategory: "Kategorie bez názvu",
@@ -79,7 +69,6 @@ export const frontendMessages: Record<
         menuClose: "Close menu",
         menuOpen: "Open menu",
         noImage: "No image",
-        noResultsFound: "No results found.",
         page: "page",
         pageRangeEmpty: "Search produced no results.",
         pageRangeOf: "of",
@@ -89,10 +78,6 @@ export const frontendMessages: Record<
         postsPlural: "Posts",
         postsSingular: "Post",
         postsTitle: "Posts",
-        searchLabel: "Search",
-        searchPlaceholder: "Search",
-        searchSubmit: "Submit",
-        searchTitle: "Search",
         selectSlide: "Select slide",
         slide: "Slide",
         untitledCategory: "Untitled category",
