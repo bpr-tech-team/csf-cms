@@ -8,7 +8,6 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { FormBlock, type FormBlockType } from "@/blocks/Form/Component";
-import { contactForm } from "@/endpoints/seed/contact-form";
 
 vi.mock("next/navigation", () => ({
     useRouter: () => ({ push: vi.fn() }),
@@ -37,8 +36,20 @@ const block: FormBlockType = {
         address: "Střelecká 672\n500 02 Hradec Králové",
     },
     form: {
-        ...contactForm,
         id: 7,
+        title: "Kontaktní formulář",
+        submitButtonLabel: "Odeslat poptávku",
+        confirmationType: "message",
+        confirmationMessage: {
+            root: {
+                type: "root",
+                children: [],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                version: 1,
+            },
+        },
         fields: [],
         createdAt: "2026-09-14T00:00:00.000Z",
         updatedAt: "2026-09-14T00:00:00.000Z",

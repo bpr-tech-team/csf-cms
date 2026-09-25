@@ -24,7 +24,6 @@ module.exports = {
                     "/api/*",
                     "/next/preview",
                     "/next/exit-preview",
-                    "/next/seed",
                 ],
             },
         ],
