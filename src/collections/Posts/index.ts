@@ -12,7 +12,12 @@ import { Banner } from "../../blocks/Banner/config";
 import { Code } from "../../blocks/Code/config";
 import { generatePreviewPath } from "../../utilities/generatePreviewPath";
 import { populateAuthors } from "./hooks/populateAuthors";
-import { revalidateDelete, revalidatePost } from "./hooks/revalidatePost";
+import {
+    capturePostPathsBeforeChange,
+    revalidateDelete,
+    revalidatePost,
+} from "./hooks/revalidatePost";
+import { captureDocumentPathsBeforeDelete } from "@/utilities/getDocumentRevalidationPaths";
 
 import {
     MetaDescriptionField,
@@ -255,7 +260,9 @@ export const Posts: CollectionConfig<"posts"> = {
         slugField({ localized: true }),
     ],
     hooks: {
+        beforeChange: [capturePostPathsBeforeChange],
         afterChange: [revalidatePost],
+        beforeDelete: [captureDocumentPathsBeforeDelete("posts")],
         afterRead: [populateAuthors],
         afterDelete: [revalidateDelete],
     },

@@ -5,37 +5,42 @@ import type {
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { locales, withLocalePrefix } from "@/i18n/config";
 import type { Page } from "../../../payload-types";
-import { getPagePath } from "@/utilities/getPagePath";
 import { BRANCHES_CACHE_TAG } from "@/utilities/branchData";
+import {
+    getDocumentRevalidationPaths,
+    takeDeletedDocumentPaths,
+} from "@/utilities/getDocumentRevalidationPaths";
 
-export const revalidatePage: CollectionAfterChangeHook<Page> = ({
+export const revalidatePage: CollectionAfterChangeHook<Page> = async ({
     doc,
     previousDoc,
-    req: { payload, context },
+    req,
 }) => {
+    const { payload, context } = req;
     if (!context.disableRevalidate) {
         if (doc._status === "published") {
-            for (const locale of locales) {
-                const path = withLocalePrefix(getPagePath(doc), locale);
+            const paths = await getDocumentRevalidationPaths("pages", doc, req);
+            for (const path of paths) {
                 payload.logger.info(`Revalidating page at path: ${path}`);
                 revalidatePath(path);
             }
             revalidateTag("pages-sitemap", "max");
         }
 
-        // If the page was previously published, we need to revalidate the old path
         if (
             previousDoc?._status === "published" &&
             (doc._status !== "published" ||
                 doc.slug !== previousDoc.slug ||
                 doc.pageType !== previousDoc.pageType)
         ) {
-            for (const locale of locales) {
-                revalidatePath(
-                    withLocalePrefix(getPagePath(previousDoc), locale),
-                );
+            const paths = await getDocumentRevalidationPaths(
+                "pages",
+                previousDoc,
+                req,
+            );
+            for (const path of paths) {
+                revalidatePath(path);
             }
             revalidateTag("pages-sitemap", "max");
         }
@@ -53,11 +58,11 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({
     doc,
-    req: { context },
+    req,
 }) => {
-    if (!context.disableRevalidate) {
-        for (const locale of locales) {
-            revalidatePath(withLocalePrefix(getPagePath(doc), locale));
+    if (!req.context.disableRevalidate) {
+        for (const path of takeDeletedDocumentPaths("pages", doc.id, req)) {
+            revalidatePath(path);
         }
         revalidateTag("pages-sitemap", "max");
         if (doc.pageType === "branch") {
