@@ -1,3 +1,4 @@
+import { contentIcon } from "@/fields/contentIcon";
 import type { Block } from "payload";
 
 import { homepageSectionIntro } from "@/fields/homepageSection";
@@ -19,6 +20,10 @@ export const ProductsGrid: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Produkt", en: "Product" },
+                plural: { cs: "Produkty", en: "Products" },
+            },
             admin: {
                 initCollapsed: true,
             },
@@ -32,22 +37,7 @@ export const ProductsGrid: Block = {
                     },
                     relationTo: "media",
                 },
-                {
-                    name: "icon",
-                    type: "upload",
-                    admin: {
-                        description: {
-                            cs: "Ikona bez pozadí a vnějších okrajů. Barevné pozadí přidává web automaticky.",
-                            en: "Icon without a background or outer padding. The website adds the colored background automatically.",
-                        },
-                    },
-                    label: {
-                        cs: "Ikona",
-                        en: "Icon",
-                    },
-                    relationTo: "media",
-                    required: true,
-                },
+                contentIcon({ required: true }),
                 {
                     name: "title",
                     type: "text",

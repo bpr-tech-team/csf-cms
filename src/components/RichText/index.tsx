@@ -36,10 +36,13 @@ const internalDocToHref = (
     return withLocalePrefix(
         relationTo === "posts"
             ? `/posts/${slug}`
-            : getPagePath({
-                  slug: slug as string,
-                  pageType: value.pageType as Page["pageType"],
-              }),
+            : getPagePath(
+                  {
+                      slug: slug as string,
+                      pageType: value.pageType as Page["pageType"],
+                  },
+                  locale,
+              ),
         locale,
     );
 };

@@ -1,4 +1,4 @@
-import type { Block } from "payload";
+    import type { Block } from "payload";
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const BranchesGrid: Block = {
@@ -32,6 +32,10 @@ export const BranchesGrid: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Pobočka", en: "Branch" },
+                plural: { cs: "Pobočky", en: "Branches" },
+            },
             required: true,
             minRows: 1,
             label: { cs: "Pobočky", en: "Branches" },

@@ -2,25 +2,21 @@ import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
 import { nestedDocsPlugin } from "@payloadcms/plugin-nested-docs";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
-import { searchPlugin } from "@payloadcms/plugin-search";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { Plugin } from "payload";
 import { revalidateRedirects } from "@/hooks/revalidateRedirects";
 import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
-import { searchFields } from "@/search/fieldOverrides";
-import { beforeSyncWithSearch } from "@/search/beforeSync";
 
 import { Page, Post } from "@/payload-types";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
-import { getCanonicalUrl, seoConfig } from "@/seo/config";
+import { getCanonicalUrl } from "@/seo/config";
+import { getSeoTitle } from "@/seo/getSeoTitle";
 import { getPagePath } from "@/utilities/getPagePath";
 import { preserveFormEmailColors } from "@/email/richText";
+import { formLabels, formSubmissionLabels } from "./formLabels";
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-    return doc?.title
-        ? `${doc.title}${seoConfig.titleSuffix}`
-        : seoConfig.defaultTitle;
-};
+const generateTitle: GenerateTitle<Post | Page> = ({ doc, locale }) =>
+    getSeoTitle(doc?.title, isLocale(locale) ? locale : defaultLocale);
 
 const generateURL: GenerateURL<Post | Page> = ({
     collectionConfig,
@@ -35,11 +31,11 @@ const generateURL: GenerateURL<Post | Page> = ({
         return getCanonicalUrl(withLocalePrefix("/", locale));
     }
 
+    const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
     const path =
         collectionConfig?.slug === "posts"
             ? `/posts/${doc.slug}`
-            : getPagePath(doc as Page);
-    const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
+            : getPagePath(doc as Page, locale);
 
     return getCanonicalUrl(withLocalePrefix(path, locale));
 };
@@ -102,6 +98,7 @@ export const plugins: Plugin[] = [
             payment: false,
         },
         formOverrides: {
+            fields: formLabels,
             labels: {
                 plural: {
                     cs: "Formuláře",
@@ -114,6 +111,7 @@ export const plugins: Plugin[] = [
             },
         },
         formSubmissionOverrides: {
+            fields: formSubmissionLabels,
             labels: {
                 plural: {
                     cs: "Odeslání formulářů",
@@ -123,31 +121,6 @@ export const plugins: Plugin[] = [
                     cs: "Odeslání formuláře",
                     en: "Form Submission",
                 },
-            },
-        },
-    }),
-    searchPlugin({
-        collections: ["posts"],
-        beforeSync: beforeSyncWithSearch,
-        searchOverrides: {
-            admin: {
-                description: {
-                    cs: "Automaticky vytvářené výsledky pro globální vyhledávání na webu. Aktualizují se při změnách dokumentů v CMS.",
-                    en: "This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.",
-                },
-            },
-            labels: {
-                plural: {
-                    cs: "Výsledky vyhledávání",
-                    en: "Search Results",
-                },
-                singular: {
-                    cs: "Výsledek vyhledávání",
-                    en: "Search Result",
-                },
-            },
-            fields: ({ defaultFields }) => {
-                return [...defaultFields, ...searchFields];
             },
         },
     }),

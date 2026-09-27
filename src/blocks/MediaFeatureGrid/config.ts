@@ -43,6 +43,10 @@ export const MediaFeatureGrid: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Vlastnost", en: "Feature" },
+                plural: { cs: "Vlastnosti", en: "Features" },
+            },
             admin: {
                 initCollapsed: true,
             },

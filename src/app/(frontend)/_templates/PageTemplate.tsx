@@ -11,9 +11,15 @@ import { generateMeta } from "@/utilities/generateMeta";
 import { cn } from "@/utilities/ui";
 import configPromise from "@payload-config";
 import { draftMode } from "next/headers";
+import { notFound } from "next/navigation";
 import React, { cache } from "react";
 import { getPayload } from "payload";
-import type { Page } from "@/payload-types";
+import { findPageBySlug } from "@/utilities/findPageBySlug";
+import {
+    getPagePath,
+    pagePathPrefixes,
+    type PageType,
+} from "@/utilities/getPagePath";
 
 type PageParams = {
     slug?: string;
@@ -22,13 +28,12 @@ type PageParams = {
 export type PageTemplateArgs = {
     locale: AppLocale;
     params: Promise<PageParams>;
-    pathPrefix?: string;
-    pageType?: "branch";
+    pageType?: PageType;
 };
 
 export async function generatePageStaticParams(
     locale: AppLocale,
-    pageType?: "branch",
+    pageType: PageType = "standard",
 ) {
     const payload = await getPayload({ config: configPromise });
     const pages = await payload.find({
@@ -39,9 +44,7 @@ export async function generatePageStaticParams(
         overrideAccess: false,
         pagination: false,
         where: {
-            pageType: pageType
-                ? { equals: pageType }
-                : { not_equals: "branch" },
+            pageType: { equals: pageType },
         },
         select: {
             slug: true,
@@ -56,7 +59,10 @@ export async function generatePageStaticParams(
 
             return slug?.[locale] || slug?.[defaultLocale];
         })
-        .filter((slug): slug is string => Boolean(slug) && slug !== "home")
+        .filter(
+            (slug): slug is string =>
+                Boolean(slug) && !(pageType === "standard" && slug === "home"),
+        )
         .map((slug) => {
             return { slug };
         });
@@ -67,26 +73,20 @@ export async function generatePageStaticParams(
 export async function PageTemplate({
     locale,
     params: paramsPromise,
-    pathPrefix,
-    pageType,
+    pageType = "standard",
 }: PageTemplateArgs) {
     const { isEnabled: draft } = await draftMode();
-    const { slug = "home" } = await paramsPromise;
-    const decodedSlug = decodeURIComponent(slug);
-    const path =
-        decodedSlug === "home"
-            ? "/"
-            : `/${pathPrefix ? `${pathPrefix}/` : ""}${decodedSlug}`;
-    const url = withLocalePrefix(path, locale);
-    const page = await queryPageBySlug({
-        locale,
-        slug: decodedSlug,
-        pageType,
-    });
+    const { slug } = await paramsPromise;
+    const { page, url } = await resolvePageRoute(locale, slug, pageType);
 
     if (!page) {
         return <PayloadRedirects locale={locale} url={url} />;
     }
+
+    const canonicalPath = getPagePath(page, locale);
+    // Proxy handles aliases before ISR. Never render a duplicate if it is
+    // bypassed (for example during draft preview).
+    if (url !== canonicalPath) notFound();
 
     const { layout } = page;
     const firstBlock = layout[0];
@@ -116,98 +116,35 @@ export async function PageTemplate({
 export async function generatePageMetadata({
     locale,
     params: paramsPromise,
-    pathPrefix,
-    pageType,
+    pageType = "standard",
 }: PageTemplateArgs): Promise<Metadata> {
-    const { slug = "home" } = await paramsPromise;
-    const decodedSlug = decodeURIComponent(slug);
-    const page = await queryPageBySlug({
-        locale,
-        slug: decodedSlug,
-        pageType,
-    });
+    const { slug } = await paramsPromise;
+    const { page, url } = await resolvePageRoute(locale, slug, pageType);
 
     return generateMeta({
         doc: page,
         locale,
-        path: withLocalePrefix(
-            decodedSlug === "home"
-                ? "/"
-                : `/${pathPrefix ? `${pathPrefix}/` : ""}${decodedSlug}`,
-            locale,
-        ),
+        path: page ? getPagePath(page, locale) : url,
     });
 }
 
-const queryPageBySlug = cache(
-    async ({
-        locale,
-        slug,
-        pageType,
-    }: {
-        locale: AppLocale;
-        slug: string;
-        pageType?: "branch";
-    }): Promise<Page | null> => {
+const resolvePageRoute = cache(
+    async (locale: AppLocale, slug: string | undefined, pageType: PageType) => {
+        const prefix = pagePathPrefixes[pageType][locale];
+        // Next.js already decodes route params; encode exactly once for URLs.
+        const url = withLocalePrefix(
+            slug === undefined
+                ? "/"
+                : `/${prefix ? `${prefix}/` : ""}${encodeURIComponent(slug)}`,
+            locale,
+        );
         const { isEnabled: draft } = await draftMode();
-        const payload = await getPayload({ config: configPromise });
-
-        const result = await payload.find({
-            collection: "pages",
-            draft,
-            fallbackLocale: locale === defaultLocale ? false : defaultLocale,
-            limit: 1,
+        const page = await findPageBySlug({
             locale,
-            overrideAccess: draft,
-            pagination: false,
-            where: {
-                pageType: pageType
-                    ? { equals: pageType }
-                    : { not_equals: "branch" },
-                slug: {
-                    equals: slug,
-                },
-            },
-        });
-
-        if (result.docs?.[0]) {
-            return result.docs[0];
-        }
-
-        if (locale === defaultLocale) {
-            return null;
-        }
-
-        const fallbackResult = await payload.find({
-            collection: "pages",
+            slug: slug ?? "home",
+            pageTypes: [pageType],
             draft,
-            limit: 1,
-            locale: defaultLocale,
-            overrideAccess: draft,
-            pagination: false,
-            where: {
-                pageType: pageType
-                    ? { equals: pageType }
-                    : { not_equals: "branch" },
-                slug: {
-                    equals: slug,
-                },
-            },
         });
-
-        const fallbackDoc = fallbackResult.docs?.[0];
-
-        if (!fallbackDoc) {
-            return null;
-        }
-
-        return payload.findByID({
-            collection: "pages",
-            draft,
-            fallbackLocale: defaultLocale,
-            id: fallbackDoc.id,
-            locale,
-            overrideAccess: draft,
-        });
+        return { page, url };
     },
 );

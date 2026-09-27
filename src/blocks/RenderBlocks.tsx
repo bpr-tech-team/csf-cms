@@ -14,6 +14,7 @@ import { ComputerAudienceBlock } from "@/blocks/ComputerAudience/Component";
 import { ComputerProductCatalogBlock } from "@/blocks/ComputerProductCatalog/Component";
 import { EditorialColumnsBlock } from "@/blocks/EditorialColumns/Component";
 import { FormBlock } from "@/blocks/Form/Component";
+import { ClientServiceBlock } from "@/blocks/ClientService/Component";
 import { LogoMarqueeBlock } from "@/blocks/LogoMarquee/Component";
 import { MediaFeatureGridBlock } from "@/blocks/MediaFeatureGrid/Component";
 import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
@@ -49,6 +50,14 @@ export const RenderBlocks: React.FC<{
                     const { blockType } = block;
 
                     switch (blockType) {
+                        case "clientService":
+                            return (
+                                <ClientServiceBlock
+                                    {...block}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                />
+                            );
                         case "hero":
                             return (
                                 <HeroBlock

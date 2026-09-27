@@ -62,11 +62,11 @@ export const BranchesGridBlock = async ({
                                         : "xl:col-span-2",
                                 )}
                             >
-                                <CardIcon resource={info.icon} />
+                                <CardIcon icon={info.icon} />
                                 <h3 className="mt-8 text-heading-md font-bold uppercase">
                                     <CMSLink
                                         type="custom"
-                                        url={getPagePath(branch)}
+                                        url={getPagePath(branch, locale)}
                                         label={branch.title}
                                         locale={locale}
                                         className="hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"

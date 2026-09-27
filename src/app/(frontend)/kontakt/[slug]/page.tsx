@@ -11,21 +11,9 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: Args) {
-    return (
-        <PageTemplate
-            locale="cs"
-            params={params}
-            pathPrefix="kontakt"
-            pageType="branch"
-        />
-    );
+    return <PageTemplate locale="cs" params={params} pageType="branch" />;
 }
 
 export async function generateMetadata({ params }: Args) {
-    return generatePageMetadata({
-        locale: "cs",
-        params,
-        pathPrefix: "kontakt",
-        pageType: "branch",
-    });
+    return generatePageMetadata({ locale: "cs", params, pageType: "branch" });
 }

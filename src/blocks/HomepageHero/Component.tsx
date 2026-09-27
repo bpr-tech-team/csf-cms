@@ -3,6 +3,7 @@ import { applyTypography } from "@/utilities/typography";
 
 import type { CSSProperties } from "react";
 
+import { ContentIcon } from "@/components/ContentIcon";
 import { MediaAsset } from "@/components/MediaAsset";
 import { HeroContent } from "@/components/HeroContent";
 import { HeroSection } from "@/components/HeroSection";
@@ -169,12 +170,10 @@ const QuickLinkCard = ({
                 className="absolute inset-0 bg-[linear-gradient(rgb(0_0_0/0.54),rgb(0_0_0/0.72)),radial-gradient(circle_at_70%_20%,rgb(175_203_8/0.22),transparent_58%)] transition-colors duration-base group-hover:bg-[linear-gradient(rgb(0_0_0/0.42),rgb(0_0_0/0.64)),radial-gradient(circle_at_70%_20%,rgb(175_203_8/0.3),transparent_58%)]"
             />
             <span className="relative z-10 flex flex-col items-center gap-5">
-                <span className="relative block size-11">
-                    <MediaAsset
-                        className="size-full object-contain"
-                        resource={item.icon}
-                    />
-                </span>
+                <ContentIcon
+                    icon={item.icon}
+                    className="size-11 text-brand-600"
+                />
                 <span className="text-heading-md font-medium text-paper-0">
                     {applyTypography(item.title, { locale })}
                 </span>

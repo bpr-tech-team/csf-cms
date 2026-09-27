@@ -19,6 +19,9 @@ async function getGlobal<T extends Global>(
         slug,
         depth,
         locale,
+        draft: false,
+        // Navigation must only resolve documents available to public visitors.
+        overrideAccess: false,
     });
 
     return global;
@@ -34,7 +37,7 @@ export const getCachedGlobal = <T extends Global>(
 ) =>
     unstable_cache(
         async () => getGlobal<T>(slug, depth, locale),
-        [slug, String(depth), locale],
+        ["public-global", slug, String(depth), locale],
         {
             tags: [`global_${slug}`, `global_${slug}_${locale}`],
         },

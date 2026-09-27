@@ -18,6 +18,10 @@ export const CompanyTimeline: Block = {
         {
             name: "items",
             type: "array",
+            labels: {
+                singular: { cs: "Událost", en: "Event" },
+                plural: { cs: "Události", en: "Events" },
+            },
             admin: {
                 initCollapsed: true,
             },

@@ -8,7 +8,7 @@ import { SetHeaderTheme } from "@/components/SetHeaderTheme";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
-import { getCanonicalUrl, seoConfig } from "@/seo/config";
+import { generateMeta } from "@/utilities/generateMeta";
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
 import { notFound } from "next/navigation";
@@ -83,30 +83,31 @@ export async function PostsArchiveTemplate({
     );
 }
 
-export function generatePostsArchiveMetadata({
+export async function generatePostsArchiveMetadata({
     locale,
     pageNumber,
 }: {
     locale: AppLocale;
     pageNumber?: string;
-}): Metadata {
+}): Promise<Metadata> {
     const messages = frontendMessages[locale];
     const path = pageNumber ? `/posts/page/${pageNumber}` : "/posts";
+    const title = pageNumber
+        ? `${messages.postsTitle} – ${messages.page} ${pageNumber}`
+        : messages.postsTitle;
 
     return {
-        alternates: {
-            canonical: getCanonicalUrl(withLocalePrefix(path, locale)),
-        },
-        description: messages.postsDescription,
+        ...(await generateMeta({
+            doc: { title, meta: { description: messages.postsDescription } },
+            locale,
+            path: withLocalePrefix(path, locale),
+        })),
         robots: pageNumber
             ? {
                   follow: true,
                   index: false,
               }
             : undefined,
-        title: pageNumber
-            ? `${messages.postsTitle} – ${messages.page} ${pageNumber || ""}${seoConfig.titleSuffix}`
-            : `${messages.postsTitle}${seoConfig.titleSuffix}`,
     };
 }
 

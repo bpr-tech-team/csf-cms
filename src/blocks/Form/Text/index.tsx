@@ -1,3 +1,5 @@
+import { frontendMessages } from "@/i18n/frontend";
+import { useLocale } from "@/providers/Locale";
 import type { TextField } from "@payloadcms/plugin-form-builder/types";
 import type { Control, FieldValues } from "react-hook-form";
 
@@ -17,6 +19,8 @@ export const Text: React.FC<
         control: Control<FieldValues>;
     }
 > = ({ name, defaultValue, label, control, required }) => {
+    const messages = frontendMessages[useLocale()].form;
+
     return (
         <FormField
             control={control}
@@ -34,7 +38,7 @@ export const Text: React.FC<
                     <FormMessage />
                 </FormItem>
             )}
-            rules={{ required: required ? "Toto pole je povinné." : false }}
+            rules={{ required: required ? messages.required : false }}
         />
     );
 };

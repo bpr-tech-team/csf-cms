@@ -17,6 +17,10 @@ export const linkGroup: LinkGroupType = ({
     const generatedLinkGroup: Field = {
         name: "links",
         type: "array",
+        labels: {
+            singular: { cs: "Odkaz", en: "Link" },
+            plural: { cs: "Odkazy", en: "Links" },
+        },
         fields: [
             link({
                 appearances,

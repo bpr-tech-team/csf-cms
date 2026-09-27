@@ -1,3 +1,5 @@
+import { frontendMessages } from "@/i18n/frontend";
+import { useLocale } from "@/providers/Locale";
 import type { CountryField } from "@payloadcms/plugin-form-builder/types";
 import type { Control, FieldValues } from "react-hook-form";
 
@@ -25,6 +27,10 @@ export const Country: React.FC<
         control: Control<FieldValues>;
     }
 > = ({ name, control, defaultValue, label, required }) => {
+    const locale = useLocale();
+    const messages = frontendMessages[locale].form;
+    const countryNames = new Intl.DisplayNames([locale], { type: "region" });
+
     return (
         <FormField
             control={control}
@@ -49,7 +55,7 @@ export const Country: React.FC<
                         <SelectContent>
                             {countryOptions.map(({ label, value }) => (
                                 <SelectItem key={value} value={value}>
-                                    {label}
+                                    {countryNames.of(value) || label}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -57,7 +63,7 @@ export const Country: React.FC<
                     <FormMessage />
                 </FormItem>
             )}
-            rules={{ required: required ? "Toto pole je povinné." : false }}
+            rules={{ required: required ? messages.required : false }}
         />
     );
 };

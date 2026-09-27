@@ -21,6 +21,10 @@ export const Footer: GlobalConfig = {
         {
             name: "columns",
             type: "array",
+            labels: {
+                singular: { cs: "Sloupec", en: "Column" },
+                plural: { cs: "Sloupce", en: "Columns" },
+            },
             fields: [
                 {
                     name: "title",
@@ -35,6 +39,10 @@ export const Footer: GlobalConfig = {
                 {
                     name: "links",
                     type: "array",
+                    labels: {
+                        singular: { cs: "Odkaz", en: "Link" },
+                        plural: { cs: "Odkazy", en: "Links" },
+                    },
                     fields: [
                         link({
                             appearances: false,

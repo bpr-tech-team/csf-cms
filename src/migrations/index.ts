@@ -9,6 +9,12 @@ import * as migration_20260922_144732_flexible_content from "./20260922_144732_f
 import * as migration_20260922_154825_flexible_content_theme from "./20260922_154825_flexible_content_theme";
 import * as migration_20260922_160319_flexible_content_mobile from "./20260922_160319_flexible_content_mobile";
 import * as migration_20260924_145734_vercel_blob from "./20260924_145734_vercel_blob";
+import * as migration_20260924_163153_content_icons from "./20260924_163153_content_icons";
+import * as migration_20260924_172116_header_navigation from "./20260924_172116_header_navigation";
+import * as migration_20260925_064813_client_service from "./20260925_064813_client_service";
+import * as migration_20260925_090044_remove_search from "./20260925_090044_remove_search";
+import * as migration_20260925_110000_enable_unaccent from "./20260925_110000_enable_unaccent";
+import * as migration_20260925_120000_payload_3_90_2 from "./20260925_120000_payload_3_90_2";
 
 export const migrations = [
     {
@@ -65,5 +71,35 @@ export const migrations = [
         up: migration_20260924_145734_vercel_blob.up,
         down: migration_20260924_145734_vercel_blob.down,
         name: "20260924_145734_vercel_blob",
+    },
+    {
+        up: migration_20260924_163153_content_icons.up,
+        down: migration_20260924_163153_content_icons.down,
+        name: "20260924_163153_content_icons",
+    },
+    {
+        up: migration_20260924_172116_header_navigation.up,
+        down: migration_20260924_172116_header_navigation.down,
+        name: "20260924_172116_header_navigation",
+    },
+    {
+        up: migration_20260925_064813_client_service.up,
+        down: migration_20260925_064813_client_service.down,
+        name: "20260925_064813_client_service",
+    },
+    {
+        up: migration_20260925_090044_remove_search.up,
+        down: migration_20260925_090044_remove_search.down,
+        name: "20260925_090044_remove_search",
+    },
+    {
+        up: migration_20260925_110000_enable_unaccent.up,
+        down: migration_20260925_110000_enable_unaccent.down,
+        name: "20260925_110000_enable_unaccent",
+    },
+    {
+        up: migration_20260925_120000_payload_3_90_2.up,
+        down: migration_20260925_120000_payload_3_90_2.down,
+        name: "20260925_120000_payload_3_90_2",
     },
 ];

@@ -14,6 +14,7 @@ import {
     type LinkFields,
 } from "@payloadcms/richtext-lexical";
 import { TextColorFeature } from "@/fields/TextColorFeature/server";
+import { withCzechLabels } from "@/i18n/lexical";
 
 export const defaultLexical = lexicalEditor({
     features: [
@@ -22,8 +23,8 @@ export const defaultLexical = lexicalEditor({
         UnderlineFeature(),
         BoldFeature(),
         ItalicFeature(),
-        OrderedListFeature(),
-        UnorderedListFeature(),
+        withCzechLabels(OrderedListFeature(), { label: "Číslovaný seznam" }),
+        withCzechLabels(UnorderedListFeature(), { label: "Odrážkový seznam" }),
         TextColorFeature(),
         FixedToolbarFeature(),
         InlineToolbarFeature(),
@@ -56,7 +57,9 @@ export const defaultLexical = lexicalEditor({
                             ) {
                                 return true; // no validation needed, as no url should exist for internal links
                             }
-                            return value ? true : "URL is required";
+                            return value
+                                ? true
+                                : options.req.t("validation:required");
                         }) as TextFieldSingleValidation,
                     },
                 ];

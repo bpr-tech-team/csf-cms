@@ -63,7 +63,7 @@ export function renderFormEmail(
             const path =
                 doc.relationTo === "posts"
                     ? `/posts/${doc.value.slug}`
-                    : getPagePath(doc.value as unknown as Page);
+                    : getPagePath(doc.value as unknown as Page, locale);
             return `${getServerSideURL()}${withLocalePrefix(path, locale)}`;
         },
     });

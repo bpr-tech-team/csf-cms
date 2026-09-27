@@ -8,7 +8,7 @@ export const ComputerProductCatalog: Block = {
         images: {
             thumbnail: {
                 url: "/block-previews/computer-product-catalog.webp",
-                alt: "Katalog počítačů",
+                alt: "Katalog produktů",
             },
         },
     },
@@ -41,6 +41,10 @@ export const ComputerProductCatalog: Block = {
         {
             name: "categories",
             type: "array",
+            labels: {
+                singular: { cs: "Kategorie", en: "Category" },
+                plural: { cs: "Kategorie", en: "Categories" },
+            },
             dbName: "pages_computer_catalog_categories",
             admin: {
                 initCollapsed: true,
@@ -70,6 +74,10 @@ export const ComputerProductCatalog: Block = {
                 {
                     name: "products",
                     type: "array",
+                    labels: {
+                        singular: { cs: "Produkt", en: "Product" },
+                        plural: { cs: "Produkty", en: "Products" },
+                    },
                     dbName: "pages_computer_catalog_products",
                     admin: {
                         initCollapsed: true,
@@ -106,6 +114,16 @@ export const ComputerProductCatalog: Block = {
                         {
                             name: "specifications",
                             type: "array",
+                            labels: {
+                                singular: {
+                                    cs: "Parametr",
+                                    en: "Specification",
+                                },
+                                plural: {
+                                    cs: "Parametry",
+                                    en: "Specifications",
+                                },
+                            },
                             dbName: "pages_computer_catalog_specs",
                             admin: {
                                 initCollapsed: true,
@@ -134,14 +152,12 @@ export const ComputerProductCatalog: Block = {
                                 cs: "Technické parametry",
                                 en: "Specifications",
                             },
-                            maxRows: 10,
                         },
                     ],
                     label: {
                         cs: "Produkty",
                         en: "Products",
                     },
-                    maxRows: 8,
                     minRows: 1,
                     required: true,
                 },
@@ -150,19 +166,18 @@ export const ComputerProductCatalog: Block = {
                 cs: "Kategorie produktů",
                 en: "Product categories",
             },
-            maxRows: 6,
             minRows: 1,
             required: true,
         },
     ],
     labels: {
         plural: {
-            cs: "Katalogy počítačů",
-            en: "Computer catalogs",
+            cs: "Katalogy produktů",
+            en: "Product catalogs",
         },
         singular: {
-            cs: "Katalog počítačů",
-            en: "Computer catalog",
+            cs: "Katalog produktů",
+            en: "Product catalog",
         },
     },
 };

@@ -75,7 +75,6 @@ export interface Config {
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
-    search: Search;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -97,7 +96,6 @@ export interface Config {
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
-    search: SearchSelect<false> | SearchSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -168,6 +166,7 @@ export interface Page {
     | BranchesGridBlock
     | BranchDetailsBlock
     | FormBlock
+    | ClientServiceBlock
     | ServicesGridBlock
     | MetricsStripBlock
     | ProductsGridBlock
@@ -211,12 +210,12 @@ export interface Page {
      * In Google Maps choose Share → Embed a map. Paste only the src URL, not the full HTML code.
      */
     mapEmbedUrl?: string | null;
-    icon?: (number | null) | Media;
+    icon: ContentIcon;
   };
   meta?: {
     title?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Recommended image file size is less than 500 kB.
      */
     image?: (number | null) | Media;
     description?: string | null;
@@ -299,7 +298,7 @@ export interface Post {
   meta?: {
     title?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Recommended image file size is less than 500 kB.
      */
     image?: (number | null) | Media;
     description?: string | null;
@@ -344,6 +343,7 @@ export interface Media {
     [k: string]: unknown;
   } | null;
   prefix?: string | null;
+  _objectKey?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -479,6 +479,7 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -554,7 +555,7 @@ export interface HomepageHeroBlock {
   quickLinks?:
     | {
         image: number | Media;
-        icon: number | Media;
+        icon: ContentIcon;
         title: string;
         links?:
           | {
@@ -582,6 +583,23 @@ export interface HomepageHeroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'homepageHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentIcon".
+ */
+export interface ContentIcon {
+  source: 'image' | 'fontawesome';
+  /**
+   * SVG or PNG without a background or excess transparent padding. The block controls the size and background.
+   */
+  image?: (number | null) | Media;
+  fontAwesome?: string | null;
+  imageColor?: ('original' | 'monochrome') | null;
+  /**
+   * Optical correction only. The icon slot stays the same size.
+   */
+  scale?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -834,6 +852,23 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientServiceBlock".
+ */
+export interface ClientServiceBlock {
+  eyebrow?: string | null;
+  heading: string;
+  description?: string | null;
+  loginLabel: string;
+  loginPlaceholder?: string | null;
+  passwordLabel: string;
+  passwordPlaceholder?: string | null;
+  submitButtonLabel: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'clientService';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ServicesGridBlock".
  */
 export interface ServicesGridBlock {
@@ -849,10 +884,7 @@ export interface ServicesGridBlock {
       }[]
     | null;
   items: {
-    /**
-     * Icon without a background or outer padding. The website adds the colored background automatically.
-     */
-    icon: number | Media;
+    icon: ContentIcon;
     title: string;
     description: string;
     link: {
@@ -911,10 +943,7 @@ export interface ProductsGridBlock {
     | null;
   items: {
     image?: (number | null) | Media;
-    /**
-     * Icon without a background or outer padding. The website adds the colored background automatically.
-     */
-    icon: number | Media;
+    icon: ContentIcon;
     title: string;
     description: string;
     link?: {
@@ -1456,37 +1485,6 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
- * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "search".
- */
-export interface Search {
-  id: number;
-  title?: string | null;
-  priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: number | Post;
-  };
-  slug?: string | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: (number | null) | Media;
-  };
-  categories?:
-    | {
-        relationTo?: string | null;
-        categoryID?: string | null;
-        title?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1635,10 +1633,6 @@ export interface PayloadLockedDocument {
         value: number | FormSubmission;
       } | null)
     | ({
-        relationTo: 'search';
-        value: number | Search;
-      } | null)
-    | ({
         relationTo: 'payload-folders';
         value: number | FolderInterface;
       } | null);
@@ -1699,6 +1693,7 @@ export interface PagesSelect<T extends boolean = true> {
         branchesGrid?: T | BranchesGridBlockSelect<T>;
         branchDetails?: T | BranchDetailsBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        clientService?: T | ClientServiceBlockSelect<T>;
         servicesGrid?: T | ServicesGridBlockSelect<T>;
         metricsStrip?: T | MetricsStripBlockSelect<T>;
         productsGrid?: T | ProductsGridBlockSelect<T>;
@@ -1737,7 +1732,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         mapEmbedUrl?: T;
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
       };
   meta?:
     | T
@@ -1828,7 +1823,7 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
         title?: T;
         links?:
           | T
@@ -1848,6 +1843,17 @@ export interface HomepageHeroBlockSelect<T extends boolean = true> {
       };
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentIcon_select".
+ */
+export interface ContentIconSelect<T extends boolean = true> {
+  source?: T;
+  image?: T;
+  fontAwesome?: T;
+  imageColor?: T;
+  scale?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1910,6 +1916,22 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ClientServiceBlock_select".
+ */
+export interface ClientServiceBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
+  description?: T;
+  loginLabel?: T;
+  loginPlaceholder?: T;
+  passwordLabel?: T;
+  passwordPlaceholder?: T;
+  submitButtonLabel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ServicesGridBlock_select".
  */
 export interface ServicesGridBlockSelect<T extends boolean = true> {
@@ -1924,7 +1946,7 @@ export interface ServicesGridBlockSelect<T extends boolean = true> {
   items?:
     | T
     | {
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
         title?: T;
         description?: T;
         link?:
@@ -1976,7 +1998,7 @@ export interface ProductsGridBlockSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
-        icon?: T;
+        icon?: T | ContentIconSelect<T>;
         title?: T;
         description?: T;
         link?:
@@ -2377,6 +2399,7 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   prefix?: T;
+  _objectKey?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2497,6 +2520,7 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  resetPasswordRequestedAt?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -2674,33 +2698,6 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "search_select".
- */
-export interface SearchSelect<T extends boolean = true> {
-  title?: T;
-  priority?: T;
-  doc?: T;
-  slug?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  categories?:
-    | T
-    | {
-        relationTo?: T;
-        categoryID?: T;
-        title?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -2790,7 +2787,46 @@ export interface Header {
   id: number;
   navItems?:
     | {
-        link: {
+        itemType: 'link' | 'dropdown';
+        link?: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        label?: string | null;
+        children?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              icon: ContentIcon;
+              id?: string | null;
+            }[]
+          | null;
+        showOverviewLink?: boolean | null;
+        overviewLink?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -2905,7 +2941,34 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
+        itemType?: T;
         link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        label?: T;
+        children?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              icon?: T | ContentIconSelect<T>;
+              id?: T;
+            };
+        showOverviewLink?: T;
+        overviewLink?:
           | T
           | {
               type?: T;
@@ -3010,7 +3073,10 @@ export interface TaskSchedulePublish {
           value: number | Post;
         } | null);
     global?: string | null;
-    user?: (number | null) | User;
+    user?: {
+      relationTo: 'users';
+      value: number | User;
+    } | null;
   };
   output?: unknown;
 }

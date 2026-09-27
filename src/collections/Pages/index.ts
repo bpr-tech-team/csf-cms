@@ -13,6 +13,7 @@ import { ComputerAudience } from "../../blocks/ComputerAudience/config";
 import { ComputerProductCatalog } from "../../blocks/ComputerProductCatalog/config";
 import { EditorialColumns } from "../../blocks/EditorialColumns/config";
 import { FormBlock } from "../../blocks/Form/config";
+import { ClientService } from "@/blocks/ClientService/config";
 import { LogoMarquee } from "../../blocks/LogoMarquee/config";
 import { MediaFeatureGrid } from "../../blocks/MediaFeatureGrid/config";
 import { MetricsStrip } from "../../blocks/MetricsStrip/config";
@@ -29,15 +30,14 @@ import { slugField } from "payload";
 import { populatePublishedAt } from "../../hooks/populatePublishedAt";
 import { generatePreviewPath } from "../../utilities/generatePreviewPath";
 import { revalidateDelete, revalidatePage } from "./hooks/revalidatePage";
+import { captureDocumentPathsBeforeDelete } from "@/utilities/getDocumentRevalidationPaths";
+import {
+    revalidateNavigation,
+    revalidateNavigationAfterDelete,
+} from "@/hooks/revalidateNavigation";
 import { validatePageLayout } from "./validateLayout";
 
-import {
-    MetaDescriptionField,
-    MetaImageField,
-    MetaTitleField,
-    OverviewField,
-    PreviewField,
-} from "@payloadcms/plugin-seo/fields";
+import { seoFields } from "@/fields/seo";
 
 export const Pages: CollectionConfig<"pages"> = {
     slug: "pages",
@@ -56,7 +56,10 @@ export const Pages: CollectionConfig<"pages"> = {
         pageType: true,
     },
     admin: {
-        defaultColumns: ["title", "slug", "updatedAt"],
+        components: {
+            beforeListTable: ["@/components/PageTypeViews#PageTypeTabs"],
+        },
+        defaultColumns: ["title", "pageType", "slug", "updatedAt"],
         livePreview: {
             url: ({ data, req }) =>
                 generatePreviewPath({
@@ -95,12 +98,23 @@ export const Pages: CollectionConfig<"pages"> = {
                         {
                             name: "layout",
                             type: "blocks",
+                            labels: {
+                                singular: {
+                                    cs: "Obsahový blok",
+                                    en: "Content block",
+                                },
+                                plural: {
+                                    cs: "Obsahové bloky",
+                                    en: "Content blocks",
+                                },
+                            },
                             blocks: [
                                 Hero,
                                 HomepageHero,
                                 BranchesGrid,
                                 BranchDetails,
                                 FormBlock,
+                                ClientService,
                                 ServicesGrid,
                                 MetricsStrip,
                                 ProductsGrid,
@@ -142,29 +156,7 @@ export const Pages: CollectionConfig<"pages"> = {
                 {
                     name: "meta",
                     label: "SEO",
-                    fields: [
-                        OverviewField({
-                            titlePath: "meta.title",
-                            descriptionPath: "meta.description",
-                            imagePath: "meta.image",
-                        }),
-                        MetaTitleField({
-                            hasGenerateFn: true,
-                        }),
-                        MetaImageField({
-                            relationTo: "media",
-                        }),
-
-                        MetaDescriptionField({}),
-                        PreviewField({
-                            // if the `generateUrl` function is configured
-                            hasGenerateFn: true,
-
-                            // field paths to match the target field for data
-                            titlePath: "meta.title",
-                            descriptionPath: "meta.description",
-                        }),
-                    ],
+                    fields: seoFields(),
                 },
             ],
         },
@@ -182,15 +174,16 @@ export const Pages: CollectionConfig<"pages"> = {
         slugField({ localized: true }),
     ],
     hooks: {
-        afterChange: [revalidatePage],
+        afterChange: [revalidatePage, revalidateNavigation],
         beforeChange: [populatePublishedAt],
-        afterDelete: [revalidateDelete],
+        beforeDelete: [captureDocumentPathsBeforeDelete("pages")],
+        afterDelete: [revalidateDelete, revalidateNavigationAfterDelete],
     },
     versions: {
         drafts: {
-            autosave: {
-                interval: 100, // We set this interval for optimal live preview
-            },
+            // Autosave creates a draft on opening the create form, which locks
+            // pageType before the editor can choose it. Require a manual save.
+            autosave: false,
             schedulePublish: true,
         },
         maxPerDoc: 50,

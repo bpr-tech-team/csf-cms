@@ -48,7 +48,7 @@ export const PayloadRedirects: React.FC<Props> = async ({
                 redirect(
                     withLocalePrefix(
                         reference.relationTo === "pages"
-                            ? getPagePath(document as Page)
+                            ? getPagePath(document as Page, locale)
                             : `/posts/${document.slug}`,
                         locale,
                     ),

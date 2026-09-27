@@ -29,7 +29,7 @@ export const ServicesGridBlock = ({
                     {items.map((item, index) => {
                         const content = (
                             <>
-                                <CardIcon resource={item.icon} />
+                                <CardIcon icon={item.icon} />
                                 <h3 className="mt-6 text-heading-md font-medium text-ink-950">
                                     {applyTypography(item.title, { locale })}
                                 </h3>

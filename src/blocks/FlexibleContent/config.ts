@@ -378,6 +378,10 @@ export const FlexibleContent: Block = {
                 {
                     name: "elements",
                     type: "blocks",
+                    labels: {
+                        singular: { cs: "Prvek", en: "Element" },
+                        plural: { cs: "Prvky", en: "Elements" },
+                    },
                     blocks: [Heading, Text, Button, Media, HTML],
                     minRows: 1,
                     required: true,

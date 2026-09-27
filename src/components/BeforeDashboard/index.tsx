@@ -1,7 +1,6 @@
 import { Banner } from "@payloadcms/ui/elements/Banner";
 import React from "react";
 
-import { SeedButton } from "./SeedButton";
 import "./index.scss";
 
 const baseClass = "before-dashboard";
@@ -15,12 +14,10 @@ const BeforeDashboard: React.FC = () => {
             Doporučené další kroky:
             <ul className={`${baseClass}__instructions`}>
                 <li>
-                    <SeedButton />
-                    {" ukázkovým obsahem pro rychlý start nového webu, potom "}
-                    <a href="/" target="_blank">
-                        otevřete web
+                    <a href="/" rel="noopener noreferrer" target="_blank">
+                        Otevřete web
                     </a>
-                    {" a zkontrolujte výsledek."}
+                    {" a zkontrolujte publikovaný obsah."}
                 </li>
                 <li>
                     {"Upravte "}

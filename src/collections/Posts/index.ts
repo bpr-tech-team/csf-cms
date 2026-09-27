@@ -12,16 +12,20 @@ import { Banner } from "../../blocks/Banner/config";
 import { Code } from "../../blocks/Code/config";
 import { generatePreviewPath } from "../../utilities/generatePreviewPath";
 import { populateAuthors } from "./hooks/populateAuthors";
-import { revalidateDelete, revalidatePost } from "./hooks/revalidatePost";
-
 import {
-    MetaDescriptionField,
-    MetaImageField,
-    MetaTitleField,
-    OverviewField,
-    PreviewField,
-} from "@payloadcms/plugin-seo/fields";
+    capturePostPathsBeforeChange,
+    revalidateDelete,
+    revalidatePost,
+} from "./hooks/revalidatePost";
+import { captureDocumentPathsBeforeDelete } from "@/utilities/getDocumentRevalidationPaths";
+import {
+    revalidateNavigation,
+    revalidateNavigationAfterDelete,
+} from "@/hooks/revalidateNavigation";
+
+import { seoFields } from "@/fields/seo";
 import { slugField } from "payload";
+import { withCzechLabels } from "@/i18n/lexical";
 
 export const Posts: CollectionConfig<"posts"> = {
     slug: "posts",
@@ -96,10 +100,25 @@ export const Posts: CollectionConfig<"posts"> = {
                                 features: ({ rootFeatures }) => {
                                     return [
                                         ...rootFeatures,
-                                        BlocksFeature({
-                                            blocks: [Banner, Code],
-                                        }),
-                                        HorizontalRuleFeature(),
+                                        withCzechLabels(
+                                            BlocksFeature({
+                                                blocks: [Banner, Code],
+                                            }),
+                                            {
+                                                inlineBlocks: {
+                                                    create: "Vytvořit: {{label}}",
+                                                    edit: "Upravit: {{label}}",
+                                                    label: "Bloky v řádku",
+                                                    remove: "Odstranit: {{label}}",
+                                                },
+                                            },
+                                        ),
+                                        withCzechLabels(
+                                            HorizontalRuleFeature(),
+                                            {
+                                                label: "Vodorovná čára",
+                                            },
+                                        ),
                                     ];
                                 },
                             }),
@@ -157,29 +176,7 @@ export const Posts: CollectionConfig<"posts"> = {
                 {
                     name: "meta",
                     label: "SEO",
-                    fields: [
-                        OverviewField({
-                            titlePath: "meta.title",
-                            descriptionPath: "meta.description",
-                            imagePath: "meta.image",
-                        }),
-                        MetaTitleField({
-                            hasGenerateFn: true,
-                        }),
-                        MetaImageField({
-                            relationTo: "media",
-                        }),
-
-                        MetaDescriptionField({}),
-                        PreviewField({
-                            // if the `generateUrl` function is configured
-                            hasGenerateFn: true,
-
-                            // field paths to match the target field for data
-                            titlePath: "meta.title",
-                            descriptionPath: "meta.description",
-                        }),
-                    ],
+                    fields: seoFields(),
                 },
             ],
         },
@@ -255,9 +252,11 @@ export const Posts: CollectionConfig<"posts"> = {
         slugField({ localized: true }),
     ],
     hooks: {
-        afterChange: [revalidatePost],
+        beforeChange: [capturePostPathsBeforeChange],
+        afterChange: [revalidatePost, revalidateNavigation],
+        beforeDelete: [captureDocumentPathsBeforeDelete("posts")],
         afterRead: [populateAuthors],
-        afterDelete: [revalidateDelete],
+        afterDelete: [revalidateDelete, revalidateNavigationAfterDelete],
     },
     versions: {
         drafts: {

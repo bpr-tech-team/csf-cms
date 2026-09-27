@@ -1,8 +1,8 @@
-import { postgresAdapter } from "@payloadcms/db-postgres";
 import sharp from "sharp";
 import path from "path";
 import { buildConfig, PayloadRequest } from "payload";
 import { cs } from "payload/i18n/cs";
+import { adminTranslations } from "@/i18n/admin";
 import { fileURLToPath } from "url";
 
 import { Categories } from "./collections/Categories";
@@ -17,27 +17,16 @@ import { defaultLexical } from "@/fields/defaultLexical";
 import { getServerSideURL } from "./utilities/getURL";
 import { defaultLocale, localeLabels, locales } from "@/i18n/config";
 import { createSMTPEmailAdapter } from "@/email/smtp";
+import { accentInsensitivePostgresAdapter } from "./db/accentInsensitivePostgresAdapter";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const email = createSMTPEmailAdapter();
 
-const adminTranslations = {
-    cs: {
-        "plugin-redirects": {
-            customUrl: "Vlastní URL",
-            documentToRedirect: "Dokument, na který přesměrovat",
-            fromUrl: "Zdrojová URL",
-            internalLink: "Interní odkaz",
-            redirectType: "Typ přesměrování",
-            toUrlType: "Typ cílové URL",
-        },
-    },
-};
-
 export default buildConfig({
     admin: {
         components: {
+            beforeNavLinks: ["@/components/PageTypeViews#PageTypeNav"],
             // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
             // Feel free to delete this at any time. Simply remove the line below.
             beforeLogin: ["@/components/BeforeLogin"],
@@ -64,7 +53,7 @@ export default buildConfig({
                     height: 1024,
                 },
                 {
-                    label: "Desktop",
+                    label: "Počítač",
                     name: "desktop",
                     width: 1440,
                     height: 900,
@@ -87,7 +76,7 @@ export default buildConfig({
             label: localeLabels[locale],
         })),
     },
-    db: postgresAdapter({
+    db: accentInsensitivePostgresAdapter({
         migrationDir: path.resolve(dirname, "migrations"),
         pool: {
             connectionString: process.env.DATABASE_URL || "",
@@ -99,6 +88,9 @@ export default buildConfig({
     ...(email ? { email } : {}),
     collections: [Pages, Posts, Media, Categories, Users],
     cors: [getServerSideURL()].filter(Boolean),
+    folders: {
+        browseByFolder: false,
+    },
     globals: [Header, Footer],
     plugins,
     secret: process.env.PAYLOAD_SECRET,

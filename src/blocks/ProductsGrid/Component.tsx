@@ -60,7 +60,7 @@ const ProductCard = ({
                     />
                 )}
             </span>
-            <CardIcon className="mt-7" resource={item.icon} />
+            <CardIcon className="mt-7" icon={item.icon} />
             <h3 className="mt-6 text-heading-md font-medium text-ink-950">
                 {applyTypography(item.title, { locale })}
             </h3>
