@@ -60,10 +60,10 @@ export const config = {
     matcher: [
         "/:slug((?!api$|admin$|posts$|en$|next$|_next$|codex-block-preview$|.*\\.)[^/]+)",
         "/sluzby/:slug",
-        "/pocitace/:slug",
+        "/produkty/:slug",
         "/en/:slug((?!posts$|.*\\.)[^/]+)",
         "/en/services/:slug",
-        "/en/computers/:slug",
+        "/en/products/:slug",
         "/en/contact/:slug",
     ],
 };

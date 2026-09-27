@@ -4,7 +4,7 @@ import type { Where } from "payload";
 export const pageTypeViews = [
     { value: "standard", label: "Standardní stránky" },
     { value: "service", label: "Služby" },
-    { value: "computer", label: "Počítače" },
+    { value: "computer", label: "Produkty" },
     { value: "branch", label: "Pobočky" },
 ] as const satisfies { value: Page["pageType"]; label: string }[];
 

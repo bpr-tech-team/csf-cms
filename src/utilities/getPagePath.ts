@@ -6,14 +6,14 @@ export type PageType = Page["pageType"];
 export const pagePathPrefixes = {
     standard: { cs: "", en: "" },
     service: { cs: "sluzby", en: "services" },
-    computer: { cs: "pocitace", en: "computers" },
+    computer: { cs: "produkty", en: "products" },
     branch: { cs: "kontakt", en: "contact" },
 } satisfies Record<PageType, Record<AppLocale, string>>;
 
 // These routes used to render copies. Keep them only as redirect entry points.
 const legacyPrefixes = {
-    standard: { cs: ["sluzby", "pocitace"], en: [] },
-    service: { cs: ["", "pocitace"], en: [""] },
+    standard: { cs: ["sluzby"], en: [] },
+    service: { cs: [""], en: [""] },
     computer: { cs: ["", "sluzby"], en: [""] },
     branch: { cs: [], en: ["kontakt"] },
 } satisfies Record<PageType, Record<AppLocale, string[]>>;

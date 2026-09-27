@@ -4,16 +4,21 @@ The frontend uses Next.js App Router segments, configuration redirects and
 `NextResponse.redirect` in Proxy. Payload stores the page type and a localized
 slug; the routing policy lives in `src/utilities/getPagePath.ts`.
 
-| Page type  | Czech              | English                |
-| ---------- | ------------------ | ---------------------- |
-| `standard` | `/{slug}`          | `/en/{slug}`           |
-| `service`  | `/sluzby/{slug}`   | `/en/services/{slug}`  |
-| `computer` | `/pocitace/{slug}` | `/en/computers/{slug}` |
-| `branch`   | `/kontakt/{slug}`  | `/en/contact/{slug}`   |
+| Page type  | Czech              | English               |
+| ---------- | ------------------ | --------------------- |
+| `standard` | `/{slug}`          | `/en/{slug}`          |
+| `service`  | `/sluzby/{slug}`   | `/en/services/{slug}` |
+| `computer` | `/produkty/{slug}` | `/en/products/{slug}` |
+| `branch`   | `/kontakt/{slug}`  | `/en/contact/{slug}`  |
 
 Czech is the default locale and has no `/cs` prefix. A standard page with slug
 `home` uses `/` or `/en`. Other types keep `home` as a regular slug within their
 section. Page types cannot be changed after the first save.
+
+The product section retains the internal `computer` value for compatibility with
+stored pages and versions. Its admin labels are Product / Produkt / Produkty.
+The erroneous `/pocitace/{slug}` and `/en/computers/{slug}` prefixes have no routes
+or aliases; products use only `/produkty/{slug}` and `/en/products/{slug}`.
 
 Each page has one canonical URL per locale. An English page without a translated
 slug uses the Czech slug in the English section. If the English slug exists,

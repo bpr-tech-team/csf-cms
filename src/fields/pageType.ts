@@ -75,8 +75,8 @@ export const pageType: SelectField = {
         },
         {
             label: {
-                cs: "Počítače",
-                en: "Computers",
+                cs: "Produkt",
+                en: "Product",
             },
             value: "computer",
         },
