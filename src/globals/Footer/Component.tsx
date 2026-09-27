@@ -44,7 +44,7 @@ export async function Footer({
                         <Logo />
                     </Link>
                     {tagline && (
-                        <p className="max-w-68 text-body-sm leading-6 font-normal text-neutral-inverse-muted">
+                        <p className="max-w-68 whitespace-pre-line text-body-sm leading-6 font-normal text-neutral-inverse-muted">
                             {applyTypography(tagline, { locale })}
                         </p>
                     )}

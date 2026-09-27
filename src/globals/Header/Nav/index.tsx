@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import type { Header as HeaderType } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
+import { withLocalePrefix } from "@/i18n/config";
 import { CMSLink } from "@/components/Link";
 import { ContentIcon } from "@/components/ContentIcon";
 import { frontendMessages } from "@/i18n/frontend";
@@ -41,6 +42,9 @@ export const HeaderNav: React.FC<{
     const contactLink = getLinkHref(data.contactLink, locale)
         ? data.contactLink
         : null;
+    // Home is reached through the logo; menu links to it are temporary destinations.
+    const isCurrentDestination = (href?: string | null) =>
+        href !== withLocalePrefix("/", locale) && isCurrentLink(pathname, href);
 
     const cancelClose = () => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -135,16 +139,12 @@ export const HeaderNav: React.FC<{
                             : null;
                     const current = isDropdown
                         ? children.some((child) =>
-                              isCurrentLink(
-                                  pathname,
+                              isCurrentDestination(
                                   getLinkHref(child.link, locale),
                               ),
                           ) ||
-                          isCurrentLink(pathname, getLinkHref(overview, locale))
-                        : isCurrentLink(
-                              pathname,
-                              getLinkHref(item.link, locale),
-                          );
+                          isCurrentDestination(getLinkHref(overview, locale))
+                        : isCurrentDestination(getLinkHref(item.link, locale));
                     const itemClass = cn(
                         headerFocus,
                         "relative flex items-center text-left no-underline transition-colors hover:text-brand-500",
@@ -268,13 +268,19 @@ export const HeaderNav: React.FC<{
                                                 {children.map(
                                                     (child, childIndex) => {
                                                         const active =
-                                                            isCurrentLink(
-                                                                pathname,
+                                                            isCurrentDestination(
                                                                 getLinkHref(
                                                                     child.link,
                                                                     locale,
                                                                 ),
                                                             );
+                                                        const originalImage =
+                                                            child.icon
+                                                                ?.source ===
+                                                                "image" &&
+                                                            child.icon
+                                                                .imageColor !==
+                                                                "monochrome";
                                                         return (
                                                             <li
                                                                 key={
@@ -305,7 +311,9 @@ export const HeaderNav: React.FC<{
                                                                 >
                                                                     <span
                                                                         className={cn(
-                                                                            "flex shrink-0 items-center justify-center bg-brand-500/16 text-brand-500 group-hover:bg-brand-500/32",
+                                                                            "flex shrink-0 items-center justify-center text-brand-500",
+                                                                            !originalImage &&
+                                                                                "bg-brand-500/16 group-hover:bg-brand-500/32",
                                                                             isMobile
                                                                                 ? "size-9 rounded-[8px]"
                                                                                 : "size-11 rounded-[10px]",
@@ -316,9 +324,13 @@ export const HeaderNav: React.FC<{
                                                                                 child.icon
                                                                             }
                                                                             className={
-                                                                                isMobile
-                                                                                    ? "size-[22px]"
-                                                                                    : "size-[26px]"
+                                                                                originalImage
+                                                                                    ? isMobile
+                                                                                        ? "size-9"
+                                                                                        : "size-11"
+                                                                                    : isMobile
+                                                                                      ? "size-[22px]"
+                                                                                      : "size-[26px]"
                                                                             }
                                                                         />
                                                                     </span>
