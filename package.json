@@ -10,6 +10,7 @@
         "postbuild": "next-sitemap --config next-sitemap.config.cjs",
         "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
         "payload": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/payload-cli.mjs",
+        "payload:migrate": "cross-env NODE_ENV=production NODE_OPTIONS=--no-deprecation node --conditions=production --import tsx scripts/payload-cli.mjs migrate",
         "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/payload-cli.mjs generate:importmap",
         "generate:types": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx scripts/payload-cli.mjs generate:types",
         "lint": "eslint . --max-warnings=0",
