@@ -10,6 +10,7 @@ import { pageType } from "@/fields/pageType";
 import { CenteredCTA } from "../../blocks/CenteredCTA/config";
 import { CompanyTimeline } from "../../blocks/CompanyTimeline/config";
 import { ComputerAudience } from "../../blocks/ComputerAudience/config";
+import { ComputerCatalog } from "../../blocks/ComputerCatalog/config";
 import { ComputerProductCatalog } from "../../blocks/ComputerProductCatalog/config";
 import { EditorialColumns } from "../../blocks/EditorialColumns/config";
 import { FormBlock } from "../../blocks/Form/config";
@@ -126,6 +127,7 @@ export const Pages: CollectionConfig<"pages"> = {
                                 SplitContent,
                                 FlexibleContent,
                                 ComputerAudience,
+                                ComputerCatalog,
                                 ComputerProductCatalog,
                                 MediaFeatureGrid,
                                 TechnologySpotlight,

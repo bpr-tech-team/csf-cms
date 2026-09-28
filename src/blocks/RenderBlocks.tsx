@@ -11,6 +11,7 @@ import { HomepageHero } from "@/blocks/HomepageHero/Component";
 import { CenteredCTABlock } from "@/blocks/CenteredCTA/Component";
 import { CompanyTimelineBlock } from "@/blocks/CompanyTimeline/Component";
 import { ComputerAudienceBlock } from "@/blocks/ComputerAudience/Component";
+import { ComputerCatalogBlock } from "@/blocks/ComputerCatalog/Component";
 import { ComputerProductCatalogBlock } from "@/blocks/ComputerProductCatalog/Component";
 import { EditorialColumnsBlock } from "@/blocks/EditorialColumns/Component";
 import { FormBlock } from "@/blocks/Form/Component";
@@ -204,6 +205,15 @@ export const RenderBlocks: React.FC<{
                         case "computerAudience":
                             return (
                                 <ComputerAudienceBlock
+                                    locale={locale}
+                                    {...block}
+                                    key={block.id ?? index}
+                                />
+                            );
+
+                        case "computerCatalog":
+                            return (
+                                <ComputerCatalogBlock
                                     locale={locale}
                                     {...block}
                                     key={block.id ?? index}

@@ -178,6 +178,7 @@ export interface Page {
     | SplitContentBlock
     | FlexibleContentBlock
     | ComputerAudienceBlock
+    | ComputerCatalogBlock
     | ComputerProductCatalogBlock
     | MediaFeatureGridBlock
     | TechnologySpotlightBlock
@@ -1298,6 +1299,72 @@ export interface ComputerAudienceBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerCatalogBlock".
+ */
+export interface ComputerCatalogBlock {
+  anchorId?: string | null;
+  navigationHeading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The first audience opens automatically. Each audience has its own categories and products.
+   */
+  audiences: {
+    title: string;
+    summary: string;
+    heading: string;
+    /**
+     * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+     */
+    highlightedTexts?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    description: string;
+    categories: {
+      label: string;
+      heading: string;
+      /**
+       * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+       */
+      highlightedTexts?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      products: {
+        image: number | Media;
+        name: string;
+        summary: string;
+        specifications?:
+          | {
+              label: string;
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[];
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'computerCatalog';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ComputerProductCatalogBlock".
  */
 export interface ComputerProductCatalogBlock {
@@ -1705,6 +1772,7 @@ export interface PagesSelect<T extends boolean = true> {
         splitContent?: T | SplitContentBlockSelect<T>;
         flexibleContent?: T | FlexibleContentBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
+        computerCatalog?: T | ComputerCatalogBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
         mediaFeatureGrid?: T | MediaFeatureGridBlockSelect<T>;
         technologySpotlight?: T | TechnologySpotlightBlockSelect<T>;
@@ -2239,6 +2307,65 @@ export interface ComputerAudienceBlockSelect<T extends boolean = true> {
               id?: T;
             };
         description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComputerCatalogBlock_select".
+ */
+export interface ComputerCatalogBlockSelect<T extends boolean = true> {
+  anchorId?: T;
+  navigationHeading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  audiences?:
+    | T
+    | {
+        title?: T;
+        summary?: T;
+        heading?: T;
+        highlightedTexts?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        description?: T;
+        categories?:
+          | T
+          | {
+              label?: T;
+              heading?: T;
+              highlightedTexts?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              products?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    summary?: T;
+                    specifications?:
+                      | T
+                      | {
+                          label?: T;
+                          value?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+            };
         id?: T;
       };
   id?: T;

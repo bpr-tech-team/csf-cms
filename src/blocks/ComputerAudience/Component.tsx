@@ -13,8 +13,16 @@ export const ComputerAudienceBlock = ({
     locale = defaultLocale,
     anchorId,
     items,
-}: ComputerAudienceBlockProps & { locale?: AppLocale }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    activeIndex: controlledIndex,
+    onActiveIndexChange,
+}: ComputerAudienceBlockProps & {
+    locale?: AppLocale;
+    activeIndex?: number;
+    onActiveIndexChange?: (index: number) => void;
+}) => {
+    const [internalIndex, setInternalIndex] = useState(0);
+    const activeIndex = controlledIndex ?? internalIndex;
+    const setActiveIndex = onActiveIndexChange ?? setInternalIndex;
     const componentId = useId();
     const selectedIndex = activeIndex < items.length ? activeIndex : 0;
     const activeItem = items[selectedIndex];
@@ -28,7 +36,10 @@ export const ComputerAudienceBlock = ({
         >
             <div className="container grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
                 <div
-                    aria-label="Cílové skupiny"
+                    aria-label={
+                        locale === "cs" ? "Cílové skupiny" : "Audiences"
+                    }
+                    aria-orientation="vertical"
                     className="space-y-3"
                     role="tablist"
                 >
@@ -48,7 +59,29 @@ export const ComputerAudienceBlock = ({
                                 id={`${componentId}-tab-${index}`}
                                 key={item.id ?? index}
                                 onClick={() => setActiveIndex(index)}
+                                onKeyDown={(event) => {
+                                    let nextIndex: number;
+                                    if (event.key === "ArrowDown")
+                                        nextIndex = (index + 1) % items.length;
+                                    else if (event.key === "ArrowUp")
+                                        nextIndex =
+                                            (index - 1 + items.length) %
+                                            items.length;
+                                    else if (event.key === "Home")
+                                        nextIndex = 0;
+                                    else if (event.key === "End")
+                                        nextIndex = items.length - 1;
+                                    else return;
+                                    event.preventDefault();
+                                    setActiveIndex(nextIndex);
+                                    event.currentTarget.parentElement
+                                        ?.querySelectorAll<HTMLButtonElement>(
+                                            '[role="tab"]',
+                                        )
+                                        [nextIndex]?.focus();
+                                }}
                                 role="tab"
+                                tabIndex={isActive ? 0 : -1}
                                 type="button"
                             >
                                 <span className="block text-heading-md leading-tight font-bold text-ink-950">
@@ -66,6 +99,7 @@ export const ComputerAudienceBlock = ({
                     aria-labelledby={`${componentId}-tab-${selectedIndex}`}
                     id={`${componentId}-panel`}
                     role="tabpanel"
+                    tabIndex={0}
                 >
                     <h2 className="text-4xl leading-tight font-bold tracking-normal whitespace-pre-line text-ink-950 md:text-heading-xl">
                         <HighlightedText

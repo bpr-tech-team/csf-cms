@@ -1,5 +1,7 @@
 import type { Block } from "payload";
 
+import { computerCategoriesField } from "@/fields/computerCatalog";
+
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const ComputerProductCatalog: Block = {
@@ -38,137 +40,12 @@ export const ComputerProductCatalog: Block = {
             required: true,
         },
         highlightedTextsField(),
-        {
-            name: "categories",
-            type: "array",
-            labels: {
-                singular: { cs: "Kategorie", en: "Category" },
-                plural: { cs: "Kategorie", en: "Categories" },
-            },
-            dbName: "pages_computer_catalog_categories",
-            admin: {
-                initCollapsed: true,
-            },
-            fields: [
-                {
-                    name: "label",
-                    type: "text",
-                    label: {
-                        cs: "Název záložky",
-                        en: "Tab label",
-                    },
-                    required: true,
-                },
-                {
-                    name: "heading",
-                    type: "textarea",
-                    label: {
-                        cs: "Nadpis kategorie",
-                        en: "Category heading",
-                    },
-                    required: true,
-                },
-                highlightedTextsField({
-                    dbName: "pages_computer_catalog_category_highlights",
-                }),
-                {
-                    name: "products",
-                    type: "array",
-                    labels: {
-                        singular: { cs: "Produkt", en: "Product" },
-                        plural: { cs: "Produkty", en: "Products" },
-                    },
-                    dbName: "pages_computer_catalog_products",
-                    admin: {
-                        initCollapsed: true,
-                    },
-                    fields: [
-                        {
-                            name: "image",
-                            type: "upload",
-                            label: {
-                                cs: "Obrázek produktu",
-                                en: "Product image",
-                            },
-                            relationTo: "media",
-                            required: true,
-                        },
-                        {
-                            name: "name",
-                            type: "text",
-                            label: {
-                                cs: "Název produktu",
-                                en: "Product name",
-                            },
-                            required: true,
-                        },
-                        {
-                            name: "summary",
-                            type: "textarea",
-                            label: {
-                                cs: "Popis produktu",
-                                en: "Product description",
-                            },
-                            required: true,
-                        },
-                        {
-                            name: "specifications",
-                            type: "array",
-                            labels: {
-                                singular: {
-                                    cs: "Parametr",
-                                    en: "Specification",
-                                },
-                                plural: {
-                                    cs: "Parametry",
-                                    en: "Specifications",
-                                },
-                            },
-                            dbName: "pages_computer_catalog_specs",
-                            admin: {
-                                initCollapsed: true,
-                            },
-                            fields: [
-                                {
-                                    name: "label",
-                                    type: "text",
-                                    label: {
-                                        cs: "Parametr",
-                                        en: "Specification",
-                                    },
-                                    required: true,
-                                },
-                                {
-                                    name: "value",
-                                    type: "textarea",
-                                    label: {
-                                        cs: "Hodnota",
-                                        en: "Value",
-                                    },
-                                    required: true,
-                                },
-                            ],
-                            label: {
-                                cs: "Technické parametry",
-                                en: "Specifications",
-                            },
-                        },
-                    ],
-                    label: {
-                        cs: "Produkty",
-                        en: "Products",
-                    },
-                    minRows: 1,
-                    required: true,
-                },
-            ],
-            label: {
-                cs: "Kategorie produktů",
-                en: "Product categories",
-            },
-            minRows: 1,
-            required: true,
-        },
+        computerCategoriesField({
+            categories: "pages_computer_catalog_categories",
+            highlights: "pages_computer_catalog_category_highlights",
+            products: "pages_computer_catalog_products",
+            specs: "pages_computer_catalog_specs",
+        }),
     ],
     labels: {
         plural: {

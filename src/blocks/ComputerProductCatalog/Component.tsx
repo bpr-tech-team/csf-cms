@@ -33,9 +33,11 @@ type Product = Category["products"][number];
 const ProductCard = ({
     product,
     locale,
+    imagePadding,
 }: {
     product: Product;
     locale: AppLocale;
+    imagePadding: boolean;
 }) => {
     const [expanded, setExpanded] = useState(false);
     const specificationsId = useId();
@@ -46,7 +48,10 @@ const ProductCard = ({
             <div className="relative aspect-square overflow-hidden rounded-lg bg-ink-950">
                 <MediaAsset
                     alt={product.name}
-                    className="absolute inset-0 size-full object-contain object-center p-4"
+                    className={cn(
+                        "absolute inset-0 size-full object-contain object-center",
+                        imagePadding && "p-4",
+                    )}
                     fill
                     resource={product.image}
                     sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 20vw"
@@ -112,9 +117,11 @@ const ProductCard = ({
 const CategoryProducts = ({
     products,
     locale,
+    imagePadding,
 }: {
     products: Product[];
     locale: AppLocale;
+    imagePadding: boolean;
 }) => {
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const gridRef = useRef<HTMLDivElement>(null);
@@ -140,6 +147,7 @@ const CategoryProducts = ({
                         key={product.id ?? index}
                         product={product}
                         locale={locale}
+                        imagePadding={imagePadding}
                     />
                 ))}
             </div>
@@ -167,7 +175,11 @@ export const ComputerProductCatalogBlock = ({
     categories,
     highlightedTexts,
     navigationHeading,
-}: ComputerProductCatalogBlockProps & { locale?: AppLocale }) => {
+    imagePadding = true,
+}: ComputerProductCatalogBlockProps & {
+    locale?: AppLocale;
+    imagePadding?: boolean;
+}) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const componentId = useId();
     const selectedIndex = activeIndex < categories.length ? activeIndex : 0;
@@ -188,7 +200,7 @@ export const ComputerProductCatalogBlock = ({
                     </h2>
                     <div
                         aria-label={messages[locale].categories}
-                        className="mt-8 grid gap-3 md:grid-cols-3"
+                        className="mt-8 grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]"
                         role="tablist"
                     >
                         {categories.map((category, index) => {
@@ -265,6 +277,7 @@ export const ComputerProductCatalogBlock = ({
                         key={activeCategory.id ?? selectedIndex}
                         products={activeCategory.products}
                         locale={locale}
+                        imagePadding={imagePadding}
                     />
                 </div>
             </div>
