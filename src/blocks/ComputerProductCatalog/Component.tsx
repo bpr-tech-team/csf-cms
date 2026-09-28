@@ -200,7 +200,7 @@ export const ComputerProductCatalogBlock = ({
                     </h2>
                     <div
                         aria-label={messages[locale].categories}
-                        className="mt-8 grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]"
+                        className="mt-8 flex flex-wrap gap-3"
                         role="tablist"
                     >
                         {categories.map((category, index) => {
@@ -210,7 +210,7 @@ export const ComputerProductCatalogBlock = ({
                                     aria-controls={`${componentId}-panel`}
                                     aria-selected={isActive}
                                     className={cn(
-                                        "min-h-12 min-w-0 rounded-pill border px-5 py-3 text-body-sm font-bold transition-colors [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500",
+                                        "min-h-12 min-w-0 max-w-full flex-initial rounded-pill border px-5 py-3 text-body-sm font-bold transition-colors [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500",
                                         isActive
                                             ? "border-brand-500 bg-brand-500 text-ink-950"
                                             : "border-brand-500/60 text-paper-0 hover:border-brand-500 hover:bg-brand-500/10",
