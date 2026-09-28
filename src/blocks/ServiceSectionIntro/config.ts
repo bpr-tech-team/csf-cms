@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { sectionDividerField } from "@/fields/sectionDivider";
 
 export const ServiceSectionIntro: Block = {
     slug: "serviceSectionIntro",
@@ -12,6 +13,7 @@ export const ServiceSectionIntro: Block = {
     },
     interfaceName: "ServiceSectionIntroBlock",
     fields: [
+        sectionDividerField("line"),
         {
             name: "anchorId",
             type: "text",

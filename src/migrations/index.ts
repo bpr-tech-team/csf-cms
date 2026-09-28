@@ -16,6 +16,7 @@ import * as migration_20260925_090044_remove_search from "./20260925_090044_remo
 import * as migration_20260925_110000_enable_unaccent from "./20260925_110000_enable_unaccent";
 import * as migration_20260925_120000_payload_3_90_2 from "./20260925_120000_payload_3_90_2";
 import * as migration_20260928_103729_merge_computer_blocks from "./20260928_103729_merge_computer_blocks";
+import * as migration_20260928_125607_section_dividers from "./20260928_125607_section_dividers";
 
 export const migrations = [
     {
@@ -107,5 +108,10 @@ export const migrations = [
         up: migration_20260928_103729_merge_computer_blocks.up,
         down: migration_20260928_103729_merge_computer_blocks.down,
         name: "20260928_103729_merge_computer_blocks",
+    },
+    {
+        up: migration_20260928_125607_section_dividers.up,
+        down: migration_20260928_125607_section_dividers.down,
+        name: "20260928_125607_section_dividers",
     },
 ];

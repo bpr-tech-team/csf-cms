@@ -1079,6 +1079,10 @@ export interface CompanyTimelineBlock {
  */
 export interface ServiceSectionIntroBlock {
   /**
+   * A green line after the heading and introduction, from the content's left edge to the screen's right edge.
+   */
+  divider?: ('none' | 'line') | null;
+  /**
    * Optional link target, for example it-outsourcing.
    */
   anchorId?: string | null;
@@ -1108,6 +1112,10 @@ export interface SplitContentBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * A green line after the heading and introduction, from the content's left edge to the screen's right edge.
+   */
+  divider?: ('none' | 'line') | null;
   heading: string;
   richText: {
     root: {
@@ -1157,24 +1165,34 @@ export interface FlexibleContentBlock {
     [k: string]: unknown;
   } | null;
   /**
+   * A green line after the heading and introduction, from the content's left edge to the screen's right edge.
+   */
+  divider?: ('none' | 'line') | null;
+  /**
    * Applies below 1024 px. Moves entire columns and preserves the order of elements within each column.
    */
   mobileColumnOrder?: ('default' | 'reverse') | null;
   /**
    * One full-width column or two equal columns. Columns stack on mobile.
    */
-  columns: {
-    horizontalAlign: 'left' | 'center' | 'right';
-    verticalAlign: 'top' | 'center' | 'bottom';
-    /**
-     * Applies to the entire column below 1024 px.
-     */
-    mobileHorizontalAlign?: ('inherit' | 'left' | 'center' | 'right') | null;
-    elements: (
-      FlexibleHeadingElement | FlexibleTextElement | FlexibleButtonElement | FlexibleMediaElement | FlexibleHtmlElement
-    )[];
-    id?: string | null;
-  }[];
+  columns?:
+    | {
+        horizontalAlign: 'left' | 'center' | 'right';
+        verticalAlign: 'top' | 'center' | 'bottom';
+        /**
+         * Applies to the entire column below 1024 px.
+         */
+        mobileHorizontalAlign?: ('inherit' | 'left' | 'center' | 'right') | null;
+        elements: (
+          | FlexibleHeadingElement
+          | FlexibleTextElement
+          | FlexibleButtonElement
+          | FlexibleMediaElement
+          | FlexibleHtmlElement
+        )[];
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'flexibleContent';
@@ -2174,6 +2192,7 @@ export interface CompanyTimelineBlockSelect<T extends boolean = true> {
  * via the `definition` "ServiceSectionIntroBlock_select".
  */
 export interface ServiceSectionIntroBlockSelect<T extends boolean = true> {
+  divider?: T;
   anchorId?: T;
   heading?: T;
   description?: T;
@@ -2194,6 +2213,7 @@ export interface SplitContentBlockSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
+  divider?: T;
   heading?: T;
   richText?: T;
   media?: T;
@@ -2210,6 +2230,7 @@ export interface FlexibleContentBlockSelect<T extends boolean = true> {
   theme?: T;
   heading?: T;
   intro?: T;
+  divider?: T;
   mobileColumnOrder?: T;
   columns?:
     | T

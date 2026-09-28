@@ -3,6 +3,7 @@ import { applyTypography } from "@/utilities/typography";
 import type { SplitContentBlock as SplitContentBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
+import { SectionDivider } from "@/components/SectionDivider";
 import { HighlightedText } from "@/components/SectionHeading";
 import RichText from "@/components/RichText";
 import { cn } from "@/utilities/ui";
@@ -17,6 +18,7 @@ export const SplitContentBlock = ({
     mediaPosition,
     richText,
     sectionHeading,
+    divider,
     theme,
 }: SplitContentBlockProps & { locale?: AppLocale }) => {
     const isDark = theme === "dark";
@@ -25,7 +27,7 @@ export const SplitContentBlock = ({
     return (
         <section
             className={cn(
-                "scroll-mt-24 py-20 md:py-24 xl:py-28",
+                "scroll-mt-24 py-20 [container-type:inline-size] md:py-24 xl:py-28",
                 isDark ? "bg-ink-950 text-paper-0" : "bg-paper-0 text-ink-950",
             )}
             data-theme={isDark ? "dark" : undefined}
@@ -41,10 +43,9 @@ export const SplitContentBlock = ({
                                 text={sectionHeading}
                             />
                         </h2>
-                        <span
-                            aria-hidden
-                            className="mt-8 block h-px w-full bg-brand-500"
-                        />
+                        {divider !== "none" ? (
+                            <SectionDivider className="mt-8" />
+                        ) : null}
                     </div>
                 ) : null}
 

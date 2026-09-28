@@ -1,6 +1,7 @@
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
+import { sectionDividerField } from "@/fields/sectionDivider";
 
 export const SplitContent: Block = {
     slug: "splitContent",
@@ -57,6 +58,7 @@ export const SplitContent: Block = {
         highlightedTextsField({
             condition: (_, { sectionHeading } = {}) => Boolean(sectionHeading),
         }),
+        sectionDividerField("line"),
         {
             name: "heading",
             type: "textarea",

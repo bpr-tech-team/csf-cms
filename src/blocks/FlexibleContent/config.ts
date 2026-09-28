@@ -1,6 +1,8 @@
 import type { Block } from "payload";
 
 import { link } from "@/fields/link";
+import { sectionDividerField } from "@/fields/sectionDivider";
+import type { FlexibleContentBlock } from "@/payload-types";
 
 const Heading: Block = {
     slug: "flexHeading",
@@ -230,6 +232,7 @@ export const FlexibleContent: Block = {
             type: "richText",
             label: { cs: "Úvodní text", en: "Introductory text" },
         },
+        sectionDividerField("none"),
         {
             type: "collapsible",
             label: { cs: "Mobilní zobrazení", en: "Mobile layout" },
@@ -274,9 +277,19 @@ export const FlexibleContent: Block = {
             name: "columns",
             dbName: "cols",
             type: "array",
-            minRows: 1,
+            minRows: 0,
             maxRows: 2,
-            required: true,
+            validate: (value, { siblingData }) => {
+                const content = siblingData as Partial<FlexibleContentBlock>;
+                return (
+                    Boolean(
+                        value?.length ||
+                        content?.heading?.trim() ||
+                        content?.intro,
+                    ) ||
+                    "Vyplňte nadpis, úvodní text nebo alespoň jeden sloupec."
+                );
+            },
             label: { cs: "Sloupce", en: "Columns" },
             labels: {
                 singular: { cs: "Sloupec", en: "Column" },
