@@ -51,7 +51,7 @@ function HeaderNavigation({
 
     return (
         <header
-            className="relative z-40 border-b border-paper-0/20 bg-ink-900 text-paper-0"
+            className="sticky top-0 z-50 border-b border-paper-0/20 bg-ink-900 text-paper-0"
             data-theme="dark"
         >
             <div className="container flex h-[71px] items-center justify-between pr-3 xl:h-[103px] xl:gap-16 xl:pr-8">
