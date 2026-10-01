@@ -5,12 +5,19 @@ import { useEffect, useRef } from "react";
 
 type Props = {
     value: number;
+    showDecimals?: boolean | null;
     prefix?: string | null;
     suffix?: string | null;
 };
 
-export function AnimatedMetric({ value, prefix, suffix }: Props) {
+export function AnimatedMetric({
+    value,
+    showDecimals = false,
+    prefix,
+    suffix,
+}: Props) {
     const numberRef = useRef<HTMLSpanElement>(null);
+    const decimalPlaces = showDecimals ? 1 : 0;
 
     useEffect(() => {
         if (
@@ -23,20 +30,21 @@ export function AnimatedMetric({ value, prefix, suffix }: Props) {
             return;
         }
 
-        const counter = new CountUp(numberRef.current, value, {
-            decimalPlaces: Math.max(
-                Math.abs(value) < 10 ? 1 : 0,
-                String(value).split(".")[1]?.length ?? 0,
-            ),
+        const element = numberRef.current;
+        const counter = new CountUp(element, value, {
+            decimalPlaces,
             duration: 3,
-            formattingFn: String,
+            formattingFn: (currentValue) => currentValue.toFixed(decimalPlaces),
+            onCompleteCallback: () => {
+                element.textContent = String(value);
+            },
             useGrouping: false,
             autoAnimate: true,
             autoAnimateOnce: true,
         });
 
         return () => counter.onDestroy();
-    }, [value]);
+    }, [value, decimalPlaces]);
 
     return (
         <span className="inline-block whitespace-nowrap tabular-nums">

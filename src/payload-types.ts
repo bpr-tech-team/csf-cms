@@ -918,6 +918,10 @@ export interface MetricsStripBlock {
   items: {
     prefix?: string | null;
     value: number;
+    /**
+     * Show one decimal place during animation. The original value is always displayed at the end.
+     */
+    showDecimals?: boolean | null;
     suffix?: string | null;
     label: string;
     id?: string | null;
@@ -2060,6 +2064,7 @@ export interface MetricsStripBlockSelect<T extends boolean = true> {
     | {
         prefix?: T;
         value?: T;
+        showDecimals?: T;
         suffix?: T;
         label?: T;
         id?: T;

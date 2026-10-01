@@ -17,6 +17,7 @@ import * as migration_20260925_110000_enable_unaccent from "./20260925_110000_en
 import * as migration_20260925_120000_payload_3_90_2 from "./20260925_120000_payload_3_90_2";
 import * as migration_20260928_103729_merge_computer_blocks from "./20260928_103729_merge_computer_blocks";
 import * as migration_20260928_125607_section_dividers from "./20260928_125607_section_dividers";
+import * as migration_20261001_085725_metrics_decimal_display from "./20261001_085725_metrics_decimal_display";
 
 export const migrations = [
     {
@@ -113,5 +114,10 @@ export const migrations = [
         up: migration_20260928_125607_section_dividers.up,
         down: migration_20260928_125607_section_dividers.down,
         name: "20260928_125607_section_dividers",
+    },
+    {
+        up: migration_20261001_085725_metrics_decimal_display.up,
+        down: migration_20261001_085725_metrics_decimal_display.down,
+        name: "20261001_085725_metrics_decimal_display",
     },
 ];
