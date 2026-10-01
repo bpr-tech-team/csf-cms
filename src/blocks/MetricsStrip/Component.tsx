@@ -32,7 +32,7 @@ export const MetricsStripBlock = ({
                             >
                                 {item.label}
                             </Eyebrow>
-                            <dd className="text-4xl leading-none font-bold tracking-normal text-brand-500 sm:text-5xl md:text-metric">
+                            <dd className="text-3xl leading-none font-bold tracking-normal text-brand-500 sm:text-5xl md:text-metric">
                                 <AnimatedMetric
                                     value={item.value}
                                     showDecimals={item.showDecimals}
