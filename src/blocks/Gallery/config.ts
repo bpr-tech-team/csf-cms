@@ -5,6 +5,14 @@ import { galleryFields } from "@/fields/gallery";
 
 export const Gallery: Block = {
     slug: "gallery",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/gallery.webp",
+                alt: "Galerie obrázků",
+            },
+        },
+    },
     dbName: "gallery",
     interfaceName: "GalleryBlock",
     labels: {
@@ -16,6 +24,7 @@ export const Gallery: Block = {
 
 export const FlexibleGallery: Block = {
     slug: "flexGallery",
+    admin: Gallery.admin,
     dbName: "flex_gallery",
     interfaceName: "FlexibleGalleryElement",
     labels: Gallery.labels,

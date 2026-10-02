@@ -6,6 +6,14 @@ import { sectionDividerField } from "@/fields/sectionDivider";
 
 export const SplitContent: Block = {
     slug: "splitContent",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/split-content.webp",
+                alt: "Dvousloupcový obsahový blok",
+            },
+        },
+    },
     interfaceName: "SplitContentBlock",
     fields: [
         blockSpacingFields(),

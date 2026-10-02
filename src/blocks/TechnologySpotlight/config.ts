@@ -5,6 +5,14 @@ import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const TechnologySpotlight: Block = {
     slug: "technologySpotlight",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/technology-spotlight.webp",
+                alt: "Technologický akcent",
+            },
+        },
+    },
     interfaceName: "TechnologySpotlightBlock",
     fields: [
         blockSpacingFields(),
