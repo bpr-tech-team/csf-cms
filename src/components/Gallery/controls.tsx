@@ -55,7 +55,7 @@ export const GalleryDots = ({
             aria-current={index === selectedIndex ? "true" : undefined}
             aria-label={`${frontendMessages[locale].gallery.slide} ${index + 1}`}
             className={cn(
-                "group relative flex h-4 w-2 items-center justify-center rounded-full",
+                "group relative flex h-4 w-2 shrink-0 items-center justify-center rounded-full transition-[width] duration-300 ease-in-out motion-reduce:transition-none",
                 index === selectedIndex && "w-6",
                 galleryFocusClasses,
             )}
@@ -66,7 +66,7 @@ export const GalleryDots = ({
             <span
                 aria-hidden
                 className={cn(
-                    "h-2 w-full rounded-full transition-colors group-hover:bg-brand-500",
+                    "h-2 w-full rounded-full transition-colors duration-300 ease-in-out group-hover:bg-brand-500 motion-reduce:transition-none",
                     index === selectedIndex
                         ? "bg-brand-500"
                         : theme === "dark"
