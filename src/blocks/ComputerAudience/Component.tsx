@@ -1,4 +1,7 @@
 "use client";
+import { hasItems } from "@/utilities/blockSpacing";
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 
 import { applyTypography } from "@/utilities/typography";
@@ -10,16 +13,20 @@ import { cn } from "@/utilities/ui";
 import React, { useId, useState } from "react";
 
 export const ComputerAudienceBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     anchorId,
     items,
     activeIndex: controlledIndex,
     onActiveIndexChange,
-}: ComputerAudienceBlockProps & {
-    locale?: AppLocale;
-    activeIndex?: number;
-    onActiveIndexChange?: (index: number) => void;
-}) => {
+}: ComputerAudienceBlockProps &
+    BlockSpacingProps & {
+        locale?: AppLocale;
+        activeIndex?: number;
+        onActiveIndexChange?: (index: number) => void;
+    }) => {
     const [internalIndex, setInternalIndex] = useState(0);
     const activeIndex = controlledIndex ?? internalIndex;
     const setActiveIndex = onActiveIndexChange ?? setInternalIndex;
@@ -27,11 +34,15 @@ export const ComputerAudienceBlock = ({
     const selectedIndex = activeIndex < items.length ? activeIndex : 0;
     const activeItem = items[selectedIndex];
 
-    if (!activeItem) return null;
+    if (!hasItems(items) || !activeItem) return null;
 
     return (
-        <section
-            className="scroll-mt-24 bg-paper-0 py-20 md:py-24 xl:py-28"
+        <BlockSection
+            blockType="computerAudience"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="scroll-mt-24 bg-paper-0"
             id={anchorId || undefined}
         >
             <div className="container grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-24">
@@ -113,6 +124,6 @@ export const ComputerAudienceBlock = ({
                     </p>
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };

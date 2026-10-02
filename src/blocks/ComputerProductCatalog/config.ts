@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { computerCategoriesField } from "@/fields/computerCatalog";
@@ -16,6 +17,7 @@ export const ComputerProductCatalog: Block = {
     },
     interfaceName: "ComputerProductCatalogBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

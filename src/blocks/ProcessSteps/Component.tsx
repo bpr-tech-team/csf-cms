@@ -1,5 +1,7 @@
 "use client";
 
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
 import type { ProcessStepsBlock as ProcessStepsBlockProps } from "@/payload-types";
@@ -11,18 +13,23 @@ import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 
 export const ProcessStepsBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     description,
     eyebrow,
     heading,
     highlightedTexts,
     items,
-}: ProcessStepsBlockProps & { locale?: AppLocale }) => {
+}: ProcessStepsBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
+    const sectionRef = useRef<HTMLElement>(null);
     const stepsRef = useRef<HTMLOListElement>(null);
 
     useEffect(() => {
         const steps = stepsRef.current;
-        if (!steps) return;
+        const section = sectionRef.current;
+        if (!steps || !section) return;
 
         gsap.registerPlugin(ScrollTrigger);
         const media = gsap.matchMedia();
@@ -70,23 +77,155 @@ export const ProcessStepsBlock = ({
                 });
 
                 timeline.progress(furthestProgress);
+                if (furthestProgress === 1) return;
+
+                const canFreeze =
+                    section.offsetHeight <= window.innerHeight - 96;
                 const smoothProgress = gsap.quickTo(timeline, "progress", {
                     duration: 0.3,
                     ease: "power2.out",
                 });
-                const advance = ({ progress }: ScrollTrigger) => {
+                const advance = (progress: number) => {
                     if (progress <= furthestProgress) return;
-                    furthestProgress = progress;
-                    smoothProgress(progress);
+                    furthestProgress = Math.min(1, progress);
+                    if (canFreeze || furthestProgress === 1) {
+                        smoothProgress.tween.pause();
+                        timeline.progress(furthestProgress);
+                    } else {
+                        smoothProgress(furthestProgress);
+                    }
                 };
 
-                ScrollTrigger.create({
-                    trigger: steps,
-                    start: "top 85%",
-                    end: conditions.desktop ? "top 20%" : "bottom 45%",
-                    onUpdate: advance,
-                    onRefresh: advance,
+                if (!canFreeze) {
+                    ScrollTrigger.create({
+                        trigger: steps,
+                        start: "top 85%",
+                        end: conditions.desktop ? "top 20%" : "bottom 45%",
+                        onUpdate: ({ progress }) => advance(progress),
+                        onRefresh: ({ progress }) => advance(progress),
+                    });
+                    return;
+                }
+
+                let unlock: (() => void) | undefined;
+                let trigger: ScrollTrigger | undefined = undefined;
+                const distance = () =>
+                    window.innerHeight * Math.max(0.4, items.length / 4);
+                const finish = () => {
+                    advance(1);
+                    unlock?.();
+                    trigger?.kill();
+                };
+                const consumeScroll = (delta: number) => {
+                    if (delta < 0) {
+                        // Let the user leave upwards without reversing the steps.
+                        unlock?.();
+                        window.scrollBy({ top: delta, behavior: "instant" });
+                        return;
+                    }
+                    advance(furthestProgress + delta / distance());
+                    if (furthestProgress === 1) finish();
+                };
+                const onKeyDown = (event: KeyboardEvent) => {
+                    if (
+                        event.ctrlKey ||
+                        event.metaKey ||
+                        event.altKey ||
+                        (event.target instanceof HTMLElement &&
+                            event.target.closest(
+                                "input, textarea, select, button, a, [contenteditable]",
+                            ))
+                    ) {
+                        return;
+                    }
+                    if (
+                        ["ArrowUp", "PageUp", "Home"].includes(event.key) ||
+                        (event.key === " " && event.shiftKey)
+                    ) {
+                        unlock?.();
+                    } else if (event.key === "Escape" || event.key === "End") {
+                        finish();
+                    } else if (
+                        ["ArrowDown", "PageDown", " "].includes(event.key)
+                    ) {
+                        event.preventDefault();
+                        consumeScroll(
+                            event.key === "ArrowDown" ? 80 : distance() / 2,
+                        );
+                    }
+                };
+                const freeze = () => {
+                    if (unlock || furthestProgress === 1) return;
+                    const bounds = section.getBoundingClientRect();
+                    if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
+                        // A fast scroll or anchor jump may skip the visible block.
+                        finish();
+                        return;
+                    }
+
+                    const root = document.documentElement;
+                    const overflow = root.style.overflow;
+                    const paddingRight = root.style.paddingRight;
+                    const touchAction = root.style.touchAction;
+                    const overscrollBehavior = root.style.overscrollBehavior;
+                    const scrollbarWidth = window.innerWidth - root.clientWidth;
+                    const scrollY = window.scrollY;
+                    root.style.paddingRight = `${parseFloat(getComputedStyle(root).paddingRight) + scrollbarWidth}px`;
+                    root.style.overflow = "hidden";
+                    root.style.touchAction = "pinch-zoom";
+                    root.style.overscrollBehavior = "none";
+
+                    const holdPosition = () => {
+                        if (window.scrollY !== scrollY) {
+                            window.scrollTo({
+                                top: scrollY,
+                                behavior: "instant",
+                            });
+                        }
+                    };
+                    const observer = ScrollTrigger.observe({
+                        target: window,
+                        type: "wheel,touch",
+                        lockAxis: true,
+                        allowClicks: true,
+                        preventDefault: true,
+                        ignoreCheck: (event) =>
+                            (event as WheelEvent).ctrlKey ||
+                            ("touches" in event &&
+                                (event as TouchEvent).touches.length > 1),
+                        onChangeY: ({ deltaY, event }) =>
+                            consumeScroll(
+                                event.type === "wheel" ? deltaY : -deltaY,
+                            ),
+                    });
+                    const onResize = () => unlock?.();
+                    unlock = () => {
+                        observer.kill();
+                        root.style.overflow = overflow;
+                        root.style.paddingRight = paddingRight;
+                        root.style.touchAction = touchAction;
+                        root.style.overscrollBehavior = overscrollBehavior;
+                        window.removeEventListener("scroll", holdPosition);
+                        window.removeEventListener("keydown", onKeyDown);
+                        window.removeEventListener("resize", onResize);
+                        unlock = undefined;
+                    };
+                    window.addEventListener("scroll", holdPosition);
+                    window.addEventListener("keydown", onKeyDown);
+                    window.addEventListener("resize", onResize);
+                };
+                trigger = ScrollTrigger.create({
+                    trigger: section,
+                    start: "center center",
+                    end: "bottom top",
+                    onEnter: freeze,
+                    onLeave: () => {
+                        if (!unlock) finish();
+                    },
                 });
+                if (furthestProgress === 1) trigger.kill();
+
+                return () => unlock?.();
             },
         );
 
@@ -94,7 +233,13 @@ export const ProcessStepsBlock = ({
     }, [items.length]);
 
     return (
-        <section className="bg-paper-0 py-20 md:py-24">
+        <BlockSection
+            blockType="processSteps"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            ref={sectionRef}
+        >
             <div className="container">
                 <SectionHeading
                     locale={locale}
@@ -142,6 +287,6 @@ export const ProcessStepsBlock = ({
                     ))}
                 </ol>
             </div>
-        </section>
+        </BlockSection>
     );
 };

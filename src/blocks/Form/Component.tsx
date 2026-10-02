@@ -1,4 +1,6 @@
 "use client";
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 
@@ -35,9 +37,13 @@ export const FormBlock: React.FC<
     {
         id?: null | string;
         locale?: AppLocale;
-    } & FormBlockType
+    } & FormBlockType &
+        BlockSpacingProps
 > = (props) => {
     const {
+        sectionSpacing,
+        spacingTop,
+        spacingBottom,
         appearance,
         locale = defaultLocale,
         employee,
@@ -115,12 +121,13 @@ export const FormBlock: React.FC<
 
     return (
         <LocaleProvider locale={locale}>
-            <section
-                className={cn(
-                    isHomepageDark
-                        ? "bg-ink-950 py-20 text-paper-0 md:py-24"
-                        : "my-16",
-                )}
+            <BlockSection
+                blockType="formBlock"
+                appearance={appearance}
+                spacing={
+                    sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+                }
+                className={isHomepageDark ? "text-paper-0" : undefined}
                 data-theme={isHomepageDark ? "dark" : undefined}
                 id={isHomepageDark ? "kontakt" : undefined}
             >
@@ -292,7 +299,7 @@ export const FormBlock: React.FC<
                         </div>
                     </div>
                 </div>
-            </section>
+            </BlockSection>
         </LocaleProvider>
     );
 };

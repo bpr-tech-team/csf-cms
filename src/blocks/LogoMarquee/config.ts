@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 export const LogoMarquee: Block = {
@@ -12,6 +13,7 @@ export const LogoMarquee: Block = {
     },
     interfaceName: "LogoMarqueeBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "eyebrow",
             type: "text",

@@ -20,6 +20,17 @@ export const frontendMessages: Record<
             submit: string;
         };
         heroPresentation: string;
+        gallery: {
+            label: string;
+            carousel: string;
+            slide: string;
+            previous: string;
+            next: string;
+            openImage: string;
+            close: string;
+            pause: string;
+            play: string;
+        };
         homeLinkLabel: string;
         mainNavigation: string;
         menuClose: string;
@@ -59,6 +70,17 @@ export const frontendMessages: Record<
             submit: "Odeslat",
         },
         heroPresentation: "Úvodní prezentace",
+        gallery: {
+            label: "Galerie obrázků",
+            carousel: "karusel",
+            slide: "Obrázek",
+            previous: "Předchozí obrázek",
+            next: "Další obrázek",
+            openImage: "Zvětšit obrázek",
+            close: "Zavřít galerii",
+            pause: "Pozastavit přehrávání",
+            play: "Spustit přehrávání",
+        },
         homeLinkLabel: "CSF — domů",
         mainNavigation: "Hlavní navigace",
         menuClose: "Zavřít menu",
@@ -98,6 +120,17 @@ export const frontendMessages: Record<
             submit: "Submit",
         },
         heroPresentation: "Introduction",
+        gallery: {
+            label: "Image gallery",
+            carousel: "carousel",
+            slide: "Image",
+            previous: "Previous image",
+            next: "Next image",
+            openImage: "Enlarge image",
+            close: "Close gallery",
+            pause: "Pause slideshow",
+            play: "Play slideshow",
+        },
         homeLinkLabel: "CSF — home",
         mainNavigation: "Main navigation",
         menuClose: "Close menu",

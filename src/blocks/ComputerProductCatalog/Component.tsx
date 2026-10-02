@@ -1,5 +1,8 @@
 "use client";
 
+import { hasItems } from "@/utilities/blockSpacing";
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
 import type { ComputerProductCatalogBlock as ComputerProductCatalogBlockProps } from "@/payload-types";
@@ -170,26 +173,37 @@ const CategoryProducts = ({
 };
 
 export const ComputerProductCatalogBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     anchorId,
     categories,
     highlightedTexts,
     navigationHeading,
     imagePadding = true,
-}: ComputerProductCatalogBlockProps & {
-    locale?: AppLocale;
-    imagePadding?: boolean;
-}) => {
+}: ComputerProductCatalogBlockProps &
+    BlockSpacingProps & {
+        locale?: AppLocale;
+        imagePadding?: boolean;
+    }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const componentId = useId();
     const selectedIndex = activeIndex < categories.length ? activeIndex : 0;
     const activeCategory = categories[selectedIndex];
 
-    if (!activeCategory) return null;
+    if (!hasItems(categories) || !activeCategory) return null;
 
     return (
         <section className="scroll-mt-24" id={anchorId || undefined}>
-            <div className="bg-ink-950 py-16 text-paper-0" data-theme="dark">
+            <BlockSection
+                as="div"
+                blockType="computerProductCatalog"
+                part="navigation"
+                spacing={{ top: sectionSpacing?.top ?? spacingTop }}
+                className="text-paper-0"
+                data-theme="dark"
+            >
                 <div className="container">
                     <h2 className="text-4xl leading-tight font-bold tracking-normal whitespace-pre-line md:text-heading-xl">
                         <HighlightedText
@@ -254,10 +268,13 @@ export const ComputerProductCatalogBlock = ({
                         })}
                     </div>
                 </div>
-            </div>
-            <div
+            </BlockSection>
+            <BlockSection
+                as="div"
+                blockType="computerProductCatalog"
+                part="products"
+                spacing={{ bottom: sectionSpacing?.bottom ?? spacingBottom }}
                 aria-labelledby={`${componentId}-tab-${selectedIndex}`}
-                className="bg-paper-0 py-20 md:py-24 xl:py-28"
                 id={`${componentId}-panel`}
                 role="tabpanel"
                 tabIndex={0}
@@ -280,7 +297,7 @@ export const ComputerProductCatalogBlock = ({
                         imagePadding={imagePadding}
                     />
                 </div>
-            </div>
+            </BlockSection>
         </section>
     );
 };

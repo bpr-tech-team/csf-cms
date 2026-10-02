@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 export const BranchDetails: Block = {
@@ -22,6 +23,7 @@ export const BranchDetails: Block = {
         },
     },
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { applyTypography } from "@/utilities/typography";
 import type { ProductsGridBlock as ProductsGridBlockProps } from "@/payload-types";
 
@@ -10,14 +12,24 @@ import { defaultLocale } from "@/i18n/config";
 import React from "react";
 
 export const ProductsGridBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     eyebrow,
     heading,
     highlightedTexts,
     items,
     locale = defaultLocale,
-}: ProductsGridBlockProps & { locale?: AppLocale }) => {
+}: ProductsGridBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     return (
-        <section className="bg-paper-0 py-20 md:py-28 xl:py-30" id="produkty">
+        <BlockSection
+            blockType="productsGrid"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+
+            id="produkty"
+        >
             <div className="container">
                 <SectionHeading
                     locale={locale}
@@ -36,7 +48,7 @@ export const ProductsGridBlock = ({
                     ))}
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };
 

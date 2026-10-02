@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import type { CSSProperties } from "react";
 import type { LogoMarqueeBlock as LogoMarqueeBlockProps } from "@/payload-types";
@@ -12,20 +14,27 @@ import styles from "./styles.module.css";
 type LogoItem = LogoMarqueeBlockProps["items"][number];
 
 export const LogoMarqueeBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     duration,
     eyebrow,
     items,
     pauseOnHover,
-}: LogoMarqueeBlockProps & { locale?: AppLocale }) => {
+}: LogoMarqueeBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     const animationStyle = {
         "--homepage-marquee-duration": `${duration ?? 40}s`,
     } as CSSProperties;
 
     return (
-        <section
+        <BlockSection
+            blockType="logoMarquee"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
             aria-label={eyebrow}
-            className="overflow-hidden border-b border-brand-500 bg-ink-950 py-9 text-paper-0"
+            className="overflow-hidden border-b border-brand-500 text-paper-0"
             data-theme="dark"
         >
             <Eyebrow
@@ -49,7 +58,7 @@ export const LogoMarqueeBlock = ({
                     <LogoGroup ariaHidden items={items} />
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };
 

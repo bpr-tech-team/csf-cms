@@ -23,6 +23,7 @@ import { ProductsGrid } from "../../blocks/ProductsGrid/config";
 import { ServicesGrid } from "../../blocks/ServicesGrid/config";
 import { TechnologySpotlight } from "../../blocks/TechnologySpotlight/config";
 import { FlexibleContent } from "@/blocks/FlexibleContent/config";
+import { Gallery } from "@/blocks/Gallery/config";
 import { Hero } from "@/blocks/Hero/config";
 import { HomepageHero } from "@/blocks/HomepageHero/config";
 import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
@@ -126,6 +127,7 @@ export const Pages: CollectionConfig<"pages"> = {
                                 ServiceSectionIntro,
                                 SplitContent,
                                 FlexibleContent,
+                                Gallery,
                                 ComputerAudience,
                                 ComputerCatalog,
                                 ComputerProductCatalog,

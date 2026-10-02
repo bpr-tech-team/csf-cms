@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 import { sectionDividerField } from "@/fields/sectionDivider";
 
@@ -13,6 +14,7 @@ export const ServiceSectionIntro: Block = {
     },
     interfaceName: "ServiceSectionIntroBlock",
     fields: [
+        blockSpacingFields(),
         sectionDividerField("line"),
         {
             name: "anchorId",

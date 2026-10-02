@@ -1,3 +1,6 @@
+import { hasBranchInfo } from "@/utilities/blockSpacing";
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import type { BranchDetailsBlock as Props, Page } from "@/payload-types";
 import { BranchOpeningHours } from "@/components/BranchOpeningHours";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
@@ -9,13 +12,16 @@ import {
 import { applyTypography } from "@/utilities/typography";
 
 export const BranchDetailsBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     anchorId,
     contactHeading,
     hoursHeading,
     page,
     locale = defaultLocale,
-}: Props & { page?: Page; locale?: AppLocale }) => {
-    if (page?.pageType !== "branch" || !page.branchInfo) return null;
+}: Props & BlockSpacingProps & { page?: Page; locale?: AppLocale }) => {
+    if (!hasBranchInfo(page)) return null;
     const info = page.branchInfo;
     const labels = branchLabels[locale];
     const billing = [
@@ -33,8 +39,12 @@ export const BranchDetailsBlock = ({
         "underline underline-offset-4 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring";
 
     return (
-        <section
-            className="scroll-mt-24 bg-paper-0 py-20 text-ink-950 md:py-24 xl:py-28"
+        <BlockSection
+            blockType="branchDetails"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="scroll-mt-24 text-ink-950"
             id={anchorId || undefined}
         >
             <div className="container grid items-start gap-12 lg:grid-cols-[3fr_2fr] lg:gap-20">
@@ -60,7 +70,7 @@ export const BranchDetailsBlock = ({
                             <dd className="inline">
                                 {info.phones?.map(({ number, id }, index) => (
                                     <span key={id ?? index}>
-                                        {index > 0 && ", "}
+                                        {index > 0 && ","}
                                         <a
                                             href={phoneHref(number)}
                                             className={linkClassName}
@@ -120,6 +130,6 @@ export const BranchDetailsBlock = ({
                     />
                 )}
             </div>
-        </section>
+        </BlockSection>
     );
 };

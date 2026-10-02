@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import type { BranchesGridBlock as Props } from "@/payload-types";
 import { CardIcon } from "@/components/CardIcon";
 import { CMSLink } from "@/components/Link";
@@ -11,13 +13,16 @@ import { applyTypography } from "@/utilities/typography";
 import { cn } from "@/utilities/ui";
 
 export const BranchesGridBlock = async ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     anchorId,
     heading,
     highlightedTexts,
     items,
     locale = defaultLocale,
     draft = false,
-}: Props & { locale?: AppLocale; draft?: boolean }) => {
+}: Props & BlockSpacingProps & { locale?: AppLocale; draft?: boolean }) => {
     const ids = Array.from(
         new Set(
             items
@@ -32,8 +37,12 @@ export const BranchesGridBlock = async ({
     const labels = branchLabels[locale];
 
     return (
-        <section
-            className="scroll-mt-24 bg-paper-0 py-20 text-ink-950 md:py-24"
+        <BlockSection
+            blockType="branchesGrid"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="scroll-mt-24 text-ink-950"
             id={anchorId || undefined}
         >
             <div className="container">
@@ -83,7 +92,7 @@ export const BranchesGridBlock = async ({
                                         {info.phones?.map(
                                             ({ number, id }, phoneIndex) => (
                                                 <span key={id ?? phoneIndex}>
-                                                    {phoneIndex > 0 && ", "}
+                                                    {phoneIndex > 0 && ","}
                                                     <a
                                                         className="underline underline-offset-4 hover:text-brand-600"
                                                         href={phoneHref(number)}
@@ -121,6 +130,6 @@ export const BranchesGridBlock = async ({
                     })}
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };

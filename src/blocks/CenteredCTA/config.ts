@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { link } from "@/fields/link";
@@ -14,6 +15,7 @@ export const CenteredCTA: Block = {
     },
     interfaceName: "CenteredCtaBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "heading",
             type: "textarea",

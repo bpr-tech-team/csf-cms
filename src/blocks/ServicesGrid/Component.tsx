@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { applyTypography } from "@/utilities/typography";
 import type { ServicesGridBlock as ServicesGridBlockProps } from "@/payload-types";
 
@@ -9,14 +11,24 @@ import { defaultLocale } from "@/i18n/config";
 import React from "react";
 
 export const ServicesGridBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     eyebrow,
     heading,
     highlightedTexts,
     items,
     locale = defaultLocale,
-}: ServicesGridBlockProps & { locale?: AppLocale }) => {
+}: ServicesGridBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     return (
-        <section className="bg-paper-0 py-20 md:py-28 xl:py-30" id="sluzby">
+        <BlockSection
+            blockType="servicesGrid"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+
+            id="sluzby"
+        >
             <div className="container">
                 <SectionHeading
                     locale={locale}
@@ -60,6 +72,6 @@ export const ServicesGridBlock = ({
                     })}
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };

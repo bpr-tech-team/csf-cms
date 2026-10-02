@@ -1,9 +1,12 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import type {
     FlexibleContentBlock as FlexibleContentProps,
     FlexibleMediaElement,
 } from "@/payload-types";
 import { CMSLink } from "@/components/Link";
 import { MediaAsset } from "@/components/MediaAsset";
+import { Gallery } from "@/components/Gallery";
 import RichText from "@/components/RichText";
 import { SectionDivider } from "@/components/SectionDivider";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
@@ -96,6 +99,9 @@ const FlexibleMedia = ({
 };
 
 export const FlexibleContentBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     anchorId,
     heading,
     intro,
@@ -104,7 +110,7 @@ export const FlexibleContentBlock = ({
     mobileColumnOrder,
     theme = "light",
     locale = defaultLocale,
-}: FlexibleContentProps & { locale?: AppLocale }) => {
+}: FlexibleContentProps & BlockSpacingProps & { locale?: AppLocale }) => {
     const contentColumns = columns || [];
     const twoColumns = contentColumns.length === 2;
     const isDark = theme === "dark";
@@ -116,10 +122,15 @@ export const FlexibleContentBlock = ({
     );
 
     return (
-        <section
+        <BlockSection
+            blockType="flexibleContent"
+            theme={theme}
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
             className={cn(
-                "scroll-mt-24 py-20 [container-type:inline-size] md:py-24 xl:py-28",
-                isDark ? "bg-ink-950 text-paper-0" : "bg-paper-0 text-ink-950",
+                "scroll-mt-24 [container-type:inline-size]",
+                isDark ? "text-paper-0" : "text-ink-950",
             )}
             data-theme={isDark ? "dark" : "light"}
             id={anchorId || undefined}
@@ -236,6 +247,21 @@ export const FlexibleContentBlock = ({
                                                         }
                                                     />
                                                 );
+                                            case "flexGallery":
+                                                return (
+                                                    <Gallery
+                                                        key={key}
+                                                        {...element}
+                                                        compact={twoColumns}
+                                                        theme={theme || "light"}
+                                                        locale={locale}
+                                                        sizes={
+                                                            twoColumns
+                                                                ? "(max-width: 64rem) 100vw, 50vw"
+                                                                : "100vw"
+                                                        }
+                                                    />
+                                                );
                                             case "flexHtml":
                                                 return (
                                                     <div
@@ -258,6 +284,6 @@ export const FlexibleContentBlock = ({
                     </div>
                 ) : null}
             </div>
-        </section>
+        </BlockSection>
     );
 };

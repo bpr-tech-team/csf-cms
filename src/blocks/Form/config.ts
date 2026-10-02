@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block, TextFieldSingleValidation } from "payload";
 import { text, textarea } from "payload/shared";
 
@@ -16,6 +17,7 @@ export const FormBlock: Block = {
     },
     interfaceName: "FormBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "appearance",
             type: "select",

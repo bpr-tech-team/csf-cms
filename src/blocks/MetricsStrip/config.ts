@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 export const MetricsStrip: Block = {
@@ -12,6 +13,7 @@ export const MetricsStrip: Block = {
     },
     interfaceName: "MetricsStripBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "heading",
             type: "text",
@@ -48,6 +50,21 @@ export const MetricsStrip: Block = {
                         en: "Value",
                     },
                     required: true,
+                },
+                {
+                    name: "showDecimals",
+                    type: "checkbox",
+                    label: {
+                        cs: "Zobrazovat desetinná čísla",
+                        en: "Show decimal numbers",
+                    },
+                    defaultValue: false,
+                    admin: {
+                        description: {
+                            cs: "Během animace zobrazí jeden znak za desetinnou čárkou. Na konci se vždy zobrazí původní hodnota.",
+                            en: "Show one decimal place during animation. The original value is always displayed at the end.",
+                        },
+                    },
                 },
                 {
                     name: "suffix",

@@ -1,11 +1,21 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const EditorialColumns: Block = {
     slug: "editorialColumns",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/editorial-columns.webp",
+                alt: "Vícesloupcový textový blok",
+            },
+        },
+    },
     interfaceName: "EditorialColumnsBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

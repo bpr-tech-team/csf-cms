@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import { contentIcon } from "@/fields/contentIcon";
 import type { Block } from "payload";
 
@@ -16,6 +17,7 @@ export const ServicesGrid: Block = {
     },
     interfaceName: "ServicesGridBlock",
     fields: [
+        blockSpacingFields(),
         ...homepageSectionIntro(),
         {
             name: "items",

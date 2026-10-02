@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { clientServiceDefaults } from "./defaults";
@@ -18,6 +19,7 @@ export const ClientService: Block = {
         },
     },
     fields: [
+        blockSpacingFields(),
         {
             name: "eyebrow",
             type: "text",

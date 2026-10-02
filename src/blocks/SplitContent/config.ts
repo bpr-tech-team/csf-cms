@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
@@ -5,8 +6,17 @@ import { sectionDividerField } from "@/fields/sectionDivider";
 
 export const SplitContent: Block = {
     slug: "splitContent",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/split-content.webp",
+                alt: "Dvousloupcový obsahový blok",
+            },
+        },
+    },
     interfaceName: "SplitContentBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
 import type { MetricsStripBlock as MetricsStripBlockProps } from "@/payload-types";
@@ -7,12 +9,22 @@ import React from "react";
 import { AnimatedMetric } from "./AnimatedMetric";
 
 export const MetricsStripBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     heading,
     items,
-}: MetricsStripBlockProps & { locale?: AppLocale }) => {
+}: MetricsStripBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     return (
-        <section className="bg-ink-950 py-16 text-paper-0" data-theme="dark">
+        <BlockSection
+            blockType="metricsStrip"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="text-paper-0"
+            data-theme="dark"
+        >
             <div className="container">
                 <h2 className="text-center text-heading-lg font-bold">
                     {applyTypography(heading, { locale })}
@@ -32,9 +44,10 @@ export const MetricsStripBlock = ({
                             >
                                 {item.label}
                             </Eyebrow>
-                            <dd className="text-4xl leading-none font-bold tracking-normal text-brand-500 sm:text-5xl md:text-metric">
+                            <dd className="text-3xl leading-none font-bold tracking-normal text-brand-500 sm:text-5xl md:text-metric">
                                 <AnimatedMetric
                                     value={item.value}
+                                    showDecimals={item.showDecimals}
                                     prefix={item.prefix}
                                     suffix={item.suffix}
                                 />
@@ -43,6 +56,6 @@ export const MetricsStripBlock = ({
                     ))}
                 </dl>
             </div>
-        </section>
+        </BlockSection>
     );
 };

@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import type { CenteredCtaBlock as CenteredCtaBlockProps } from "@/payload-types";
 
 import { MediaAsset } from "@/components/MediaAsset";
@@ -8,14 +10,21 @@ import { defaultLocale } from "@/i18n/config";
 import React from "react";
 
 export const CenteredCTABlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     backgroundMedia,
     heading,
     link,
     locale = defaultLocale,
-}: CenteredCtaBlockProps & { locale?: AppLocale }) => {
+}: CenteredCtaBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     return (
-        <section
-            className="relative overflow-hidden border-b border-border-dark bg-ink-950 py-24 text-center text-paper-0 md:py-28"
+        <BlockSection
+            blockType="centeredCta"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="relative overflow-hidden border-b border-border-dark text-center text-paper-0"
             data-theme="dark"
         >
             {backgroundMedia && (
@@ -50,6 +59,6 @@ export const CenteredCTABlock = ({
                     />
                 )}
             </div>
-        </section>
+        </BlockSection>
     );
 };

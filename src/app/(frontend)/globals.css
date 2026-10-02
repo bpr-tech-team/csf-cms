@@ -71,8 +71,8 @@
     --text-eyebrow: 0.6875rem;
     --text-eyebrow--line-height: 1.03125rem;
     --text-eyebrow--letter-spacing: 0.09em;
-    --text-metric: 4rem;
-    --text-metric--line-height: 4rem;
+    --text-metric: 3.5rem;
+    --text-metric--line-height: 3.5rem;
     --text-metric--letter-spacing: 0;
 
     /* Shape, depth and motion */

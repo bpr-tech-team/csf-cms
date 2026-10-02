@@ -177,6 +177,7 @@ export interface Page {
     | ServiceSectionIntroBlock
     | SplitContentBlock
     | FlexibleContentBlock
+    | GalleryBlock
     | ComputerAudienceBlock
     | ComputerCatalogBlock
     | ComputerProductCatalogBlock
@@ -236,6 +237,14 @@ export interface Page {
  * via the `definition` "HeroBlock".
  */
 export interface HeroBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow?: string | null;
   heading: string;
   description?: string | null;
@@ -499,6 +508,14 @@ export interface User {
  */
 export interface HomepageHeroBlock {
   /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
    * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
    */
   backgroundMedia?: (number | null) | Media;
@@ -607,6 +624,14 @@ export interface ContentIcon {
  * via the `definition` "BranchesGridBlock".
  */
 export interface BranchesGridBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   heading: string;
   /**
@@ -633,6 +658,14 @@ export interface BranchesGridBlock {
  * via the `definition` "BranchDetailsBlock".
  */
 export interface BranchDetailsBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   /**
    * Default: Contact details
@@ -651,6 +684,14 @@ export interface BranchDetailsBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   appearance?: ('default' | 'homepageDark') | null;
   eyebrow?: string | null;
   form: number | Form;
@@ -856,6 +897,14 @@ export interface Form {
  * via the `definition` "ClientServiceBlock".
  */
 export interface ClientServiceBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow?: string | null;
   heading: string;
   description?: string | null;
@@ -873,6 +922,14 @@ export interface ClientServiceBlock {
  * via the `definition` "ServicesGridBlock".
  */
 export interface ServicesGridBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow?: string | null;
   heading: string;
   /**
@@ -914,10 +971,22 @@ export interface ServicesGridBlock {
  * via the `definition` "MetricsStripBlock".
  */
 export interface MetricsStripBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   heading: string;
   items: {
     prefix?: string | null;
     value: number;
+    /**
+     * Show one decimal place during animation. The original value is always displayed at the end.
+     */
+    showDecimals?: boolean | null;
     suffix?: string | null;
     label: string;
     id?: string | null;
@@ -931,6 +1000,14 @@ export interface MetricsStripBlock {
  * via the `definition` "ProductsGridBlock".
  */
 export interface ProductsGridBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow?: string | null;
   heading: string;
   /**
@@ -972,6 +1049,14 @@ export interface ProductsGridBlock {
  * via the `definition` "LogoMarqueeBlock".
  */
 export interface LogoMarqueeBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow: string;
   items: {
     logo: number | Media;
@@ -993,6 +1078,14 @@ export interface LogoMarqueeBlock {
  * via the `definition` "CenteredCtaBlock".
  */
 export interface CenteredCtaBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   heading: string;
   link: {
     type?: ('reference' | 'custom') | null;
@@ -1026,6 +1119,14 @@ export interface CenteredCtaBlock {
  * via the `definition` "ProcessStepsBlock".
  */
 export interface ProcessStepsBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow?: string | null;
   heading: string;
   /**
@@ -1052,6 +1153,14 @@ export interface ProcessStepsBlock {
  * via the `definition` "CompanyTimelineBlock".
  */
 export interface CompanyTimelineBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   eyebrow?: string | null;
   heading: string;
   /**
@@ -1079,6 +1188,14 @@ export interface CompanyTimelineBlock {
  */
 export interface ServiceSectionIntroBlock {
   /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
    * A green line after the heading and introduction, from the content's left edge to the screen's right edge.
    */
   divider?: ('none' | 'line') | null;
@@ -1097,6 +1214,14 @@ export interface ServiceSectionIntroBlock {
  * via the `definition` "SplitContentBlock".
  */
 export interface SplitContentBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   /**
    * Optional link target for the block.
    */
@@ -1146,6 +1271,14 @@ export interface SplitContentBlock {
  * via the `definition` "FlexibleContentBlock".
  */
 export interface FlexibleContentBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   theme: 'light' | 'dark';
   heading?: string | null;
@@ -1188,6 +1321,7 @@ export interface FlexibleContentBlock {
           | FlexibleTextElement
           | FlexibleButtonElement
           | FlexibleMediaElement
+          | FlexibleGalleryElement
           | FlexibleHtmlElement
         )[];
         id?: string | null;
@@ -1275,6 +1409,21 @@ export interface FlexibleMediaElement {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleGalleryElement".
+ */
+export interface FlexibleGalleryElement {
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
+  autoplay?: boolean | null;
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FlexibleHtmlElement".
  */
 export interface FlexibleHtmlElement {
@@ -1288,9 +1437,40 @@ export interface FlexibleHtmlElement {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock".
+ */
+export interface GalleryBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
+  autoplay?: boolean | null;
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ComputerAudienceBlock".
  */
 export interface ComputerAudienceBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   /**
    * Optional link target for the block.
    */
@@ -1320,6 +1500,14 @@ export interface ComputerAudienceBlock {
  * via the `definition` "ComputerCatalogBlock".
  */
 export interface ComputerCatalogBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   navigationHeading: string;
   /**
@@ -1387,6 +1575,14 @@ export interface ComputerCatalogBlock {
  */
 export interface ComputerProductCatalogBlock {
   /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
    * Optional link target for the catalog.
    */
   anchorId?: string | null;
@@ -1436,6 +1632,14 @@ export interface ComputerProductCatalogBlock {
  * via the `definition` "MediaFeatureGridBlock".
  */
 export interface MediaFeatureGridBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   heading: string;
   /**
@@ -1466,6 +1670,14 @@ export interface MediaFeatureGridBlock {
  * via the `definition` "TechnologySpotlightBlock".
  */
 export interface TechnologySpotlightBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   heading: string;
   /**
@@ -1493,6 +1705,14 @@ export interface TechnologySpotlightBlock {
  * via the `definition` "EditorialColumnsBlock".
  */
 export interface EditorialColumnsBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   anchorId?: string | null;
   heading: string;
   /**
@@ -1789,6 +2009,7 @@ export interface PagesSelect<T extends boolean = true> {
         serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
         splitContent?: T | SplitContentBlockSelect<T>;
         flexibleContent?: T | FlexibleContentBlockSelect<T>;
+        gallery?: T | GalleryBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
         computerCatalog?: T | ComputerCatalogBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
@@ -1839,6 +2060,8 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "HeroBlock_select".
  */
 export interface HeroBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   heading?: T;
   description?: T;
@@ -1866,6 +2089,8 @@ export interface HeroBlockSelect<T extends boolean = true> {
  * via the `definition` "HomepageHeroBlock_select".
  */
 export interface HomepageHeroBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   backgroundMedia?: T;
   slides?:
     | T
@@ -1946,6 +2171,8 @@ export interface ContentIconSelect<T extends boolean = true> {
  * via the `definition` "BranchesGridBlock_select".
  */
 export interface BranchesGridBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   heading?: T;
   highlightedTexts?:
@@ -1970,6 +2197,8 @@ export interface BranchesGridBlockSelect<T extends boolean = true> {
  * via the `definition` "BranchDetailsBlock_select".
  */
 export interface BranchDetailsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   contactHeading?: T;
   hoursHeading?: T;
@@ -1981,6 +2210,8 @@ export interface BranchDetailsBlockSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   appearance?: T;
   eyebrow?: T;
   form?: T;
@@ -2005,6 +2236,8 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "ClientServiceBlock_select".
  */
 export interface ClientServiceBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   heading?: T;
   description?: T;
@@ -2021,6 +2254,8 @@ export interface ClientServiceBlockSelect<T extends boolean = true> {
  * via the `definition` "ServicesGridBlock_select".
  */
 export interface ServicesGridBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   heading?: T;
   highlightedTexts?:
@@ -2054,12 +2289,15 @@ export interface ServicesGridBlockSelect<T extends boolean = true> {
  * via the `definition` "MetricsStripBlock_select".
  */
 export interface MetricsStripBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   heading?: T;
   items?:
     | T
     | {
         prefix?: T;
         value?: T;
+        showDecimals?: T;
         suffix?: T;
         label?: T;
         id?: T;
@@ -2072,6 +2310,8 @@ export interface MetricsStripBlockSelect<T extends boolean = true> {
  * via the `definition` "ProductsGridBlock_select".
  */
 export interface ProductsGridBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   heading?: T;
   highlightedTexts?:
@@ -2105,6 +2345,8 @@ export interface ProductsGridBlockSelect<T extends boolean = true> {
  * via the `definition` "LogoMarqueeBlock_select".
  */
 export interface LogoMarqueeBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   items?:
     | T
@@ -2124,6 +2366,8 @@ export interface LogoMarqueeBlockSelect<T extends boolean = true> {
  * via the `definition` "CenteredCtaBlock_select".
  */
 export interface CenteredCtaBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   heading?: T;
   link?:
     | T
@@ -2144,6 +2388,8 @@ export interface CenteredCtaBlockSelect<T extends boolean = true> {
  * via the `definition` "ProcessStepsBlock_select".
  */
 export interface ProcessStepsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   heading?: T;
   highlightedTexts?:
@@ -2168,6 +2414,8 @@ export interface ProcessStepsBlockSelect<T extends boolean = true> {
  * via the `definition` "CompanyTimelineBlock_select".
  */
 export interface CompanyTimelineBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   eyebrow?: T;
   heading?: T;
   highlightedTexts?:
@@ -2192,6 +2440,8 @@ export interface CompanyTimelineBlockSelect<T extends boolean = true> {
  * via the `definition` "ServiceSectionIntroBlock_select".
  */
 export interface ServiceSectionIntroBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   divider?: T;
   anchorId?: T;
   heading?: T;
@@ -2204,6 +2454,8 @@ export interface ServiceSectionIntroBlockSelect<T extends boolean = true> {
  * via the `definition` "SplitContentBlock_select".
  */
 export interface SplitContentBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   theme?: T;
   sectionHeading?: T;
@@ -2226,6 +2478,8 @@ export interface SplitContentBlockSelect<T extends boolean = true> {
  * via the `definition` "FlexibleContentBlock_select".
  */
 export interface FlexibleContentBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   theme?: T;
   heading?: T;
@@ -2245,6 +2499,7 @@ export interface FlexibleContentBlockSelect<T extends boolean = true> {
               flexText?: T | FlexibleTextElementSelect<T>;
               flexButton?: T | FlexibleButtonElementSelect<T>;
               flexMedia?: T | FlexibleMediaElementSelect<T>;
+              flexGallery?: T | FlexibleGalleryElementSelect<T>;
               flexHtml?: T | FlexibleHtmlElementSelect<T>;
             };
         id?: T;
@@ -2302,6 +2557,22 @@ export interface FlexibleMediaElementSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleGalleryElement_select".
+ */
+export interface FlexibleGalleryElementSelect<T extends boolean = true> {
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FlexibleHtmlElement_select".
  */
 export interface FlexibleHtmlElementSelect<T extends boolean = true> {
@@ -2311,9 +2582,29 @@ export interface FlexibleHtmlElementSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock_select".
+ */
+export interface GalleryBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ComputerAudienceBlock_select".
  */
 export interface ComputerAudienceBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   items?:
     | T
@@ -2338,6 +2629,8 @@ export interface ComputerAudienceBlockSelect<T extends boolean = true> {
  * via the `definition` "ComputerCatalogBlock_select".
  */
 export interface ComputerCatalogBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   navigationHeading?: T;
   highlightedTexts?:
@@ -2397,6 +2690,8 @@ export interface ComputerCatalogBlockSelect<T extends boolean = true> {
  * via the `definition` "ComputerProductCatalogBlock_select".
  */
 export interface ComputerProductCatalogBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   navigationHeading?: T;
   highlightedTexts?:
@@ -2441,6 +2736,8 @@ export interface ComputerProductCatalogBlockSelect<T extends boolean = true> {
  * via the `definition` "MediaFeatureGridBlock_select".
  */
 export interface MediaFeatureGridBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   heading?: T;
   highlightedTexts?:
@@ -2466,6 +2763,8 @@ export interface MediaFeatureGridBlockSelect<T extends boolean = true> {
  * via the `definition` "TechnologySpotlightBlock_select".
  */
 export interface TechnologySpotlightBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   heading?: T;
   highlightedTexts?:
@@ -2491,6 +2790,8 @@ export interface TechnologySpotlightBlockSelect<T extends boolean = true> {
  * via the `definition` "EditorialColumnsBlock_select".
  */
 export interface EditorialColumnsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
   anchorId?: T;
   heading?: T;
   highlightedTexts?:

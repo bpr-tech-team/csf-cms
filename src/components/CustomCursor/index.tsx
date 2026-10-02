@@ -93,12 +93,12 @@ export const CustomCursor = () => {
     return (
         <div
             aria-hidden
-            className="pointer-events-none fixed top-0 left-0 z-50 hidden size-5 rounded-full bg-primary opacity-0 lg:block"
+            className="pointer-events-none fixed top-0 left-0 z-999 hidden size-4 rounded-full bg-primary opacity-0 lg:block"
             data-custom-cursor
             ref={cursorRef}
             style={{
                 boxShadow:
-                    "0 0 12px 32px color-mix(in srgb, var(--primary) 45%, transparent)",
+                    "0 0 8px 24px color-mix(in srgb, var(--primary) 45%, transparent)",
             }}
         />
     );

@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { ArrayField, Block } from "payload";
 
 import { ComputerAudience } from "@/blocks/ComputerAudience/config";
@@ -32,6 +33,7 @@ export const ComputerCatalog: Block = {
         },
     },
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

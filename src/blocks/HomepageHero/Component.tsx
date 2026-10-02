@@ -1,4 +1,6 @@
 "use client";
+import { hasItems } from "@/utilities/blockSpacing";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { applyTypography } from "@/utilities/typography";
 
 import type { CSSProperties } from "react";
@@ -18,14 +20,18 @@ import React, { useMemo, useState } from "react";
 
 import styles from "./styles.module.css";
 
-type HomepageHeroProps = HomepageHeroBlock & {
-    isPageIntro?: boolean;
-    locale?: AppLocale;
-};
+type HomepageHeroProps = HomepageHeroBlock &
+    BlockSpacingProps & {
+        isPageIntro?: boolean;
+        locale?: AppLocale;
+    };
 
 type QuickLink = NonNullable<HomepageHeroBlock["quickLinks"]>[number];
 
 export const HomepageHero: React.FC<HomepageHeroProps> = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     autoplay = true,
     autoplayInterval = 7000,
     backgroundMedia,
@@ -45,7 +51,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
     const interval = Math.min(Math.max(autoplayInterval ?? 7000, 3000), 20000);
     const messages = frontendMessages[locale];
 
-    if (!activeSlide) return null;
+    if (!hasItems(availableSlides) || !activeSlide) return null;
 
     const progressStyle = {
         "--homepage-hero-progress-duration": `${interval}ms`,
@@ -56,6 +62,9 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
 
     return (
         <HeroSection
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
             backgroundMedia={backgroundMedia}
             isPageIntro={isPageIntro}
             label={messages.heroPresentation}
