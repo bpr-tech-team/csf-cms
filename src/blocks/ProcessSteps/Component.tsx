@@ -108,15 +108,24 @@ export const ProcessStepsBlock = ({
                 }
 
                 let unlock: (() => void) | undefined;
+                let momentum: gsap.core.Tween | undefined;
+                const stopMomentum = () => {
+                    momentum?.kill();
+                    momentum = undefined;
+                };
                 let trigger: ScrollTrigger | undefined = undefined;
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
                 const distance = () =>
-                    window.innerHeight * Math.max(0.4, items.length / 4);
+                    viewportHeight * Math.max(0.4, items.length / 4);
                 const finish = () => {
+                    stopMomentum();
                     advance(1);
                     unlock?.();
                     trigger?.kill();
                 };
                 const consumeScroll = (delta: number) => {
+                    stopMomentum();
                     if (delta < 0) {
                         // Let the user leave upwards without reversing the steps.
                         unlock?.();
@@ -126,8 +135,30 @@ export const ProcessStepsBlock = ({
                     advance(furthestProgress + delta / distance());
                     if (furthestProgress === 1) finish();
                 };
+                const coast = (velocity: number) => {
+                    if (!unlock || velocity <= 0) return;
+                    // For power2.out, distance = initial velocity * duration / 3.
+                    // Only the timeline coasts; the page stays fixed throughout.
+                    const duration = Math.min(
+                        0.8,
+                        Math.max(0.2, velocity / 3000),
+                    );
+                    const state = { progress: furthestProgress };
+                    momentum = gsap.to(state, {
+                        progress:
+                            furthestProgress +
+                            (velocity * duration) / (3 * distance()),
+                        duration,
+                        ease: "power2.out",
+                        onUpdate: () => {
+                            advance(state.progress);
+                            if (furthestProgress === 1) finish();
+                        },
+                    });
+                };
                 const onKeyDown = (event: KeyboardEvent) => {
                     if (
+                        !unlock ||
                         event.ctrlKey ||
                         event.metaKey ||
                         event.altKey ||
@@ -154,7 +185,7 @@ export const ProcessStepsBlock = ({
                         );
                     }
                 };
-                const freeze = () => {
+                const freeze = (self: ScrollTrigger) => {
                     if (unlock || furthestProgress === 1) return;
                     const bounds = section.getBoundingClientRect();
                     if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
@@ -163,57 +194,106 @@ export const ProcessStepsBlock = ({
                         return;
                     }
 
+                    const incomingVelocity = self.getVelocity();
                     const root = document.documentElement;
+                    const body = document.body;
                     const overflow = root.style.overflow;
-                    const paddingRight = root.style.paddingRight;
-                    const touchAction = root.style.touchAction;
-                    const overscrollBehavior = root.style.overscrollBehavior;
-                    const scrollbarWidth = window.innerWidth - root.clientWidth;
+                    const bodyStyles = {
+                        position: body.style.position,
+                        top: body.style.top,
+                        left: body.style.left,
+                        width: body.style.width,
+                    };
+                    const scrollX = window.scrollX;
                     const scrollY = window.scrollY;
-                    root.style.paddingRight = `${parseFloat(getComputedStyle(root).paddingRight) + scrollbarWidth}px`;
-                    root.style.overflow = "hidden";
-                    root.style.touchAction = "pinch-zoom";
-                    root.style.overscrollBehavior = "none";
-
-                    const holdPosition = () => {
-                        if (window.scrollY !== scrollY) {
-                            window.scrollTo({
-                                top: scrollY,
-                                behavior: "instant",
-                            });
-                        }
-                    };
-                    const observer = ScrollTrigger.observe({
-                        target: window,
-                        type: "wheel,touch",
-                        lockAxis: true,
-                        allowClicks: true,
-                        preventDefault: true,
-                        ignoreCheck: (event) =>
-                            (event as WheelEvent).ctrlKey ||
-                            ("touches" in event &&
-                                (event as TouchEvent).touches.length > 1),
-                        onChangeY: ({ deltaY, event }) =>
-                            consumeScroll(
-                                event.type === "wheel" ? deltaY : -deltaY,
-                            ),
-                    });
-                    const onResize = () => unlock?.();
+                    const bodyWidth = body.getBoundingClientRect().width;
                     unlock = () => {
-                        observer.kill();
-                        root.style.overflow = overflow;
-                        root.style.paddingRight = paddingRight;
-                        root.style.touchAction = touchAction;
-                        root.style.overscrollBehavior = overscrollBehavior;
-                        window.removeEventListener("scroll", holdPosition);
-                        window.removeEventListener("keydown", onKeyDown);
-                        window.removeEventListener("resize", onResize);
+                        // Restore once, rather than correcting every native scroll event.
                         unlock = undefined;
+                        stopMomentum();
+                        Object.assign(body.style, bodyStyles);
+                        root.style.overflow = overflow;
+                        window.scrollTo({
+                            left: scrollX,
+                            top: scrollY,
+                            behavior: "instant",
+                        });
+                        trigger?.enable(false, false);
                     };
-                    window.addEventListener("scroll", holdPosition);
-                    window.addEventListener("keydown", onKeyDown);
-                    window.addEventListener("resize", onResize);
+                    // A fixed body also stops Safari's in-flight momentum scrolling.
+                    trigger?.disable(false);
+                    Object.assign(body.style, {
+                        position: "fixed",
+                        top: `${-scrollY}px`,
+                        left: `${-scrollX}px`,
+                        width: `${bodyWidth}px`,
+                    });
+                    root.style.overflow = "hidden";
+                    if (!observer.isPressed) coast(incomingVelocity);
                 };
+
+                let touchY: number | undefined;
+                // Track the gesture before entering the section, so the current swipe
+                // can continue driving the animation when the page becomes locked.
+                const observer = ScrollTrigger.observe({
+                    target: window,
+                    type: "wheel,touch",
+                    lockAxis: true,
+                    tolerance: 1,
+                    preventDefault: false,
+                    ignoreCheck: (event) => {
+                        if (
+                            (event as WheelEvent).ctrlKey ||
+                            (event.target instanceof HTMLElement &&
+                                event.target.closest(
+                                    "a, button, input, textarea, select, [contenteditable]",
+                                )) ||
+                            ("touches" in event &&
+                                (event as TouchEvent).touches.length > 1)
+                        ) {
+                            touchY = undefined;
+                            unlock?.();
+                            return true;
+                        }
+                        if (
+                            unlock &&
+                            event.cancelable &&
+                            event.type !== "touchend"
+                        ) {
+                            event.preventDefault();
+                        }
+                        return false;
+                    },
+                    onPress: ({ event }) => {
+                        stopMomentum();
+                        touchY = (event as TouchEvent).touches?.[0]?.screenY;
+                        // GSAP's iOS recommendation: cancel touchstart as well as moves.
+                        if (unlock && event.cancelable) event.preventDefault();
+                    },
+                    onChangeY: ({ deltaY, event }) => {
+                        const point = (event as TouchEvent).touches?.[0];
+                        const delta =
+                            point && touchY !== undefined
+                                ? touchY - point.screenY
+                                : event.type === "wheel"
+                                  ? deltaY
+                                  : -deltaY;
+                        if (point) touchY = point.screenY;
+                        if (unlock) consumeScroll(delta);
+                    },
+                    onRelease: (self, wasDragging = false) => {
+                        touchY = undefined;
+                        if (!unlock || !wasDragging || self.axis === "x")
+                            return;
+                        coast(-self.velocityY);
+                    },
+                });
+                const onResize = () => {
+                    // Safari's address bar changes height during a swipe; keep the lock.
+                    if (window.innerWidth !== viewportWidth) unlock?.();
+                };
+                window.addEventListener("keydown", onKeyDown);
+                window.addEventListener("resize", onResize);
                 trigger = ScrollTrigger.create({
                     trigger: section,
                     start: "center center",
@@ -224,8 +304,15 @@ export const ProcessStepsBlock = ({
                     },
                 });
                 if (furthestProgress === 1) trigger.kill();
+                else if (unlock) trigger.disable(false);
 
-                return () => unlock?.();
+                return () => {
+                    unlock?.();
+                    stopMomentum();
+                    observer.kill();
+                    window.removeEventListener("keydown", onKeyDown);
+                    window.removeEventListener("resize", onResize);
+                };
             },
         );
 
