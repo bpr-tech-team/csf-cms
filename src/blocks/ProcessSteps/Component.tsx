@@ -77,8 +77,10 @@ export const ProcessStepsBlock = ({
                 });
 
                 timeline.progress(furthestProgress);
+                if (furthestProgress === 1) return;
 
-                const canPin = section.offsetHeight <= window.innerHeight - 96;
+                const canFreeze =
+                    section.offsetHeight <= window.innerHeight - 96;
                 const smoothProgress = gsap.quickTo(timeline, "progress", {
                     duration: 0.3,
                     ease: "power2.out",
@@ -86,7 +88,7 @@ export const ProcessStepsBlock = ({
                 const advance = (progress: number) => {
                     if (progress <= furthestProgress) return;
                     furthestProgress = Math.min(1, progress);
-                    if (furthestProgress === 1) {
+                    if (canFreeze || furthestProgress === 1) {
                         smoothProgress.tween.pause();
                         timeline.progress(furthestProgress);
                     } else {
@@ -94,24 +96,223 @@ export const ProcessStepsBlock = ({
                     }
                 };
 
-                // Pin only the section; native scrolling (including touch momentum)
-                // drives the reveal without intercepting gestures or locking the page.
-                ScrollTrigger.create({
-                    trigger: canPin ? section : steps,
-                    pin: canPin ? section : false,
-                    pinSpacing: true,
-                    anticipatePin: 1,
-                    start: canPin ? "center center" : "top 85%",
-                    end: canPin
-                        ? () =>
-                              `+=${window.innerHeight * Math.max(0.4, items.length / 4)}`
-                        : conditions.desktop
-                          ? "top 20%"
-                          : "bottom 45%",
-                    onUpdate: ({ progress }) => advance(progress),
-                    onRefresh: ({ progress }) => advance(progress),
-                    onLeave: () => advance(1),
+                if (!canFreeze) {
+                    ScrollTrigger.create({
+                        trigger: steps,
+                        start: "top 85%",
+                        end: conditions.desktop ? "top 20%" : "bottom 45%",
+                        onUpdate: ({ progress }) => advance(progress),
+                        onRefresh: ({ progress }) => advance(progress),
+                    });
+                    return;
+                }
+
+                let unlock: (() => void) | undefined;
+                let momentum: gsap.core.Tween | undefined;
+                const stopMomentum = () => {
+                    momentum?.kill();
+                    momentum = undefined;
+                };
+                let trigger: ScrollTrigger | undefined = undefined;
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
+                const distance = () =>
+                    viewportHeight * Math.max(0.4, items.length / 4);
+                const finish = () => {
+                    stopMomentum();
+                    advance(1);
+                    unlock?.();
+                    trigger?.kill();
+                };
+                const consumeScroll = (delta: number) => {
+                    stopMomentum();
+                    if (delta < 0) {
+                        // Let the user leave upwards without reversing the steps.
+                        unlock?.();
+                        window.scrollBy({ top: delta, behavior: "instant" });
+                        return;
+                    }
+                    advance(furthestProgress + delta / distance());
+                    if (furthestProgress === 1) finish();
+                };
+                const coast = (velocity: number) => {
+                    if (!unlock || velocity <= 0) return;
+                    // For power2.out, distance = initial velocity * duration / 3.
+                    // Only the timeline coasts; the page stays fixed throughout.
+                    const duration = Math.min(
+                        0.8,
+                        Math.max(0.2, velocity / 3000),
+                    );
+                    const state = { progress: furthestProgress };
+                    momentum = gsap.to(state, {
+                        progress:
+                            furthestProgress +
+                            (velocity * duration) / (3 * distance()),
+                        duration,
+                        ease: "power2.out",
+                        onUpdate: () => {
+                            advance(state.progress);
+                            if (furthestProgress === 1) finish();
+                        },
+                    });
+                };
+                const onKeyDown = (event: KeyboardEvent) => {
+                    if (
+                        !unlock ||
+                        event.ctrlKey ||
+                        event.metaKey ||
+                        event.altKey ||
+                        (event.target instanceof HTMLElement &&
+                            event.target.closest(
+                                "input, textarea, select, button, a, [contenteditable]",
+                            ))
+                    ) {
+                        return;
+                    }
+                    if (
+                        ["ArrowUp", "PageUp", "Home"].includes(event.key) ||
+                        (event.key === " " && event.shiftKey)
+                    ) {
+                        unlock?.();
+                    } else if (event.key === "Escape" || event.key === "End") {
+                        finish();
+                    } else if (
+                        ["ArrowDown", "PageDown", " "].includes(event.key)
+                    ) {
+                        event.preventDefault();
+                        consumeScroll(
+                            event.key === "ArrowDown" ? 80 : distance() / 2,
+                        );
+                    }
+                };
+                const freeze = (self: ScrollTrigger) => {
+                    if (unlock || furthestProgress === 1) return;
+                    const bounds = section.getBoundingClientRect();
+                    if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
+                        // A fast scroll or anchor jump may skip the visible block.
+                        finish();
+                        return;
+                    }
+
+                    const incomingVelocity = self.getVelocity();
+                    const root = document.documentElement;
+                    const body = document.body;
+                    const overflow = root.style.overflow;
+                    const bodyStyles = {
+                        position: body.style.position,
+                        top: body.style.top,
+                        left: body.style.left,
+                        width: body.style.width,
+                    };
+                    const scrollX = window.scrollX;
+                    const scrollY = window.scrollY;
+                    const bodyWidth = body.getBoundingClientRect().width;
+                    unlock = () => {
+                        // Restore once, rather than correcting every native scroll event.
+                        unlock = undefined;
+                        stopMomentum();
+                        Object.assign(body.style, bodyStyles);
+                        root.style.overflow = overflow;
+                        window.scrollTo({
+                            left: scrollX,
+                            top: scrollY,
+                            behavior: "instant",
+                        });
+                        trigger?.enable(false, false);
+                    };
+                    // A fixed body also stops Safari's in-flight momentum scrolling.
+                    trigger?.disable(false);
+                    Object.assign(body.style, {
+                        position: "fixed",
+                        top: `${-scrollY}px`,
+                        left: `${-scrollX}px`,
+                        width: `${bodyWidth}px`,
+                    });
+                    root.style.overflow = "hidden";
+                    if (!observer.isPressed) coast(incomingVelocity);
+                };
+
+                let touchY: number | undefined;
+                // Track the gesture before entering the section, so the current swipe
+                // can continue driving the animation when the page becomes locked.
+                const observer = ScrollTrigger.observe({
+                    target: window,
+                    type: "wheel,touch",
+                    lockAxis: true,
+                    tolerance: 1,
+                    preventDefault: false,
+                    ignoreCheck: (event) => {
+                        if (
+                            (event as WheelEvent).ctrlKey ||
+                            (event.target instanceof HTMLElement &&
+                                event.target.closest(
+                                    "a, button, input, textarea, select, [contenteditable]",
+                                )) ||
+                            ("touches" in event &&
+                                (event as TouchEvent).touches.length > 1)
+                        ) {
+                            touchY = undefined;
+                            unlock?.();
+                            return true;
+                        }
+                        if (
+                            unlock &&
+                            event.cancelable &&
+                            event.type !== "touchend"
+                        ) {
+                            event.preventDefault();
+                        }
+                        return false;
+                    },
+                    onPress: ({ event }) => {
+                        stopMomentum();
+                        touchY = (event as TouchEvent).touches?.[0]?.screenY;
+                        // GSAP's iOS recommendation: cancel touchstart as well as moves.
+                        if (unlock && event.cancelable) event.preventDefault();
+                    },
+                    onChangeY: ({ deltaY, event }) => {
+                        const point = (event as TouchEvent).touches?.[0];
+                        const delta =
+                            point && touchY !== undefined
+                                ? touchY - point.screenY
+                                : event.type === "wheel"
+                                  ? deltaY
+                                  : -deltaY;
+                        if (point) touchY = point.screenY;
+                        if (unlock) consumeScroll(delta);
+                    },
+                    onRelease: (self, wasDragging = false) => {
+                        touchY = undefined;
+                        if (!unlock || !wasDragging || self.axis === "x")
+                            return;
+                        coast(-self.velocityY);
+                    },
                 });
+                const onResize = () => {
+                    // Safari's address bar changes height during a swipe; keep the lock.
+                    if (window.innerWidth !== viewportWidth) unlock?.();
+                };
+                window.addEventListener("keydown", onKeyDown);
+                window.addEventListener("resize", onResize);
+                trigger = ScrollTrigger.create({
+                    trigger: section,
+                    start: "center center",
+                    end: "bottom top",
+                    onEnter: freeze,
+                    onLeave: () => {
+                        if (!unlock) finish();
+                    },
+                });
+                if (furthestProgress === 1) trigger.kill();
+                else if (unlock) trigger.disable(false);
+
+                return () => {
+                    unlock?.();
+                    stopMomentum();
+                    observer.kill();
+                    window.removeEventListener("keydown", onKeyDown);
+                    window.removeEventListener("resize", onResize);
+                };
             },
         );
 
