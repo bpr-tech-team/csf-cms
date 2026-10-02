@@ -58,7 +58,7 @@ export const config = {
     // Only page routes that can have an old alias or a fallback-language slug.
     // Czech branch URLs need no lookup. Assets, API, admin and posts skip Proxy.
     matcher: [
-        "/:slug((?!api$|admin$|posts$|en$|next$|_next$|codex-block-preview$|.*\\.)[^/]+)",
+        "/:slug((?!api$|admin$|posts$|en$|next$|_next$|.*\\.)[^/]+)",
         "/sluzby/:slug",
         "/produkty/:slug",
         "/en/:slug((?!posts$|.*\\.)[^/]+)",
