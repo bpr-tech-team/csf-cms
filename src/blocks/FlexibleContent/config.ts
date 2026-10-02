@@ -4,6 +4,7 @@ import type { Block } from "payload";
 import { link } from "@/fields/link";
 import { sectionDividerField } from "@/fields/sectionDivider";
 import type { FlexibleContentBlock } from "@/payload-types";
+import { FlexibleGallery } from "@/blocks/Gallery/config";
 
 const Heading: Block = {
     slug: "flexHeading",
@@ -397,7 +398,14 @@ export const FlexibleContent: Block = {
                         singular: { cs: "Prvek", en: "Element" },
                         plural: { cs: "Prvky", en: "Elements" },
                     },
-                    blocks: [Heading, Text, Button, Media, HTML],
+                    blocks: [
+                        Heading,
+                        Text,
+                        Button,
+                        Media,
+                        FlexibleGallery,
+                        HTML,
+                    ],
                     minRows: 1,
                     required: true,
                     label: { cs: "Prvky sloupce", en: "Column elements" },

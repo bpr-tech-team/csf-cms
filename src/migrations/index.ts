@@ -19,6 +19,7 @@ import * as migration_20260928_103729_merge_computer_blocks from "./20260928_103
 import * as migration_20260928_125607_section_dividers from "./20260928_125607_section_dividers";
 import * as migration_20261001_085725_metrics_decimal_display from "./20261001_085725_metrics_decimal_display";
 import * as migration_20261002_064047_block_spacing from "./20261002_064047_block_spacing";
+import * as migration_20261002_093715_gallery from "./20261002_093715_gallery";
 
 export const migrations = [
     {
@@ -125,5 +126,10 @@ export const migrations = [
         up: migration_20261002_064047_block_spacing.up,
         down: migration_20261002_064047_block_spacing.down,
         name: "20261002_064047_block_spacing",
+    },
+    {
+        up: migration_20261002_093715_gallery.up,
+        down: migration_20261002_093715_gallery.down,
+        name: "20261002_093715_gallery",
     },
 ];

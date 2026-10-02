@@ -6,6 +6,7 @@ import type {
 } from "@/payload-types";
 import { CMSLink } from "@/components/Link";
 import { MediaAsset } from "@/components/MediaAsset";
+import { Gallery } from "@/components/Gallery";
 import RichText from "@/components/RichText";
 import { SectionDivider } from "@/components/SectionDivider";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
@@ -242,6 +243,21 @@ export const FlexibleContentBlock = ({
                                                         sizes={
                                                             twoColumns
                                                                 ? "(max-width: 1023px) 100vw, 50vw"
+                                                                : "100vw"
+                                                        }
+                                                    />
+                                                );
+                                            case "flexGallery":
+                                                return (
+                                                    <Gallery
+                                                        key={key}
+                                                        {...element}
+                                                        compact={twoColumns}
+                                                        theme={theme || "light"}
+                                                        locale={locale}
+                                                        sizes={
+                                                            twoColumns
+                                                                ? "(max-width: 64rem) 100vw, 50vw"
                                                                 : "100vw"
                                                         }
                                                     />

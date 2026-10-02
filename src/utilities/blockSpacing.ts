@@ -1,4 +1,5 @@
 import type { Form, FormBlock, Page } from "@/payload-types";
+import { getGalleryImages } from "@/utilities/gallery";
 
 export type SpacingSize = "auto" | "none" | "compact" | "normal" | "large";
 export type SectionSpacing = {
@@ -129,6 +130,14 @@ const definitions = {
     },
     splitContent: { surface: "theme", spacing: content, flow: "content" },
     flexibleContent: { surface: "theme", spacing: content, flow: "content" },
+    gallery: {
+        surface: "light",
+        spacing: content,
+        flow: "content",
+        isVisible: (block) =>
+            block.blockType === "gallery" &&
+            getGalleryImages(block.images).length > 0,
+    },
     computerAudience: {
         surface: "light",
         spacing: content,

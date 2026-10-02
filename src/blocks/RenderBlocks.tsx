@@ -28,6 +28,7 @@ import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
 import { ServicesGridBlock } from "@/blocks/ServicesGrid/Component";
 import { FlexibleContentBlock } from "@/blocks/FlexibleContent/Component";
+import { GalleryBlock } from "@/blocks/Gallery/Component";
 import { ServiceSectionIntroBlock } from "@/blocks/ServiceSectionIntro/Component";
 import { SplitContentBlock } from "@/blocks/SplitContent/Component";
 import { TechnologySpotlightBlock } from "@/blocks/TechnologySpotlight/Component";
@@ -215,6 +216,16 @@ export const RenderBlocks: React.FC<{
                                     {...block}
                                     sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
+                                />
+                            );
+
+                        case "gallery":
+                            return (
+                                <GalleryBlock
+                                    {...block}
+                                    sectionSpacing={sectionSpacing}
+                                    key={block.id ?? index}
+                                    locale={locale}
                                 />
                             );
 

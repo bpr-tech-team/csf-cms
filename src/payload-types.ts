@@ -177,6 +177,7 @@ export interface Page {
     | ServiceSectionIntroBlock
     | SplitContentBlock
     | FlexibleContentBlock
+    | GalleryBlock
     | ComputerAudienceBlock
     | ComputerCatalogBlock
     | ComputerProductCatalogBlock
@@ -1320,6 +1321,7 @@ export interface FlexibleContentBlock {
           | FlexibleTextElement
           | FlexibleButtonElement
           | FlexibleMediaElement
+          | FlexibleGalleryElement
           | FlexibleHtmlElement
         )[];
         id?: string | null;
@@ -1407,6 +1409,21 @@ export interface FlexibleMediaElement {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleGalleryElement".
+ */
+export interface FlexibleGalleryElement {
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
+  autoplay?: boolean | null;
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'flexGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FlexibleHtmlElement".
  */
 export interface FlexibleHtmlElement {
@@ -1417,6 +1434,29 @@ export interface FlexibleHtmlElement {
   id?: string | null;
   blockName?: string | null;
   blockType: 'flexHtml';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock".
+ */
+export interface GalleryBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
+  autoplay?: boolean | null;
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1969,6 +2009,7 @@ export interface PagesSelect<T extends boolean = true> {
         serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
         splitContent?: T | SplitContentBlockSelect<T>;
         flexibleContent?: T | FlexibleContentBlockSelect<T>;
+        gallery?: T | GalleryBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
         computerCatalog?: T | ComputerCatalogBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
@@ -2458,6 +2499,7 @@ export interface FlexibleContentBlockSelect<T extends boolean = true> {
               flexText?: T | FlexibleTextElementSelect<T>;
               flexButton?: T | FlexibleButtonElementSelect<T>;
               flexMedia?: T | FlexibleMediaElementSelect<T>;
+              flexGallery?: T | FlexibleGalleryElementSelect<T>;
               flexHtml?: T | FlexibleHtmlElementSelect<T>;
             };
         id?: T;
@@ -2515,10 +2557,44 @@ export interface FlexibleMediaElementSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FlexibleGalleryElement_select".
+ */
+export interface FlexibleGalleryElementSelect<T extends boolean = true> {
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FlexibleHtmlElement_select".
  */
 export interface FlexibleHtmlElementSelect<T extends boolean = true> {
   html?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock_select".
+ */
+export interface GalleryBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
   id?: T;
   blockName?: T;
 }
