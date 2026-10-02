@@ -79,7 +79,9 @@ export const ProcessStepsBlock = ({
                 timeline.progress(furthestProgress);
                 if (furthestProgress === 1) return;
 
+                // Keep native scrolling on mobile to avoid fighting Safari's touch scrolling.
                 const canFreeze =
+                    conditions.desktop &&
                     section.offsetHeight <= window.innerHeight - 96;
                 const smoothProgress = gsap.quickTo(timeline, "progress", {
                     duration: 0.3,
