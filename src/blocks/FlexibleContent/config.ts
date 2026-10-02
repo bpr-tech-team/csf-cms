@@ -8,6 +8,14 @@ import { FlexibleGallery } from "@/blocks/Gallery/config";
 
 const Heading: Block = {
     slug: "flexHeading",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/flex-heading.webp",
+                alt: "Nadpis H3",
+            },
+        },
+    },
     dbName: "flex_heading",
     interfaceName: "FlexibleHeadingElement",
     labels: {
@@ -26,6 +34,14 @@ const Heading: Block = {
 
 const Text: Block = {
     slug: "flexText",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/flex-text.webp",
+                alt: "Text",
+            },
+        },
+    },
     dbName: "flex_text",
     interfaceName: "FlexibleTextElement",
     labels: {
@@ -44,6 +60,14 @@ const Text: Block = {
 
 const Button: Block = {
     slug: "flexButton",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/flex-button.webp",
+                alt: "Tlačítko",
+            },
+        },
+    },
     dbName: "flex_button",
     interfaceName: "FlexibleButtonElement",
     labels: {
@@ -55,6 +79,14 @@ const Button: Block = {
 
 const Media: Block = {
     slug: "flexMedia",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/flex-media.webp",
+                alt: "Obrázek nebo video",
+            },
+        },
+    },
     dbName: "flex_media",
     interfaceName: "FlexibleMediaElement",
     labels: {
@@ -164,6 +196,14 @@ const Media: Block = {
 
 const HTML: Block = {
     slug: "flexHtml",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/flex-html.webp",
+                alt: "HTML / iframe",
+            },
+        },
+    },
     dbName: "flex_html",
     interfaceName: "FlexibleHtmlElement",
     labels: {
