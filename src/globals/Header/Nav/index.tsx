@@ -8,7 +8,6 @@ import { CMSLink } from "@/components/Link";
 import { ContentIcon } from "@/components/ContentIcon";
 import { frontendMessages } from "@/i18n/frontend";
 import { getLinkHref, isCurrentLink } from "@/utilities/getLinkHref";
-import { applyTypography } from "@/utilities/typography";
 import { cn } from "@/utilities/ui";
 
 export const headerFocus =
@@ -221,9 +220,7 @@ export const HeaderNav: React.FC<{
                                             }
                                         }}
                                     >
-                                        {applyTypography(item.label, {
-                                            locale,
-                                        })}
+                                        {item.label}
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             alt=""
@@ -251,10 +248,7 @@ export const HeaderNav: React.FC<{
                                         >
                                             {!isMobile && (
                                                 <p className="mb-3 text-xs font-medium uppercase tracking-[0.08em] text-paper-0/50">
-                                                    {applyTypography(
-                                                        item.label,
-                                                        { locale },
-                                                    )}
+                                                    {item.label}
                                                 </p>
                                             )}
                                             <ul
@@ -290,6 +284,9 @@ export const HeaderNav: React.FC<{
                                                             >
                                                                 <CMSLink
                                                                     {...child.link}
+                                                                    typography={
+                                                                        false
+                                                                    }
                                                                     label={null}
                                                                     locale={
                                                                         locale
@@ -357,6 +354,7 @@ export const HeaderNav: React.FC<{
                                                 >
                                                     <CMSLink
                                                         {...overview}
+                                                        typography={false}
                                                         locale={locale}
                                                         className={cn(
                                                             headerFocus,
@@ -375,6 +373,7 @@ export const HeaderNav: React.FC<{
                             ) : (
                                 <CMSLink
                                     {...item.link}
+                                    typography={false}
                                     locale={locale}
                                     aria-current={current ? "page" : undefined}
                                     className={itemClass}
@@ -387,6 +386,7 @@ export const HeaderNav: React.FC<{
             {customerZoneLink && (
                 <CMSLink
                     {...customerZoneLink}
+                    typography={false}
                     locale={locale}
                     className={cn(
                         headerFocus,
@@ -407,6 +407,7 @@ export const HeaderNav: React.FC<{
                 >
                     <CMSLink
                         {...contactLink}
+                        typography={false}
                         locale={locale}
                         appearance="default"
                         className={
