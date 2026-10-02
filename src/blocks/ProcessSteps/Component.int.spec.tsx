@@ -2,32 +2,26 @@ import React from "react";
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const animation = vi.hoisted(() => {
-    const timeline = { from: vi.fn(), progress: vi.fn() };
-    const trigger = { disable: vi.fn(), enable: vi.fn(), kill: vi.fn() };
-    return {
-        timeline,
-        trigger,
-        create: vi.fn(),
-        dispose: undefined as (() => void) | undefined,
-    };
-});
+const animation = vi.hoisted(() => ({
+    timeline: { from: vi.fn(), progress: vi.fn() },
+    smoothProgress: Object.assign(vi.fn(), { tween: { pause: vi.fn() } }),
+    create: vi.fn(),
+    revert: vi.fn(),
+    motion: true,
+}));
 
 vi.mock("gsap", () => ({
     default: {
         registerPlugin: vi.fn(),
         timeline: () => animation.timeline,
-        quickTo: () => Object.assign(vi.fn(), { tween: { pause: vi.fn() } }),
+        quickTo: () => animation.smoothProgress,
         matchMedia: () => ({
-            add: (
-                _queries: unknown,
-                setup: (context: unknown) => () => void,
-            ) => {
-                animation.dispose = setup({
-                    conditions: { desktop: false, motion: true },
+            add: (_queries: unknown, setup: (context: unknown) => void) => {
+                setup({
+                    conditions: { desktop: false, motion: animation.motion },
                 });
             },
-            revert: () => animation.dispose?.(),
+            revert: animation.revert,
         }),
     },
 }));
@@ -49,24 +43,6 @@ vi.mock("@/utilities/typography", () => ({
 
 import { ProcessStepsBlock } from "./Component";
 
-const touchEvent = (
-    type: string,
-    screenY: number,
-    count = 1,
-    cancelable = true,
-) => {
-    const event = new Event(type, { cancelable });
-    Object.defineProperty(event, "touches", {
-        value: Array.from({ length: count }, (_, identifier) => ({
-            identifier,
-            screenY,
-            // Deliberately unreliable viewport coordinates, as reported on iOS.
-            clientY: screenY + 1000,
-        })),
-    });
-    window.dispatchEvent(event);
-    return event;
-};
 const mount = () =>
     render(
         <ProcessStepsBlock
@@ -75,119 +51,84 @@ const mount = () =>
             items={[{ title: "First" }, { title: "Second" }]}
         />,
     );
-const enter = () => animation.create.mock.calls[0][0].onEnter();
+const scrollTrigger = () => animation.create.mock.calls[0][0];
 
 beforeEach(() => {
     vi.clearAllMocks();
+    animation.motion = true;
     animation.timeline.from.mockReturnValue(animation.timeline);
-    animation.create.mockReturnValue(animation.trigger);
     vi.spyOn(window, "scrollTo").mockImplementation(() => {});
     vi.spyOn(window, "scrollBy").mockImplementation(() => {});
     vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(400);
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
-        top: 100,
-        bottom: 500,
-        left: 0,
-        right: 390,
-        width: 390,
-        height: 400,
-        x: 0,
-        y: 100,
-        toJSON: () => ({}),
-    });
-    Object.defineProperties(window, {
-        innerWidth: { configurable: true, value: 390 },
-        innerHeight: { configurable: true, value: 800 },
-        scrollY: { configurable: true, value: 600 },
+    Object.defineProperty(window, "innerHeight", {
+        configurable: true,
+        value: 800,
     });
 });
 afterEach(() => {
     cleanup();
-    document.body.removeAttribute("style");
-    document.documentElement.removeAttribute("style");
     vi.restoreAllMocks();
 });
 
-describe("ProcessSteps mobile scroll lock", () => {
-    it("continues the swipe that entered the block, without correcting native scroll events", () => {
-        mount();
-        touchEvent("touchstart", 700);
-        touchEvent("touchmove", 650);
-        enter();
-        expect(document.body.style.position).toBe("fixed");
-        expect(document.body.style.top).toBe("-600px");
-        window.dispatchEvent(new Event("scroll"));
-        expect(window.scrollTo).not.toHaveBeenCalled();
+describe("ProcessSteps native scrolling", () => {
+    it("keeps gestures native and advances from scroll progress after the finger is released", () => {
+        const { container } = mount();
+        const trigger = scrollTrigger();
+        expect(trigger.pin).toBe(container.querySelector("section"));
+        expect(trigger.end()).toBe("+=400");
 
-        expect(touchEvent("touchmove", 550).defaultPrevented).toBe(true);
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.25);
-        touchEvent("touchmove", 250);
+        for (const type of [
+            "touchstart",
+            "touchmove",
+            "touchend",
+            "wheel",
+            "keydown",
+        ]) {
+            const event = new Event(type, { cancelable: true });
+            window.dispatchEvent(event);
+            expect(event.defaultPrevented).toBe(false);
+        }
+        // The browser continues scrolling with momentum after touchend.
+        trigger.onUpdate({ progress: 0.25 });
+        trigger.onUpdate({ progress: 0.75 });
+        expect(animation.smoothProgress.mock.calls).toEqual([[0.25], [0.75]]);
+        expect(document.body.style.position).toBe("");
+        expect(document.documentElement.style.overflow).toBe("");
+        expect(window.scrollTo).not.toHaveBeenCalled();
+        expect(window.scrollBy).not.toHaveBeenCalled();
+    });
+
+    it("does not hide steps already revealed when scrolling back or refreshing", () => {
+        mount();
+        const trigger = scrollTrigger();
+        trigger.onUpdate({ progress: 0.75 });
+        trigger.onUpdate({ progress: 0.25 });
+        trigger.onRefresh({ progress: 0.5 });
+        expect(animation.smoothProgress).toHaveBeenCalledTimes(1);
+        expect(animation.smoothProgress).toHaveBeenCalledWith(0.75);
+        trigger.onLeave();
         expect(animation.timeline.progress).toHaveBeenLastCalledWith(1);
-        expect(document.body.style.position).toBe("");
-        expect(window.scrollTo).toHaveBeenCalledTimes(1);
-        expect(window.scrollTo).toHaveBeenCalledWith({
-            left: 0,
-            top: 600,
-            behavior: "instant",
-        });
-        expect(animation.trigger.kill).toHaveBeenCalled();
+        trigger.onUpdate({ progress: 0.1 });
+        expect(animation.timeline.progress).toHaveBeenLastCalledWith(1);
     });
 
-    it("keeps the lock when Safari's toolbar changes viewport height", () => {
+    it("leaves tall mobile sections unpinned so all their content remains reachable", () => {
+        vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(
+            900,
+        );
         mount();
-        enter();
-        Object.defineProperty(window, "innerHeight", { value: 700 });
-        window.dispatchEvent(new Event("resize"));
-        expect(document.body.style.position).toBe("fixed");
-        expect(window.scrollTo).not.toHaveBeenCalled();
-        Object.defineProperty(window, "innerWidth", { value: 800 });
-        window.dispatchEvent(new Event("resize"));
-        expect(document.body.style.position).toBe("");
+        const trigger = scrollTrigger();
+        expect(trigger.pin).toBe(false);
+        expect(trigger.start).toBe("top 85%");
+        expect(trigger.end).toBe("bottom 45%");
     });
 
-    it("advances an already scrolling gesture even when touchmove cannot be cancelled", () => {
-        mount();
-        touchEvent("touchstart", 700);
-        enter();
-        touchEvent("touchmove", 600, 1, false);
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.25);
-        expect(document.body.style.position).toBe("fixed");
-        expect(window.scrollTo).not.toHaveBeenCalled();
-    });
-
-    it("allows leaving upwards without reversing the revealed steps", () => {
-        mount();
-        touchEvent("touchstart", 500);
-        enter();
-        touchEvent("touchmove", 400);
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.25);
-        touchEvent("touchmove", 450);
-        expect(document.body.style.position).toBe("");
-        expect(window.scrollBy).toHaveBeenCalledWith({
-            top: -50,
-            behavior: "instant",
-        });
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.25);
-    });
-
-    it("releases the lock for pinch zoom and restores existing styles on unmount", () => {
-        document.body.style.position = "relative";
-        document.body.style.width = "90%";
-        document.documentElement.style.overflow = "clip";
+    it("respects reduced motion and reverts its GSAP context on unmount", () => {
+        animation.motion = false;
         const view = mount();
-        enter();
-        touchEvent("touchstart", 500, 2);
-        expect(document.body.style.position).toBe("relative");
-        enter();
+        expect(animation.create).not.toHaveBeenCalled();
+        expect(animation.timeline.from).not.toHaveBeenCalled();
         view.unmount();
-        expect(document.body.style.position).toBe("relative");
-        expect(document.body.style.width).toBe("90%");
-        expect(document.documentElement.style.overflow).toBe("clip");
-        const wheel = new WheelEvent("wheel", {
-            deltaY: 100,
-            cancelable: true,
-        });
-        window.dispatchEvent(wheel);
-        expect(wheel.defaultPrevented).toBe(false);
+        expect(animation.revert).toHaveBeenCalledTimes(1);
     });
 });
