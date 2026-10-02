@@ -79,9 +79,7 @@ export const ProcessStepsBlock = ({
                 timeline.progress(furthestProgress);
                 if (furthestProgress === 1) return;
 
-                // Keep native scrolling on mobile to avoid fighting Safari's touch scrolling.
                 const canFreeze =
-                    conditions.desktop &&
                     section.offsetHeight <= window.innerHeight - 96;
                 const smoothProgress = gsap.quickTo(timeline, "progress", {
                     duration: 0.3,
@@ -111,8 +109,10 @@ export const ProcessStepsBlock = ({
 
                 let unlock: (() => void) | undefined;
                 let trigger: ScrollTrigger | undefined = undefined;
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
                 const distance = () =>
-                    window.innerHeight * Math.max(0.4, items.length / 4);
+                    viewportHeight * Math.max(0.4, items.length / 4);
                 const finish = () => {
                     advance(1);
                     unlock?.();
@@ -130,6 +130,7 @@ export const ProcessStepsBlock = ({
                 };
                 const onKeyDown = (event: KeyboardEvent) => {
                     if (
+                        !unlock ||
                         event.ctrlKey ||
                         event.metaKey ||
                         event.altKey ||
@@ -166,56 +167,92 @@ export const ProcessStepsBlock = ({
                     }
 
                     const root = document.documentElement;
+                    const body = document.body;
                     const overflow = root.style.overflow;
-                    const paddingRight = root.style.paddingRight;
-                    const touchAction = root.style.touchAction;
-                    const overscrollBehavior = root.style.overscrollBehavior;
-                    const scrollbarWidth = window.innerWidth - root.clientWidth;
+                    const bodyStyles = {
+                        position: body.style.position,
+                        top: body.style.top,
+                        left: body.style.left,
+                        width: body.style.width,
+                    };
+                    const scrollX = window.scrollX;
                     const scrollY = window.scrollY;
-                    root.style.paddingRight = `${parseFloat(getComputedStyle(root).paddingRight) + scrollbarWidth}px`;
-                    root.style.overflow = "hidden";
-                    root.style.touchAction = "pinch-zoom";
-                    root.style.overscrollBehavior = "none";
-
-                    const holdPosition = () => {
-                        if (window.scrollY !== scrollY) {
-                            window.scrollTo({
-                                top: scrollY,
-                                behavior: "instant",
-                            });
-                        }
-                    };
-                    const observer = ScrollTrigger.observe({
-                        target: window,
-                        type: "wheel,touch",
-                        lockAxis: true,
-                        allowClicks: true,
-                        preventDefault: true,
-                        ignoreCheck: (event) =>
-                            (event as WheelEvent).ctrlKey ||
-                            ("touches" in event &&
-                                (event as TouchEvent).touches.length > 1),
-                        onChangeY: ({ deltaY, event }) =>
-                            consumeScroll(
-                                event.type === "wheel" ? deltaY : -deltaY,
-                            ),
-                    });
-                    const onResize = () => unlock?.();
+                    const bodyWidth = body.getBoundingClientRect().width;
                     unlock = () => {
-                        observer.kill();
-                        root.style.overflow = overflow;
-                        root.style.paddingRight = paddingRight;
-                        root.style.touchAction = touchAction;
-                        root.style.overscrollBehavior = overscrollBehavior;
-                        window.removeEventListener("scroll", holdPosition);
-                        window.removeEventListener("keydown", onKeyDown);
-                        window.removeEventListener("resize", onResize);
+                        // Restore once, rather than correcting every native scroll event.
                         unlock = undefined;
+                        Object.assign(body.style, bodyStyles);
+                        root.style.overflow = overflow;
+                        window.scrollTo({
+                            left: scrollX,
+                            top: scrollY,
+                            behavior: "instant",
+                        });
+                        trigger?.enable(false, false);
                     };
-                    window.addEventListener("scroll", holdPosition);
-                    window.addEventListener("keydown", onKeyDown);
-                    window.addEventListener("resize", onResize);
+                    // A fixed body also stops Safari's in-flight momentum scrolling.
+                    trigger?.disable(false);
+                    Object.assign(body.style, {
+                        position: "fixed",
+                        top: `${-scrollY}px`,
+                        left: `${-scrollX}px`,
+                        width: `${bodyWidth}px`,
+                    });
+                    root.style.overflow = "hidden";
                 };
+
+                let touch: { id: number; y: number } | undefined;
+                const onTouchStart = (event: TouchEvent) => {
+                    if (event.touches.length !== 1) {
+                        touch = undefined;
+                        unlock?.();
+                        return;
+                    }
+                    const point = event.touches[0];
+                    touch = { id: point.identifier, y: point.screenY };
+                };
+                const onTouchMove = (event: TouchEvent) => {
+                    if (!touch || event.touches.length !== 1) return;
+                    const point = event.touches[0];
+                    if (point.identifier !== touch.id) return;
+                    // Screen coordinates stay independent of programmatic page scrolling.
+                    const delta = touch.y - point.screenY;
+                    touch.y = point.screenY;
+                    if (!unlock) return;
+                    if (event.cancelable) event.preventDefault();
+                    consumeScroll(delta);
+                };
+                const onTouchEnd = () => {
+                    touch = undefined;
+                };
+                const onWheel = (event: WheelEvent) => {
+                    if (!unlock || event.ctrlKey) return;
+                    if (event.cancelable) event.preventDefault();
+                    const multiplier =
+                        event.deltaMode === 1
+                            ? parseFloat(
+                                  getComputedStyle(document.body).lineHeight,
+                              ) || 22
+                            : event.deltaMode === 2
+                              ? viewportHeight
+                              : 1;
+                    consumeScroll(event.deltaY * multiplier);
+                };
+                const onResize = () => {
+                    // Safari's address bar changes height during a swipe; keep the lock.
+                    if (window.innerWidth !== viewportWidth) unlock?.();
+                };
+                window.addEventListener("touchstart", onTouchStart, {
+                    passive: true,
+                });
+                window.addEventListener("touchmove", onTouchMove, {
+                    passive: false,
+                });
+                window.addEventListener("touchend", onTouchEnd);
+                window.addEventListener("touchcancel", onTouchEnd);
+                window.addEventListener("wheel", onWheel, { passive: false });
+                window.addEventListener("keydown", onKeyDown);
+                window.addEventListener("resize", onResize);
                 trigger = ScrollTrigger.create({
                     trigger: section,
                     start: "center center",
@@ -226,8 +263,18 @@ export const ProcessStepsBlock = ({
                     },
                 });
                 if (furthestProgress === 1) trigger.kill();
+                else if (unlock) trigger.disable(false);
 
-                return () => unlock?.();
+                return () => {
+                    unlock?.();
+                    window.removeEventListener("touchstart", onTouchStart);
+                    window.removeEventListener("touchmove", onTouchMove);
+                    window.removeEventListener("touchend", onTouchEnd);
+                    window.removeEventListener("touchcancel", onTouchEnd);
+                    window.removeEventListener("wheel", onWheel);
+                    window.removeEventListener("keydown", onKeyDown);
+                    window.removeEventListener("resize", onResize);
+                };
             },
         );
 
