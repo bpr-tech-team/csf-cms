@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
@@ -14,6 +15,7 @@ export const MediaFeatureGrid: Block = {
     },
     interfaceName: "MediaFeatureGridBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

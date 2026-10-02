@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
 import type { SplitContentBlock as SplitContentBlockProps } from "@/payload-types";
@@ -10,6 +12,9 @@ import { cn } from "@/utilities/ui";
 import React from "react";
 
 export const SplitContentBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     anchorId,
     heading,
@@ -20,15 +25,20 @@ export const SplitContentBlock = ({
     sectionHeading,
     divider,
     theme,
-}: SplitContentBlockProps & { locale?: AppLocale }) => {
+}: SplitContentBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     const isDark = theme === "dark";
     const isMediaLeft = mediaPosition === "left";
 
     return (
-        <section
+        <BlockSection
+            blockType="splitContent"
+            theme={theme}
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
             className={cn(
-                "scroll-mt-24 py-20 [container-type:inline-size] md:py-24 xl:py-28",
-                isDark ? "bg-ink-950 text-paper-0" : "bg-paper-0 text-ink-950",
+                "scroll-mt-24 [container-type:inline-size]",
+                isDark ? "text-paper-0" : "text-ink-950",
             )}
             data-theme={isDark ? "dark" : undefined}
             id={anchorId || undefined}
@@ -89,6 +99,6 @@ export const SplitContentBlock = ({
                     </div>
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };

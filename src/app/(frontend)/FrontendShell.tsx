@@ -54,7 +54,7 @@ export async function FrontendShell({
                 <JsonLd data={websiteJsonLd(locale)} />
                 <JsonLd data={professionalServiceJsonLd()} />
             </head>
-            <body>
+            <body className="[--site-header-height:--spacing(18)] xl:[--site-header-height:--spacing(26)] [--page-top-spacing:--spacing(16)]">
                 <Providers locale={locale}>
                     <AdminBar
                         adminBarProps={{

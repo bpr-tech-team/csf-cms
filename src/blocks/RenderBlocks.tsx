@@ -1,3 +1,8 @@
+import {
+    hasPopulatedForm,
+    isVisiblePageBlock,
+    resolveBlockSpacing,
+} from "@/utilities/blockSpacing";
 import React, { Fragment } from "react";
 
 import type { Page } from "@/payload-types";
@@ -42,19 +47,28 @@ export const RenderBlocks: React.FC<{
         draft = false,
     } = props;
 
-    const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0;
+    const visibleBlocks = Array.isArray(blocks)
+        ? blocks.filter((block) => isVisiblePageBlock(block, page))
+        : [];
+    const hasBlocks = visibleBlocks.length > 0;
 
     if (hasBlocks) {
         return (
             <Fragment>
-                {blocks.map((block, index) => {
+                {visibleBlocks.map((block, index) => {
                     const { blockType } = block;
+                    const sectionSpacing = resolveBlockSpacing(
+                        block,
+                        visibleBlocks[index - 1],
+                        visibleBlocks[index + 1],
+                    );
 
                     switch (blockType) {
                         case "clientService":
                             return (
                                 <ClientServiceBlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                     locale={locale}
                                 />
@@ -63,6 +77,7 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <HeroBlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                     locale={locale}
                                     isPageIntro={isFirstSection && index === 0}
@@ -72,6 +87,7 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <BranchesGridBlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                     locale={locale}
                                     draft={draft}
@@ -81,6 +97,7 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <BranchDetailsBlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                     locale={locale}
                                     page={page}
@@ -90,16 +107,14 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <HomepageHero
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                     locale={locale}
                                     isPageIntro={isFirstSection && index === 0}
                                 />
                             );
                         case "formBlock":
-                            if (
-                                typeof block.form !== "object" ||
-                                block.form === null
-                            ) {
+                            if (!hasPopulatedForm(block.form)) {
                                 return null;
                             }
 
@@ -107,6 +122,7 @@ export const RenderBlocks: React.FC<{
                                 <FormBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     form={block.form}
                                     key={index}
                                 />
@@ -116,6 +132,7 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <ServicesGridBlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                     locale={locale}
                                 />
@@ -126,6 +143,7 @@ export const RenderBlocks: React.FC<{
                                 <MetricsStripBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                 />
                             );
@@ -134,6 +152,7 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <ProductsGridBlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                     locale={locale}
                                 />
@@ -144,6 +163,7 @@ export const RenderBlocks: React.FC<{
                                 <LogoMarqueeBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                 />
                             );
@@ -152,6 +172,7 @@ export const RenderBlocks: React.FC<{
                             return (
                                 <CenteredCTABlock
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                     locale={locale}
                                 />
@@ -162,6 +183,7 @@ export const RenderBlocks: React.FC<{
                                 <CompanyTimelineBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                 />
                             );
@@ -171,6 +193,7 @@ export const RenderBlocks: React.FC<{
                                 <ProcessStepsBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={index}
                                 />
                             );
@@ -180,6 +203,7 @@ export const RenderBlocks: React.FC<{
                                 <ServiceSectionIntroBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -189,6 +213,7 @@ export const RenderBlocks: React.FC<{
                                 <SplitContentBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -198,6 +223,7 @@ export const RenderBlocks: React.FC<{
                                 <FlexibleContentBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -207,6 +233,7 @@ export const RenderBlocks: React.FC<{
                                 <ComputerAudienceBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -216,6 +243,7 @@ export const RenderBlocks: React.FC<{
                                 <ComputerCatalogBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -225,6 +253,7 @@ export const RenderBlocks: React.FC<{
                                 <ComputerProductCatalogBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -234,6 +263,7 @@ export const RenderBlocks: React.FC<{
                                 <MediaFeatureGridBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -243,6 +273,7 @@ export const RenderBlocks: React.FC<{
                                 <TechnologySpotlightBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );
@@ -252,6 +283,7 @@ export const RenderBlocks: React.FC<{
                                 <EditorialColumnsBlock
                                     locale={locale}
                                     {...block}
+                                    sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                 />
                             );

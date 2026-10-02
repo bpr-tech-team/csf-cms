@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
@@ -6,6 +7,7 @@ export const TechnologySpotlight: Block = {
     slug: "technologySpotlight",
     interfaceName: "TechnologySpotlightBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

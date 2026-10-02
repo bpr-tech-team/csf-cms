@@ -1,4 +1,5 @@
-    import type { Block } from "payload";
+import { blockSpacingFields } from "@/fields/blockSpacing";
+import type { Block } from "payload";
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 
 export const BranchesGrid: Block = {
@@ -17,6 +18,7 @@ export const BranchesGrid: Block = {
         plural: { cs: "Přehledy poboček", en: "Branch grids" },
     },
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

@@ -1,5 +1,7 @@
 "use client";
 
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
 import type { ProcessStepsBlock as ProcessStepsBlockProps } from "@/payload-types";
@@ -11,13 +13,16 @@ import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 
 export const ProcessStepsBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     description,
     eyebrow,
     heading,
     highlightedTexts,
     items,
-}: ProcessStepsBlockProps & { locale?: AppLocale }) => {
+}: ProcessStepsBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     const sectionRef = useRef<HTMLElement>(null);
     const stepsRef = useRef<HTMLOListElement>(null);
 
@@ -228,7 +233,13 @@ export const ProcessStepsBlock = ({
     }, [items.length]);
 
     return (
-        <section ref={sectionRef} className="bg-paper-0 py-20 md:py-24">
+        <BlockSection
+            blockType="processSteps"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            ref={sectionRef}
+        >
             <div className="container">
                 <SectionHeading
                     locale={locale}
@@ -276,6 +287,6 @@ export const ProcessStepsBlock = ({
                     ))}
                 </ol>
             </div>
-        </section>
+        </BlockSection>
     );
 };

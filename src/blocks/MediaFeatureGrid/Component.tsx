@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
 import type { MediaFeatureGridBlock as MediaFeatureGridBlockProps } from "@/payload-types";
@@ -7,16 +9,23 @@ import { HighlightedText } from "@/components/SectionHeading";
 import React from "react";
 
 export const MediaFeatureGridBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     anchorId,
     description,
     heading,
     highlightedTexts,
     items,
-}: MediaFeatureGridBlockProps & { locale?: AppLocale }) => {
+}: MediaFeatureGridBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     return (
-        <section
-            className="scroll-mt-24 bg-ink-950 py-20 text-paper-0 md:py-24 xl:py-28"
+        <BlockSection
+            blockType="mediaFeatureGrid"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="scroll-mt-24 text-paper-0"
             data-theme="dark"
             id={anchorId || undefined}
         >
@@ -56,6 +65,6 @@ export const MediaFeatureGridBlock = ({
                     ))}
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };

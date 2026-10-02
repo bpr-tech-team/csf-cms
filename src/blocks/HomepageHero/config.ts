@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import { contentIcon } from "@/fields/contentIcon";
 import type { Block } from "payload";
 import { highlightedTextsField } from "@/fields/highlightedTexts";
@@ -21,6 +22,7 @@ export const HomepageHero: Block = {
         plural: { cs: "Úvodní bloky domovské stránky", en: "Homepage heroes" },
     },
     fields: [
+        blockSpacingFields(),
         heroBackgroundField(false),
         {
             name: "slides",

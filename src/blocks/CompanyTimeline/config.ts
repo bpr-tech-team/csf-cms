@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { homepageSectionIntro } from "@/fields/homepageSection";
@@ -14,6 +15,7 @@ export const CompanyTimeline: Block = {
     },
     interfaceName: "CompanyTimelineBlock",
     fields: [
+        blockSpacingFields(),
         ...homepageSectionIntro(),
         {
             name: "items",

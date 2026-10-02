@@ -70,6 +70,49 @@ const data: Catalog = {
     ],
 };
 
+describe("catalog section spacing", () => {
+    afterEach(cleanup);
+
+    it("changes only the outer edges and preserves internal audience/navigation/product spacing", () => {
+        const { container } = render(
+            <ComputerCatalogBlock
+                {...data}
+                spacingTop="none"
+                spacingBottom="large"
+                locale="en"
+            />,
+        );
+        const audience = container.querySelector(
+            "section section",
+        ) as HTMLElement;
+        const navigation = container.querySelector(
+            '[data-theme="dark"]',
+        ) as HTMLElement;
+        const products = navigation.parentElement?.querySelector(
+            '[role="tabpanel"]',
+        ) as HTMLElement;
+        expect(audience.className).toContain(
+            "[--section-space-top:var(--section-spacing-none)]",
+        );
+        expect(audience.className).toContain(
+            "[--section-space-bottom:var(--section-spacing-content)]",
+        );
+        expect(navigation.className).toContain(
+            "[--section-space-top:var(--section-spacing-short)]",
+        );
+        expect(navigation.className).toContain(
+            "[--section-space-bottom:var(--section-spacing-short)]",
+        );
+        expect(products.className).toContain(
+            "[--section-space-top:var(--section-spacing-content)]",
+        );
+        expect(products.className).toContain(
+            "[--section-space-bottom:var(--section-spacing-large)]",
+        );
+        expect(container.querySelector("[style]")).toBeNull();
+    });
+});
+
 afterEach(cleanup);
 
 describe("workstation audience and category selection", () => {

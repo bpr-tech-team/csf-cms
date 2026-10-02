@@ -96,7 +96,12 @@ export async function PageTemplate({
     );
 
     return (
-        <article className={cn("pt-16", startsWithHero ? "pb-0" : "pb-24")}>
+        <article
+            className={cn(
+                "pt-(--page-top-spacing)",
+                startsWithHero ? "pb-0" : "pb-24",
+            )}
+        >
             <SetHeaderTheme theme={startsWithHero ? "dark" : "light"} />
             <PayloadRedirects disableNotFound locale={locale} url={url} />
 

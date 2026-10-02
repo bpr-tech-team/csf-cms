@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 export const MetricsStrip: Block = {
@@ -12,6 +13,7 @@ export const MetricsStrip: Block = {
     },
     interfaceName: "MetricsStripBlock",
     fields: [
+        blockSpacingFields(),
         {
             name: "heading",
             type: "text",

@@ -1,3 +1,5 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import type { EditorialColumnsBlock as EditorialColumnsBlockProps } from "@/payload-types";
 
@@ -6,15 +8,22 @@ import RichText from "@/components/RichText";
 import React from "react";
 
 export const EditorialColumnsBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     anchorId,
     columns,
     heading,
     highlightedTexts,
-}: EditorialColumnsBlockProps & { locale?: AppLocale }) => {
+}: EditorialColumnsBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     return (
-        <section
-            className="scroll-mt-24 bg-ink-950 py-20 text-paper-0 md:py-24 xl:py-28"
+        <BlockSection
+            blockType="editorialColumns"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="scroll-mt-24 text-paper-0"
             data-theme="dark"
             id={anchorId || undefined}
         >
@@ -39,6 +48,6 @@ export const EditorialColumnsBlock = ({
                     ))}
                 </div>
             </div>
-        </section>
+        </BlockSection>
     );
 };

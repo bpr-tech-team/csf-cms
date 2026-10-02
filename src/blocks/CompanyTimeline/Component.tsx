@@ -1,4 +1,6 @@
 "use client";
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 
 import { applyTypography } from "@/utilities/typography";
@@ -13,11 +15,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useEffect, useRef } from "react";
 
 export const CompanyTimelineBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     locale = defaultLocale,
     heading,
     highlightedTexts,
     items,
-}: CompanyTimelineBlockProps & { locale?: AppLocale }) => {
+}: CompanyTimelineBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     const pathRef = useRef<SVGPathElement>(null);
     const timelineRef = useRef<HTMLDivElement>(null);
     const timelineBallRef = useRef<HTMLDivElement>(null);
@@ -98,7 +103,13 @@ export const CompanyTimelineBlock = ({
     }, [items.length]);
 
     return (
-        <section className="overflow-hidden bg-paper-0 py-20 text-ink-900 xl:pt-24 xl:pb-28">
+        <BlockSection
+            blockType="companyTimeline"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
+            className="overflow-hidden text-ink-900"
+        >
             <div className="container">
                 <SectionHeading
                     locale={locale}
@@ -204,6 +215,6 @@ export const CompanyTimelineBlock = ({
                     })}
                 </ol>
             </div>
-        </section>
+        </BlockSection>
     );
 };

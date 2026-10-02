@@ -1,3 +1,4 @@
+import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
 import { link } from "@/fields/link";
@@ -205,6 +206,7 @@ export const FlexibleContent: Block = {
         },
     },
     fields: [
+        blockSpacingFields(),
         {
             name: "anchorId",
             type: "text",

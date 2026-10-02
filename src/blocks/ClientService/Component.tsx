@@ -1,5 +1,7 @@
 "use client";
 
+import { BlockSection } from "@/components/BlockSection";
+import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { useId, useRef, useState, type FormEvent } from "react";
 import { LoaderCircle } from "lucide-react";
 
@@ -27,6 +29,9 @@ const messages = {
 };
 
 export const ClientServiceBlock = ({
+    sectionSpacing,
+    spacingTop,
+    spacingBottom,
     eyebrow,
     heading,
     description,
@@ -36,7 +41,7 @@ export const ClientServiceBlock = ({
     passwordPlaceholder,
     submitButtonLabel,
     locale = defaultLocale,
-}: ClientServiceBlockProps & { locale?: AppLocale }) => {
+}: ClientServiceBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
     const id = useId();
     const submitting = useRef(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,9 +81,13 @@ export const ClientServiceBlock = ({
     };
 
     return (
-        <section
+        <BlockSection
+            blockType="clientService"
+            spacing={
+                sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
+            }
             aria-labelledby={`${id}-heading`}
-            className="bg-ink-950 px-6 py-16 text-paper-0 md:pt-[74px] md:pb-20"
+            className="px-6 text-paper-0"
             data-theme="dark"
         >
             <div className="mx-auto max-w-[50rem] text-center">
@@ -180,6 +189,6 @@ export const ClientServiceBlock = ({
                     </Alert>
                 )}
             </form>
-        </section>
+        </BlockSection>
     );
 };

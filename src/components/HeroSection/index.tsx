@@ -1,30 +1,33 @@
+import { BlockSection } from "@/components/BlockSection";
+import type { SectionSpacing } from "@/utilities/blockSpacing";
 import type { ReactNode } from "react";
 
 import { HeroBackground } from "@/components/HeroBackground";
 import type { Media } from "@/payload-types";
-import { cn } from "@/utilities/ui";
 
 type HeroSectionProps = {
     backgroundMedia?: Media | number | null;
     children: ReactNode;
+    spacing?: SectionSpacing;
     isPageIntro?: boolean;
     label?: string;
     onAutoplayChange?: (running: boolean) => void;
 };
 
 export const HeroSection = ({
+    spacing,
     backgroundMedia,
     children,
     isPageIntro = false,
     label,
     onAutoplayChange,
 }: HeroSectionProps) => (
-    <section
+    <BlockSection
+        blockType="hero"
+        isPageIntro={isPageIntro}
+        spacing={spacing}
         aria-label={label}
-        className={cn(
-            "relative isolate min-h-120 overflow-hidden bg-ink-900 py-20 text-paper-0 md:py-24",
-            isPageIntro && "-mt-42 pt-58 md:pt-72",
-        )}
+        className="relative isolate min-h-120 overflow-hidden text-paper-0"
         data-theme="dark"
     >
         <HeroBackground
@@ -33,5 +36,5 @@ export const HeroSection = ({
             resource={backgroundMedia}
         />
         <div className="container relative z-10">{children}</div>
-    </section>
+    </BlockSection>
 );
