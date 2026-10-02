@@ -93,7 +93,7 @@ export const CustomCursor = () => {
     return (
         <div
             aria-hidden
-            className="pointer-events-none fixed top-0 left-0 z-60 hidden size-4 rounded-full bg-primary opacity-0 lg:block"
+            className="pointer-events-none fixed top-0 left-0 z-999 hidden size-4 rounded-full bg-primary opacity-0 lg:block"
             data-custom-cursor
             ref={cursorRef}
             style={{
