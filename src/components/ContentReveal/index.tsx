@@ -98,6 +98,7 @@ export const ContentReveal = ({
                         startedRef.current = true;
                     },
                 });
+                timeline.timeScale(reduced ? 1 : 0.8);
 
                 if (!startedRef.current) {
                     const reveal = (
