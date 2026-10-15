@@ -5,6 +5,7 @@ import { CMSLink } from "@/components/Link";
 import { Logo } from "@/components/Logo/Logo";
 import { MediaAsset } from "@/components/MediaAsset";
 import RichText from "@/components/RichText";
+import { FooterBranchesMapBlock } from "./BranchesMap";
 import { defaultLocale, withLocalePrefix, type AppLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import type {
@@ -135,6 +136,8 @@ function FooterBlock({
     locale: AppLocale;
 }) {
     switch (block.blockType) {
+        case "footerBranchesMap":
+            return <FooterBranchesMapBlock block={block} locale={locale} />;
         case "footerBrand":
             return (
                 <div className="flex flex-col items-start gap-6">
@@ -221,7 +224,7 @@ export function Footer({
             className="mt-auto border-t border-border-dark bg-olive-950 text-white"
             data-theme="dark"
         >
-            <div className="container flex flex-col-reverse gap-x-6 gap-y-10 py-16 lg:grid lg:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
+            <div className="container flex flex-col-reverse gap-x-6 gap-y-10 py-16 lg:grid lg:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] lg:items-center">
                 {(data.layout ?? []).map((column, index) => (
                     <div
                         className="flex min-w-0 flex-col items-start gap-6 max-lg:empty:hidden"

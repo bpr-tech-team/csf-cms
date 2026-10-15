@@ -2,8 +2,10 @@ import type { Block } from "payload";
 
 import { link } from "@/fields/link";
 import { contentIcon } from "@/fields/contentIcon";
+import { FooterBranchesMap } from "./BranchesMap/config";
 
 export const footerBlocks: Block[] = [
+    FooterBranchesMap,
     {
         slug: "footerBrand",
         interfaceName: "FooterBrandBlock",

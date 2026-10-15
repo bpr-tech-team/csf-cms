@@ -42,7 +42,7 @@ export async function FrontendShell({
 }) {
     const [{ isEnabled }, footerData, contactDetails] = await Promise.all([
         draftMode(),
-        getCachedGlobal("footer", 1, locale, "layout-v2")(),
+        getCachedGlobal("footer", 1, locale, "layout-v3")(),
         getCachedGlobal("contact-details", 1)(),
     ]);
 

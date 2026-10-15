@@ -3344,7 +3344,9 @@ export interface Footer {
   layout?:
     | {
         heading?: string | null;
-        content?: (FooterBrandBlock | FooterContactsBlock | FooterTextBlock | FooterLinksBlock)[] | null;
+        content?:
+          | (FooterBranchesMapBlock | FooterBrandBlock | FooterContactsBlock | FooterTextBlock | FooterLinksBlock)[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -3397,6 +3399,23 @@ export interface Footer {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBranchesMapBlock".
+ */
+export interface FooterBranchesMapBlock {
+  /**
+   * Assign branch pages to map positions. Names and links come from the page. Points without an assigned, published branch are hidden on the website.
+   */
+  points: {
+    position: 'praha' | 'hradec-kralove' | 'ostrava' | 'zlin' | 'brno';
+    branch?: (number | null) | Page;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerBranchesMap';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3596,6 +3615,7 @@ export interface FooterSelect<T extends boolean = true> {
         content?:
           | T
           | {
+              footerBranchesMap?: T | FooterBranchesMapBlockSelect<T>;
               footerBrand?: T | FooterBrandBlockSelect<T>;
               footerContacts?: T | FooterContactsBlockSelect<T>;
               footerText?: T | FooterTextBlockSelect<T>;
@@ -3641,6 +3661,21 @@ export interface FooterSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBranchesMapBlock_select".
+ */
+export interface FooterBranchesMapBlockSelect<T extends boolean = true> {
+  points?:
+    | T
+    | {
+        position?: T;
+        branch?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
