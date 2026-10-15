@@ -41,11 +41,7 @@ function HeaderNavigation({
             href={withLocalePrefix("/", locale)}
             onClick={() => setIsMenuOpen(false)}
         >
-            <Logo
-                loading="eager"
-                priority="high"
-                className="w-[82px] xl:w-25"
-            />
+            <Logo loading="eager" priority="high"/>
         </Link>
     );
 
