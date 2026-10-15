@@ -47,7 +47,6 @@ export const frontendMessages: Record<
         postsTitle: string;
         selectSlide: string;
         slide: string;
-        untitledCategory: string;
     }
 > = {
     cs: {
@@ -99,7 +98,6 @@ export const frontendMessages: Record<
         postsTitle: "Novinky",
         selectSlide: "Přepnout snímek",
         slide: "Snímek",
-        untitledCategory: "Kategorie bez názvu",
     },
     en: {
         adminDashboard: "Dashboard",
@@ -150,6 +148,5 @@ export const frontendMessages: Record<
         postsTitle: "Posts",
         selectSlide: "Select slide",
         slide: "Slide",
-        untitledCategory: "Untitled category",
     },
 };

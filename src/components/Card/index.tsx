@@ -2,26 +2,25 @@
 import { applyTypography } from "@/utilities/typography";
 
 import type { AppLocale } from "@/i18n/config";
-import { defaultLocale, withLocalePrefix } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import { cn } from "@/utilities/ui";
 import useClickableCard from "@/utilities/useClickableCard";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React from "react";
 
-import type { Post } from "@/payload-types";
+import { getPagePath } from "@/utilities/getPagePath";
+import type { PostCardData } from "@/utilities/postCards";
 
 import { Media } from "@/components/Media";
 
-export type CardPostData = Pick<Post, "slug" | "categories" | "meta" | "title">;
+export type CardPostData = PostCardData;
 
 export const Card: React.FC<{
     alignItems?: "center";
     className?: string;
     doc?: CardPostData;
     locale?: AppLocale;
-    relationTo?: "posts";
-    showCategories?: boolean;
     title?: string;
 }> = (props) => {
     const { cardRef, linkRef } = useClickableCard({});
@@ -29,19 +28,14 @@ export const Card: React.FC<{
         className,
         doc,
         locale = defaultLocale,
-        relationTo,
-        showCategories,
         title: titleFromProps,
     } = props;
     const messages = frontendMessages[locale];
 
-    const { slug, categories, meta, title } = doc || {};
-    const { description, image: metaImage } = meta || {};
+    const { slug, heroImage, excerpt, title } = doc || {};
 
-    const hasCategories =
-        categories && Array.isArray(categories) && categories.length > 0;
     const titleToUse = titleFromProps || title;
-    const href = withLocalePrefix(`/${relationTo}/${slug}`, locale);
+    const href = getPagePath({ slug, pageType: "post" }, locale);
 
     return (
         <article
@@ -52,44 +46,16 @@ export const Card: React.FC<{
             ref={cardRef}
         >
             <div className="relative w-full ">
-                {!metaImage && (
+                {(!heroImage || typeof heroImage !== "object") && (
                     <div className="">
                         {applyTypography(messages.noImage, { locale })}
                     </div>
                 )}
-                {metaImage && typeof metaImage !== "string" && (
-                    <Media resource={metaImage} size="33vw" />
+                {heroImage && typeof heroImage === "object" && (
+                    <Media resource={heroImage} size="33vw" />
                 )}
             </div>
             <div className="p-4">
-                {showCategories && hasCategories && (
-                    <div className="uppercase text-sm mb-4">
-                        {categories?.map((category, index) => {
-                            if (typeof category === "object") {
-                                const { title: titleFromCategory } = category;
-
-                                const categoryTitle =
-                                    titleFromCategory ||
-                                    messages.untitledCategory;
-
-                                const isLast = index === categories.length - 1;
-
-                                return (
-                                    <Fragment key={index}>
-                                        {applyTypography(categoryTitle, {
-                                            locale,
-                                        })}
-                                        {!isLast && (
-                                            <Fragment>, &nbsp;</Fragment>
-                                        )}
-                                    </Fragment>
-                                );
-                            }
-
-                            return null;
-                        })}
-                    </div>
-                )}
                 {titleToUse && (
                     <div className="prose">
                         <h3>
@@ -103,9 +69,9 @@ export const Card: React.FC<{
                         </h3>
                     </div>
                 )}
-                {description && (
+                {excerpt && (
                     <div className="mt-2">
-                        <p>{applyTypography(description, { locale })}</p>
+                        <p>{applyTypography(excerpt, { locale })}</p>
                     </div>
                 )}
             </div>

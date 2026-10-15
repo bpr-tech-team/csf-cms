@@ -1,14 +1,14 @@
 import { Fragment, type ReactNode } from "react";
 
 import {
-    getPageBlockPresentation,
-    type PageBlock,
+    getContentBlockPresentation,
+    type ContentBlock,
 } from "@/utilities/blockSpacing";
 import { cn } from "@/utilities/ui";
 
 type SurfaceGroup = {
     key: string | number;
-    surface: ReturnType<typeof getPageBlockPresentation>["surface"];
+    surface: ReturnType<typeof getContentBlockPresentation>["surface"];
     backgroundClassName: string;
     children: ReactNode[];
 };
@@ -17,14 +17,14 @@ export const BlockSurfaceGroups = ({
     blocks,
     children,
 }: {
-    blocks: PageBlock[];
+    blocks: ContentBlock[];
     children: ReactNode[];
 }) => {
     const groups: SurfaceGroup[] = [];
 
     blocks.forEach((block, index) => {
         const { surface, backgroundClassName } =
-            getPageBlockPresentation(block);
+            getContentBlockPresentation(block);
         const previous = groups.at(-1);
 
         // One continuous background prevents the page canvas from showing

@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { JsonLd, blogPostingJsonLd } from "@/seo/structuredData";
+import { getRelatedPostCards } from "@/utilities/postCards";
 
 import { PayloadRedirects } from "@/components/PayloadRedirects";
 import { SetHeaderTheme } from "@/components/SetHeaderTheme";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 import { RenderBlocks } from "@/blocks/RenderBlocks";
-import { PAGE_HERO_BLOCK_TYPES } from "@/collections/Pages/validateLayout";
+import { HERO_BLOCK_TYPES } from "@/fields/validateContentLayout";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { generateMeta } from "@/utilities/generateMeta";
-import { cn } from "@/utilities/ui";
 import configPromise from "@payload-config";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
@@ -91,27 +92,27 @@ export async function PageTemplate({
     const { layout } = page;
     const firstBlock = layout[0];
     const firstBlockType = firstBlock?.blockType;
-    const startsWithHero = PAGE_HERO_BLOCK_TYPES.some(
+    const startsWithHero = HERO_BLOCK_TYPES.some(
         (blockType) => blockType === firstBlockType,
     );
 
     return (
-        <article
-            className={cn(
-                "pt-(--page-top-spacing)",
-                startsWithHero ? "pb-0" : "pb-24",
-            )}
-        >
+        <article>
             <SetHeaderTheme theme={startsWithHero ? "dark" : "light"} />
             <PayloadRedirects disableNotFound locale={locale} url={url} />
 
             {draft && <LivePreviewListener />}
+
+            {page.pageType === "post" && (
+                <JsonLd data={blogPostingJsonLd(page, locale, canonicalPath)} />
+            )}
 
             <RenderBlocks
                 blocks={layout}
                 locale={locale}
                 isFirstSection={startsWithHero}
                 page={page}
+                relatedPosts={getRelatedPostCards(page)}
                 draft={draft}
             />
         </article>

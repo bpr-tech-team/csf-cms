@@ -24,6 +24,7 @@ import * as migration_20261015_164458_content_heading_icons from "./20261015_164
 import * as migration_20261015_185846_flexible_footer from "./20261015_185846_flexible_footer";
 import * as migration_20261015_191306_shared_contact_details from "./20261015_191306_shared_contact_details";
 import * as migration_20261015_194748_footer_branches_map from "./20261015_194748_footer_branches_map";
+import * as migration_20261015_230402_pages_post_type_remove_legacy_collections from "./20261015_230402_pages_post_type_remove_legacy_collections";
 
 export const migrations = [
     {
@@ -155,5 +156,10 @@ export const migrations = [
         up: migration_20261015_194748_footer_branches_map.up,
         down: migration_20261015_194748_footer_branches_map.down,
         name: "20261015_194748_footer_branches_map",
+    },
+    {
+        up: migration_20261015_230402_pages_post_type_remove_legacy_collections.up,
+        down: migration_20261015_230402_pages_post_type_remove_legacy_collections.down,
+        name: "20261015_230402_pages_post_type_remove_legacy_collections",
     },
 ];

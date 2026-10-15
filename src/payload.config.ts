@@ -5,10 +5,8 @@ import { cs } from "payload/i18n/cs";
 import { adminTranslations } from "@/i18n/admin";
 import { fileURLToPath } from "url";
 
-import { Categories } from "./collections/Categories";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
-import { Posts } from "./collections/Posts";
 import { Users } from "./collections/Users";
 import { Footer } from "./globals/Footer/config";
 import { Header } from "./globals/Header/config";
@@ -87,7 +85,7 @@ export default buildConfig({
         push: false,
     }),
     ...(email ? { email } : {}),
-    collections: [Pages, Posts, Media, Categories, Users],
+    collections: [Pages, Media, Users],
     cors: [getServerSideURL()].filter(Boolean),
     folders: {
         browseByFolder: false,

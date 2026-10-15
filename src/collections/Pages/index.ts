@@ -3,41 +3,25 @@ import type { Page } from "@/payload-types";
 
 import { authenticated } from "../../access/authenticated";
 import { authenticatedOrPublished } from "../../access/authenticatedOrPublished";
-import { BranchesGrid } from "@/blocks/BranchesGrid/config";
-import { BranchDetails } from "@/blocks/BranchDetails/config";
 import { branchInfo } from "@/fields/branchInfo";
 import { pageType } from "@/fields/pageType";
-import { CenteredCTA } from "../../blocks/CenteredCTA/config";
-import { CompanyTimeline } from "../../blocks/CompanyTimeline/config";
-import { ComputerAudience } from "../../blocks/ComputerAudience/config";
-import { ComputerCatalog } from "../../blocks/ComputerCatalog/config";
-import { ComputerProductCatalog } from "../../blocks/ComputerProductCatalog/config";
-import { EditorialColumns } from "../../blocks/EditorialColumns/config";
-import { FormBlock } from "../../blocks/Form/config";
-import { ClientService } from "@/blocks/ClientService/config";
-import { LogoMarquee } from "../../blocks/LogoMarquee/config";
-import { MediaFeatureGrid } from "../../blocks/MediaFeatureGrid/config";
-import { MetricsStrip } from "../../blocks/MetricsStrip/config";
-import { ProcessSteps } from "../../blocks/ProcessSteps/config";
-import { ProductsGrid } from "../../blocks/ProductsGrid/config";
-import { ServicesGrid } from "../../blocks/ServicesGrid/config";
-import { TechnologySpotlight } from "../../blocks/TechnologySpotlight/config";
-import { FlexibleContent } from "@/blocks/FlexibleContent/config";
-import { Gallery } from "@/blocks/Gallery/config";
-import { Hero } from "@/blocks/Hero/config";
-import { HomepageHero } from "@/blocks/HomepageHero/config";
-import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
-import { SplitContent } from "@/blocks/SplitContent/config";
 import { slugField } from "payload";
 import { populatePublishedAt } from "../../hooks/populatePublishedAt";
 import { generatePreviewPath } from "../../utilities/generatePreviewPath";
-import { revalidateDelete, revalidatePage } from "./hooks/revalidatePage";
+import {
+    capturePagePathsBeforeChange,
+    revalidateDelete,
+    revalidatePage,
+} from "./hooks/revalidatePage";
+import { populateAuthors } from "./hooks/populateAuthors";
 import { captureDocumentPathsBeforeDelete } from "@/utilities/getDocumentRevalidationPaths";
 import {
     revalidateNavigation,
     revalidateNavigationAfterDelete,
 } from "@/hooks/revalidateNavigation";
-import { validatePageLayout } from "./validateLayout";
+import { contentLayout } from "@/fields/contentLayout";
+import { postTabs } from "@/fields/postTabs";
+import { postCardSelect } from "@/utilities/postCards";
 
 import { seoFields } from "@/fields/seo";
 
@@ -52,14 +36,15 @@ export const Pages: CollectionConfig<"pages"> = {
     // This config controls what's populated by default when a page is referenced
     // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
     // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'pages'>
-    defaultPopulate: {
-        title: true,
-        slug: true,
-        pageType: true,
-    },
+    defaultPopulate: postCardSelect,
     admin: {
         components: {
             beforeListTable: ["@/components/PageTypeViews#PageTypeTabs"],
+            views: {
+                list: {
+                    Component: "@/components/PageTypeViews#PageTypeListView",
+                },
+            },
         },
         defaultColumns: ["title", "pageType", "slug", "updatedAt"],
         livePreview: {
@@ -96,57 +81,7 @@ export const Pages: CollectionConfig<"pages"> = {
             type: "tabs",
             tabs: [
                 {
-                    fields: [
-                        {
-                            name: "layout",
-                            type: "blocks",
-                            labels: {
-                                singular: {
-                                    cs: "Obsahový blok",
-                                    en: "Content block",
-                                },
-                                plural: {
-                                    cs: "Obsahové bloky",
-                                    en: "Content blocks",
-                                },
-                            },
-                            blocks: [
-                                Hero,
-                                HomepageHero,
-                                BranchesGrid,
-                                BranchDetails,
-                                FormBlock,
-                                ClientService,
-                                ServicesGrid,
-                                MetricsStrip,
-                                ProductsGrid,
-                                LogoMarquee,
-                                CenteredCTA,
-                                ProcessSteps,
-                                CompanyTimeline,
-                                ServiceSectionIntro,
-                                SplitContent,
-                                FlexibleContent,
-                                Gallery,
-                                ComputerAudience,
-                                ComputerCatalog,
-                                ComputerProductCatalog,
-                                MediaFeatureGrid,
-                                TechnologySpotlight,
-                                EditorialColumns,
-                            ],
-                            required: true,
-                            validate: validatePageLayout,
-                            admin: {
-                                initCollapsed: true,
-                            },
-                            label: {
-                                cs: "Obsahové bloky",
-                                en: "Content blocks",
-                            },
-                            localized: true,
-                        },
-                    ],
+                    fields: [contentLayout()],
                     label: {
                         cs: "Obsah",
                         en: "Content",
@@ -157,6 +92,7 @@ export const Pages: CollectionConfig<"pages"> = {
                     admin: { condition: (data) => data?.pageType === "branch" },
                     fields: [branchInfo],
                 },
+                ...postTabs,
                 {
                     name: "meta",
                     label: "SEO",
@@ -179,7 +115,8 @@ export const Pages: CollectionConfig<"pages"> = {
     ],
     hooks: {
         afterChange: [revalidatePage, revalidateNavigation],
-        beforeChange: [populatePublishedAt],
+        beforeChange: [capturePagePathsBeforeChange, populatePublishedAt],
+        afterRead: [populateAuthors],
         beforeDelete: [captureDocumentPathsBeforeDelete("pages")],
         afterDelete: [revalidateDelete, revalidateNavigationAfterDelete],
     },

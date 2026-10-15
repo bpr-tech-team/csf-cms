@@ -1,7 +1,6 @@
 import { defaultLocale, withLocalePrefix, type AppLocale } from "@/i18n/config";
 import {
     DefaultNodeTypes,
-    SerializedBlockNode,
     SerializedLinkNode,
     type DefaultTypedEditorState,
 } from "@payloadcms/richtext-lexical";
@@ -12,44 +11,35 @@ import {
     TextJSXConverter,
 } from "@payloadcms/richtext-lexical/react";
 
-import { CodeBlock, CodeBlockProps } from "@/blocks/Code/Component";
-
-import type { BannerBlock as BannerBlockProps, Page } from "@/payload-types";
-import { BannerBlock } from "@/blocks/Banner/Component";
+import type { Page } from "@/payload-types";
 import { cn } from "@/utilities/ui";
 import { applyRichTextTypography } from "@/utilities/richTextTypography";
 import { getPagePath } from "@/utilities/getPagePath";
 import { getTextColor } from "@/fields/TextColorFeature/colors";
 import { contentListLabels as formatContentListLabels } from "@/utilities/contentListLabels";
 
-type NodeTypes =
-    DefaultNodeTypes | SerializedBlockNode<BannerBlockProps | CodeBlockProps>;
-
 const internalDocToHref = (
     { linkNode }: { linkNode: SerializedLinkNode },
     locale: AppLocale,
 ) => {
     const { value, relationTo } = linkNode.fields.doc!;
-    if (typeof value !== "object") {
-        throw new Error("Expected value to be an object");
-    }
+    if (relationTo !== "pages" || !value || typeof value !== "object")
+        return "#";
     const slug = value.slug;
     return withLocalePrefix(
-        relationTo === "posts"
-            ? `/posts/${slug}`
-            : getPagePath(
-                  {
-                      slug: slug as string,
-                      pageType: value.pageType as Page["pageType"],
-                  },
-                  locale,
-              ),
+        getPagePath(
+            {
+                slug: slug as string,
+                pageType: value.pageType as Page["pageType"],
+            },
+            locale,
+        ),
         locale,
     );
 };
 
 const jsxConverters =
-    (locale: AppLocale): JSXConvertersFunction<NodeTypes> =>
+    (locale: AppLocale): JSXConvertersFunction<DefaultNodeTypes> =>
     ({ defaultConverters }) => ({
         ...defaultConverters,
         text: (args) => {
@@ -70,18 +60,6 @@ const jsxConverters =
         ...LinkJSXConverter({
             internalDocToHref: (args) => internalDocToHref(args, locale),
         }),
-        blocks: {
-            banner: ({ node }) => (
-                <BannerBlock
-                    className="col-start-2 mb-4"
-                    {...node.fields}
-                    locale={locale}
-                />
-            ),
-            code: ({ node }) => (
-                <CodeBlock className="col-start-2" {...node.fields} />
-            ),
-        },
     });
 
 type Props = {

@@ -1,4 +1,5 @@
 import type { Form, FormBlock, Page } from "@/payload-types";
+import type { PostCardData } from "@/utilities/postCards";
 import { getGalleryImages } from "@/utilities/gallery";
 
 export type SpacingSize = "auto" | "none" | "compact" | "normal" | "large";
@@ -26,8 +27,8 @@ export type SectionSpacingDefaults = {
     bottom: SectionSpacingPreset;
 };
 
-export type PageBlock = Page["layout"][number];
-export type PageBlockType = PageBlock["blockType"];
+export type ContentBlock = Page["layout"][number];
+export type ContentBlockType = ContentBlock["blockType"];
 type Surface = "light" | "dark" | "hero" | "mixed";
 
 export type BlockPresentationOptions = {
@@ -42,7 +43,11 @@ type Definition = {
     spacing: SectionSpacingDefaults;
     // Joining is an explicit design choice, not inferred from background alone.
     flow: "content" | "standalone";
-    isVisible?: (block: PageBlock, page?: Page) => boolean;
+    isVisible?: (
+        block: ContentBlock,
+        page?: Page,
+        relatedPosts?: readonly PostCardData[],
+    ) => boolean;
 };
 
 export const hasItems = <T>(items?: T[] | null): items is [T, ...T[]] =>
@@ -72,6 +77,12 @@ const definitions = {
         flow: "standalone",
         isVisible: (block) =>
             block.blockType === "homepageHero" && hasItems(block.slides),
+    },
+    relatedPosts: {
+        surface: "light",
+        spacing: content,
+        flow: "content",
+        isVisible: (_, __, relatedPosts) => Boolean(relatedPosts?.length),
     },
     branchesGrid: { surface: "light", spacing: standard, flow: "content" },
     branchDetails: {
@@ -163,7 +174,7 @@ const definitions = {
     mediaFeatureGrid: { surface: "dark", spacing: content, flow: "content" },
     technologySpotlight: { surface: "dark", spacing: content, flow: "content" },
     editorialColumns: { surface: "dark", spacing: content, flow: "content" },
-} satisfies Record<PageBlockType, Definition>;
+} satisfies Record<ContentBlockType, Definition>;
 
 const backgroundClasses: Record<Surface, string> = {
     light: "bg-paper-0",
@@ -173,7 +184,7 @@ const backgroundClasses: Record<Surface, string> = {
 };
 
 export const getBlockPresentation = (
-    blockType: PageBlockType,
+    blockType: ContentBlockType,
     options: BlockPresentationOptions = {},
 ) => {
     const definition: Definition = definitions[blockType];
@@ -207,24 +218,28 @@ export const getBlockPresentation = (
     };
 };
 
-export const isVisiblePageBlock = (block: PageBlock, page?: Page): boolean => {
+export const isVisibleContentBlock = (
+    block: ContentBlock,
+    page?: Page,
+    relatedPosts?: readonly PostCardData[],
+): boolean => {
     const definition: Definition = definitions[block.blockType];
-    return definition.isVisible?.(block, page) ?? true;
+    return definition.isVisible?.(block, page, relatedPosts) ?? true;
 };
 
-export const getPageBlockPresentation = (block: PageBlock) =>
+export const getContentBlockPresentation = (block: ContentBlock) =>
     getBlockPresentation(block.blockType, {
         theme: "theme" in block ? block.theme : undefined,
         appearance: "appearance" in block ? block.appearance : undefined,
     });
 
 const shareAutomaticSpacing = (
-    before?: PageBlock,
-    after?: PageBlock,
+    before?: ContentBlock,
+    after?: ContentBlock,
 ): boolean => {
     if (!before || !after) return false;
-    const beforePresentation = getPageBlockPresentation(before);
-    const afterPresentation = getPageBlockPresentation(after);
+    const beforePresentation = getContentBlockPresentation(before);
+    const afterPresentation = getContentBlockPresentation(after);
     return Boolean(
         beforePresentation.flow === "content" &&
         afterPresentation.flow === "content" &&
@@ -235,9 +250,9 @@ const shareAutomaticSpacing = (
 };
 
 export const resolveBlockSpacing = (
-    block: PageBlock,
-    previous?: PageBlock,
-    next?: PageBlock,
+    block: ContentBlock,
+    previous?: ContentBlock,
+    next?: ContentBlock,
 ): SectionSpacing => ({
     top: shareAutomaticSpacing(previous, block)
         ? "none"

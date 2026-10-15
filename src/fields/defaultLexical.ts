@@ -29,7 +29,7 @@ export const defaultLexical = lexicalEditor({
         FixedToolbarFeature(),
         InlineToolbarFeature(),
         LinkFeature({
-            enabledCollections: ["pages", "posts"],
+            enabledCollections: ["pages"],
             fields: ({ defaultFields }) => {
                 const defaultFieldsWithoutUrl = defaultFields.filter(
                     (field) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    DefaultListView,
     Link,
     NavGroup,
     parseSearchParams,
@@ -10,11 +11,32 @@ import {
     useLocale,
     useNav,
 } from "@payloadcms/ui";
+import type { ListViewClientProps } from "payload";
 import { usePathname, useSearchParams } from "next/navigation";
 import { formatAdminURL } from "payload/shared";
 
-import { activePageType, pageTypeViews, pageTypeWhere } from "./views";
+import {
+    activePageType,
+    pageTypeCreateURL,
+    pageTypeViews,
+    pageTypeWhere,
+} from "./views";
 import "./styles.css";
+
+export function PageTypeListView(props: ListViewClientProps) {
+    const { query } = useListQuery();
+    const locale = useLocale();
+    return (
+        <DefaultListView
+            {...props}
+            newDocumentURL={pageTypeCreateURL(
+                props.newDocumentURL,
+                activePageType(query.where),
+                locale?.code,
+            )}
+        />
+    );
+}
 
 export function PageTypeNav() {
     const { permissions } = useAuth();
@@ -32,7 +54,8 @@ export function PageTypeNav() {
             ? activePageType(parseSearchParams(searchParams).where)
             : undefined;
 
-    if (!permissions?.collections?.pages?.read) return null;
+    const canReadPages = permissions?.collections?.pages?.read;
+    if (!canReadPages) return null;
 
     return (
         <NavGroup label="Stránky podle typu">

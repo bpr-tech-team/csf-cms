@@ -1,12 +1,15 @@
 import {
+    type ContentBlock,
     hasPopulatedForm,
-    isVisiblePageBlock,
+    isVisibleContentBlock,
     resolveBlockSpacing,
 } from "@/utilities/blockSpacing";
 import React from "react";
 
 import { BlockSurfaceGroups } from "@/components/BlockSurfaceGroups";
 
+import type { PostCardData } from "@/utilities/postCards";
+import { RelatedPostsBlock } from "@/blocks/RelatedPosts/Component";
 import type { Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
@@ -36,10 +39,11 @@ import { SplitContentBlock } from "@/blocks/SplitContent/Component";
 import { TechnologySpotlightBlock } from "@/blocks/TechnologySpotlight/Component";
 
 export const RenderBlocks: React.FC<{
-    blocks: Page["layout"][0][];
+    blocks: ContentBlock[];
     locale?: AppLocale;
     isFirstSection?: boolean;
     page?: Page;
+    relatedPosts?: PostCardData[];
     draft?: boolean;
 }> = (props) => {
     const {
@@ -47,11 +51,14 @@ export const RenderBlocks: React.FC<{
         locale = defaultLocale,
         isFirstSection = false,
         page,
+        relatedPosts = [],
         draft = false,
     } = props;
 
     const visibleBlocks = Array.isArray(blocks)
-        ? blocks.filter((block) => isVisiblePageBlock(block, page))
+        ? blocks.filter((block) =>
+              isVisibleContentBlock(block, page, relatedPosts),
+          )
         : [];
     const hasBlocks = visibleBlocks.length > 0;
 
@@ -67,6 +74,16 @@ export const RenderBlocks: React.FC<{
                     );
 
                     switch (blockType) {
+                        case "relatedPosts":
+                            return (
+                                <RelatedPostsBlock
+                                    {...block}
+                                    docs={relatedPosts}
+                                    sectionSpacing={sectionSpacing}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                />
+                            );
                         case "clientService":
                             return (
                                 <ClientServiceBlock

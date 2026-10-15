@@ -1,4 +1,4 @@
-import type { ContactDetails, Post } from "@/payload-types";
+import type { ContactDetails, Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { localeLanguages, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
@@ -72,7 +72,7 @@ export const professionalServiceJsonLd = (
 });
 
 export const blogPostingJsonLd = (
-    post: Post,
+    post: Page,
     locale: AppLocale = "cs",
     path?: string,
 ) => {
