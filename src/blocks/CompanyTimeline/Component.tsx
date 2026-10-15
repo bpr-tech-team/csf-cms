@@ -33,9 +33,6 @@ export const CompanyTimelineBlock = ({
         const timelineBall = timelineBallRef.current;
 
         if (!path || !timeline || !timelineBall) return;
-        if (!window.matchMedia("(min-width: 1536px)").matches) return;
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-            return;
 
         const headings = Array.from(
             timeline.querySelectorAll<HTMLElement>("[data-timeline-heading]"),
@@ -76,30 +73,35 @@ export const CompanyTimelineBlock = ({
             path.setAttribute("d", pathData);
         };
 
-        updatePath();
+        const media = gsap.matchMedia();
+        media.add(
+            "(min-width: 80rem) and (prefers-reduced-motion: no-preference)",
+            () => {
+                updatePath();
 
-        const context = gsap.context(() => {
-            gsap.set(timelineBall, { autoAlpha: 1 });
-            gsap.to(timelineBall, {
-                ease: "none",
-                motionPath: {
-                    align: path,
-                    alignOrigin: [0.5, 0.5],
-                    path,
-                },
-                scrollTrigger: {
-                    end: "center 35%",
-                    endTrigger: headings.at(-1),
-                    invalidateOnRefresh: true,
-                    onRefreshInit: updatePath,
-                    scrub: 0.35,
-                    start: "center 65%",
-                    trigger: headings[0],
-                },
-            });
-        }, timeline);
+                gsap.set(timelineBall, { autoAlpha: 1 });
+                gsap.to(timelineBall, {
+                    ease: "none",
+                    motionPath: {
+                        align: path,
+                        alignOrigin: [0.5, 0.5],
+                        path,
+                    },
+                    scrollTrigger: {
+                        end: "center 35%",
+                        endTrigger: headings.at(-1),
+                        invalidateOnRefresh: true,
+                        onRefreshInit: updatePath,
+                        scrub: 0.35,
+                        start: "center 65%",
+                        trigger: headings[0],
+                    },
+                });
+            },
+            timeline,
+        );
 
-        return () => context.revert();
+        return () => media.revert();
     }, [items.length]);
 
     return (
@@ -132,7 +134,7 @@ export const CompanyTimelineBlock = ({
                 </svg>
                 <div
                     aria-hidden
-                    className="pointer-events-none absolute top-0 left-0 z-20 hidden size-5 rounded-full bg-primary opacity-0 will-change-transform 2xl:block"
+                    className="pointer-events-none absolute top-0 left-0 z-20 hidden size-5 rounded-full bg-primary opacity-0 will-change-transform xl:block"
                     ref={timelineBallRef}
                     style={{
                         boxShadow:
