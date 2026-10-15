@@ -42,7 +42,7 @@ export const TechnologySpotlightBlock = ({
                             />
                         </h2>
                         {description ? (
-                            <p className="mt-6 max-w-3xl text-body-md leading-7 whitespace-pre-line text-paper-0/75 md:text-body-lg md:leading-8">
+                            <p className="mt-6 max-w-3xl text-body-md leading-7 whitespace-pre-line text-paper-0 md:text-body-lg md:leading-8">
                                 {applyTypography(description, { locale })}
                             </p>
                         ) : null}

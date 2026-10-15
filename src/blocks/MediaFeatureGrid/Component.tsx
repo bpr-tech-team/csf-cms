@@ -38,7 +38,7 @@ export const MediaFeatureGridBlock = ({
                     />
                 </h2>
                 {description ? (
-                    <p className="mt-6 max-w-4xl text-body-md leading-7 whitespace-pre-line text-paper-0/75 md:text-body-lg md:leading-8">
+                    <p className="mt-6 max-w-4xl text-body-md leading-7 whitespace-pre-line text-paper-0 md:text-body-lg md:leading-8">
                         {applyTypography(description, { locale })}
                     </p>
                 ) : null}
@@ -58,7 +58,7 @@ export const MediaFeatureGridBlock = ({
                             <h3 className="mt-6 text-xl leading-7 font-bold uppercase">
                                 {applyTypography(item.title, { locale })}
                             </h3>
-                            <p className="mt-4 text-body-sm leading-6 whitespace-pre-line text-paper-0/75">
+                            <p className="mt-4 text-body-sm leading-6 whitespace-pre-line text-paper-0">
                                 {applyTypography(item.description, { locale })}
                             </p>
                         </article>

@@ -40,7 +40,7 @@ export const EditorialColumnsBlock = ({
                     {columns.map((column, index) => (
                         <RichText
                             locale={locale}
-                            className="text-body-md leading-7 text-paper-0/75 [&_a]:text-paper-0 [&_li]:my-2 [&_p]:my-0 [&_ul]:my-0"
+                            className="text-body-md leading-7 text-paper-0 [&_li]:my-2 [&_p]:my-0 [&_ul]:my-0"
                             data={column.richText}
                             enableGutter={false}
                             key={column.id ?? index}
