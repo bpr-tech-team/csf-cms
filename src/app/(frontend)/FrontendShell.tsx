@@ -3,7 +3,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { AdminBar } from "@/components/AdminBar";
-import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/globals/Footer/Component";
 import { Header } from "@/globals/Header/Component";
 import type { AppLocale } from "@/i18n/config";
@@ -67,8 +66,6 @@ export async function FrontendShell({
                         }}
                         locale={locale}
                     />
-                    <CustomCursor />
-
                     <Header locale={locale} />
                     {children}
                     <Footer

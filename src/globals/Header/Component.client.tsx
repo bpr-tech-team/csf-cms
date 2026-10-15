@@ -41,7 +41,7 @@ function HeaderNavigation({
             href={withLocalePrefix("/", locale)}
             onClick={() => setIsMenuOpen(false)}
         >
-            <Logo loading="eager" priority="high"/>
+            <Logo loading="eager" priority="high" />
         </Link>
     );
 
@@ -130,7 +130,7 @@ function MobileMenu({
             ref={dialogRef}
             id="site-navigation"
             aria-label={messages.mainNavigation}
-            className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto overscroll-contain border-0 bg-ink-900 p-0 text-paper-0 backdrop:bg-ink-900 cursor-auto! [&_*]:cursor-auto!"
+            className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto overscroll-contain border-0 bg-ink-900 p-0 text-paper-0 backdrop:bg-ink-900"
             data-theme="dark"
             onCancel={(event) => {
                 event.preventDefault();
