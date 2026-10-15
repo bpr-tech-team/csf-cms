@@ -5,6 +5,8 @@ import { link } from "@/fields/link";
 import { sectionDividerField } from "@/fields/sectionDivider";
 import type { FlexibleContentBlock } from "@/payload-types";
 import { FlexibleGallery } from "@/blocks/Gallery/config";
+import { contentIcon } from "@/fields/contentIcon";
+import { defaultContentHeadingIcon } from "@/utilities/contentIcon";
 
 const Heading: Block = {
     slug: "flexHeading",
@@ -29,6 +31,10 @@ const Heading: Block = {
             label: { cs: "Nadpis", en: "Heading" },
             required: true,
         },
+        contentIcon({
+            required: true,
+            defaultFontAwesome: defaultContentHeadingIcon,
+        }),
     ],
 };
 

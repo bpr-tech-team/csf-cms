@@ -3,7 +3,9 @@ import {
     isVisiblePageBlock,
     resolveBlockSpacing,
 } from "@/utilities/blockSpacing";
-import React, { Fragment } from "react";
+import React from "react";
+
+import { BlockSurfaceGroups } from "@/components/BlockSurfaceGroups";
 
 import type { Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
@@ -55,7 +57,7 @@ export const RenderBlocks: React.FC<{
 
     if (hasBlocks) {
         return (
-            <Fragment>
+            <BlockSurfaceGroups blocks={visibleBlocks}>
                 {visibleBlocks.map((block, index) => {
                     const { blockType } = block;
                     const sectionSpacing = resolveBlockSpacing(
@@ -303,7 +305,7 @@ export const RenderBlocks: React.FC<{
                             return null;
                     }
                 })}
-            </Fragment>
+            </BlockSurfaceGroups>
         );
     }
 

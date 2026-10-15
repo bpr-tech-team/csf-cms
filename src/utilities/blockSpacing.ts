@@ -212,7 +212,7 @@ export const isVisiblePageBlock = (block: PageBlock, page?: Page): boolean => {
     return definition.isVisible?.(block, page) ?? true;
 };
 
-const getPresentation = (block: PageBlock) =>
+export const getPageBlockPresentation = (block: PageBlock) =>
     getBlockPresentation(block.blockType, {
         theme: "theme" in block ? block.theme : undefined,
         appearance: "appearance" in block ? block.appearance : undefined,
@@ -223,8 +223,8 @@ const shareAutomaticSpacing = (
     after?: PageBlock,
 ): boolean => {
     if (!before || !after) return false;
-    const beforePresentation = getPresentation(before);
-    const afterPresentation = getPresentation(after);
+    const beforePresentation = getPageBlockPresentation(before);
+    const afterPresentation = getPageBlockPresentation(after);
     return Boolean(
         beforePresentation.flow === "content" &&
         afterPresentation.flow === "content" &&

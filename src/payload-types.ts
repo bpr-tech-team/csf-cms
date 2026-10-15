@@ -1242,6 +1242,7 @@ export interface SplitContentBlock {
    */
   divider?: ('none' | 'line') | null;
   heading: string;
+  icon: ContentIcon;
   richText: {
     root: {
       type: string;
@@ -1337,6 +1338,7 @@ export interface FlexibleContentBlock {
  */
 export interface FlexibleHeadingElement {
   heading: string;
+  icon: ContentIcon;
   id?: string | null;
   blockName?: string | null;
   blockType: 'flexHeading';
@@ -2467,6 +2469,7 @@ export interface SplitContentBlockSelect<T extends boolean = true> {
       };
   divider?: T;
   heading?: T;
+  icon?: T | ContentIconSelect<T>;
   richText?: T;
   media?: T;
   mediaPosition?: T;
@@ -2513,6 +2516,7 @@ export interface FlexibleContentBlockSelect<T extends boolean = true> {
  */
 export interface FlexibleHeadingElementSelect<T extends boolean = true> {
   heading?: T;
+  icon?: T | ContentIconSelect<T>;
   id?: T;
   blockName?: T;
 }

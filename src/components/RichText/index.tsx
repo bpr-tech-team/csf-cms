@@ -20,6 +20,7 @@ import { cn } from "@/utilities/ui";
 import { applyRichTextTypography } from "@/utilities/richTextTypography";
 import { getPagePath } from "@/utilities/getPagePath";
 import { getTextColor } from "@/fields/TextColorFeature/colors";
+import { contentListLabels as formatContentListLabels } from "@/utilities/contentListLabels";
 
 type NodeTypes =
     DefaultNodeTypes | SerializedBlockNode<BannerBlockProps | CodeBlockProps>;
@@ -89,6 +90,7 @@ type Props = {
     enableGutter?: boolean;
     enableProse?: boolean;
     typography?: boolean;
+    contentListLabels?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function RichText(props: Props) {
@@ -99,11 +101,14 @@ export default function RichText(props: Props) {
         data,
         locale = defaultLocale,
         typography = true,
+        contentListLabels = false,
         ...rest
     } = props;
+    const formattedData = contentListLabels
+        ? formatContentListLabels(data)
+        : data;
     return (
-        <ConvertRichText
-            converters={jsxConverters(locale)}
+        <div
             className={cn(
                 "payload-richtext",
                 {
@@ -115,9 +120,16 @@ export default function RichText(props: Props) {
                 className,
             )}
             {...rest}
-            data={
-                !typography ? data : applyRichTextTypography(data, { locale })
-            }
-        />
+        >
+            <ConvertRichText
+                disableContainer
+                converters={jsxConverters(locale)}
+                data={
+                    !typography
+                        ? formattedData
+                        : applyRichTextTypography(formattedData, { locale })
+                }
+            />
+        </div>
     );
 }

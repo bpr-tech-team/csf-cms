@@ -1,0 +1,17 @@
+.content [data-reveal="text"] {
+    font-size: 15px;
+}
+
+.content [data-reveal="text"] ul {
+    list-style-type: disc;
+}
+
+.content [data-reveal="text"] ul > li::marker {
+    color: var(--color-brand-500);
+}
+
+@media (min-width: 64rem) {
+    .content [data-reveal="text"] {
+        font-size: var(--text-body-md);
+    }
+}

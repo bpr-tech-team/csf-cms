@@ -20,6 +20,7 @@ import * as migration_20260928_125607_section_dividers from "./20260928_125607_s
 import * as migration_20261001_085725_metrics_decimal_display from "./20261001_085725_metrics_decimal_display";
 import * as migration_20261002_064047_block_spacing from "./20261002_064047_block_spacing";
 import * as migration_20261002_093715_gallery from "./20261002_093715_gallery";
+import * as migration_20261015_164458_content_heading_icons from "./20261015_164458_content_heading_icons";
 
 export const migrations = [
     {
@@ -131,5 +132,10 @@ export const migrations = [
         up: migration_20261002_093715_gallery.up,
         down: migration_20261002_093715_gallery.down,
         name: "20261002_093715_gallery",
+    },
+    {
+        up: migration_20261015_164458_content_heading_icons.up,
+        down: migration_20261015_164458_content_heading_icons.down,
+        name: "20261015_164458_content_heading_icons",
     },
 ];
