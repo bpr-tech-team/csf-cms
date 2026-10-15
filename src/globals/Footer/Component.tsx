@@ -56,7 +56,7 @@ export async function Footer({
                         className="flex flex-col items-start gap-4"
                         key={`${column.title}-${column.id || columnIndex}`}
                     >
-                        <h2 className="text-xs leading-4 font-bold tracking-widest text-brand-400 uppercase">
+                        <h2 className="text-xs leading-4 xl:text-lg xl:leading-6 font-bold tracking-widest text-brand-400 uppercase">
                             {applyTypography(column.title, { locale })}
                         </h2>
                         <ul className="flex flex-col gap-4">
@@ -64,7 +64,7 @@ export async function Footer({
                                 <li key={id || `${link.label}-${index}`}>
                                     <CMSLink
                                         {...link}
-                                        className="text-body-md leading-6 font-normal text-neutral-inverse-muted no-underline transition-colors duration-fast hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary"
+                                        className="text-body-md xl:text-md leading-6 font-normal text-neutral-inverse-muted no-underline transition-colors duration-fast hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary"
                                         locale={locale}
                                     />
                                 </li>
