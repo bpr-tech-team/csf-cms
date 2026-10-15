@@ -12,6 +12,7 @@ import { Posts } from "./collections/Posts";
 import { Users } from "./collections/Users";
 import { Footer } from "./globals/Footer/config";
 import { Header } from "./globals/Header/config";
+import { ContactDetails } from "./globals/ContactDetails/config";
 import { plugins } from "./plugins";
 import { defaultLexical } from "@/fields/defaultLexical";
 import { getServerSideURL } from "./utilities/getURL";
@@ -91,7 +92,7 @@ export default buildConfig({
     folders: {
         browseByFolder: false,
     },
-    globals: [Header, Footer],
+    globals: [Header, Footer, ContactDetails],
     plugins,
     secret: process.env.PAYLOAD_SECRET,
     sharp,

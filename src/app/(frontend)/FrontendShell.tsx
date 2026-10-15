@@ -20,6 +20,7 @@ import {
 } from "@/seo/structuredData";
 import { cn } from "@/utilities/ui";
 import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
+import { getCachedGlobal } from "@/utilities/getGlobals";
 import { draftMode } from "next/headers";
 import React from "react";
 import { GeistMono } from "geist/font/mono";
@@ -39,7 +40,11 @@ export async function FrontendShell({
     children: React.ReactNode;
     locale: AppLocale;
 }) {
-    const { isEnabled } = await draftMode();
+    const [{ isEnabled }, footerData, contactDetails] = await Promise.all([
+        draftMode(),
+        getCachedGlobal("footer", 1, locale, "layout-v2")(),
+        getCachedGlobal("contact-details", 1)(),
+    ]);
 
     return (
         <html
@@ -50,9 +55,9 @@ export async function FrontendShell({
             <head>
                 <InitTheme />
                 <link href="/favicon.ico" rel="icon" sizes="any" />
-                <JsonLd data={organizationJsonLd()} />
+                <JsonLd data={organizationJsonLd(contactDetails)} />
                 <JsonLd data={websiteJsonLd(locale)} />
-                <JsonLd data={professionalServiceJsonLd()} />
+                <JsonLd data={professionalServiceJsonLd(contactDetails)} />
             </head>
             <body className="[--site-header-height:--spacing(18)] xl:[--site-header-height:--spacing(26)] [--page-top-spacing:--spacing(16)]">
                 <Providers locale={locale}>
@@ -66,7 +71,11 @@ export async function FrontendShell({
 
                     <Header locale={locale} />
                     {children}
-                    <Footer locale={locale} />
+                    <Footer
+                        contacts={contactDetails}
+                        data={footerData}
+                        locale={locale}
+                    />
                 </Providers>
                 {(process.env.VERCEL_ENV === "preview" ||
                     process.env.VERCEL_ENV === "production") && (

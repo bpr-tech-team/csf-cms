@@ -110,10 +110,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'contact-details': ContactDetails;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'contact-details': ContactDetailsSelect<false> | ContactDetailsSelect<true>;
   };
   locale: 'cs' | 'en';
   widgets: {
@@ -3336,6 +3338,16 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  /**
+   * Drag to reorder columns and their blocks. Columns stack in reverse order on mobile. An empty column reserves space only on wide screens.
+   */
+  layout?:
+    | {
+        heading?: string | null;
+        content?: (FooterBrandBlock | FooterContactsBlock | FooterTextBlock | FooterLinksBlock)[] | null;
+        id?: string | null;
+      }[]
+    | null;
   tagline?: string | null;
   columns?:
     | {
@@ -3380,6 +3392,124 @@ export interface Footer {
           url?: string | null;
           label: string;
         };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBrandBlock".
+ */
+export interface FooterBrandBlock {
+  /**
+   * Uses the default CSF logo when no image is selected.
+   */
+  logo?: (number | null) | Media;
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerBrand';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterContactsBlock".
+ */
+export interface FooterContactsBlock {
+  /**
+   * Uses the Contact details section. Choose which contacts and social links appear here, their order and their icons.
+   */
+  items?:
+    | {
+        kind: 'phone' | 'email' | 'socialLink' | 'dataBox';
+        /**
+         * Manage the available links in the separate Contact details section.
+         */
+        socialLinkId?: string | null;
+        /**
+         * Optional text before the contact value. Overrides the link name for a social network.
+         */
+        label?: string | null;
+        icon: ContentIcon;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerContacts';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterTextBlock".
+ */
+export interface FooterTextBlock {
+  text: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterLinksBlock".
+ */
+export interface FooterLinksBlock {
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerLinks';
+}
+/**
+ * Shared contacts for the website and all languages. Footer contact blocks use these values automatically. Empty values are hidden.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details".
+ */
+export interface ContactDetails {
+  id: number;
+  phone?: string | null;
+  email?: string | null;
+  dataBoxId?: string | null;
+  /**
+   * Optional list. Add any network or contact link and change their order.
+   */
+  socialLinks?:
+    | {
+        label: string;
+        url: string;
         id?: string | null;
       }[]
     | null;
@@ -3459,6 +3589,20 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  layout?:
+    | T
+    | {
+        heading?: T;
+        content?:
+          | T
+          | {
+              footerBrand?: T | FooterBrandBlockSelect<T>;
+              footerContacts?: T | FooterContactsBlockSelect<T>;
+              footerText?: T | FooterTextBlockSelect<T>;
+              footerLinks?: T | FooterLinksBlockSelect<T>;
+            };
+        id?: T;
+      };
   tagline?: T;
   columns?:
     | T
@@ -3492,6 +3636,83 @@ export interface FooterSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBrandBlock_select".
+ */
+export interface FooterBrandBlockSelect<T extends boolean = true> {
+  logo?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterContactsBlock_select".
+ */
+export interface FooterContactsBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        kind?: T;
+        socialLinkId?: T;
+        label?: T;
+        icon?: T | ContentIconSelect<T>;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterTextBlock_select".
+ */
+export interface FooterTextBlockSelect<T extends boolean = true> {
+  text?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterLinksBlock_select".
+ */
+export interface FooterLinksBlockSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details_select".
+ */
+export interface ContactDetailsSelect<T extends boolean = true> {
+  phone?: T;
+  email?: T;
+  dataBoxId?: T;
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;
