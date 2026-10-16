@@ -8,6 +8,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 
 import type { Page } from "../../../payload-types";
 import { BRANCHES_CACHE_TAG } from "@/utilities/branchData";
+import { POST_CARDS_CACHE_TAG } from "@/utilities/postsGrid";
 import { locales, withLocalePrefix } from "@/i18n/config";
 import {
     getDocumentRevalidationPaths,
@@ -17,6 +18,7 @@ import {
 const previousPathsKey = (id: Page["id"]) => `pagePathsBeforeChange:${id}`;
 
 const revalidatePostCards = () => {
+    revalidateTag(POST_CARDS_CACHE_TAG, { expire: 0 });
     for (const locale of locales) {
         const route =
             locale === "cs" ? "/(frontend)/posts" : "/(frontend-en)/en/posts";

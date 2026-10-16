@@ -183,6 +183,7 @@ export interface Page {
     | TechnologySpotlightBlock
     | EditorialColumnsBlock
     | RelatedPostsBlock
+    | PostsGridBlock
   )[];
   /**
    * These details are shared by the branch page and branch grids.
@@ -1650,6 +1651,27 @@ export interface RelatedPostsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsGridBlock".
+ */
+export interface PostsGridBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  anchorId?: string | null;
+  theme: 'light' | 'dark';
+  heading?: string | null;
+  pageSize: '6' | '12' | '24';
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postsGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -1933,6 +1955,7 @@ export interface PagesSelect<T extends boolean = true> {
         technologySpotlight?: T | TechnologySpotlightBlockSelect<T>;
         editorialColumns?: T | EditorialColumnsBlockSelect<T>;
         relatedPosts?: T | RelatedPostsBlockSelect<T>;
+        postsGrid?: T | PostsGridBlockSelect<T>;
       };
   branchInfo?:
     | T
@@ -2746,6 +2769,20 @@ export interface RelatedPostsBlockSelect<T extends boolean = true> {
   spacingTop?: T;
   spacingBottom?: T;
   heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsGridBlock_select".
+ */
+export interface PostsGridBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  anchorId?: T;
+  theme?: T;
+  heading?: T;
+  pageSize?: T;
   id?: T;
   blockName?: T;
 }

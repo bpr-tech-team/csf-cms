@@ -22,6 +22,7 @@ import { Gallery } from "@/blocks/Gallery/config";
 import { Hero } from "@/blocks/Hero/config";
 import { HomepageHero } from "@/blocks/HomepageHero/config";
 import { RelatedPosts } from "@/blocks/RelatedPosts/config";
+import { PostsGrid } from "@/blocks/PostsGrid/config";
 import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
 import { SplitContent } from "@/blocks/SplitContent/config";
 import { validateContentLayout } from "./validateContentLayout";
@@ -52,6 +53,7 @@ const contentBlocks: Block[] = [
     TechnologySpotlight,
     EditorialColumns,
     RelatedPosts,
+    PostsGrid,
 ];
 
 export const contentLayout = (): BlocksField => ({

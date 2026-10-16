@@ -25,6 +25,7 @@ import * as migration_20261015_185846_flexible_footer from "./20261015_185846_fl
 import * as migration_20261015_191306_shared_contact_details from "./20261015_191306_shared_contact_details";
 import * as migration_20261015_194748_footer_branches_map from "./20261015_194748_footer_branches_map";
 import * as migration_20261015_230402_pages_post_type_remove_legacy_collections from "./20261015_230402_pages_post_type_remove_legacy_collections";
+import * as migration_20261016_123611_posts_grid from "./20261016_123611_posts_grid";
 
 export const migrations = [
     {
@@ -161,5 +162,10 @@ export const migrations = [
         up: migration_20261015_230402_pages_post_type_remove_legacy_collections.up,
         down: migration_20261015_230402_pages_post_type_remove_legacy_collections.down,
         name: "20261015_230402_pages_post_type_remove_legacy_collections",
+    },
+    {
+        up: migration_20261016_123611_posts_grid.up,
+        down: migration_20261016_123611_posts_grid.down,
+        name: "20261016_123611_posts_grid",
     },
 ];
