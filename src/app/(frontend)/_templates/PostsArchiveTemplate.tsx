@@ -54,10 +54,6 @@ export async function PostsArchiveTemplate({
 
             <div className="container mb-8">
                 <PageRange
-                    collectionLabels={{
-                        plural: messages.postsPlural,
-                        singular: messages.postsSingular,
-                    }}
                     currentPage={posts.page}
                     limit={postsPerPage}
                     locale={locale}

@@ -161,7 +161,6 @@ export function PostsGridClient({
                     ) : data && !error ? (
                         <PageRange
                             locale={locale}
-                            showCollectionLabel={false}
                             currentPage={data.page}
                             limit={limit}
                             totalDocs={data.totalDocs}

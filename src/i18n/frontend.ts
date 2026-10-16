@@ -42,8 +42,6 @@ export const frontendMessages: Record<
         pageRangeOf: string;
         pageRangeShowing: string;
         postsDescription: string;
-        postsPlural: string;
-        postsSingular: string;
         postsTitle: string;
         postsGrid: {
             search: string;
@@ -111,8 +109,6 @@ export const frontendMessages: Record<
         pageRangeShowing: "Zobrazeno",
         postsDescription:
             "Novinky a odborné články CSF o IT službách, ICT infrastruktuře, cloudových řešeních, hardwaru a servisu.",
-        postsPlural: "článků",
-        postsSingular: "článek",
         postsTitle: "Novinky",
         postsGrid: {
             search: "Hledat podle názvu",
@@ -179,8 +175,6 @@ export const frontendMessages: Record<
         pageRangeShowing: "Showing",
         postsDescription:
             "CSF news and expert articles about IT services, ICT infrastructure, cloud solutions, hardware, and service.",
-        postsPlural: "Posts",
-        postsSingular: "Post",
         postsTitle: "Posts",
         postsGrid: {
             search: "Search by title",
