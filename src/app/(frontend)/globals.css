@@ -121,7 +121,8 @@
     }
 }
 
-:root {
+:root,
+[data-theme="light"] {
     --background: var(--color-paper-0);
     --foreground: var(--color-ink-900);
     --card: var(--color-paper-50);
