@@ -93,7 +93,7 @@ const definitions = {
     },
     formBlock: {
         surface: "form",
-        spacing: { top: "short", bottom: "short" },
+        spacing: standard,
         flow: "standalone",
         isVisible: (block) =>
             block.blockType === "formBlock" && hasPopulatedForm(block.form),
@@ -195,7 +195,6 @@ export const getBlockPresentation = (
         surface = options.theme === "dark" ? "dark" : "light";
     } else if (definition.surface === "form") {
         surface = options.appearance === "homepageDark" ? "dark" : "light";
-        if (surface === "dark") spacing = standard;
     } else {
         surface = definition.surface;
     }

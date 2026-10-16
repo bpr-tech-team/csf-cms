@@ -1,0 +1,62 @@
+.root[data-theme="light"] {
+    --input: var(--color-neutral-secondary);
+    --ring: var(--color-neutral-secondary);
+    --form-panel-background: var(--card);
+    --form-panel-border: var(--border);
+    --form-control-background: var(--background);
+    --form-control-border: var(--input);
+}
+
+.root[data-theme="dark"] {
+    --input: var(--color-brand-500);
+    --ring: var(--color-brand-500);
+    --destructive: var(--color-red-400);
+    --destructive-foreground: var(--destructive);
+    --form-panel-background: var(--color-olive-950);
+    --form-panel-border: color-mix(in oklab, var(--primary) 20%, transparent);
+    --form-control-background: var(--color-olive-850);
+    --form-control-border: var(--form-panel-border);
+}
+
+.panel {
+    background-color: var(--form-panel-background);
+    border-color: var(--form-panel-border);
+}
+
+.root [data-slot="form-control"]:not([role="checkbox"]) {
+    background-color: var(--form-control-background);
+    border-color: var(--form-control-border);
+    border-radius: var(--radius-xs);
+}
+
+.root input:not([type="checkbox"]),
+.root [role="combobox"] {
+    height: calc(var(--spacing) * 12);
+}
+
+.root textarea {
+    min-height: calc(var(--spacing) * 28);
+}
+
+/* A dark page can still contain a light form, including its rich text. */
+.root :global(.payload-richtext) {
+    color: inherit;
+    --tw-prose-invert-links: var(--foreground);
+    --tw-prose-invert-code: var(--foreground);
+    --tw-prose-invert-quotes: var(--foreground);
+    --tw-prose-invert-counters: var(--muted-foreground);
+    --tw-prose-invert-bullets: var(--muted-foreground);
+}
+
+.root [data-slot="form-control"]:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.root [data-slot="form-control"][aria-invalid="true"] {
+    border-color: var(--destructive);
+}
+
+.root [data-slot="form-control"][aria-invalid="true"]:focus-visible {
+    outline-color: var(--destructive);
+}

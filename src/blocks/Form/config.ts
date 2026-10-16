@@ -36,8 +36,8 @@ export const FormBlock: Block = {
                 },
                 {
                     label: {
-                        cs: "Tmavý blok domovské stránky",
-                        en: "Homepage dark",
+                        cs: "Tmavý",
+                        en: "Dark",
                     },
                     value: "homepageDark",
                 },
@@ -46,10 +46,6 @@ export const FormBlock: Block = {
         {
             name: "eyebrow",
             type: "text",
-            admin: {
-                condition: (_, { appearance } = {}) =>
-                    appearance === "homepageDark",
-            },
             label: {
                 cs: "Nadpis sekce",
                 en: "Eyebrow",

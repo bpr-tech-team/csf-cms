@@ -107,7 +107,8 @@
             "unrs-resolver"
         ],
         "patchedDependencies": {
-            "@payloadcms/ui@3.90.2": "patches/@payloadcms__ui@3.90.2.patch"
+            "@payloadcms/ui@3.90.2": "patches/@payloadcms__ui@3.90.2.patch",
+            "@payloadcms/storage-vercel-blob@3.90.2": "patches/@payloadcms__storage-vercel-blob@3.90.2.patch"
         }
     },
     "packageManager": "pnpm@10.32.1"
