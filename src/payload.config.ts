@@ -24,7 +24,21 @@ const email = createSMTPEmailAdapter();
 
 export default buildConfig({
     admin: {
+        meta: {
+            titleSuffix: "- CSF",
+            icons: [
+                {
+                    rel: "icon",
+                    url: "/favicon.ico",
+                    type: "image/x-icon",
+                    sizes: "any",
+                },
+            ],
+        },
         components: {
+            graphics: {
+                Logo: "@/components/Logo/AdminLogo#AdminLogo",
+            },
             beforeNavLinks: ["@/components/PageTypeViews#PageTypeNav"],
             // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
             // Feel free to delete this at any time. Simply remove the line below.
