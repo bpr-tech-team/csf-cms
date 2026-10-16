@@ -26,6 +26,7 @@ export const PageRange: React.FC<{
     currentPage?: number;
     limit?: number;
     locale?: AppLocale;
+    showCollectionLabel?: boolean;
     totalDocs?: number;
 }> = (props) => {
     const {
@@ -35,6 +36,7 @@ export const PageRange: React.FC<{
         currentPage,
         limit,
         locale = defaultLocale,
+        showCollectionLabel = true,
         totalDocs,
     } = props;
     const messages = frontendMessages[locale];
@@ -58,9 +60,7 @@ export const PageRange: React.FC<{
             {typeof totalDocs !== "undefined" &&
                 totalDocs > 0 &&
                 applyTypography(
-                    `${messages.pageRangeShowing} ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ""} ${messages.pageRangeOf} ${totalDocs} ${
-                        totalDocs > 1 ? plural : singular
-                    }`,
+                    `${messages.pageRangeShowing} ${indexStart}${indexStart > 0 ? ` - ${indexEnd}` : ""} ${messages.pageRangeOf} ${totalDocs}${showCollectionLabel ? ` ${totalDocs > 1 ? plural : singular}` : ""}`,
                     { locale },
                 )}
         </div>

@@ -82,11 +82,8 @@ export async function getPostCards(
     return {
         docs: result.docs.map(cardData),
         page,
-        limit: query.limit,
         totalDocs: result.totalDocs,
         totalPages: Math.max(1, result.totalPages),
-        hasPrevPage: page > 1,
-        hasNextPage: page < Math.max(1, result.totalPages),
     };
 }
 
