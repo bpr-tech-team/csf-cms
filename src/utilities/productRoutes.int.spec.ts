@@ -118,3 +118,59 @@ describe("product URLs", () => {
         expect(response.headers.get("location")).toBeNull();
     });
 });
+
+describe("article pages", () => {
+    it.each([
+        ["cs", "/posts/novinka"],
+        ["en", "/en/posts/novinka"],
+    ] as const)(
+        "resolves %s article links, preview and invalidation through pages",
+        (locale, expected) => {
+            const article = { slug: "novinka", pageType: "post" } as Page;
+            expect(getPagePath(article, locale)).toBe(expected);
+            expect(
+                getLinkHref(
+                    {
+                        type: "reference",
+                        reference: { relationTo: "pages", value: article },
+                    },
+                    locale,
+                ),
+            ).toBe(expected);
+            const preview = generatePreviewPath({
+                collection: "pages",
+                slug: article.slug!,
+                pageType: "post",
+                req: { locale } as PayloadRequest,
+            });
+            expect(
+                new URL(preview!, "https://example.test").searchParams.get(
+                    "path",
+                ),
+            ).toBe(expected);
+            expect(getPageRoutePaths(article, locale)).toEqual([expected]);
+        },
+    );
+
+    it("redirects the Czech fallback slug to the translated article slug", async () => {
+        expect(
+            unstable_doesMiddlewareMatch({ config, url: "/en/posts/novinka" }),
+        ).toBe(true);
+        vi.mocked(findPageBySlug).mockResolvedValue({
+            slug: "news",
+            pageType: "post",
+        } as Page);
+        const response = await proxy(
+            new NextRequest(
+                "https://example.test/en/posts/novinka?ref=archive",
+            ),
+        );
+        expect(findPageBySlug).toHaveBeenCalledWith(
+            expect.objectContaining({ pageTypes: ["post"] }),
+        );
+        expect(response.status).toBe(308);
+        expect(response.headers.get("location")).toBe(
+            "https://example.test/en/posts/news?ref=archive",
+        );
+    });
+});

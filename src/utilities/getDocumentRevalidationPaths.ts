@@ -4,13 +4,12 @@ import {
     defaultLocale,
     isLocale,
     locales,
-    withLocalePrefix,
     type AppLocale,
 } from "@/i18n/config";
 import type { Page } from "@/payload-types";
 import { getPageRoutePaths } from "@/utilities/getPagePath";
 
-type DocumentCollection = "pages" | "posts";
+type DocumentCollection = "pages";
 type Slugs = Partial<Record<AppLocale, string | null>>;
 type DocumentPaths = {
     id: number | string;
@@ -23,7 +22,7 @@ const localizedSlugs = (
     locale: AppLocale,
 ): Slugs => (typeof slug === "object" && slug ? slug : { [locale]: slug });
 
-const documentPaths = (collection: DocumentCollection, doc: DocumentPaths) => {
+const documentPaths = (doc: DocumentPaths) => {
     const slugs = localizedSlugs(doc.slug, defaultLocale);
     const paths = new Set<string>();
 
@@ -38,16 +37,11 @@ const documentPaths = (collection: DocumentCollection, doc: DocumentPaths) => {
         for (const slug of localeSlugs) {
             if (!slug) continue;
 
-            const encodedSlug = encodeURIComponent(slug);
-            if (collection === "posts") {
-                paths.add(withLocalePrefix(`/posts/${encodedSlug}`, locale));
-            } else {
-                for (const path of getPageRoutePaths(
-                    { slug, pageType: doc.pageType },
-                    locale,
-                )) {
-                    paths.add(path);
-                }
+            for (const path of getPageRoutePaths(
+                { slug, pageType: doc.pageType },
+                locale,
+            )) {
+                paths.add(path);
             }
         }
     }
@@ -68,10 +62,7 @@ export const getDocumentRevalidationPaths = async (
         fallbackLocale: false,
         draft: false,
         depth: 0,
-        select:
-            collection === "pages"
-                ? { slug: true, pageType: true }
-                : { slug: true },
+        select: { slug: true, pageType: true },
         // Internal cache maintenance must also see unpublished documents.
         overrideAccess: true,
         // Payload mutates req.locale for Local API calls. Preserve the outer
@@ -79,7 +70,7 @@ export const getDocumentRevalidationPaths = async (
         req: { ...req },
     });
 
-    return documentPaths(collection, {
+    return documentPaths({
         ...storedDoc,
         ...doc,
         // previousDoc supplies the old slug on unpublish or rename.

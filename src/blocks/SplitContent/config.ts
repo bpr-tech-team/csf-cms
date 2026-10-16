@@ -3,6 +3,8 @@ import type { Block } from "payload";
 
 import { highlightedTextsField } from "@/fields/highlightedTexts";
 import { sectionDividerField } from "@/fields/sectionDivider";
+import { contentIcon } from "@/fields/contentIcon";
+import { defaultContentHeadingIcon } from "@/utilities/contentIcon";
 
 export const SplitContent: Block = {
     slug: "splitContent",
@@ -78,6 +80,10 @@ export const SplitContent: Block = {
             },
             required: true,
         },
+        contentIcon({
+            required: true,
+            defaultFontAwesome: defaultContentHeadingIcon,
+        }),
         {
             name: "richText",
             type: "richText",

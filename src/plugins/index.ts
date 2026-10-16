@@ -1,5 +1,4 @@
 import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
-import { nestedDocsPlugin } from "@payloadcms/plugin-nested-docs";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
@@ -7,7 +6,7 @@ import { Plugin } from "payload";
 import { revalidateRedirects } from "@/hooks/revalidateRedirects";
 import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
 
-import { Page, Post } from "@/payload-types";
+import { Page } from "@/payload-types";
 import { defaultLocale, isLocale, withLocalePrefix } from "@/i18n/config";
 import { getCanonicalUrl } from "@/seo/config";
 import { getSeoTitle } from "@/seo/getSeoTitle";
@@ -15,14 +14,10 @@ import { getPagePath } from "@/utilities/getPagePath";
 import { preserveFormEmailColors } from "@/email/richText";
 import { formLabels, formSubmissionLabels } from "./formLabels";
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc, locale }) =>
+const generateTitle: GenerateTitle<Page> = ({ doc, locale }) =>
     getSeoTitle(doc?.title, isLocale(locale) ? locale : defaultLocale);
 
-const generateURL: GenerateURL<Post | Page> = ({
-    collectionConfig,
-    doc,
-    locale: incomingLocale,
-}) => {
+const generateURL: GenerateURL<Page> = ({ doc, locale: incomingLocale }) => {
     if (!doc?.slug) {
         const locale = isLocale(incomingLocale)
             ? incomingLocale
@@ -32,10 +27,7 @@ const generateURL: GenerateURL<Post | Page> = ({
     }
 
     const locale = isLocale(incomingLocale) ? incomingLocale : defaultLocale;
-    const path =
-        collectionConfig?.slug === "posts"
-            ? `/posts/${doc.slug}`
-            : getPagePath(doc as Page, locale);
+    const path = getPagePath(doc as Page, locale);
 
     return getCanonicalUrl(withLocalePrefix(path, locale));
 };
@@ -48,7 +40,7 @@ export const plugins: Plugin[] = [
         clientUploads: true,
     }),
     redirectsPlugin({
-        collections: ["pages", "posts"],
+        collections: ["pages"],
         overrides: {
             labels: {
                 plural: {
@@ -82,11 +74,6 @@ export const plugins: Plugin[] = [
                 afterDelete: [revalidateRedirects],
             },
         },
-    }),
-    nestedDocsPlugin({
-        collections: ["categories"],
-        generateURL: (docs) =>
-            docs.reduce((url, doc) => `${url}/${doc.slug}`, ""),
     }),
     seoPlugin({
         generateTitle,

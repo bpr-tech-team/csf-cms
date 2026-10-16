@@ -1,5 +1,6 @@
 import type { SelectField } from "payload";
 import { ValidationError } from "payload";
+import { isPageType } from "@/components/PageTypeViews/views";
 
 export const pageType: SelectField = {
     name: "pageType",
@@ -15,7 +16,8 @@ export const pageType: SelectField = {
         },
         position: "sidebar",
     },
-    defaultValue: "standard",
+    defaultValue: ({ req }) =>
+        isPageType(req.query?.pageType) ? req.query.pageType : "standard",
     hooks: {
         beforeChange: [
             // Access control strips the incoming value. Keep the current type
@@ -55,6 +57,10 @@ export const pageType: SelectField = {
         en: "Page type",
     },
     options: [
+        {
+            label: { cs: "Článek", en: "Post" },
+            value: "post",
+        },
         {
             label: { cs: "Pobočka", en: "Branch" },
             value: "branch",

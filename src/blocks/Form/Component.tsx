@@ -153,7 +153,7 @@ export const FormBlock: React.FC<
                             className={cn(
                                 "mb-8 lg:mb-12",
                                 isHomepageDark &&
-                                    "text-center [&_h1]:text-heading-xl [&_h1]:font-bold [&_h2]:text-heading-xl [&_h2]:font-bold [&_p]:text-paper-0/90",
+                                    "text-center [&_h1]:text-heading-xl [&_h1]:font-bold [&_h2]:text-heading-xl [&_h2]:font-bold text-paper-0",
                             )}
                             data={introContent}
                             enableGutter={false}

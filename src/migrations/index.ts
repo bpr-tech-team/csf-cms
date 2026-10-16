@@ -20,6 +20,11 @@ import * as migration_20260928_125607_section_dividers from "./20260928_125607_s
 import * as migration_20261001_085725_metrics_decimal_display from "./20261001_085725_metrics_decimal_display";
 import * as migration_20261002_064047_block_spacing from "./20261002_064047_block_spacing";
 import * as migration_20261002_093715_gallery from "./20261002_093715_gallery";
+import * as migration_20261015_164458_content_heading_icons from "./20261015_164458_content_heading_icons";
+import * as migration_20261015_185846_flexible_footer from "./20261015_185846_flexible_footer";
+import * as migration_20261015_191306_shared_contact_details from "./20261015_191306_shared_contact_details";
+import * as migration_20261015_194748_footer_branches_map from "./20261015_194748_footer_branches_map";
+import * as migration_20261015_230402_pages_post_type_remove_legacy_collections from "./20261015_230402_pages_post_type_remove_legacy_collections";
 
 export const migrations = [
     {
@@ -131,5 +136,30 @@ export const migrations = [
         up: migration_20261002_093715_gallery.up,
         down: migration_20261002_093715_gallery.down,
         name: "20261002_093715_gallery",
+    },
+    {
+        up: migration_20261015_164458_content_heading_icons.up,
+        down: migration_20261015_164458_content_heading_icons.down,
+        name: "20261015_164458_content_heading_icons",
+    },
+    {
+        up: migration_20261015_185846_flexible_footer.up,
+        down: migration_20261015_185846_flexible_footer.down,
+        name: "20261015_185846_flexible_footer",
+    },
+    {
+        up: migration_20261015_191306_shared_contact_details.up,
+        down: migration_20261015_191306_shared_contact_details.down,
+        name: "20261015_191306_shared_contact_details",
+    },
+    {
+        up: migration_20261015_194748_footer_branches_map.up,
+        down: migration_20261015_194748_footer_branches_map.down,
+        name: "20261015_194748_footer_branches_map",
+    },
+    {
+        up: migration_20261015_230402_pages_post_type_remove_legacy_collections.up,
+        down: migration_20261015_230402_pages_post_type_remove_legacy_collections.down,
+        name: "20261015_230402_pages_post_type_remove_legacy_collections",
     },
 ];

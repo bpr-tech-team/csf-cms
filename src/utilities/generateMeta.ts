@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import type { Media, Page, Post, Config } from "../payload-types";
+import type { Media, Page, Config } from "../payload-types";
 
 import type { AppLocale } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
@@ -23,7 +23,7 @@ const getImageURL = (image?: Media | Config["db"]["defaultIDType"] | null) => {
 };
 
 export const generateMeta = async (args: {
-    doc: Partial<Page> | Partial<Post> | null;
+    doc: Partial<Page> | null;
     locale?: AppLocale;
     path?: string;
 }): Promise<Metadata> => {

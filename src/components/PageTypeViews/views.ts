@@ -6,10 +6,30 @@ export const pageTypeViews = [
     { value: "service", label: "Služby" },
     { value: "computer", label: "Produkty" },
     { value: "branch", label: "Pobočky" },
+    { value: "post", label: "Články" },
 ] as const satisfies { value: Page["pageType"]; label: string }[];
 
 export function pageTypeWhere(pageType: Page["pageType"]): Where {
     return { and: [{ pageType: { equals: pageType } }] };
+}
+
+export const isPageType = (value: unknown): value is Page["pageType"] =>
+    pageTypeViews.some((view) => view.value === value);
+
+export function pageTypeCreateURL(
+    url: string,
+    type?: Page["pageType"],
+    locale?: string,
+) {
+    if (!type && !locale) return url;
+    const target = new URL(url, "http://payload.local");
+    if (type) target.searchParams.set("pageType", type);
+    if (locale && !target.searchParams.has("locale")) {
+        target.searchParams.set("locale", locale);
+    }
+    return url.startsWith("/")
+        ? `${target.pathname}${target.search}${target.hash}`
+        : target.href;
 }
 
 // Payload's filter editor can wrap conditions in AND / OR groups.

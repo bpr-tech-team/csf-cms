@@ -68,9 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
-    posts: Post;
     media: Media;
-    categories: Category;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -89,9 +87,7 @@ export interface Config {
   };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -110,10 +106,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'contact-details': ContactDetails;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'contact-details': ContactDetailsSelect<false> | ContactDetailsSelect<true>;
   };
   locale: 'cs' | 'en';
   widgets: {
@@ -159,7 +157,7 @@ export interface Page {
   /**
    * The page type cannot be changed after the first save, including a draft.
    */
-  pageType: 'branch' | 'standard' | 'service' | 'computer';
+  pageType: 'post' | 'branch' | 'standard' | 'service' | 'computer';
   layout: (
     | HeroBlock
     | HomepageHeroBlock
@@ -184,6 +182,7 @@ export interface Page {
     | MediaFeatureGridBlock
     | TechnologySpotlightBlock
     | EditorialColumnsBlock
+    | RelatedPostsBlock
   )[];
   /**
    * These details are shared by the branch page and branch grids.
@@ -214,6 +213,22 @@ export interface Page {
     mapEmbedUrl?: string | null;
     icon: ContentIcon;
   };
+  /**
+   * Image for post cards. Build the page content with blocks.
+   */
+  heroImage: number | Media;
+  /**
+   * Short text for post cards. Set the page heading in its content blocks.
+   */
+  excerpt: string;
+  relatedPosts?: (number | Page)[] | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     /**
@@ -253,15 +268,10 @@ export interface HeroBlock {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
           url?: string | null;
           label: string;
           /**
@@ -279,56 +289,6 @@ export interface HeroBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Recommended image file size is less than 500 kB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -453,57 +413,6 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "HomepageHeroBlock".
  */
 export interface HomepageHeroBlock {
@@ -529,15 +438,10 @@ export interface HomepageHeroBlock {
               link: {
                 type?: ('reference' | 'custom') | null;
                 newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
+                reference?: {
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null;
                 url?: string | null;
                 label: string;
                 /**
@@ -580,15 +484,10 @@ export interface HomepageHeroBlock {
               link: {
                 type?: ('reference' | 'custom') | null;
                 newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
+                reference?: {
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null;
                 url?: string | null;
                 label: string;
               };
@@ -948,15 +847,10 @@ export interface ServicesGridBlock {
     link: {
       type?: ('reference' | 'custom') | null;
       newTab?: boolean | null;
-      reference?:
-        | ({
-            relationTo: 'pages';
-            value: number | Page;
-          } | null)
-        | ({
-            relationTo: 'posts';
-            value: number | Post;
-          } | null);
+      reference?: {
+        relationTo: 'pages';
+        value: number | Page;
+      } | null;
       url?: string | null;
       label: string;
     };
@@ -1027,15 +921,10 @@ export interface ProductsGridBlock {
     link?: {
       type?: ('reference' | 'custom') | null;
       newTab?: boolean | null;
-      reference?:
-        | ({
-            relationTo: 'pages';
-            value: number | Page;
-          } | null)
-        | ({
-            relationTo: 'posts';
-            value: number | Post;
-          } | null);
+      reference?: {
+        relationTo: 'pages';
+        value: number | Page;
+      } | null;
       url?: string | null;
     };
     id?: string | null;
@@ -1090,15 +979,10 @@ export interface CenteredCtaBlock {
   link: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     url?: string | null;
     label: string;
     /**
@@ -1242,6 +1126,7 @@ export interface SplitContentBlock {
    */
   divider?: ('none' | 'line') | null;
   heading: string;
+  icon: ContentIcon;
   richText: {
     root: {
       type: string;
@@ -1337,6 +1222,7 @@ export interface FlexibleContentBlock {
  */
 export interface FlexibleHeadingElement {
   heading: string;
+  icon: ContentIcon;
   id?: string | null;
   blockName?: string | null;
   blockType: 'flexHeading';
@@ -1373,15 +1259,10 @@ export interface FlexibleButtonElement {
   link: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     url?: string | null;
     label: string;
     /**
@@ -1748,6 +1629,54 @@ export interface EditorialColumnsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RelatedPostsBlock".
+ */
+export interface RelatedPostsBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Choose posts in Related posts on the Meta tab. The block is hidden if no published posts are selected.
+   */
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'relatedPosts';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1758,15 +1687,10 @@ export interface Redirect {
   from: string;
   to?: {
     type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     url?: string | null;
   };
   updatedAt: string;
@@ -1910,16 +1834,8 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
-      } | null)
-    | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'categories';
-        value: number | Category;
       } | null)
     | ({
         relationTo: 'users';
@@ -2016,6 +1932,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaFeatureGrid?: T | MediaFeatureGridBlockSelect<T>;
         technologySpotlight?: T | TechnologySpotlightBlockSelect<T>;
         editorialColumns?: T | EditorialColumnsBlockSelect<T>;
+        relatedPosts?: T | RelatedPostsBlockSelect<T>;
       };
   branchInfo?:
     | T
@@ -2040,6 +1957,16 @@ export interface PagesSelect<T extends boolean = true> {
             };
         mapEmbedUrl?: T;
         icon?: T | ContentIconSelect<T>;
+      };
+  heroImage?: T;
+  excerpt?: T;
+  relatedPosts?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
       };
   meta?:
     | T
@@ -2467,6 +2394,7 @@ export interface SplitContentBlockSelect<T extends boolean = true> {
       };
   divider?: T;
   heading?: T;
+  icon?: T | ContentIconSelect<T>;
   richText?: T;
   media?: T;
   mediaPosition?: T;
@@ -2513,6 +2441,7 @@ export interface FlexibleContentBlockSelect<T extends boolean = true> {
  */
 export interface FlexibleHeadingElementSelect<T extends boolean = true> {
   heading?: T;
+  icon?: T | ContentIconSelect<T>;
   id?: T;
   blockName?: T;
 }
@@ -2811,34 +2740,14 @@ export interface EditorialColumnsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
+ * via the `definition` "RelatedPostsBlock_select".
  */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
-  generateSlug?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+export interface RelatedPostsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  heading?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2935,26 +2844,6 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
- */
-export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
-  generateSlug?: T;
-  slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3240,15 +3129,10 @@ export interface Header {
         link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
           url?: string | null;
           label: string;
         };
@@ -3258,15 +3142,10 @@ export interface Header {
               link: {
                 type?: ('reference' | 'custom') | null;
                 newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
+                reference?: {
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null;
                 url?: string | null;
                 label: string;
               };
@@ -3278,15 +3157,10 @@ export interface Header {
         overviewLink?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
           url?: string | null;
           label: string;
         };
@@ -3296,30 +3170,20 @@ export interface Header {
   customerZoneLink: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     url?: string | null;
     label: string;
   };
   contactLink: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     url?: string | null;
     label: string;
   };
@@ -3332,6 +3196,18 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  /**
+   * Drag to reorder columns and their blocks. Columns stack in reverse order on mobile. An empty column reserves space only on wide screens.
+   */
+  layout?:
+    | {
+        heading?: string | null;
+        content?:
+          | (FooterBranchesMapBlock | FooterBrandBlock | FooterContactsBlock | FooterTextBlock | FooterLinksBlock)[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   tagline?: string | null;
   columns?:
     | {
@@ -3341,15 +3217,10 @@ export interface Footer {
               link: {
                 type?: ('reference' | 'custom') | null;
                 newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
+                reference?: {
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null;
                 url?: string | null;
                 label: string;
               };
@@ -3364,18 +3235,143 @@ export interface Footer {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
           url?: string | null;
           label: string;
         };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBranchesMapBlock".
+ */
+export interface FooterBranchesMapBlock {
+  /**
+   * Assign branch pages to map positions. Names and links come from the page. Points without an assigned, published branch are hidden on the website.
+   */
+  points: {
+    position: 'praha' | 'hradec-kralove' | 'ostrava' | 'zlin' | 'brno';
+    branch?: (number | null) | Page;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerBranchesMap';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBrandBlock".
+ */
+export interface FooterBrandBlock {
+  /**
+   * Uses the default CSF logo when no image is selected.
+   */
+  logo?: (number | null) | Media;
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerBrand';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterContactsBlock".
+ */
+export interface FooterContactsBlock {
+  /**
+   * Uses the Contact details section. Choose which contacts and social links appear here, their order and their icons.
+   */
+  items?:
+    | {
+        kind: 'phone' | 'email' | 'socialLink' | 'dataBox';
+        /**
+         * Manage the available links in the separate Contact details section.
+         */
+        socialLinkId?: string | null;
+        /**
+         * Optional text before the contact value. Overrides the link name for a social network.
+         */
+        label?: string | null;
+        icon: ContentIcon;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerContacts';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterTextBlock".
+ */
+export interface FooterTextBlock {
+  text: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterLinksBlock".
+ */
+export interface FooterLinksBlock {
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?: {
+            relationTo: 'pages';
+            value: number | Page;
+          } | null;
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'footerLinks';
+}
+/**
+ * Shared contacts for the website and all languages. Footer contact blocks use these values automatically. Empty values are hidden.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details".
+ */
+export interface ContactDetails {
+  id: number;
+  phone?: string | null;
+  email?: string | null;
+  dataBoxId?: string | null;
+  /**
+   * Optional list. Add any network or contact link and change their order.
+   */
+  socialLinks?:
+    | {
+        label: string;
+        url: string;
         id?: string | null;
       }[]
     | null;
@@ -3455,6 +3451,21 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  layout?:
+    | T
+    | {
+        heading?: T;
+        content?:
+          | T
+          | {
+              footerBranchesMap?: T | FooterBranchesMapBlockSelect<T>;
+              footerBrand?: T | FooterBrandBlockSelect<T>;
+              footerContacts?: T | FooterContactsBlockSelect<T>;
+              footerText?: T | FooterTextBlockSelect<T>;
+              footerLinks?: T | FooterLinksBlockSelect<T>;
+            };
+        id?: T;
+      };
   tagline?: T;
   columns?:
     | T
@@ -3496,6 +3507,98 @@ export interface FooterSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBranchesMapBlock_select".
+ */
+export interface FooterBranchesMapBlockSelect<T extends boolean = true> {
+  points?:
+    | T
+    | {
+        position?: T;
+        branch?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterBrandBlock_select".
+ */
+export interface FooterBrandBlockSelect<T extends boolean = true> {
+  logo?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterContactsBlock_select".
+ */
+export interface FooterContactsBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        kind?: T;
+        socialLinkId?: T;
+        label?: T;
+        icon?: T | ContentIconSelect<T>;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterTextBlock_select".
+ */
+export interface FooterTextBlockSelect<T extends boolean = true> {
+  text?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FooterLinksBlock_select".
+ */
+export interface FooterLinksBlockSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-details_select".
+ */
+export interface ContactDetailsSelect<T extends boolean = true> {
+  phone?: T;
+  email?: T;
+  dataBoxId?: T;
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -3512,15 +3615,10 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    doc?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     global?: string | null;
     user?: {
       relationTo: 'users';
@@ -3528,42 +3626,6 @@ export interface TaskSchedulePublish {
     } | null;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

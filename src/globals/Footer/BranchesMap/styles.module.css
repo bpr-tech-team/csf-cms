@@ -1,0 +1,182 @@
+.map {
+    --map-accent: #b0cb0e;
+    --dot-size: clamp(6px, 1.35cqw, 10px);
+    --label-gap: 18px;
+    --map-motion-duration: 240ms;
+    --map-label-duration: 150ms;
+    --map-label-delay: 60ms;
+    position: relative;
+    isolation: isolate;
+    container-type: inline-size;
+    width: 100%;
+    aspect-ratio: 1183 / 680;
+}
+
+.background {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+}
+
+.points {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.point {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+}
+
+.point[data-active="true"] {
+    z-index: 1;
+}
+
+.link {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: var(--color-paper-0);
+    outline: none;
+    text-decoration: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.connector {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 1px;
+    height: calc(50% + var(--label-gap));
+    background: var(--map-accent);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: bottom;
+    transition:
+        transform var(--map-motion-duration) cubic-bezier(0.22, 1, 0.36, 1),
+        opacity var(--map-label-duration) ease;
+}
+
+.dot {
+    position: relative;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    pointer-events: none;
+    transform: scale(1);
+    transition: transform var(--map-motion-duration)
+        cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dot::before,
+.dot::after {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+}
+
+.dot::before {
+    inset: -50%;
+    background: var(--map-accent);
+    filter: blur(calc(var(--dot-size) * 0.75));
+    transition:
+        inset var(--map-motion-duration) ease,
+        filter var(--map-motion-duration) ease;
+}
+
+.dot::after {
+    inset: 0;
+    background: #d9d9d9;
+}
+
+.point[data-active="true"] .dot {
+    /* The reference increases the core diameter from 16px to 29px. */
+    transform: scale(1.8125);
+}
+
+.point[data-active="true"] .dot::before {
+    /* A 59px halo and 9.5px blur around the reference's 29px core. */
+    inset: -51.724%;
+    filter: blur(calc(var(--dot-size) * 0.3276));
+}
+
+.point[data-active="true"] .connector {
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1);
+}
+
+.label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: max-content;
+    max-width: min(14rem, calc(100cqw - 1rem));
+    padding-bottom: var(--label-gap);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    /* Keep labels inside the map, including the easternmost point. */
+    transform: translateX(
+        clamp(
+            calc(0.5rem - var(--point-x)),
+            -50%,
+            calc(100cqw - var(--point-x) - 0.5rem - 100%)
+        )
+    );
+    transition:
+        opacity var(--map-label-duration) ease,
+        visibility var(--map-label-duration);
+}
+
+.bubble {
+    display: block;
+    border: 1px solid rgb(176 203 14 / 0.6);
+    border-radius: var(--radius-pill);
+    padding: 6px 12px;
+    background: var(--color-ink-900);
+    box-shadow:
+        0 0 16px 5px rgb(0 0 0 / 0.65),
+        0 0 22px rgb(176 203 14 / 0.12);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    text-align: center;
+    transition:
+        color var(--map-label-duration) ease,
+        border-color var(--map-label-duration) ease;
+}
+
+.bubble:hover {
+    border-color: var(--map-accent);
+    color: var(--map-accent);
+}
+
+.point[data-active="true"] .label {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition:
+        opacity var(--map-label-duration) ease var(--map-label-delay),
+        visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .map {
+        --map-motion-duration: 0ms;
+        --map-label-duration: 0ms;
+        --map-label-delay: 0ms;
+    }
+}

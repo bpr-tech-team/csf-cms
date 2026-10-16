@@ -109,7 +109,8 @@ export const link: LinkType = ({
                 cs: "Dokument pro odkaz",
                 en: "Document to link to",
             },
-            relationTo: ["pages", "posts"],
+            // Keep the stored polymorphic shape of existing page links.
+            relationTo: ["pages"],
             required: true,
         },
         {

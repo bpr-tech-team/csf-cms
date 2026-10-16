@@ -9,10 +9,7 @@ export const seoConfig = {
     locale: "cs_CZ",
     defaultOgImagePath: "/csf-og.png",
     logoPath: "/csf-logo.png",
-    email: "info@csf.cz",
-    telephone: "+420 495 533 495",
     foundingDate: "1998",
-    sameAs: ["https://cz.linkedin.com/company/csf-s-r-o"],
     address: {
         streetAddress: "Střelecká 672/14",
         postalCode: "500 02",

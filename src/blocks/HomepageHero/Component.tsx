@@ -137,7 +137,7 @@ export const HomepageHero: React.FC<HomepageHeroProps> = ({
                         size="compact"
                         tone="inverse"
                     />
-                    <p className="mx-auto mt-5 max-w-[59rem] text-body-md font-normal text-paper-0/80 md:text-body-lg md:leading-8">
+                    <p className="mx-auto mt-5 max-w-[59rem] font-light text-body-md text-paper md:text-body-lg md:leading-8">
                         {applyTypography(intro.description, { locale })}
                     </p>
                 </div>

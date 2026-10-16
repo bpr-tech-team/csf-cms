@@ -1,10 +1,13 @@
 import type { BlocksFieldValidation } from "payload";
 
-export const PAGE_HERO_BLOCK_TYPES = ["hero", "homepageHero"] as const;
+export const HERO_BLOCK_TYPES = ["hero", "homepageHero"] as const;
 
-const pageHeroBlockTypes = new Set<string>(PAGE_HERO_BLOCK_TYPES);
+const pageHeroBlockTypes = new Set<string>(HERO_BLOCK_TYPES);
 
-export const validatePageLayout: BlocksFieldValidation = (value, { data }) => {
+export const validateContentLayout: BlocksFieldValidation = (
+    value,
+    { data },
+) => {
     if (!Array.isArray(value) || value.length === 0) {
         return "Přidejte alespoň jeden obsahový blok.";
     }
@@ -45,6 +48,23 @@ export const validatePageLayout: BlocksFieldValidation = (value, { data }) => {
     }
     if (branchDetailsBlocks.length > 1) {
         return "Kontakty a mapu pobočky lze na stránku přidat pouze jednou.";
+    }
+
+    const relatedPostsBlocks = value.filter(
+        (block) =>
+            block &&
+            typeof block === "object" &&
+            "blockType" in block &&
+            block.blockType === "relatedPosts",
+    );
+    if (
+        relatedPostsBlocks.length &&
+        (!data || !("pageType" in data) || data.pageType !== "post")
+    ) {
+        return "Související články lze použít pouze na stránce typu Článek.";
+    }
+    if (relatedPostsBlocks.length > 1) {
+        return "Související články lze na stránku přidat pouze jednou.";
     }
 
     return true;

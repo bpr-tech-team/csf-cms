@@ -11,3 +11,15 @@ export const RowLabel: React.FC<RowLabelProps> = () => {
 
     return <div>{label}</div>;
 };
+
+export const ColumnRowLabel: React.FC<RowLabelProps> = () => {
+    const { data, rowNumber } =
+        useRowLabel<NonNullable<Footer["layout"]>[number]>();
+
+    return (
+        <span>
+            Sloupec {(rowNumber ?? 0) + 1}
+            {data?.heading ? `: ${data.heading}` : ""}
+        </span>
+    );
+};
