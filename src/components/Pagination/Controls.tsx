@@ -17,13 +17,11 @@ export function PaginationControls({
     page,
     totalPages,
     onPageChange,
-    label,
 }: {
     locale: AppLocale;
     page: number;
     totalPages: number;
     onPageChange: (page: number) => void;
-    label?: string;
 }) {
     const messages = frontendMessages[locale].pagination;
     if (totalPages <= 1) return null;
@@ -32,7 +30,7 @@ export function PaginationControls({
         .sort((a, b) => a - b);
 
     return (
-        <Pagination aria-label={label ?? messages.label}>
+        <Pagination aria-label={messages.label}>
             <PaginationContent className="flex-wrap">
                 <PaginationItem>
                     <PaginationPrevious

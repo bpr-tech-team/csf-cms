@@ -16,11 +16,8 @@ export type PostCardsQuery = PostsGridState & {
 export type PostCardsResult = {
     docs: PostCardData[];
     page: number;
-    limit: number;
     totalDocs: number;
     totalPages: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
 };
 
 export const defaultPostsGridState: PostsGridState = {

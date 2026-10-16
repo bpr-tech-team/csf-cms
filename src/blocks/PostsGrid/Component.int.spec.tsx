@@ -40,11 +40,8 @@ const initialData: PostCardsResult = {
         },
     ],
     page: 1,
-    limit: 6,
     totalDocs: 15,
     totalPages: 3,
-    hasPrevPage: false,
-    hasNextPage: true,
 };
 const result = (title: string, page = 1): PostCardsResult => ({
     ...initialData,

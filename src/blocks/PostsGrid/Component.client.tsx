@@ -161,10 +161,7 @@ export function PostsGridClient({
                     ) : data && !error ? (
                         <PageRange
                             locale={locale}
-                            collectionLabels={{
-                                plural: messages.postsPlural,
-                                singular: messages.postsSingular,
-                            }}
+                            showCollectionLabel={false}
                             currentPage={data.page}
                             limit={limit}
                             totalDocs={data.totalDocs}

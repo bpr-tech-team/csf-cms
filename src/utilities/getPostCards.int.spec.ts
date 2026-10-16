@@ -35,8 +35,6 @@ describe("public post card selection", () => {
             page: 2,
             totalPages: 3,
             totalDocs: 14,
-            hasPrevPage: true,
-            hasNextPage: true,
         });
         const result = await getPostCards({
             locale: "cs",
@@ -72,8 +70,6 @@ describe("public post card selection", () => {
             page: 2,
             totalPages: 2,
             totalDocs: 7,
-            hasPrevPage: true,
-            hasNextPage: false,
         });
         const result = await getPostCards({
             locale: "en",
@@ -99,8 +95,6 @@ describe("public post card selection", () => {
             page: 9,
             totalPages: 0,
             totalDocs: 0,
-            hasPrevPage: true,
-            hasNextPage: false,
         });
         expect(
             await getPostCards({
@@ -114,8 +108,6 @@ describe("public post card selection", () => {
             page: 1,
             totalPages: 1,
             totalDocs: 0,
-            hasPrevPage: false,
-            hasNextPage: false,
         });
     });
 
