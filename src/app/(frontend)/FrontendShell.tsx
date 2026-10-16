@@ -3,7 +3,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { AdminBar } from "@/components/AdminBar";
-import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/globals/Footer/Component";
 import { Header } from "@/globals/Header/Component";
 import type { AppLocale } from "@/i18n/config";
@@ -20,6 +19,7 @@ import {
 } from "@/seo/structuredData";
 import { cn } from "@/utilities/ui";
 import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
+import { getCachedGlobal } from "@/utilities/getGlobals";
 import { draftMode } from "next/headers";
 import React from "react";
 import { GeistMono } from "geist/font/mono";
@@ -29,7 +29,7 @@ const poppins = Poppins({
     display: "swap",
     subsets: ["latin", "latin-ext"],
     variable: "--font-poppins",
-    weight: ["400", "500", "600", "700", "800"],
+    weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export async function FrontendShell({
@@ -39,7 +39,11 @@ export async function FrontendShell({
     children: React.ReactNode;
     locale: AppLocale;
 }) {
-    const { isEnabled } = await draftMode();
+    const [{ isEnabled }, footerData, contactDetails] = await Promise.all([
+        draftMode(),
+        getCachedGlobal("footer", 1, locale, "layout-v3")(),
+        getCachedGlobal("contact-details", 1)(),
+    ]);
 
     return (
         <html
@@ -50,11 +54,11 @@ export async function FrontendShell({
             <head>
                 <InitTheme />
                 <link href="/favicon.ico" rel="icon" sizes="any" />
-                <JsonLd data={organizationJsonLd()} />
+                <JsonLd data={organizationJsonLd(contactDetails)} />
                 <JsonLd data={websiteJsonLd(locale)} />
-                <JsonLd data={professionalServiceJsonLd()} />
+                <JsonLd data={professionalServiceJsonLd(contactDetails)} />
             </head>
-            <body className="[--site-header-height:--spacing(18)] xl:[--site-header-height:--spacing(26)] [--page-top-spacing:--spacing(16)]">
+            <body className="[--site-header-height:--spacing(18)] xl:[--site-header-height:--spacing(26)]">
                 <Providers locale={locale}>
                     <AdminBar
                         adminBarProps={{
@@ -62,11 +66,13 @@ export async function FrontendShell({
                         }}
                         locale={locale}
                     />
-                    <CustomCursor />
-
                     <Header locale={locale} />
                     {children}
-                    <Footer locale={locale} />
+                    <Footer
+                        contacts={contactDetails}
+                        data={footerData}
+                        locale={locale}
+                    />
                 </Providers>
                 {(process.env.VERCEL_ENV === "preview" ||
                     process.env.VERCEL_ENV === "production") && (

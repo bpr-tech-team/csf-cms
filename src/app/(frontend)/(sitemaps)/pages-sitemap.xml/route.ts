@@ -20,6 +20,7 @@ const getPagesSitemap = unstable_cache(
             locale: "all",
             pagination: false,
             where: {
+                pageType: { not_equals: "post" },
                 _status: {
                     equals: "published",
                 },

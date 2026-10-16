@@ -34,7 +34,11 @@ export const PayloadRedirects: React.FC<Props> = async ({
         }
 
         const reference = redirectItem.to?.reference;
-        if (redirectItem.to?.type !== "custom" && reference?.value != null) {
+        if (
+            redirectItem.to?.type !== "custom" &&
+            reference?.relationTo === "pages" &&
+            reference.value != null
+        ) {
             const id =
                 typeof reference.value === "object"
                     ? reference.value.id
@@ -47,9 +51,7 @@ export const PayloadRedirects: React.FC<Props> = async ({
             if (document?.slug) {
                 redirect(
                     withLocalePrefix(
-                        reference.relationTo === "pages"
-                            ? getPagePath(document as Page, locale)
-                            : `/posts/${document.slug}`,
+                        getPagePath(document as Page, locale),
                         locale,
                     ),
                 );

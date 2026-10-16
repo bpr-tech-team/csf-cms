@@ -9,6 +9,8 @@ import { MediaAsset } from "@/components/MediaAsset";
 import { Gallery } from "@/components/Gallery";
 import RichText from "@/components/RichText";
 import { SectionDivider } from "@/components/SectionDivider";
+import { ContentHeading } from "@/components/ContentHeading";
+import { ContentReveal } from "@/components/ContentReveal";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { getMediaUrl } from "@/utilities/getMediaUrl";
 import { applyTypography } from "@/utilities/typography";
@@ -68,6 +70,9 @@ const FlexibleMedia = ({
 
     return (
         <div
+            data-reveal={
+                media.mimeType?.startsWith("video/") ? "media" : "image"
+            }
             className={cn(
                 "relative w-full overflow-hidden rounded-lg",
                 cropped && aspectClasses[aspectRatio],
@@ -153,7 +158,7 @@ export const FlexibleContentBlock = ({
                     <SectionDivider className="mt-8" />
                 ) : null}
                 {contentColumns.length > 0 ? (
-                    <div
+                    <ContentReveal
                         className={cn(
                             "grid grid-cols-1 items-stretch gap-10 lg:gap-16",
                             twoColumns && "lg:grid-cols-2",
@@ -191,15 +196,15 @@ export const FlexibleContentBlock = ({
                                         switch (element.blockType) {
                                             case "flexHeading":
                                                 return (
-                                                    <h3
+                                                    <ContentHeading
                                                         key={key}
-                                                        className="w-full text-heading-md leading-tight font-bold whitespace-pre-line"
+                                                        icon={element.icon}
                                                     >
                                                         {applyTypography(
                                                             element.heading,
                                                             { locale },
                                                         )}
-                                                    </h3>
+                                                    </ContentHeading>
                                                 );
                                             case "flexText":
                                                 return (
@@ -209,31 +214,38 @@ export const FlexibleContentBlock = ({
                                                             themedRichTextClasses
                                                         }
                                                         data={element.richText}
+                                                        contentListLabels
+                                                        data-reveal="text"
                                                         enableGutter={false}
                                                         locale={locale}
                                                     />
                                                 );
                                             case "flexButton":
                                                 return (
-                                                    <CMSLink
+                                                    <div
                                                         key={key}
-                                                        {...element.link}
-                                                        appearance={
-                                                            element.link
-                                                                .appearance ||
-                                                            "default"
-                                                        }
-                                                        className={cn(
-                                                            "max-w-full whitespace-normal text-center",
-                                                            element.link
-                                                                .appearance ===
-                                                                "outline" &&
-                                                                (isDark
-                                                                    ? "border-border-dark hover:bg-olive-900 hover:text-paper-0"
-                                                                    : "border-border-light hover:bg-brand-100 hover:text-ink-950"),
-                                                        )}
-                                                        locale={locale}
-                                                    />
+                                                        className="max-w-full"
+                                                        data-reveal="button"
+                                                    >
+                                                        <CMSLink
+                                                            {...element.link}
+                                                            appearance={
+                                                                element.link
+                                                                    .appearance ||
+                                                                "default"
+                                                            }
+                                                            className={cn(
+                                                                "max-w-full whitespace-normal text-center",
+                                                                element.link
+                                                                    .appearance ===
+                                                                    "outline" &&
+                                                                    (isDark
+                                                                        ? "border-border-dark hover:bg-olive-900 hover:text-paper-0"
+                                                                        : "border-border-light hover:bg-brand-100 hover:text-ink-950"),
+                                                            )}
+                                                            locale={locale}
+                                                        />
+                                                    </div>
                                                 );
                                             case "flexMedia":
                                                 return (
@@ -249,23 +261,31 @@ export const FlexibleContentBlock = ({
                                                 );
                                             case "flexGallery":
                                                 return (
-                                                    <Gallery
+                                                    <div
                                                         key={key}
-                                                        {...element}
-                                                        compact={twoColumns}
-                                                        theme={theme || "light"}
-                                                        locale={locale}
-                                                        sizes={
-                                                            twoColumns
-                                                                ? "(max-width: 64rem) 100vw, 50vw"
-                                                                : "100vw"
-                                                        }
-                                                    />
+                                                        className="w-full"
+                                                        data-reveal="media"
+                                                    >
+                                                        <Gallery
+                                                            {...element}
+                                                            compact={twoColumns}
+                                                            theme={
+                                                                theme || "light"
+                                                            }
+                                                            locale={locale}
+                                                            sizes={
+                                                                twoColumns
+                                                                    ? "(max-width: 64rem) 100vw, 50vw"
+                                                                    : "100vw"
+                                                            }
+                                                        />
+                                                    </div>
                                                 );
                                             case "flexHtml":
                                                 return (
                                                     <div
                                                         key={key}
+                                                        data-reveal="embed"
                                                         className="w-full overflow-x-auto [&_iframe]:max-w-full [&_img]:max-w-full"
                                                         dangerouslySetInnerHTML={{
                                                             __html: sanitizeFlexibleHTML(
@@ -281,7 +301,7 @@ export const FlexibleContentBlock = ({
                                 )}
                             </div>
                         ))}
-                    </div>
+                    </ContentReveal>
                 ) : null}
             </div>
         </BlockSection>

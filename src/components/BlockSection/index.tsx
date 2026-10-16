@@ -3,7 +3,7 @@ import { createElement, type ComponentPropsWithRef } from "react";
 import {
     getBlockPresentation,
     type BlockPresentationOptions,
-    type PageBlockType,
+    type ContentBlockType,
     type SectionSpacing,
     type SectionSpacingDefaults,
     type SectionSpacingPreset,
@@ -114,7 +114,7 @@ const getSectionSpacingClasses = (
 type BlockSectionProps = ComponentPropsWithRef<"section"> &
     BlockPresentationOptions & {
         as?: "section" | "div";
-        blockType: PageBlockType;
+        blockType: ContentBlockType;
         spacing?: SectionSpacing;
     };
 
@@ -143,7 +143,7 @@ export const BlockSection = ({
             "[--section-top-inset:0px] pt-[calc(var(--section-space-top)+var(--section-top-inset))] pb-(--section-space-bottom)",
             isPageIntro &&
                 presentation.surface === "hero" &&
-                "-mt-[calc(var(--site-header-height)+var(--page-top-spacing))] [--section-top-inset:calc(var(--site-header-height)+var(--page-top-spacing))]",
+                "-mt-(--site-header-height) [--section-top-inset:var(--site-header-height)]",
             className,
         ),
     });

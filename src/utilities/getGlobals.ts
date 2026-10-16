@@ -29,15 +29,23 @@ async function getGlobal<T extends Global>(
 
 /**
  * Returns a unstable_cache function mapped with the cache tag for the slug
+ * Use cacheVersion when changing a global's response shape.
  */
 export const getCachedGlobal = <T extends Global>(
     slug: T,
     depth = 0,
     locale: AppLocale = defaultLocale,
+    cacheVersion?: string,
 ) =>
     unstable_cache(
         async () => getGlobal<T>(slug, depth, locale),
-        ["public-global", slug, String(depth), locale],
+        [
+            "public-global",
+            slug,
+            String(depth),
+            locale,
+            ...(cacheVersion ? [cacheVersion] : []),
+        ],
         {
             tags: [`global_${slug}`, `global_${slug}_${locale}`],
         },

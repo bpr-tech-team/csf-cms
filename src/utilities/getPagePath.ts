@@ -8,6 +8,7 @@ export const pagePathPrefixes = {
     service: { cs: "sluzby", en: "services" },
     computer: { cs: "produkty", en: "products" },
     branch: { cs: "kontakt", en: "contact" },
+    post: { cs: "posts", en: "posts" },
 } satisfies Record<PageType, Record<AppLocale, string>>;
 
 // These routes used to render copies. Keep them only as redirect entry points.
@@ -16,6 +17,7 @@ const legacyPrefixes = {
     service: { cs: [""], en: [""] },
     computer: { cs: ["", "sluzby"], en: [""] },
     branch: { cs: [], en: ["kontakt"] },
+    post: { cs: [], en: [] },
 } satisfies Record<PageType, Record<AppLocale, string[]>>;
 
 export const getPageRoutePrefixes = (pageType: PageType, locale: AppLocale) => [

@@ -8,7 +8,8 @@ export const frontendMessages: Record<
         datePublished: string;
         defaultDescription: string;
         defaultTitle: string;
-        footerNavigation: string;
+        footerDataBoxLabel: string;
+        footerLinksLabel: string;
         form: {
             required: string;
             invalidEmail: string;
@@ -46,7 +47,6 @@ export const frontendMessages: Record<
         postsTitle: string;
         selectSlide: string;
         slide: string;
-        untitledCategory: string;
     }
 > = {
     cs: {
@@ -56,7 +56,8 @@ export const frontendMessages: Record<
         defaultDescription:
             "CSF, s.r.o. poskytuje komplexní IT služby, ICT infrastrukturu, cloudová řešení, hardware, AV techniku, tisková řešení a servis pro firmy a instituce v České republice.",
         defaultTitle: "CSF | Partner v oblasti IT",
-        footerNavigation: "Navigace",
+        footerDataBoxLabel: "ID datové schránky",
+        footerLinksLabel: "Odkazy v patičce",
         form: {
             required: "Toto pole je povinné.",
             invalidEmail: "Zadejte platnou e-mailovou adresu.",
@@ -97,7 +98,6 @@ export const frontendMessages: Record<
         postsTitle: "Novinky",
         selectSlide: "Přepnout snímek",
         slide: "Snímek",
-        untitledCategory: "Kategorie bez názvu",
     },
     en: {
         adminDashboard: "Dashboard",
@@ -106,7 +106,8 @@ export const frontendMessages: Record<
         defaultDescription:
             "CSF, s.r.o. provides comprehensive IT services, ICT infrastructure, cloud solutions, hardware, AV technology, print solutions, and service for companies and institutions in the Czech Republic.",
         defaultTitle: "CSF | IT Partner",
-        footerNavigation: "Navigation",
+        footerDataBoxLabel: "Data box ID",
+        footerLinksLabel: "Footer links",
         form: {
             required: "This field is required.",
             invalidEmail: "Enter a valid email address.",
@@ -147,6 +148,5 @@ export const frontendMessages: Record<
         postsTitle: "Posts",
         selectSlide: "Select slide",
         slide: "Slide",
-        untitledCategory: "Untitled category",
     },
 };

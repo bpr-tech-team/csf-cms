@@ -4,9 +4,11 @@ import { hasFontAwesomeIcon } from "@/utilities/fontAwesome.server";
 export const contentIcon = ({
     required = false,
     label = { cs: "Ikona", en: "Icon" },
+    defaultFontAwesome,
 }: {
     required?: boolean;
     label?: GroupField["label"];
+    defaultFontAwesome?: string;
 } = {}): GroupField => ({
     name: "icon",
     type: "group",
@@ -16,7 +18,7 @@ export const contentIcon = ({
         {
             name: "source",
             type: "select",
-            defaultValue: "image",
+            defaultValue: defaultFontAwesome ? "fontawesome" : "image",
             required: true,
             label: { cs: "Zdroj ikony", en: "Icon source" },
             options: [
@@ -42,6 +44,7 @@ export const contentIcon = ({
         {
             name: "fontAwesome",
             type: "text",
+            defaultValue: defaultFontAwesome,
             required,
             label: { cs: "Ikona Font Awesome", en: "Font Awesome icon" },
             admin: {

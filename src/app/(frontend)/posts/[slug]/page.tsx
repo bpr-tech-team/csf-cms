@@ -1,8 +1,8 @@
 import {
-    generatePostMetadata,
-    generatePostStaticParams,
-    PostTemplate,
-} from "@/app/(frontend)/_templates/PostTemplate";
+    generatePageMetadata,
+    generatePageStaticParams,
+    PageTemplate,
+} from "@/app/(frontend)/_templates/PageTemplate";
 
 type Args = {
     params: Promise<{
@@ -11,13 +11,13 @@ type Args = {
 };
 
 export async function generateStaticParams() {
-    return generatePostStaticParams("cs");
+    return generatePageStaticParams("cs", "post");
 }
 
 export default async function Post({ params }: Args) {
-    return <PostTemplate locale="cs" params={params} />;
+    return <PageTemplate locale="cs" params={params} pageType="post" />;
 }
 
 export async function generateMetadata({ params }: Args) {
-    return generatePostMetadata({ locale: "cs", params });
+    return generatePageMetadata({ locale: "cs", params, pageType: "post" });
 }

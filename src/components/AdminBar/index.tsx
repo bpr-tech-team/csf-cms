@@ -55,9 +55,7 @@ export const AdminBar: React.FC<{
     const locale = props.locale || defaultLocale;
     const segments = useSelectedLayoutSegments();
     const [show, setShow] = useState(false);
-    const collection = (segments.find(
-        (segment) => segment in collectionLabels,
-    ) || "pages") as keyof typeof collectionLabels;
+    const labelType = segments.includes("posts") ? "posts" : "pages";
     const router = useRouter();
 
     const onAuthChange = React.useCallback((user: PayloadMeUser) => {
@@ -81,13 +79,13 @@ export const AdminBar: React.FC<{
                         user: "text-white",
                     }}
                     cmsURL={getClientSideURL()}
-                    collectionSlug={collection}
+                    collectionSlug="pages"
                     collectionLabels={{
                         plural:
-                            collectionLabels[collection]?.plural[locale] ||
+                            collectionLabels[labelType]?.plural[locale] ||
                             "Pages",
                         singular:
-                            collectionLabels[collection]?.singular[locale] ||
+                            collectionLabels[labelType]?.singular[locale] ||
                             "Page",
                     }}
                     logo={<Title locale={locale} />}

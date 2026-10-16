@@ -16,7 +16,7 @@ type EyebrowProps = {
 
 const toneClasses = {
     brand: "text-brand-500",
-    inverse: "text-paper-0/90",
+    inverse: "text-paper-0",
     neutral: "text-neutral-secondary",
 } as const;
 

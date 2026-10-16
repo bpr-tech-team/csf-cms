@@ -59,11 +59,13 @@ export function renderFormEmail(
     const links = LinkHTMLConverter({
         internalDocToHref: ({ linkNode }) => {
             const doc = linkNode.fields.doc;
-            if (!doc || typeof doc.value !== "object") return "#";
-            const path =
-                doc.relationTo === "posts"
-                    ? `/posts/${doc.value.slug}`
-                    : getPagePath(doc.value as unknown as Page, locale);
+            if (
+                doc?.relationTo !== "pages" ||
+                !doc.value ||
+                typeof doc.value !== "object"
+            )
+                return "#";
+            const path = getPagePath(doc.value as unknown as Page, locale);
             return `${getServerSideURL()}${withLocalePrefix(path, locale)}`;
         },
     });

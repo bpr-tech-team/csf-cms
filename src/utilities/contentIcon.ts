@@ -1,5 +1,7 @@
 import type { Media } from "@/payload-types";
 
+export const defaultContentHeadingIcon = "solid/circle-plus";
+
 export type ContentIconValue = {
     source?: "image" | "fontawesome" | null;
     image?: Media | number | null;

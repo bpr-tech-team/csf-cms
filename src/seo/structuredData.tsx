@@ -1,4 +1,4 @@
-import type { Post } from "@/payload-types";
+import type { ContactDetails, Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { localeLanguages, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
@@ -15,7 +15,7 @@ const postalAddress = (
     addressCountry: "addressCountry" in address ? address.addressCountry : "CZ",
 });
 
-export const organizationJsonLd = () => ({
+export const organizationJsonLd = (contacts?: Partial<ContactDetails>) => ({
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${getCanonicalUrl()}/#organization`,
@@ -23,10 +23,12 @@ export const organizationJsonLd = () => ({
     alternateName: seoConfig.siteName,
     url: getCanonicalUrl(),
     logo: getCanonicalUrl(seoConfig.logoPath),
-    email: seoConfig.email,
-    telephone: seoConfig.telephone,
+    email: contacts?.email || undefined,
+    telephone: contacts?.phone || undefined,
     foundingDate: seoConfig.foundingDate,
-    sameAs: seoConfig.sameAs,
+    sameAs: contacts?.socialLinks?.length
+        ? contacts.socialLinks.map(({ url }) => url)
+        : undefined,
     address: postalAddress(seoConfig.address),
 });
 
@@ -42,15 +44,17 @@ export const websiteJsonLd = (locale: AppLocale = "cs") => ({
     inLanguage: localeLanguages[locale],
 });
 
-export const professionalServiceJsonLd = () => ({
+export const professionalServiceJsonLd = (
+    contacts?: Partial<ContactDetails>,
+) => ({
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": `${getCanonicalUrl()}/#professional-service`,
     name: seoConfig.legalName,
     url: getCanonicalUrl(),
     image: getCanonicalUrl(seoConfig.defaultOgImagePath),
-    email: seoConfig.email,
-    telephone: seoConfig.telephone,
+    email: contacts?.email || undefined,
+    telephone: contacts?.phone || undefined,
     address: postalAddress(seoConfig.address),
     areaServed: {
         "@type": "Country",
@@ -68,7 +72,7 @@ export const professionalServiceJsonLd = () => ({
 });
 
 export const blogPostingJsonLd = (
-    post: Post,
+    post: Page,
     locale: AppLocale = "cs",
     path?: string,
 ) => {

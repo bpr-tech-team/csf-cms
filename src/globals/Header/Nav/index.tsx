@@ -85,7 +85,7 @@ export const HeaderNav: React.FC<{
             className={cn(
                 isMobile
                     ? "flex min-h-0 flex-1 flex-col px-5 pt-2"
-                    : "flex items-center text-body-sm",
+                    : "flex items-center text-lg",
                 className,
             )}
             onClick={(event) => {
@@ -149,7 +149,7 @@ export const HeaderNav: React.FC<{
                         "relative flex items-center text-left no-underline transition-colors hover:text-brand-500",
                         isMobile
                             ? "min-h-15 w-full justify-between py-3 text-lg font-medium"
-                            : "min-h-26 gap-1.5 text-sm",
+                            : "min-h-26 gap-1.5 text-lg",
                         isOpen || current ? "text-brand-500" : "text-paper-0",
                         !isMobile &&
                             (isOpen || current) &&
@@ -247,7 +247,7 @@ export const HeaderNav: React.FC<{
                                             }
                                         >
                                             {!isMobile && (
-                                                <p className="mb-3 text-xs font-medium uppercase tracking-[0.08em] text-paper-0/50">
+                                                <p className="mb-3 text-lg font-medium uppercase tracking-[0.08em] text-paper-0/50">
                                                     {item.label}
                                                 </p>
                                             )}
@@ -301,7 +301,7 @@ export const HeaderNav: React.FC<{
                                                                         "group flex h-full items-center rounded-xl no-underline transition-colors hover:bg-paper-0/[0.06] hover:text-brand-500",
                                                                         isMobile
                                                                             ? "gap-3.5 py-1.5 text-base text-paper-0/85"
-                                                                            : "gap-4 p-3.5 text-base font-medium text-paper-0",
+                                                                            : "gap-4 p-3.5 text-lg font-medium text-paper-0",
                                                                         active &&
                                                                             "bg-paper-0/[0.06] text-brand-500",
                                                                     )}
@@ -358,7 +358,7 @@ export const HeaderNav: React.FC<{
                                                         locale={locale}
                                                         className={cn(
                                                             headerFocus,
-                                                            "inline-flex items-center gap-2 text-sm font-medium text-brand-500 hover:underline",
+                                                            "inline-flex items-center gap-2 text-sm xl:text-lg font-medium text-brand-500 hover:underline",
                                                         )}
                                                     >
                                                         <span aria-hidden>
@@ -393,7 +393,7 @@ export const HeaderNav: React.FC<{
                         "text-paper-0 no-underline hover:text-brand-500",
                         isMobile
                             ? "flex min-h-15 items-center border-b border-paper-0/10 py-3 text-lg font-medium"
-                            : "ml-32 text-sm",
+                            : "ml-32 text-lg",
                     )}
                 />
             )}
@@ -410,9 +410,7 @@ export const HeaderNav: React.FC<{
                         typography={false}
                         locale={locale}
                         appearance="default"
-                        className={
-                            isMobile ? "h-13 w-full" : "px-4 text-[13px]"
-                        }
+                        className={isMobile ? "h-13 w-full" : "px-4 text-lg"}
                     />
                 </div>
             )}

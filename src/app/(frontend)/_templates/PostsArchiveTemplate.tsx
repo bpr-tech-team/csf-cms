@@ -8,6 +8,7 @@ import { SetHeaderTheme } from "@/components/SetHeaderTheme";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
+import { postCardSelect } from "@/utilities/postCards";
 import { generateMeta } from "@/utilities/generateMeta";
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
@@ -31,19 +32,15 @@ export async function PostsArchiveTemplate({
     const messages = frontendMessages[locale];
 
     const posts = await payload.find({
-        collection: "posts",
+        collection: "pages",
+        where: { pageType: { equals: "post" } },
         depth: 1,
         fallbackLocale: locale === defaultLocale ? false : defaultLocale,
         limit: postsPerPage,
         locale,
         overrideAccess: false,
         page: pageNumber,
-        select: {
-            title: true,
-            slug: true,
-            categories: true,
-            meta: true,
-        },
+        select: postCardSelect,
     });
 
     return (
@@ -114,7 +111,8 @@ export async function generatePostsArchiveMetadata({
 export async function generatePostsPageStaticParams(locale: AppLocale) {
     const payload = await getPayload({ config: configPromise });
     const { totalDocs } = await payload.count({
-        collection: "posts",
+        collection: "pages",
+        where: { pageType: { equals: "post" } },
         locale,
         overrideAccess: false,
     });

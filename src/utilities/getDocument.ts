@@ -5,7 +5,7 @@ import { getPayload } from "payload";
 
 /** Read the current public target without caching its URL or publication state. */
 export async function getDocument(
-    collection: "pages" | "posts",
+    collection: "pages",
     id: number | string,
     locale: AppLocale = defaultLocale,
 ) {

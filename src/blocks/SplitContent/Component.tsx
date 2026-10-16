@@ -6,6 +6,8 @@ import type { SplitContentBlock as SplitContentBlockProps } from "@/payload-type
 
 import { MediaAsset } from "@/components/MediaAsset";
 import { SectionDivider } from "@/components/SectionDivider";
+import { ContentHeading } from "@/components/ContentHeading";
+import { ContentReveal } from "@/components/ContentReveal";
 import { HighlightedText } from "@/components/SectionHeading";
 import RichText from "@/components/RichText";
 import { cn } from "@/utilities/ui";
@@ -18,6 +20,7 @@ export const SplitContentBlock = ({
     locale = defaultLocale,
     anchorId,
     heading,
+    icon,
     highlightedTexts,
     media,
     mediaPosition,
@@ -59,15 +62,20 @@ export const SplitContentBlock = ({
                     </div>
                 ) : null}
 
-                <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-24">
+                <ContentReveal className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-24">
                     <div
                         className={cn(
                             isMediaLeft ? "lg:order-2" : "lg:order-1",
                         )}
                     >
-                        <h3 className="text-3xl leading-tight font-bold tracking-normal md:text-heading-lg">
-                            {applyTypography(heading, { locale })}
-                        </h3>
+                        {heading.trim() ? (
+                            <ContentHeading
+                                icon={icon}
+                                className="[--content-heading-size:var(--text-heading-lg)]"
+                            >
+                                {applyTypography(heading, { locale })}
+                            </ContentHeading>
+                        ) : null}
                         <RichText
                             locale={locale}
                             className={cn(
@@ -77,11 +85,19 @@ export const SplitContentBlock = ({
                                     : "text-neutral-secondary [&_a]:text-ink-950",
                             )}
                             data={richText}
+                            contentListLabels
+                            data-reveal="text"
                             enableGutter={false}
                         />
                     </div>
 
                     <div
+                        data-reveal={
+                            typeof media === "object" &&
+                            media?.mimeType?.startsWith("video/")
+                                ? "media"
+                                : "image"
+                        }
                         className={cn(
                             "relative aspect-[4/3] overflow-hidden rounded-lg border bg-paper-50 lg:aspect-square",
                             isDark
@@ -97,7 +113,7 @@ export const SplitContentBlock = ({
                             sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                     </div>
-                </div>
+                </ContentReveal>
             </div>
         </BlockSection>
     );

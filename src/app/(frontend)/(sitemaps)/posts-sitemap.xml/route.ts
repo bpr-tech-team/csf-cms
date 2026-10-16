@@ -9,7 +9,7 @@ const getPostsSitemap = unstable_cache(
     async () => {
         const payload = await getPayload({ config });
         const results = await payload.find({
-            collection: "posts",
+            collection: "pages",
             overrideAccess: false,
             draft: false,
             depth: 0,
@@ -17,6 +17,7 @@ const getPostsSitemap = unstable_cache(
             locale: "all",
             pagination: false,
             where: {
+                pageType: { equals: "post" },
                 _status: {
                     equals: "published",
                 },
