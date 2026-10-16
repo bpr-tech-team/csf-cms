@@ -28,6 +28,7 @@ import { LocaleProvider } from "@/providers/Locale";
 
 import { fields } from "./fields";
 import { EmployeeCard } from "./EmployeeCard";
+import styles from "./styles.module.css";
 
 export type FormBlockType = Omit<GeneratedFormBlock, "form"> & {
     form: FormType;
@@ -127,8 +128,11 @@ export const FormBlock: React.FC<
                 spacing={
                     sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
                 }
-                className={isHomepageDark ? "text-paper-0" : undefined}
-                data-theme={isHomepageDark ? "dark" : undefined}
+                className={cn(
+                    styles.root,
+                    isHomepageDark ? "text-paper-0" : "text-foreground",
+                )}
+                data-theme={isHomepageDark ? "dark" : "light"}
                 id={isHomepageDark ? "kontakt" : undefined}
             >
                 <div
@@ -137,12 +141,12 @@ export const FormBlock: React.FC<
                         !showEmployee && "lg:max-w-[46rem]!",
                     )}
                 >
-                    {eyebrow && isHomepageDark && !hasSubmitted && (
+                    {eyebrow && !hasSubmitted && (
                         <Eyebrow
                             locale={locale}
                             align="center"
                             className="mb-5"
-                            tone="inverse"
+                            tone={isHomepageDark ? "inverse" : "neutral"}
                         >
                             {eyebrow}
                         </Eyebrow>
@@ -150,22 +154,17 @@ export const FormBlock: React.FC<
                     {enableIntro && introContent && !hasSubmitted && (
                         <RichText
                             locale={locale}
-                            className={cn(
-                                "mb-8 lg:mb-12",
-                                isHomepageDark &&
-                                    "text-center [&_h1]:text-heading-xl [&_h1]:font-bold [&_h2]:text-heading-xl [&_h2]:font-bold text-paper-0",
-                            )}
+                            className="mb-8 text-center [&_h1]:text-heading-xl [&_h1]:font-bold [&_h2]:text-heading-xl [&_h2]:font-bold lg:mb-12"
                             data={introContent}
                             enableGutter={false}
                         />
                     )}
                     <div
                         className={cn(
-                            "rounded-md border border-border p-4 lg:p-6",
+                            styles.panel,
+                            "rounded-md border p-6 md:p-10 lg:p-6 [&_label]:text-eyebrow [&_label]:font-medium [&_label]:uppercase",
                             showEmployee &&
                                 "grid items-start gap-8 md:gap-10 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]",
-                            isHomepageDark &&
-                                "border-brand-500/20 bg-olive-950 p-6 md:p-10 [&_input]:h-12 [&_input]:rounded-xs [&_input]:border-brand-500/20 [&_input]:bg-olive-850 [&_label]:text-eyebrow [&_label]:font-medium [&_label]:uppercase [&_textarea]:min-h-28 [&_textarea]:rounded-xs [&_textarea]:border-brand-500/20 [&_textarea]:bg-olive-850",
                         )}
                     >
                         {showEmployee && employee && (
@@ -274,10 +273,7 @@ export const FormBlock: React.FC<
                                             </div>
 
                                             <Button
-                                                className={cn(
-                                                    isHomepageDark &&
-                                                        "mt-8 w-full",
-                                                )}
+                                                className="mt-8 w-full"
                                                 type="submit"
                                                 variant="default"
                                             >

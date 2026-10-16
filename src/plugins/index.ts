@@ -33,6 +33,8 @@ const generateURL: GenerateURL<Page> = ({ doc, locale: incomingLocale }) => {
 };
 
 export const plugins: Plugin[] = [
+    // The pinned Blob adapter patch reserves a new object key before each upload,
+    // including replacements, so duplicate names cannot overwrite other originals.
     vercelBlobStorage({
         alwaysInsertFields: true,
         collections: { media: true },
