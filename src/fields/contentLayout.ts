@@ -25,6 +25,7 @@ import { RelatedPosts } from "@/blocks/RelatedPosts/config";
 import { ServiceSectionIntro } from "@/blocks/ServiceSectionIntro/config";
 import { SplitContent } from "@/blocks/SplitContent/config";
 import { validateContentLayout } from "./validateContentLayout";
+import { collapseContentFields } from "./collapseContentFields";
 
 const contentBlocks: Block[] = [
     Hero,
@@ -60,7 +61,10 @@ export const contentLayout = (): BlocksField => ({
         singular: { cs: "Obsahový blok", en: "Content block" },
         plural: { cs: "Obsahové bloky", en: "Content blocks" },
     },
-    blocks: contentBlocks,
+    blocks: contentBlocks.map((block) => ({
+        ...block,
+        fields: collapseContentFields(block.fields),
+    })),
     filterOptions: ({ data }) =>
         contentBlocks
             .filter((block) =>
@@ -73,7 +77,12 @@ export const contentLayout = (): BlocksField => ({
             .map(({ slug }) => slug),
     required: true,
     validate: validateContentLayout,
-    admin: { initCollapsed: true },
+    admin: {
+        initCollapsed: true,
+        components: {
+            Field: "@/fields/ContentLayoutField#ContentLayoutField",
+        },
+    },
     label: { cs: "Obsahové bloky", en: "Content blocks" },
     localized: true,
 });
