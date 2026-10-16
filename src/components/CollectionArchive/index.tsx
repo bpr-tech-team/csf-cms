@@ -8,6 +8,7 @@ import { Card, CardPostData } from "@/components/Card";
 export type Props = {
     locale?: AppLocale;
     posts: CardPostData[];
+    theme?: "light" | "dark";
 };
 
 export const CollectionArchive: React.FC<Props> = (props) => {
@@ -15,25 +16,27 @@ export const CollectionArchive: React.FC<Props> = (props) => {
 
     return (
         <div className={cn("container")}>
-            <div>
-                <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-4 gap-x-4 lg:gap-y-8 lg:gap-x-8 xl:gap-x-8">
-                    {posts?.map((result) => {
-                        if (typeof result === "object" && result !== null) {
-                            return (
-                                <div className="col-span-4" key={result.id}>
-                                    <Card
-                                        className="h-full"
-                                        doc={result}
-                                        locale={locale}
-                                    />
-                                </div>
-                            );
-                        }
-
-                        return null;
-                    })}
-                </div>
-            </div>
+            <PostCardGrid locale={locale} posts={posts} theme={props.theme} />
         </div>
     );
 };
+
+export function PostCardGrid({
+    posts,
+    locale = defaultLocale,
+    theme = "light",
+}: Props) {
+    return (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            {posts.map((doc) => (
+                <Card
+                    key={doc.id}
+                    className="h-full"
+                    doc={doc}
+                    locale={locale}
+                    theme={theme}
+                />
+            ))}
+        </div>
+    );
+}

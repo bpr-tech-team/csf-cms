@@ -21,6 +21,7 @@ export const Card: React.FC<{
     className?: string;
     doc?: CardPostData;
     locale?: AppLocale;
+    theme?: "light" | "dark";
     title?: string;
 }> = (props) => {
     const { cardRef, linkRef } = useClickableCard({});
@@ -28,6 +29,7 @@ export const Card: React.FC<{
         className,
         doc,
         locale = defaultLocale,
+        theme = "light",
         title: titleFromProps,
     } = props;
     const messages = frontendMessages[locale];
@@ -40,7 +42,7 @@ export const Card: React.FC<{
     return (
         <article
             className={cn(
-                "border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer",
+                "border border-border rounded-lg overflow-hidden bg-card text-card-foreground hover:cursor-pointer",
                 className,
             )}
             ref={cardRef}
@@ -57,7 +59,12 @@ export const Card: React.FC<{
             </div>
             <div className="p-4">
                 {titleToUse && (
-                    <div className="prose">
+                    <div
+                        className={cn(
+                            "prose",
+                            theme === "dark" && "prose-invert",
+                        )}
+                    >
                         <h3>
                             <Link
                                 className="not-prose"

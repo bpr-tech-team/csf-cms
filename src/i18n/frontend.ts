@@ -45,6 +45,24 @@ export const frontendMessages: Record<
         postsPlural: string;
         postsSingular: string;
         postsTitle: string;
+        postsGrid: {
+            search: string;
+            placeholder: string;
+            clear: string;
+            sort: string;
+            newest: string;
+            oldest: string;
+            loading: string;
+            error: string;
+            retry: string;
+        };
+        pagination: {
+            label: string;
+            previous: string;
+            next: string;
+            more: string;
+            page: string;
+        };
         selectSlide: string;
         slide: string;
     }
@@ -96,6 +114,24 @@ export const frontendMessages: Record<
         postsPlural: "článků",
         postsSingular: "článek",
         postsTitle: "Novinky",
+        postsGrid: {
+            search: "Hledat podle názvu",
+            placeholder: "Název článku…",
+            clear: "Vymazat",
+            sort: "Řazení",
+            newest: "Od nejnovějších",
+            oldest: "Od nejstarších",
+            loading: "Načítání článků…",
+            error: "Články se nepodařilo načíst.",
+            retry: "Zkusit znovu",
+        },
+        pagination: {
+            label: "Stránkování článků",
+            previous: "Předchozí",
+            next: "Další",
+            more: "Další stránky",
+            page: "Strana",
+        },
         selectSlide: "Přepnout snímek",
         slide: "Snímek",
     },
@@ -146,6 +182,24 @@ export const frontendMessages: Record<
         postsPlural: "Posts",
         postsSingular: "Post",
         postsTitle: "Posts",
+        postsGrid: {
+            search: "Search by title",
+            placeholder: "Post title…",
+            clear: "Clear",
+            sort: "Sort by",
+            newest: "Newest first",
+            oldest: "Oldest first",
+            loading: "Loading posts…",
+            error: "Could not load posts.",
+            retry: "Try again",
+        },
+        pagination: {
+            label: "Post pagination",
+            previous: "Previous",
+            next: "Next",
+            more: "More pages",
+            page: "Page",
+        },
         selectSlide: "Select slide",
         slide: "Slide",
     },

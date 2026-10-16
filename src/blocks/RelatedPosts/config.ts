@@ -4,6 +4,14 @@ import { blockSpacingFields } from "@/fields/blockSpacing";
 
 export const RelatedPosts: Block = {
     slug: "relatedPosts",
+    admin: {
+        images: {
+            thumbnail: {
+                url: "/block-previews/related-posts.webp",
+                alt: "Související články",
+            },
+        },
+    },
     interfaceName: "RelatedPostsBlock",
     labels: {
         singular: { cs: "Související články", en: "Related posts" },

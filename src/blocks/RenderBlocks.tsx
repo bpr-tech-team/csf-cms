@@ -10,6 +10,7 @@ import { BlockSurfaceGroups } from "@/components/BlockSurfaceGroups";
 
 import type { PostCardData } from "@/utilities/postCards";
 import { RelatedPostsBlock } from "@/blocks/RelatedPosts/Component";
+import { PostsGridBlock } from "@/blocks/PostsGrid/Component";
 import type { Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
@@ -74,6 +75,16 @@ export const RenderBlocks: React.FC<{
                     );
 
                     switch (blockType) {
+                        case "postsGrid":
+                            return (
+                                <PostsGridBlock
+                                    {...block}
+                                    blockId={block.id ?? `posts-grid-${index}`}
+                                    sectionSpacing={sectionSpacing}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                />
+                            );
                         case "relatedPosts":
                             return (
                                 <RelatedPostsBlock

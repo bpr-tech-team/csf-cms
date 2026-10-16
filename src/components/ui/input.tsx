@@ -1,7 +1,7 @@
 import { cn } from "@/utilities/ui";
 import * as React from "react";
 
-const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
+const Input: React.FC<React.ComponentProps<"input">> = ({
     className,
     type,
     ...props

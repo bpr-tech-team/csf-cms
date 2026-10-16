@@ -84,6 +84,7 @@ const definitions = {
         flow: "content",
         isVisible: (_, __, relatedPosts) => Boolean(relatedPosts?.length),
     },
+    postsGrid: { surface: "theme", spacing: content, flow: "content" },
     branchesGrid: { surface: "light", spacing: standard, flow: "content" },
     branchDetails: {
         surface: "light",
