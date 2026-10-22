@@ -4,6 +4,7 @@ import { BlockSection } from "@/components/BlockSection";
 import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
+import { subscribeToAnchorNavigation } from "@/utilities/anchorNavigation";
 import type { ProcessStepsBlock as ProcessStepsBlockProps } from "@/payload-types";
 
 import { SectionHeading } from "@/components/SectionHeading";
@@ -253,6 +254,26 @@ export const ProcessStepsBlock = ({
                     if (!observer.isPressed) coast(incomingVelocity);
                 };
 
+                const unsubscribeAnchorNavigation = subscribeToAnchorNavigation(
+                    (target) => {
+                        const wasLocked = Boolean(unlock);
+                        // Complete every steps block before/containing the target,
+                        // so a smooth anchor scroll cannot be intercepted en route.
+                        // Blocks after the target keep their normal animation.
+                        if (
+                            section.contains(target) ||
+                            section.compareDocumentPosition(target) &
+                                Node.DOCUMENT_POSITION_FOLLOWING
+                        ) {
+                            finish();
+                        } else {
+                            unlock?.();
+                        }
+                        return wasLocked;
+                    },
+                );
+                if (furthestProgress === 1) return unsubscribeAnchorNavigation;
+
                 let touchY: number | undefined;
                 // Track the gesture before entering the section, so the current swipe
                 // can continue driving the animation when the page becomes locked.
@@ -338,6 +359,7 @@ export const ProcessStepsBlock = ({
                 else if (unlock) trigger.disable(false);
 
                 return () => {
+                    unsubscribeAnchorNavigation();
                     unlock?.();
                     stopMomentum();
                     observer.kill();

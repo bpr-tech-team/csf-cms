@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, fireEvent, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const animation = vi.hoisted(() => ({
@@ -62,14 +62,18 @@ vi.mock("@/utilities/typography", () => ({
     applyTypography: (text: string) => text,
 }));
 import { ProcessStepsBlock } from "./Component";
+import { SmoothHashLink } from "@/components/Link/SmoothHashLink";
 
-const mount = () =>
+const mount = (after?: React.ReactNode) =>
     render(
-        <ProcessStepsBlock
-            blockType="processSteps"
-            heading="Procesní kroky"
-            items={[{ title: "First" }, { title: "Second" }]}
-        />,
+        <>
+            <ProcessStepsBlock
+                blockType="processSteps"
+                heading="Procesní kroky"
+                items={[{ title: "First" }, { title: "Second" }]}
+            />
+            {after}
+        </>,
     );
 const enter = (velocity = 0) =>
     animation.create.mock.calls[0][0].onEnter({ getVelocity: () => velocity });
@@ -138,12 +142,112 @@ beforeEach(() => {
 });
 afterEach(() => {
     cleanup();
+    window.history.replaceState(null, "", "/");
     document.body.removeAttribute("style");
     document.documentElement.removeAttribute("style");
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
 });
 
 describe("ProcessSteps page lock with animation momentum", () => {
+    it("completes intermediate steps before a smooth hash link scrolls, including an active lock", () => {
+        const view = mount(
+            <>
+                <div id="contact" />
+                <SmoothHashLink href="#contact">Contact</SmoothHashLink>
+            </>,
+        );
+        enter();
+        wheel(120);
+        vi.stubGlobal(
+            "matchMedia",
+            vi.fn(() => ({ matches: false })),
+        );
+        const scrollIntoView = vi.fn(() => {
+            expect(document.body.style.position).toBe("");
+            expect(document.documentElement.style.overflow).toBe("");
+            expect(animation.progress).toBe(1);
+        });
+        view.container.querySelector("#contact")!.scrollIntoView =
+            scrollIntoView;
+
+        fireEvent.click(view.getByRole("link"));
+
+        expect(scrollIntoView).toHaveBeenCalledWith({
+            behavior: "smooth",
+            block: "start",
+        });
+        expect(window.location.hash).toBe("#contact");
+        expect(animation.trigger.kill).toHaveBeenCalled();
+        enter();
+        expect(document.body.style.position).toBe("");
+    });
+
+    it("does not lock when a smooth anchor scroll passes a section that was not yet entered", () => {
+        const view = mount(
+            <>
+                <div id="contact" />
+                <a href="#contact" onClick={(event) => event.preventDefault()}>
+                    Contact
+                </a>
+            </>,
+        );
+
+        fireEvent.click(view.getByRole("link"));
+        enter();
+
+        expect(animation.progress).toBe(1);
+        expect(document.body.style.position).toBe("");
+        expect(window.scrollTo).not.toHaveBeenCalled();
+    });
+
+    it("releases an upward anchor jump while preserving the animation for later scrolling", () => {
+        const view = mount();
+        const target = document.createElement("div");
+        target.id = "before-steps";
+        view.container.before(target);
+        enter();
+        wheel(4);
+        const link = document.createElement("a");
+        link.href = "#before-steps";
+        link.onclick = (event) => event.preventDefault();
+        view.container.append(link);
+
+        fireEvent.click(link);
+
+        expect(document.body.style.position).toBe("");
+        expect(animation.progress).toBe(0.005);
+        expect(animation.trigger.kill).not.toHaveBeenCalled();
+        enter();
+        expect(document.body.style.position).toBe("fixed");
+        target.remove();
+    });
+
+    it("starts with steps revealed when the initial URL points to a later section", () => {
+        window.history.replaceState(null, "", "#contact");
+        mount(<div id="contact" />);
+
+        expect(animation.progress).toBe(1);
+        expect(animation.create).not.toHaveBeenCalled();
+        expect(animation.observe).not.toHaveBeenCalled();
+        expect(document.body.style.position).toBe("");
+    });
+
+    it("reveals a target within the steps without taking a page lock", () => {
+        const view = mount();
+        view.container.querySelector("li")!.id = "step-one";
+        const link = document.createElement("a");
+        link.href = "#step-one";
+        link.onclick = (event) => event.preventDefault();
+        view.container.append(link);
+
+        fireEvent.click(link);
+        enter();
+
+        expect(animation.progress).toBe(1);
+        expect(document.body.style.position).toBe("");
+    });
+
     it("smooths a coarse wheel impulse without jumping the visible animation", () => {
         mount();
         enter();
