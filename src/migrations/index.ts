@@ -26,6 +26,7 @@ import * as migration_20261015_191306_shared_contact_details from "./20261015_19
 import * as migration_20261015_194748_footer_branches_map from "./20261015_194748_footer_branches_map";
 import * as migration_20261015_230402_pages_post_type_remove_legacy_collections from "./20261015_230402_pages_post_type_remove_legacy_collections";
 import * as migration_20261016_123611_posts_grid from "./20261016_123611_posts_grid";
+import * as migration_20261022_102111_services_grid_card_links from "./20261022_102111_services_grid_card_links";
 
 export const migrations = [
     {
@@ -167,5 +168,10 @@ export const migrations = [
         up: migration_20261016_123611_posts_grid.up,
         down: migration_20261016_123611_posts_grid.down,
         name: "20261016_123611_posts_grid",
+    },
+    {
+        up: migration_20261022_102111_services_grid_card_links.up,
+        down: migration_20261022_102111_services_grid_card_links.down,
+        name: "20261022_102111_services_grid_card_links",
     },
 ];

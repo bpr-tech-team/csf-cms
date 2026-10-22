@@ -161,6 +161,17 @@ export const HeaderNav: React.FC<{
                             className={cn(
                                 isMobile && "border-b border-paper-0/10",
                             )}
+                            onPointerEnter={(event) => {
+                                if (
+                                    !isMobile &&
+                                    !isDropdown &&
+                                    event.pointerType === "mouse"
+                                ) {
+                                    cancelClose();
+                                    hoverOpenedIndex.current = null;
+                                    setOpenIndex(null);
+                                }
+                            }}
                         >
                             {isDropdown ? (
                                 <>
@@ -225,148 +236,171 @@ export const HeaderNav: React.FC<{
                                         <img
                                             alt=""
                                             aria-hidden
-                                            src={`/media/block/header/${isMobile ? "mobile-" : ""}chevron-${isOpen ? "up" : "down"}.svg`}
+                                            src={`/media/block/header/${isMobile ? "mobile-chevron-down" : `chevron-${isOpen ? "up" : "down"}`}.svg`}
                                             width={isMobile ? 24 : 9.5}
                                             height={isMobile ? 24 : 5.5}
+                                            className={cn(
+                                                isMobile &&
+                                                    "transition-transform duration-240 ease-standard motion-reduce:transition-none",
+                                                isMobile &&
+                                                    isOpen &&
+                                                    "rotate-180",
+                                            )}
                                         />
                                     </button>
                                     <div
                                         id={`${id}-panel-${index}`}
                                         aria-labelledby={`${id}-trigger-${index}`}
-                                        hidden={!isOpen}
+                                        hidden={!isMobile && !isOpen}
+                                        inert={!isOpen}
                                         className={cn(
-                                            !isMobile &&
-                                                "absolute inset-x-0 top-full max-h-[calc(100dvh-104px)] overflow-y-auto border-b border-paper-0/20 bg-ink-900 shadow-floating",
+                                            isMobile
+                                                ? "grid transition-[grid-template-rows,opacity] duration-240 ease-standard motion-reduce:transition-none"
+                                                : "absolute inset-x-0 top-full max-h-[calc(100dvh-104px)] overflow-y-auto border-b border-paper-0/20 bg-ink-900 shadow-floating",
+                                            isMobile &&
+                                                (isOpen
+                                                    ? "grid-rows-[1fr] opacity-100"
+                                                    : "grid-rows-[0fr] opacity-0"),
                                         )}
                                     >
                                         <div
                                             className={
                                                 isMobile
-                                                    ? "pb-4"
-                                                    : "container py-10"
+                                                    ? "min-h-0 overflow-hidden"
+                                                    : undefined
                                             }
                                         >
-                                            {!isMobile && (
-                                                <p className="mb-3 text-lg font-medium uppercase tracking-[0.08em] text-paper-0/50">
-                                                    {item.label}
-                                                </p>
-                                            )}
-                                            <ul
-                                                className={cn(
-                                                    "m-0 grid list-none p-0",
+                                            <div
+                                                className={
                                                     isMobile
-                                                        ? "gap-1"
-                                                        : "grid-cols-3 gap-2",
-                                                )}
+                                                        ? "pb-4"
+                                                        : "container py-10"
+                                                }
                                             >
-                                                {children.map(
-                                                    (child, childIndex) => {
-                                                        const active =
-                                                            isCurrentDestination(
-                                                                getLinkHref(
-                                                                    child.link,
-                                                                    locale,
-                                                                ),
-                                                            );
-                                                        const originalImage =
-                                                            child.icon
-                                                                ?.source ===
-                                                                "image" &&
-                                                            child.icon
-                                                                .imageColor !==
-                                                                "monochrome";
-                                                        return (
-                                                            <li
-                                                                key={
-                                                                    child.id ||
-                                                                    childIndex
-                                                                }
-                                                            >
-                                                                <CMSLink
-                                                                    {...child.link}
-                                                                    typography={
-                                                                        false
+                                                {!isMobile && (
+                                                    <p className="mb-3 text-lg font-medium uppercase tracking-[0.08em] text-paper-0/50">
+                                                        {item.label}
+                                                    </p>
+                                                )}
+                                                <ul
+                                                    className={cn(
+                                                        "m-0 grid list-none p-0",
+                                                        isMobile
+                                                            ? "gap-1"
+                                                            : "grid-cols-3 gap-2",
+                                                    )}
+                                                >
+                                                    {children.map(
+                                                        (child, childIndex) => {
+                                                            const active =
+                                                                isCurrentDestination(
+                                                                    getLinkHref(
+                                                                        child.link,
+                                                                        locale,
+                                                                    ),
+                                                                );
+                                                            const originalImage =
+                                                                child.icon
+                                                                    ?.source ===
+                                                                    "image" &&
+                                                                child.icon
+                                                                    .imageColor !==
+                                                                    "monochrome";
+                                                            return (
+                                                                <li
+                                                                    key={
+                                                                        child.id ||
+                                                                        childIndex
                                                                     }
-                                                                    label={null}
-                                                                    locale={
-                                                                        locale
-                                                                    }
-                                                                    aria-current={
-                                                                        active
-                                                                            ? "page"
-                                                                            : undefined
-                                                                    }
-                                                                    className={cn(
-                                                                        headerFocus,
-                                                                        "group flex h-full items-center rounded-xl no-underline transition-colors hover:bg-paper-0/[0.06] hover:text-brand-500",
-                                                                        isMobile
-                                                                            ? "gap-3.5 py-1.5 text-base text-paper-0/85"
-                                                                            : "gap-4 p-3.5 text-lg font-medium text-paper-0",
-                                                                        active &&
-                                                                            "bg-paper-0/[0.06] text-brand-500",
-                                                                    )}
                                                                 >
-                                                                    <span
+                                                                    <CMSLink
+                                                                        {...child.link}
+                                                                        typography={
+                                                                            false
+                                                                        }
+                                                                        label={
+                                                                            null
+                                                                        }
+                                                                        locale={
+                                                                            locale
+                                                                        }
+                                                                        aria-current={
+                                                                            active
+                                                                                ? "page"
+                                                                                : undefined
+                                                                        }
                                                                         className={cn(
-                                                                            "flex shrink-0 items-center justify-center text-brand-500",
-                                                                            !originalImage &&
-                                                                                "bg-brand-500/16 group-hover:bg-brand-500/32",
+                                                                            headerFocus,
+                                                                            "group flex h-full items-center rounded-xl no-underline transition-colors hover:bg-paper-0/[0.06] hover:text-brand-500",
                                                                             isMobile
-                                                                                ? "size-9 rounded-[8px]"
-                                                                                : "size-11 rounded-[10px]",
+                                                                                ? "gap-3.5 py-1.5 text-base text-paper-0/85"
+                                                                                : "gap-4 p-3.5 text-lg font-medium text-paper-0",
+                                                                            active &&
+                                                                                "bg-paper-0/[0.06] text-brand-500",
                                                                         )}
                                                                     >
-                                                                        <ContentIcon
-                                                                            icon={
-                                                                                child.icon
+                                                                        <span
+                                                                            className={cn(
+                                                                                "flex shrink-0 items-center justify-center text-brand-500",
+                                                                                !originalImage &&
+                                                                                    "bg-brand-500/16 group-hover:bg-brand-500/32",
+                                                                                isMobile
+                                                                                    ? "size-9 rounded-[8px]"
+                                                                                    : "size-11 rounded-[10px]",
+                                                                            )}
+                                                                        >
+                                                                            <ContentIcon
+                                                                                icon={
+                                                                                    child.icon
+                                                                                }
+                                                                                className={
+                                                                                    originalImage
+                                                                                        ? isMobile
+                                                                                            ? "size-9"
+                                                                                            : "size-11"
+                                                                                        : isMobile
+                                                                                          ? "size-[22px]"
+                                                                                          : "size-[26px]"
+                                                                                }
+                                                                            />
+                                                                        </span>
+                                                                        <span>
+                                                                            {
+                                                                                child
+                                                                                    .link
+                                                                                    .label
                                                                             }
-                                                                            className={
-                                                                                originalImage
-                                                                                    ? isMobile
-                                                                                        ? "size-9"
-                                                                                        : "size-11"
-                                                                                    : isMobile
-                                                                                      ? "size-[22px]"
-                                                                                      : "size-[26px]"
-                                                                            }
-                                                                        />
-                                                                    </span>
-                                                                    <span>
-                                                                        {
-                                                                            child
-                                                                                .link
-                                                                                .label
-                                                                        }
-                                                                    </span>
-                                                                </CMSLink>
-                                                            </li>
-                                                        );
-                                                    },
-                                                )}
-                                            </ul>
-                                            {overview && (
-                                                <div
-                                                    className={
-                                                        isMobile
-                                                            ? "pt-4"
-                                                            : "mt-8 border-t border-paper-0/10 pt-6 pl-4"
-                                                    }
-                                                >
-                                                    <CMSLink
-                                                        {...overview}
-                                                        typography={false}
-                                                        locale={locale}
-                                                        className={cn(
-                                                            headerFocus,
-                                                            "inline-flex items-center gap-2 text-sm xl:text-lg font-medium text-brand-500 hover:underline",
-                                                        )}
+                                                                        </span>
+                                                                    </CMSLink>
+                                                                </li>
+                                                            );
+                                                        },
+                                                    )}
+                                                </ul>
+                                                {overview && (
+                                                    <div
+                                                        className={
+                                                            isMobile
+                                                                ? "pt-4"
+                                                                : "mt-8 border-t border-paper-0/10 pt-6 pl-4"
+                                                        }
                                                     >
-                                                        <span aria-hidden>
-                                                            →
-                                                        </span>
-                                                    </CMSLink>
-                                                </div>
-                                            )}
+                                                        <CMSLink
+                                                            {...overview}
+                                                            typography={false}
+                                                            locale={locale}
+                                                            className={cn(
+                                                                headerFocus,
+                                                                "inline-flex items-center gap-2 text-sm xl:text-lg font-medium text-brand-500 hover:underline",
+                                                            )}
+                                                        >
+                                                            <span aria-hidden>
+                                                                →
+                                                            </span>
+                                                        </CMSLink>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </>

@@ -17,6 +17,7 @@ export const HeroBlock = ({
         spacing={sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }}
         backgroundMedia={backgroundMedia}
         isPageIntro={isPageIntro}
+        variant={isPageIntro ? "pageIntro" : "default"}
     >
         <HeroContent {...content} isPageIntro={isPageIntro} />
     </HeroSection>

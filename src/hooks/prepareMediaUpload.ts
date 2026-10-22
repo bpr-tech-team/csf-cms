@@ -1,8 +1,10 @@
+import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { APIError, type CollectionBeforeChangeHook } from "payload";
 
 export const prepareMediaUpload: CollectionBeforeChangeHook = async ({
     data,
+    originalDoc,
     req,
 }) => {
     const file = req.file;
@@ -22,6 +24,12 @@ export const prepareMediaUpload: CollectionBeforeChangeHook = async ({
             "The uploaded file is empty. Please upload it again.",
             400,
         );
+    }
+
+    // Server uploads and in-place crops also need a fresh storage/cache identity.
+    // Keep a destination already reserved for a new processed client upload.
+    if (!data._objectKey || data._objectKey === originalDoc?._objectKey) {
+        data._objectKey = randomUUID();
     }
 
     return data;

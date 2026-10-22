@@ -49,7 +49,7 @@ export const ServicesGrid: Block = {
                     },
                     required: true,
                 },
-                link({ appearances: false }),
+                link({ appearances: false, disableLabel: true }),
             ],
             label: {
                 cs: "Služby",

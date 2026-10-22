@@ -1,0 +1,25 @@
+.pageIntro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* The section's padding already includes the header inset. */
+    min-height: 30rem;
+}
+
+@media (min-width: 48rem) {
+    .pageIntro {
+        min-height: 35rem;
+    }
+}
+
+@media (min-width: 80rem) {
+    .pageIntro {
+        min-height: clamp(35rem, 75svh, 40rem);
+    }
+}
+
+@media (max-height: 600px) {
+    .pageIntro {
+        min-height: 0;
+    }
+}

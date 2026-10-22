@@ -15,6 +15,20 @@
 
 @plugin "@tailwindcss/typography";
 
+/* Preserve layout while the first hero's photo and content become ready together.
+   Without the small head script (including no-JS), server content stays visible. */
+html[data-hero-reveal-enabled] [data-hero-reveal="pending"] > * {
+    visibility: hidden;
+}
+
+html[data-hero-reveal-enabled] [data-hero-reveal="pending"] * {
+    animation-play-state: paused !important;
+}
+
+html[data-hero-reveal-enabled] [data-hero-reveal="error"] img[data-hero-image] {
+    visibility: hidden;
+}
+
 .payload-richtext .richtext-color * {
     color: inherit;
 }
@@ -204,10 +218,6 @@
     body {
         @apply bg-background text-foreground min-h-[100vh] flex flex-col;
     }
-}
-
-html:not([data-theme]) {
-    opacity: 0;
 }
 
 @media (any-pointer: fine) {

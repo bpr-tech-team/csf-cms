@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import { anyone } from "../access/anyone";
 import { authenticated } from "../access/authenticated";
 import { prepareMediaUpload } from "../hooks/prepareMediaUpload";
+import { revalidateMedia } from "../hooks/revalidateMedia";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -14,6 +15,7 @@ export const Media: CollectionConfig = {
     slug: "media",
     folders: true,
     hooks: {
+        afterOperation: [revalidateMedia],
         beforeChange: [prepareMediaUpload],
     },
     access: {

@@ -4,6 +4,7 @@ import { BlockSection } from "@/components/BlockSection";
 import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import { applyTypography } from "@/utilities/typography";
+import { subscribeToAnchorNavigation } from "@/utilities/anchorNavigation";
 import type { ProcessStepsBlock as ProcessStepsBlockProps } from "@/payload-types";
 
 import { SectionHeading } from "@/components/SectionHeading";
@@ -85,14 +86,19 @@ export const ProcessStepsBlock = ({
                     duration: 0.3,
                     ease: "power2.out",
                 });
-                const advance = (progress: number) => {
-                    if (progress <= furthestProgress) return;
-                    furthestProgress = Math.min(1, progress);
-                    if (canFreeze || furthestProgress === 1) {
+                const advance = (progress: number, smooth = !canFreeze) => {
+                    // Small deltas may sum to 0.999999... even when the rendered
+                    // timeline is complete; snap the endpoint to release the page.
+                    const nextProgress = progress >= 1 - 1e-6 ? 1 : progress;
+                    if (nextProgress <= furthestProgress) return;
+                    furthestProgress = nextProgress;
+                    if (!smooth || (!canFreeze && furthestProgress === 1)) {
                         smoothProgress.tween.pause();
                         timeline.progress(furthestProgress);
                     } else {
-                        smoothProgress(furthestProgress);
+                        // Direct touch/trackpad updates may have moved the timeline
+                        // since quickTo last ran; always start at the visible progress.
+                        smoothProgress(furthestProgress, timeline.progress());
                     }
                 };
 
@@ -116,15 +122,25 @@ export const ProcessStepsBlock = ({
                 let trigger: ScrollTrigger | undefined = undefined;
                 const viewportHeight = window.innerHeight;
                 const viewportWidth = window.innerWidth;
-                const distance = () =>
+                const inputDistance =
                     viewportHeight * Math.max(0.4, items.length / 4);
+                const progressDistance = inputDistance * 2;
+                const stopSmoothing = () => {
+                    smoothProgress.tween.pause();
+                    furthestProgress = timeline.progress();
+                };
                 const finish = () => {
                     stopMomentum();
-                    advance(1);
+                    smoothProgress.tween.pause();
+                    furthestProgress = 1;
+                    timeline.progress(1);
                     unlock?.();
                     trigger?.kill();
                 };
-                const consumeScroll = (delta: number) => {
+                smoothProgress.tween.eventCallback("onComplete", () => {
+                    if (furthestProgress === 1) finish();
+                });
+                const consumeScroll = (delta: number, smooth = false) => {
                     stopMomentum();
                     if (delta < 0) {
                         // Let the user leave upwards without reversing the steps.
@@ -132,8 +148,11 @@ export const ProcessStepsBlock = ({
                         window.scrollBy({ top: delta, behavior: "instant" });
                         return;
                     }
-                    advance(furthestProgress + delta / distance());
-                    if (furthestProgress === 1) finish();
+                    advance(
+                        furthestProgress + delta / progressDistance,
+                        smooth,
+                    );
+                    if (furthestProgress === 1 && !smooth) finish();
                 };
                 const coast = (velocity: number) => {
                     if (!unlock || velocity <= 0) return;
@@ -147,7 +166,7 @@ export const ProcessStepsBlock = ({
                     momentum = gsap.to(state, {
                         progress:
                             furthestProgress +
-                            (velocity * duration) / (3 * distance()),
+                            (velocity * duration) / (3 * progressDistance),
                         duration,
                         ease: "power2.out",
                         onUpdate: () => {
@@ -181,7 +200,9 @@ export const ProcessStepsBlock = ({
                     ) {
                         event.preventDefault();
                         consumeScroll(
-                            event.key === "ArrowDown" ? 80 : distance() / 2,
+                            event.key === "ArrowDown"
+                                ? 80
+                                : progressDistance / 2,
                         );
                     }
                 };
@@ -211,6 +232,7 @@ export const ProcessStepsBlock = ({
                         // Restore once, rather than correcting every native scroll event.
                         unlock = undefined;
                         stopMomentum();
+                        stopSmoothing();
                         Object.assign(body.style, bodyStyles);
                         root.style.overflow = overflow;
                         window.scrollTo({
@@ -231,6 +253,26 @@ export const ProcessStepsBlock = ({
                     root.style.overflow = "hidden";
                     if (!observer.isPressed) coast(incomingVelocity);
                 };
+
+                const unsubscribeAnchorNavigation = subscribeToAnchorNavigation(
+                    (target) => {
+                        const wasLocked = Boolean(unlock);
+                        // Complete every steps block before/containing the target,
+                        // so a smooth anchor scroll cannot be intercepted en route.
+                        // Blocks after the target keep their normal animation.
+                        if (
+                            section.contains(target) ||
+                            section.compareDocumentPosition(target) &
+                                Node.DOCUMENT_POSITION_FOLLOWING
+                        ) {
+                            finish();
+                        } else {
+                            unlock?.();
+                        }
+                        return wasLocked;
+                    },
+                );
+                if (furthestProgress === 1) return unsubscribeAnchorNavigation;
 
                 let touchY: number | undefined;
                 // Track the gesture before entering the section, so the current swipe
@@ -266,6 +308,7 @@ export const ProcessStepsBlock = ({
                     },
                     onPress: ({ event }) => {
                         stopMomentum();
+                        stopSmoothing();
                         touchY = (event as TouchEvent).touches?.[0]?.screenY;
                         // GSAP's iOS recommendation: cancel touchstart as well as moves.
                         if (unlock && event.cancelable) event.preventDefault();
@@ -279,7 +322,16 @@ export const ProcessStepsBlock = ({
                                   ? deltaY
                                   : -deltaY;
                         if (point) touchY = point.screenY;
-                        if (unlock) consumeScroll(delta);
+                        if (unlock) {
+                            // Keep input smoothing independent of animation speed,
+                            // so slowing progress cannot turn wheel impulses into jumps.
+                            const smooth =
+                                event.type === "wheel" &&
+                                ((delta / inputDistance) * timeline.duration() >
+                                    0.1 ||
+                                    smoothProgress.tween.isActive());
+                            consumeScroll(delta, smooth);
+                        }
                     },
                     onRelease: (self, wasDragging = false) => {
                         touchY = undefined;
@@ -307,6 +359,7 @@ export const ProcessStepsBlock = ({
                 else if (unlock) trigger.disable(false);
 
                 return () => {
+                    unsubscribeAnchorNavigation();
                     unlock?.();
                     stopMomentum();
                     observer.kill();

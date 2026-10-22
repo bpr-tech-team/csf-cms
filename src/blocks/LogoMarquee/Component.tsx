@@ -80,6 +80,7 @@ const LogoGroup = ({
                         alt={ariaHidden ? "" : item.name}
                         className="h-10 w-32 object-contain md:w-40"
                         resource={item.logo}
+                        sizes="(min-width: 768px) 160px, 128px"
                     />
                 );
 

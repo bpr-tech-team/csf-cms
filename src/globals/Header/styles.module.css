@@ -1,0 +1,22 @@
+@media (prefers-reduced-motion: no-preference) {
+    .closing,
+    .closing::backdrop {
+        animation: menu-close 240ms var(--ease-standard) forwards;
+    }
+
+    .closing nav {
+        animation: content-close 240ms var(--ease-standard) forwards;
+    }
+}
+
+@keyframes menu-close {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes content-close {
+    to {
+        transform: translateY(-0.5rem);
+    }
+}
