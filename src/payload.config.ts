@@ -24,6 +24,7 @@ const email = createSMTPEmailAdapter();
 
 export default buildConfig({
     admin: {
+        theme: "dark",
         meta: {
             titleSuffix: "- CSF",
             icons: [
