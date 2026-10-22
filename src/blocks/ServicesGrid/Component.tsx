@@ -8,6 +8,7 @@ import { CardIcon } from "@/components/CardIcon";
 import { SectionHeading } from "@/components/SectionHeading";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
+import { getLinkHref } from "@/utilities/getLinkHref";
 import React from "react";
 
 export const ServicesGridBlock = ({
@@ -26,7 +27,6 @@ export const ServicesGridBlock = ({
             spacing={
                 sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
             }
-
             id="sluzby"
         >
             <div className="container">
@@ -52,22 +52,31 @@ export const ServicesGridBlock = ({
                                 </p>
                             </>
                         );
+                        const className =
+                            "group flex min-h-80 flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-sm transition-colors duration-base hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-600";
+
+                        if (!getLinkHref(item.link, locale)) {
+                            return (
+                                <article
+                                    className={className}
+                                    key={item.id ?? index}
+                                >
+                                    {content}
+                                </article>
+                            );
+                        }
 
                         return (
-                            <article
-                                className="group flex min-h-80 flex-col rounded-lg border border-border-light bg-ink-950/[0.02] p-6 backdrop-blur-sm transition-colors duration-base hover:bg-brand-500"
+                            <CMSLink
+                                {...item.link}
+                                appearance="inline"
+                                className={className}
                                 key={item.id ?? index}
+                                label={null}
+                                locale={locale}
                             >
                                 {content}
-                                {item.link && (
-                                    <CMSLink
-                                        {...item.link}
-                                        appearance="inline"
-                                        className="mt-auto pt-8 text-body-md font-medium text-[#131409] underline underline-offset-2 transition-colors hover:text-brand-600"
-                                        locale={locale}
-                                    />
-                                )}
-                            </article>
+                            </CMSLink>
                         );
                     })}
                 </div>
