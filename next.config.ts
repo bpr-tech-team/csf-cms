@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
                 pathname: "/media/block/**",
             },
         ],
-        qualities: [75, 100],
+        qualities: [65, 75, 100],
         remotePatterns: [
             ...(process.env.BLOB_PUBLIC_URL
                 ? [

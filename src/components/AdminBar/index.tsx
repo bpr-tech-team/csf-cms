@@ -10,13 +10,19 @@ import { defaultLocale, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import { cn } from "@/utilities/ui";
 import { useSelectedLayoutSegments } from "next/navigation";
-import { PayloadAdminBar } from "@payloadcms/admin-bar";
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import "./index.scss";
 
 import { getClientSideURL } from "@/utilities/getURL";
+
+// Editor controls are not needed to render a public page's first screen.
+const PayloadAdminBar = dynamic(
+    () => import("@payloadcms/admin-bar").then((mod) => mod.PayloadAdminBar),
+    { ssr: false },
+);
 
 const baseClass = "admin-bar";
 

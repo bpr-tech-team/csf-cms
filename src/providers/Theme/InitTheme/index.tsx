@@ -1,50 +1,28 @@
-import Script from "next/script";
 import React from "react";
 
 import { defaultTheme, themeLocalStorageKey } from "../shared";
 
 export const InitTheme: React.FC = () => {
     return (
-        // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
-        <Script
+        // Run during HTML parsing, before CSS paints, without the Next.js runtime.
+        <script
             dangerouslySetInnerHTML={{
                 __html: `
   (function () {
-    function getImplicitPreference() {
-      var mediaQuery = '(prefers-color-scheme: dark)'
-      var mql = window.matchMedia(mediaQuery)
-      var hasImplicitPreference = typeof mql.matches === 'boolean'
-
-      if (hasImplicitPreference) {
-        return mql.matches ? 'dark' : 'light'
-      }
-
-      return null
-    }
-
-    function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
-    }
-
-    var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
-
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      var implicitPreference = getImplicitPreference()
-
-      if (implicitPreference) {
-        themeToSet = implicitPreference
-      }
-    }
+    var themeToSet = ${JSON.stringify(defaultTheme)}
+    try {
+      themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    } catch (_) {}
+    try {
+      var preference = window.localStorage.getItem(${JSON.stringify(themeLocalStorageKey)})
+      if (preference === 'light' || preference === 'dark') themeToSet = preference
+    } catch (_) {}
 
     document.documentElement.setAttribute('data-theme', themeToSet)
   })();
   `,
             }}
             id="theme-script"
-            strategy="beforeInteractive"
         />
     );
 };

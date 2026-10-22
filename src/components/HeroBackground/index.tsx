@@ -1,7 +1,8 @@
 import Image from "next/image";
 
 import type { Media } from "@/payload-types";
-import { getMediaUrl } from "@/utilities/getMediaUrl";
+import { getImageMediaUrl } from "@/utilities/getImageMediaUrl";
+import { isImageMedia } from "@/utilities/isImageMedia";
 
 import { HeroParticles } from "./HeroParticles";
 import styles from "./styles.module.css";
@@ -17,13 +18,7 @@ export const HeroBackground = ({
     onAutoplayChange,
     resource,
 }: HeroBackgroundProps) => {
-    const image =
-        resource &&
-        typeof resource === "object" &&
-        resource.url &&
-        resource.mimeType?.startsWith("image/")
-            ? resource
-            : null;
+    const image = isImageMedia(resource) ? resource : null;
 
     return (
         <>
@@ -32,12 +27,13 @@ export const HeroBackground = ({
                     <Image
                         alt=""
                         className={styles.image}
+                        data-hero-image={isPageIntro ? "" : undefined}
                         fetchPriority={isPageIntro ? "high" : undefined}
                         fill
                         loading={isPageIntro ? "eager" : "lazy"}
-                        quality={75}
+                        quality={65}
                         sizes="100vw"
-                        src={getMediaUrl(image.url, image.updatedAt)}
+                        src={getImageMediaUrl(image)}
                     />
                 )}
             </div>
