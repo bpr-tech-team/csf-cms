@@ -5,6 +5,9 @@ import type { ReactNode } from "react";
 import { HeroBackground } from "@/components/HeroBackground";
 import type { Media } from "@/payload-types";
 import { isImageMedia } from "@/utilities/isImageMedia";
+import { cn } from "@/utilities/ui";
+
+import styles from "./styles.module.css";
 
 type HeroSectionProps = {
     backgroundMedia?: Media | number | null;
@@ -13,6 +16,7 @@ type HeroSectionProps = {
     isPageIntro?: boolean;
     label?: string;
     onAutoplayChange?: (running: boolean) => void;
+    variant?: "default" | "pageIntro";
 };
 
 export const HeroSection = ({
@@ -22,13 +26,17 @@ export const HeroSection = ({
     isPageIntro = false,
     label,
     onAutoplayChange,
+    variant = "default",
 }: HeroSectionProps) => (
     <BlockSection
         blockType="hero"
         isPageIntro={isPageIntro}
         spacing={spacing}
         aria-label={label}
-        className="relative isolate min-h-120 overflow-hidden text-paper-0"
+        className={cn(
+            "relative isolate min-h-120 overflow-hidden text-paper-0",
+            variant === "pageIntro" && styles.pageIntro,
+        )}
         data-hero-reveal={
             isPageIntro && isImageMedia(backgroundMedia) ? "pending" : undefined
         }
