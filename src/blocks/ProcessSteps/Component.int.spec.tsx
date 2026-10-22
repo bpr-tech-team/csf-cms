@@ -3,7 +3,18 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const animation = vi.hoisted(() => ({
-    timeline: { from: vi.fn(), progress: vi.fn() },
+    progress: 0,
+    timeline: {
+        from: vi.fn(),
+        progress: vi.fn(),
+        duration: () => 1.85,
+    },
+    smoothProgress: vi.fn(),
+    smoothTween: {
+        pause: vi.fn(),
+        isActive: vi.fn(),
+        eventCallback: vi.fn(),
+    },
     tween: { kill: vi.fn() },
     observer: { kill: vi.fn(), isPressed: true },
     trigger: { disable: vi.fn(), enable: vi.fn(), kill: vi.fn() },
@@ -17,7 +28,10 @@ vi.mock("gsap", () => ({
     default: {
         registerPlugin: vi.fn(),
         timeline: () => animation.timeline,
-        quickTo: () => Object.assign(vi.fn(), { tween: { pause: vi.fn() } }),
+        quickTo: () =>
+            Object.assign(animation.smoothProgress, {
+                tween: animation.smoothTween,
+            }),
         to: animation.to,
         matchMedia: () => ({
             add: (
@@ -69,12 +83,36 @@ const press = (y: number) =>
     observer().onPress({ event: touch("touchstart", y) });
 const move = (y: number) =>
     observer().onChangeY({ deltaY: -100, event: touch("touchmove", y) });
+const wheel = (deltaY: number) => {
+    const event = new WheelEvent("wheel", { deltaY, cancelable: true });
+    observer().ignoreCheck(event);
+    observer().onChangeY({ deltaY, event });
+    return event;
+};
+const completeSmoothing = (progress = 1) => {
+    animation.progress = progress;
+    animation.smoothTween.isActive.mockReturnValue(false);
+    animation.smoothTween.eventCallback.mock.calls[0][1]();
+};
 
 beforeEach(() => {
     vi.clearAllMocks();
+    animation.progress = 0;
     animation.motion = true;
     animation.observer.isPressed = true;
     animation.timeline.from.mockReturnValue(animation.timeline);
+    animation.timeline.progress.mockImplementation((progress?: number) => {
+        if (progress === undefined) return animation.progress;
+        animation.progress = progress;
+        return animation.timeline;
+    });
+    animation.smoothTween.isActive.mockReturnValue(false);
+    animation.smoothTween.pause.mockImplementation(() => {
+        animation.smoothTween.isActive.mockReturnValue(false);
+    });
+    animation.smoothProgress.mockImplementation(() => {
+        animation.smoothTween.isActive.mockReturnValue(true);
+    });
     animation.create.mockReturnValue(animation.trigger);
     animation.observe.mockReturnValue(animation.observer);
     animation.to.mockReturnValue(animation.tween);
@@ -106,6 +144,137 @@ afterEach(() => {
 });
 
 describe("ProcessSteps page lock with animation momentum", () => {
+    it("smooths a coarse wheel impulse without jumping the visible animation", () => {
+        mount();
+        enter();
+        expect(wheel(120).defaultPrevented).toBe(true);
+        expect(animation.smoothProgress).toHaveBeenLastCalledWith(0.15, 0);
+        expect(animation.progress).toBe(0);
+        expect(document.body.style.position).toBe("fixed");
+        expect(window.scrollTo).not.toHaveBeenCalled();
+    });
+
+    it("accumulates wheel impulses and keeps smoothing their fine trailing deltas", () => {
+        mount();
+        enter();
+        wheel(120);
+        animation.progress = 0.05;
+        wheel(120);
+        expect(animation.smoothProgress).toHaveBeenLastCalledWith(0.3, 0.05);
+        wheel(4);
+        expect(animation.smoothProgress).toHaveBeenLastCalledWith(0.305, 0.05);
+        expect(animation.progress).toBe(0.05);
+    });
+
+    it("keeps smoothing wheel impulses that only exceed the threshold at the original speed", () => {
+        mount();
+        enter();
+        wheel(30);
+        expect(animation.smoothProgress).toHaveBeenCalledWith(0.0375, 0);
+        expect(animation.progress).toBe(0);
+        expect(document.body.style.position).toBe("fixed");
+    });
+
+    it("preserves direct tracking of fine trackpad deltas", () => {
+        mount();
+        enter();
+        wheel(4);
+        wheel(4);
+        expect(animation.progress).toBe(0.01);
+        expect(animation.smoothProgress).not.toHaveBeenCalled();
+        expect(document.body.style.position).toBe("fixed");
+    });
+
+    it("finishes after many fine trackpad deltas without trapping the page on floating-point residue", () => {
+        mount();
+        enter();
+        for (let index = 0; index < 400; index++) wheel(2);
+        expect(animation.progress).toBe(1);
+        expect(document.body.style.position).toBe("");
+        expect(document.documentElement.style.overflow).toBe("");
+        expect(window.scrollTo).toHaveBeenCalledTimes(1);
+    });
+
+    it("starts a coarse wheel transition from the progress already shown by the trackpad", () => {
+        mount();
+        enter();
+        wheel(4);
+        wheel(120);
+        expect(animation.smoothProgress).toHaveBeenLastCalledWith(0.155, 0.005);
+        expect(animation.progress).toBe(0.005);
+    });
+
+    it("requires twice the original scroll distance and waits for the final transition before unlocking", () => {
+        mount();
+        enter();
+        wheel(400);
+        expect(animation.smoothProgress).toHaveBeenCalledWith(0.5, 0);
+        completeSmoothing(0.5);
+        expect(document.body.style.position).toBe("fixed");
+        expect(window.scrollTo).not.toHaveBeenCalled();
+        wheel(400);
+        wheel(120);
+        expect(animation.smoothProgress).toHaveBeenCalledTimes(2);
+        expect(animation.smoothProgress).toHaveBeenLastCalledWith(1, 0.5);
+        animation.progress = 0.9;
+        expect(document.body.style.position).toBe("fixed");
+        expect(window.scrollTo).not.toHaveBeenCalled();
+        completeSmoothing();
+        expect(document.body.style.position).toBe("");
+        expect(window.scrollTo).toHaveBeenCalledTimes(1);
+        expect(animation.trigger.kill).toHaveBeenCalled();
+    });
+
+    it("pauses wheel smoothing on upward exit and resumes from the visible progress", () => {
+        mount();
+        enter();
+        wheel(120);
+        animation.progress = 0.1;
+        wheel(-40);
+        expect(animation.smoothTween.isActive()).toBe(false);
+        expect(document.body.style.position).toBe("");
+        expect(window.scrollBy).toHaveBeenCalledWith({
+            top: -40,
+            behavior: "instant",
+        });
+        enter();
+        wheel(4);
+        expect(animation.progress).toBeCloseTo(0.105);
+    });
+
+    it("lets a touch gesture take over from an unfinished wheel transition", () => {
+        mount();
+        enter();
+        wheel(120);
+        animation.progress = 0.1;
+        press(700);
+        move(660);
+        expect(animation.smoothTween.isActive()).toBe(false);
+        expect(animation.progress).toBeCloseTo(0.15);
+        expect(document.body.style.position).toBe("fixed");
+    });
+
+    it("allows Escape to finish immediately during the final wheel transition", () => {
+        mount();
+        enter();
+        wheel(800);
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+        expect(animation.progress).toBe(1);
+        expect(document.body.style.position).toBe("");
+        expect(animation.smoothTween.isActive()).toBe(false);
+    });
+
+    it("stops an unfinished wheel transition and restores the page on unmount", () => {
+        const view = mount();
+        enter();
+        wheel(120);
+        view.unmount();
+        expect(animation.smoothTween.isActive()).toBe(false);
+        expect(document.body.style.position).toBe("");
+        expect(document.documentElement.style.overflow).toBe("");
+        expect(animation.observer.kill).toHaveBeenCalled();
+    });
+
     it("continues an existing swipe while the whole page remains fixed", () => {
         mount();
         press(700);
@@ -114,7 +283,7 @@ describe("ProcessSteps page lock with animation momentum", () => {
         expect(document.body.style.position).toBe("fixed");
         expect(document.body.style.top).toBe("-600px");
         move(550);
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.25);
+        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.125);
         window.dispatchEvent(new Event("scroll"));
         expect(window.scrollTo).not.toHaveBeenCalled();
     });
@@ -126,7 +295,7 @@ describe("ProcessSteps page lock with animation momentum", () => {
         move(600);
         observer().onRelease({ velocityY: -2000, axis: "y" }, true);
         const [state, tween] = animation.to.mock.calls[0];
-        expect(tween.progress).toBeGreaterThan(1);
+        expect(tween.progress).toBeCloseTo(0.680556);
         expect(tween.duration).toBeGreaterThan(0);
         state.progress = 0.7;
         tween.onUpdate();
@@ -135,7 +304,7 @@ describe("ProcessSteps page lock with animation momentum", () => {
         expect(window.scrollTo).not.toHaveBeenCalled();
         state.progress = 1.05;
         tween.onUpdate();
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(1);
+        expect(animation.progress).toBe(1);
         expect(document.body.style.position).toBe("");
         expect(window.scrollTo).toHaveBeenCalledTimes(1);
         expect(animation.trigger.kill).toHaveBeenCalled();
@@ -146,7 +315,7 @@ describe("ProcessSteps page lock with animation momentum", () => {
         animation.observer.isPressed = false;
         enter(2000);
         expect(animation.to).toHaveBeenCalledTimes(1);
-        expect(animation.to.mock.calls[0][1].progress).toBeGreaterThan(1);
+        expect(animation.to.mock.calls[0][1].progress).toBeCloseTo(0.555556);
         expect(document.body.style.position).toBe("fixed");
         expect(window.scrollTo).not.toHaveBeenCalled();
     });
@@ -161,7 +330,7 @@ describe("ProcessSteps page lock with animation momentum", () => {
         expect(animation.tween.kill).toHaveBeenCalled();
         move(550);
         expect(document.body.style.position).toBe("");
-        expect(animation.timeline.progress).toHaveBeenLastCalledWith(0.25);
+        expect(animation.progress).toBe(0.125);
         expect(window.scrollBy).toHaveBeenCalledWith({
             top: -50,
             behavior: "instant",
