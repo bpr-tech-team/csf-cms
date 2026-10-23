@@ -1,9 +1,9 @@
 export const branchMapPositions = {
-    praha: { label: "Praha", x: 478, y: 295 },
-    "hradec-kralove": { label: "Hradec Králové", x: 647, y: 253 },
-    ostrava: { label: "Ostrava", x: 959, y: 317 },
-    zlin: { label: "Zlín", x: 936, y: 469 },
-    brno: { label: "Brno", x: 794, y: 483 },
+    praha: { label: "Praha", x: 424.53, y: 277.47 },
+    "hradec-kralove": { label: "Hradec Králové", x: 653.67, y: 234.56 },
+    ostrava: { label: "Ostrava", x: 1073.29, y: 339.59 },
+    zlin: { label: "Zlín", x: 973.45, y: 501.84 },
+    brno: { label: "Brno", x: 805.31, y: 511.28 },
 } as const;
 
 export type BranchMapPosition = keyof typeof branchMapPositions;
