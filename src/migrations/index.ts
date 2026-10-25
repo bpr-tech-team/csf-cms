@@ -29,6 +29,8 @@ import * as migration_20261016_123611_posts_grid from "./20261016_123611_posts_g
 import * as migration_20261022_102111_services_grid_card_links from "./20261022_102111_services_grid_card_links";
 import * as migration_20261025_082441_branch_hero_map_position from "./20261025_082441_branch_hero_map_position";
 import * as migration_20261025_090452_canonical_branch_map from "./20261025_090452_canonical_branch_map";
+import * as migration_20261025_094728_branch_images from "./20261025_094728_branch_images";
+import * as migration_20261025_100759_gallery_controls from "./20261025_100759_gallery_controls";
 
 export const migrations = [
     {
@@ -185,5 +187,15 @@ export const migrations = [
         up: migration_20261025_090452_canonical_branch_map.up,
         down: migration_20261025_090452_canonical_branch_map.down,
         name: "20261025_090452_canonical_branch_map",
+    },
+    {
+        up: migration_20261025_094728_branch_images.up,
+        down: migration_20261025_094728_branch_images.down,
+        name: "20261025_094728_branch_images",
+    },
+    {
+        up: migration_20261025_100759_gallery_controls.up,
+        down: migration_20261025_100759_gallery_controls.down,
+        name: "20261025_100759_gallery_controls",
     },
 ];

@@ -55,6 +55,24 @@ The canonical-map migration copies legacy Footer positions into pages and their
 versions before removing the redundant Footer field; conflicting assignments
 stop the migration before any content is changed.
 
+The `branchDetails` block (Informace o pobočce) reads opening hours and contacts
+from `branchInfo`. Hours appear on the left and contacts on the right on wide
+screens; narrow screens stack them in that order. Empty opening hours omit that
+column. Optional ordered `branchInfo.images` are shared across languages and use
+the existing Gallery below the information, with a 21:9 crop and autoplay off.
+One image opens in the same lightbox without carousel controls; multiple images
+can be switched manually. The enlarged view shows the full original image.
+Without valid images, the photo row is omitted. The former `mapEmbedUrl` field
+remains stored for compatibility but is hidden in the editor and no longer
+rendered by this block.
+
+Gallery blocks, galleries within Flexible content, and the Branch information
+block offer `showControls` (Zobrazit ovládání), enabled by default. Disabling it
+hides inline arrows, indicators and the zoom button. Swiping, keyboard navigation
+and clicking the image to open the lightbox remain available; the lightbox keeps
+its controls. Autoplay galleries retain a pause/resume button revealed by keyboard
+focus, even with inline controls hidden.
+
 Static generation and on-demand revalidation remain enabled. Proxy matches only
 page URLs that need alias or localized-slug resolution; homepages, assets, API,
 admin and canonical Czech branch/post routes bypass it. Its Payload lookup

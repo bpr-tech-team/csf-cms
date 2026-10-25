@@ -1,4 +1,5 @@
 import { blockSpacingFields } from "@/fields/blockSpacing";
+import { galleryControlsField } from "@/fields/gallery";
 import type { Block } from "payload";
 
 export const BranchDetails: Block = {
@@ -7,19 +8,19 @@ export const BranchDetails: Block = {
         images: {
             thumbnail: {
                 url: "/block-previews/branch-details.webp",
-                alt: "Kontakty a mapa pobočky",
+                alt: "Informace o pobočce",
             },
         },
     },
     interfaceName: "BranchDetailsBlock",
     labels: {
         singular: {
-            cs: "Kontakty a mapa pobočky",
-            en: "Branch contacts and map",
+            cs: "Informace o pobočce",
+            en: "Branch information",
         },
         plural: {
-            cs: "Kontakty a mapy poboček",
-            en: "Branch contacts and maps",
+            cs: "Informace o pobočkách",
+            en: "Branch information blocks",
         },
     },
     fields: [
@@ -51,5 +52,6 @@ export const BranchDetails: Block = {
                 },
             },
         },
+        galleryControlsField(),
     ],
 };

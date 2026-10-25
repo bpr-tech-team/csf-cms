@@ -3,13 +3,12 @@ import { BlockSection } from "@/components/BlockSection";
 import type { BlockSpacingProps } from "@/utilities/blockSpacing";
 import type { BranchDetailsBlock as Props, Page } from "@/payload-types";
 import { BranchOpeningHours } from "@/components/BranchOpeningHours";
+import { Gallery } from "@/components/Gallery";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
-import {
-    branchLabels,
-    isGoogleMapsEmbedURL,
-    phoneHref,
-} from "@/utilities/branchData";
+import { branchLabels, phoneHref } from "@/utilities/branchData";
+import { getGalleryImages } from "@/utilities/gallery";
 import { applyTypography } from "@/utilities/typography";
+import { cn } from "@/utilities/ui";
 
 export const BranchDetailsBlock = ({
     sectionSpacing,
@@ -18,6 +17,7 @@ export const BranchDetailsBlock = ({
     anchorId,
     contactHeading,
     hoursHeading,
+    showControls,
     page,
     locale = defaultLocale,
 }: Props & BlockSpacingProps & { page?: Page; locale?: AppLocale }) => {
@@ -31,10 +31,10 @@ export const BranchDetailsBlock = ({
     ]
         .filter(Boolean)
         .join(", ");
-    const mapUrl =
-        info.mapEmbedUrl && isGoogleMapsEmbedURL(info.mapEmbedUrl)
-            ? info.mapEmbedUrl
-            : null;
+    const hours = info.openingHours ?? [];
+    const hasHours = hours.length > 0;
+    const images = info.images ?? [];
+    const hasImages = getGalleryImages(images).length > 0;
     const linkClassName =
         "underline underline-offset-4 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring";
 
@@ -47,87 +47,98 @@ export const BranchDetailsBlock = ({
             className="scroll-mt-24 text-ink-950"
             id={anchorId || undefined}
         >
-            <div className="container grid items-start gap-12 lg:grid-cols-[3fr_2fr] lg:gap-20">
-                <div>
-                    <h2 className="text-3xl font-bold md:text-heading-lg">
-                        {applyTypography(contactHeading || labels.contacts, {
-                            locale,
-                        })}
-                    </h2>
-                    <dl className="mt-8 space-y-2 text-body-md wrap-anywhere">
-                        <div>
-                            <dt className="inline font-medium">
-                                {labels.address}:{" "}
-                            </dt>
-                            <dd className="inline whitespace-pre-line">
-                                {applyTypography(info.address, { locale })}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="inline font-medium">
-                                {labels.phone}:{" "}
-                            </dt>
-                            <dd className="inline">
-                                {info.phones?.map(({ number, id }, index) => (
-                                    <span key={id ?? index}>
-                                        {index > 0 && ","}
-                                        <a
-                                            href={phoneHref(number)}
-                                            className={linkClassName}
-                                        >
-                                            {number}
-                                        </a>
-                                    </span>
-                                ))}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="inline font-medium">
-                                {labels.email}:{" "}
-                            </dt>
-                            <dd className="inline">
-                                <a
-                                    href={`mailto:${info.email}`}
-                                    className={linkClassName}
-                                >
-                                    {info.email}
-                                </a>
-                            </dd>
-                        </div>
-                        {billing && (
-                            <div>
-                                <dt className="inline font-medium">
-                                    {labels.billing}:{" "}
-                                </dt>
-                                <dd className="inline">
-                                    {applyTypography(billing, { locale })}
-                                </dd>
-                            </div>
-                        )}
-                    </dl>
-                    {info.openingHours?.length ? (
-                        <div className="mt-12">
+            <div className="container space-y-12 lg:space-y-16">
+                <div
+                    className={cn(
+                        "grid items-start gap-10 lg:gap-20",
+                        hasHours && "lg:grid-cols-2",
+                    )}
+                >
+                    {hasHours && (
+                        <div data-branch-hours>
                             <h2 className="mb-8 text-3xl font-bold md:text-heading-lg">
                                 {applyTypography(hoursHeading || labels.hours, {
                                     locale,
                                 })}
                             </h2>
-                            <BranchOpeningHours
-                                hours={info.openingHours}
-                                locale={locale}
-                            />
+                            <BranchOpeningHours hours={hours} locale={locale} />
                         </div>
-                    ) : null}
+                    )}
+                    <div data-branch-contacts>
+                        <h2 className="text-3xl font-bold md:text-heading-lg">
+                            {applyTypography(
+                                contactHeading || labels.contacts,
+                                {
+                                    locale,
+                                },
+                            )}
+                        </h2>
+                        <dl className="mt-8 space-y-2 text-body-md wrap-anywhere">
+                            <div>
+                                <dt className="inline font-medium">
+                                    {labels.address}:{" "}
+                                </dt>
+                                <dd className="inline whitespace-pre-line">
+                                    {applyTypography(info.address, { locale })}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">
+                                    {labels.phone}:{" "}
+                                </dt>
+                                <dd className="inline">
+                                    {info.phones?.map(
+                                        ({ number, id }, index) => (
+                                            <span key={id ?? index}>
+                                                {index > 0 && ", "}
+                                                <a
+                                                    href={phoneHref(number)}
+                                                    className={linkClassName}
+                                                >
+                                                    {number}
+                                                </a>
+                                            </span>
+                                        ),
+                                    )}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt className="inline font-medium">
+                                    {labels.email}:{" "}
+                                </dt>
+                                <dd className="inline">
+                                    <a
+                                        href={`mailto:${info.email}`}
+                                        className={linkClassName}
+                                    >
+                                        {info.email}
+                                    </a>
+                                </dd>
+                            </div>
+                            {billing && (
+                                <div>
+                                    <dt className="inline font-medium">
+                                        {labels.billing}:{" "}
+                                    </dt>
+                                    <dd className="inline">
+                                        {applyTypography(billing, { locale })}
+                                    </dd>
+                                </div>
+                            )}
+                        </dl>
+                    </div>
                 </div>
-                {mapUrl && (
-                    <iframe
-                        className="aspect-[447/411] w-full rounded-lg border border-border-light bg-paper-50"
-                        src={mapUrl}
-                        title={`${labels.map}: ${page.title}`}
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                    />
+                {hasImages && (
+                    <div data-branch-gallery>
+                        <Gallery
+                            images={images}
+                            aspectRatio="21/9"
+                            autoplay={false}
+                            showControls={showControls}
+                            sizes="(min-width: 80rem) 76rem, 100vw"
+                            locale={locale}
+                        />
+                    </div>
                 )}
             </div>
         </BlockSection>

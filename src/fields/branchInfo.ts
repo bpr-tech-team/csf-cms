@@ -1,4 +1,5 @@
 import { contentIcon } from "@/fields/contentIcon";
+import { galleryImagesField } from "@/fields/gallery";
 import type { GroupField, TextFieldSingleValidation } from "payload";
 import { text, textarea } from "payload/shared";
 
@@ -133,6 +134,15 @@ export const branchInfo: GroupField = {
             ],
         },
         {
+            ...galleryImagesField({ required: false, minRows: 0 }),
+            admin: {
+                description: {
+                    cs: "Volitelné fotografie pobočky, společné pro všechny jazyky. Pořadí můžete měnit přetažením. Alternativní text se přebírá z média v aktuálním jazyce.",
+                    en: "Optional branch photos, shared across all languages. Drag to reorder. Each image uses the media's alt text in the current language.",
+                },
+            },
+        },
+        {
             name: "mapEmbedUrl",
             type: "text",
             label: {
@@ -140,6 +150,7 @@ export const branchInfo: GroupField = {
                 en: "Google Maps embed URL",
             },
             admin: {
+                hidden: true,
                 description: {
                     cs: "V Google Maps zvolte Sdílet → Vložení mapy. Vložte pouze URL z atributu src, nikoli celý HTML kód.",
                     en: "In Google Maps choose Share → Embed a map. Paste only the src URL, not the full HTML code.",

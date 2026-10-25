@@ -213,6 +213,15 @@ export interface Page {
         }[]
       | null;
     /**
+     * Optional branch photos, shared across all languages. Drag to reorder. Each image uses the media's alt text in the current language.
+     */
+    images?:
+      | {
+          image: number | Media;
+          id?: string | null;
+        }[]
+      | null;
+    /**
      * In Google Maps choose Share → Embed a map. Paste only the src URL, not the full HTML code.
      */
     mapEmbedUrl?: string | null;
@@ -579,6 +588,10 @@ export interface BranchDetailsBlock {
    * Default: Opening hours
    */
   hoursHeading?: string | null;
+  /**
+   * Show arrows, indicators and the zoom button in the gallery preview. When hidden, clicking photos and swiping remain available, and enlarged-view controls stay visible.
+   */
+  showControls?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'branchDetails';
@@ -1301,6 +1314,10 @@ export interface FlexibleGalleryElement {
     image: number | Media;
     id?: string | null;
   }[];
+  /**
+   * Show arrows, indicators and the zoom button in the gallery preview. When hidden, clicking photos and swiping remain available, and enlarged-view controls stay visible.
+   */
+  showControls?: boolean | null;
   autoplay?: boolean | null;
   autoplayInterval?: number | null;
   id?: string | null;
@@ -1337,6 +1354,10 @@ export interface GalleryBlock {
     image: number | Media;
     id?: string | null;
   }[];
+  /**
+   * Show arrows, indicators and the zoom button in the gallery preview. When hidden, clicking photos and swiping remain available, and enlarged-view controls stay visible.
+   */
+  showControls?: boolean | null;
   autoplay?: boolean | null;
   autoplayInterval?: number | null;
   id?: string | null;
@@ -1982,6 +2003,12 @@ export interface PagesSelect<T extends boolean = true> {
               hours?: T;
               id?: T;
             };
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
         mapEmbedUrl?: T;
         icon?: T | ContentIconSelect<T>;
       };
@@ -2156,6 +2183,7 @@ export interface BranchDetailsBlockSelect<T extends boolean = true> {
   anchorId?: T;
   contactHeading?: T;
   hoursHeading?: T;
+  showControls?: T;
   id?: T;
   blockName?: T;
 }
@@ -2521,6 +2549,7 @@ export interface FlexibleGalleryElementSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  showControls?: T;
   autoplay?: T;
   autoplayInterval?: T;
   id?: T;
@@ -2548,6 +2577,7 @@ export interface GalleryBlockSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  showControls?: T;
   autoplay?: T;
   autoplayInterval?: T;
   id?: T;
