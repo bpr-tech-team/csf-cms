@@ -111,6 +111,7 @@ export const RenderBlocks: React.FC<{
                                     sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}
                                     locale={locale}
+                                    page={page}
                                     isPageIntro={isFirstSection && index === 0}
                                 />
                             );

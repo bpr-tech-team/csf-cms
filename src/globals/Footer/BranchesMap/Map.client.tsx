@@ -1,14 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
-    branchMapPositions,
-    branchMapSize,
-    type BranchMapPosition,
-} from "./positions";
+    BranchesMapDot,
+    BranchesMapImage,
+    getBranchMapPointStyle,
+} from "@/components/BranchesMap/MapGraphics";
+import type { BranchMapPosition } from "@/components/BranchesMap/positions";
+import mapStyles from "@/components/BranchesMap/styles.module.css";
+import { cn } from "@/utilities/ui";
+
 import styles from "./styles.module.css";
 
 export type BranchMapPoint = {
@@ -52,34 +55,21 @@ export function BranchesMap({
     }, [activePosition]);
 
     return (
-        <nav aria-label={label} className={styles.map} ref={mapRef}>
-            <Image
-                alt=""
-                className={styles.background}
-                draggable={false}
-                height={branchMapSize.height}
-                src="/footer/footer-map.svg"
-                unoptimized
-                width={branchMapSize.width}
-            />
-            <ul className={styles.points}>
+        <nav
+            aria-label={label}
+            className={cn(mapStyles.map, styles.map)}
+            ref={mapRef}
+        >
+            <BranchesMapImage />
+            <ul className={mapStyles.points}>
                 {points.map(({ position, title, href }) => {
-                    const { x, y } = branchMapPositions[position];
-                    const left = (x / branchMapSize.width) * 100;
-                    const top = (y / branchMapSize.height) * 100;
-
                     return (
                         <li
-                            className={styles.point}
+                            className={cn(mapStyles.point, styles.point)}
                             data-active={activePosition === position}
+                            data-map-point={position}
                             key={position}
-                            style={
-                                {
-                                    left: `${left}%`,
-                                    top: `${top}%`,
-                                    "--point-x": `${left}cqw`,
-                                } as CSSProperties
-                            }
+                            style={getBranchMapPointStyle(position)}
                         >
                             <Link
                                 aria-label={title}
@@ -131,9 +121,8 @@ export function BranchesMap({
                                     aria-hidden="true"
                                     className={styles.connector}
                                 />
-                                <span
-                                    aria-hidden="true"
-                                    className={styles.dot}
+                                <BranchesMapDot
+                                    highlighted={activePosition === position}
                                 />
                                 <span
                                     aria-hidden="true"

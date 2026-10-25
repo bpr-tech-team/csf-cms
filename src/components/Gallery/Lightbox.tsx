@@ -32,8 +32,11 @@ export const GalleryLightbox = ({
     onRestoreFocus: () => void;
 }) => {
     const messages = frontendMessages[locale].gallery;
+    const hasMultipleSlides = slides.length > 1;
     const [viewportRef, api] = useEmblaCarousel({
-        loop: true,
+        active: hasMultipleSlides,
+        loop: hasMultipleSlides,
+        watchDrag: hasMultipleSlides,
         startIndex: initialIndex,
         breakpoints: {
             "(prefers-reduced-motion: reduce)": { duration: 0 },
@@ -59,6 +62,7 @@ export const GalleryLightbox = ({
                     onRestoreFocus();
                 }}
                 onKeyDown={(event) => {
+                    if (!hasMultipleSlides) return;
                     const nextIndex = {
                         ArrowLeft:
                             (selectedIndex - 1 + slides.length) % slides.length,
@@ -114,44 +118,56 @@ export const GalleryLightbox = ({
                             />
                         </button>
                     </DialogClose>
-                    <div className="relative mt-3 h-12 shrink-0 md:absolute md:inset-0 md:mt-0 md:h-auto md:pointer-events-none">
-                        <GalleryArrow
-                            direction="left"
-                            label={messages.previous}
-                            className="right-1/2 mr-2 md:pointer-events-auto md:top-1/2 md:right-auto md:left-6 md:mr-0 md:size-14 md:-translate-y-1/2"
-                            onClick={() =>
-                                selectSlide(
-                                    (selectedIndex - 1 + slides.length) %
-                                        slides.length,
-                                )
-                            }
-                        />
-                        <GalleryArrow
-                            direction="right"
-                            label={messages.next}
-                            className="left-1/2 ml-2 md:pointer-events-auto md:top-1/2 md:right-6 md:left-auto md:ml-0 md:size-14 md:-translate-y-1/2"
-                            onClick={() =>
-                                selectSlide((selectedIndex + 1) % slides.length)
-                            }
+                    {hasMultipleSlides && (
+                        <div className="relative mt-3 h-12 shrink-0 md:absolute md:inset-0 md:mt-0 md:h-auto md:pointer-events-none">
+                            <GalleryArrow
+                                direction="left"
+                                label={messages.previous}
+                                className="right-1/2 mr-2 md:pointer-events-auto md:top-1/2 md:right-auto md:left-6 md:mr-0 md:size-14 md:-translate-y-1/2"
+                                onClick={() =>
+                                    selectSlide(
+                                        (selectedIndex - 1 + slides.length) %
+                                            slides.length,
+                                    )
+                                }
+                            />
+                            <GalleryArrow
+                                direction="right"
+                                label={messages.next}
+                                className="left-1/2 ml-2 md:pointer-events-auto md:top-1/2 md:right-6 md:left-auto md:ml-0 md:size-14 md:-translate-y-1/2"
+                                onClick={() =>
+                                    selectSlide(
+                                        (selectedIndex + 1) % slides.length,
+                                    )
+                                }
+                            />
+                        </div>
+                    )}
+                </div>
+                {hasMultipleSlides && (
+                    <div
+                        aria-label={frontendMessages[locale].selectSlide}
+                        className="flex max-h-16 shrink-0 flex-wrap items-center justify-center gap-2 overflow-y-auto px-4 pb-4 md:pb-6"
+                        role="group"
+                    >
+                        <GalleryDots
+                            slides={slides}
+                            selectedIndex={selectedIndex}
+                            onSelect={selectSlide}
+                            locale={locale}
+                            theme="dark"
                         />
                     </div>
-                </div>
-                <div
-                    aria-label={frontendMessages[locale].selectSlide}
-                    className="flex max-h-16 shrink-0 flex-wrap items-center justify-center gap-2 overflow-y-auto px-4 pb-4 md:pb-6"
-                    role="group"
-                >
-                    <GalleryDots
-                        slides={slides}
-                        selectedIndex={selectedIndex}
-                        onSelect={selectSlide}
-                        locale={locale}
-                        theme="dark"
-                    />
-                </div>
-                <p aria-live="polite" aria-atomic="true" className="sr-only">
-                    {messages.slide} {selectedIndex + 1} / {slides.length}
-                </p>
+                )}
+                {hasMultipleSlides && (
+                    <p
+                        aria-live="polite"
+                        aria-atomic="true"
+                        className="sr-only"
+                    >
+                        {messages.slide} {selectedIndex + 1} / {slides.length}
+                    </p>
+                )}
             </DialogContent>
         </Dialog>
     );

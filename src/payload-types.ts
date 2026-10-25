@@ -189,6 +189,10 @@ export interface Page {
    * These details are shared by the branch page and branch grids.
    */
   branchInfo?: {
+    /**
+     * Point highlighted in the branch hero, shared across all languages. Leave empty to display the map without a highlighted point.
+     */
+    mapPosition?: ('praha' | 'hradec-kralove' | 'ostrava' | 'zlin' | 'brno') | null;
     address: string;
     phones: {
       number: string;
@@ -205,6 +209,15 @@ export interface Page {
       | {
           days: string;
           hours: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Optional branch photos, shared across all languages. Drag to reorder. Each image uses the media's alt text in the current language.
+     */
+    images?:
+      | {
+          image: number | Media;
           id?: string | null;
         }[]
       | null;
@@ -286,7 +299,7 @@ export interface HeroBlock {
   /**
    * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
    */
-  backgroundMedia: number | Media;
+  backgroundMedia?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
@@ -575,6 +588,10 @@ export interface BranchDetailsBlock {
    * Default: Opening hours
    */
   hoursHeading?: string | null;
+  /**
+   * Show arrows, indicators and the zoom button in the gallery preview. When hidden, clicking photos and swiping remain available, and enlarged-view controls stay visible.
+   */
+  showControls?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'branchDetails';
@@ -1297,6 +1314,10 @@ export interface FlexibleGalleryElement {
     image: number | Media;
     id?: string | null;
   }[];
+  /**
+   * Show arrows, indicators and the zoom button in the gallery preview. When hidden, clicking photos and swiping remain available, and enlarged-view controls stay visible.
+   */
+  showControls?: boolean | null;
   autoplay?: boolean | null;
   autoplayInterval?: number | null;
   id?: string | null;
@@ -1333,6 +1354,10 @@ export interface GalleryBlock {
     image: number | Media;
     id?: string | null;
   }[];
+  /**
+   * Show arrows, indicators and the zoom button in the gallery preview. When hidden, clicking photos and swiping remain available, and enlarged-view controls stay visible.
+   */
+  showControls?: boolean | null;
   autoplay?: boolean | null;
   autoplayInterval?: number | null;
   id?: string | null;
@@ -1959,6 +1984,7 @@ export interface PagesSelect<T extends boolean = true> {
   branchInfo?:
     | T
     | {
+        mapPosition?: T;
         address?: T;
         phones?:
           | T
@@ -1975,6 +2001,12 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               days?: T;
               hours?: T;
+              id?: T;
+            };
+        images?:
+          | T
+          | {
+              image?: T;
               id?: T;
             };
         mapEmbedUrl?: T;
@@ -2151,6 +2183,7 @@ export interface BranchDetailsBlockSelect<T extends boolean = true> {
   anchorId?: T;
   contactHeading?: T;
   hoursHeading?: T;
+  showControls?: T;
   id?: T;
   blockName?: T;
 }
@@ -2516,6 +2549,7 @@ export interface FlexibleGalleryElementSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  showControls?: T;
   autoplay?: T;
   autoplayInterval?: T;
   id?: T;
@@ -2543,6 +2577,7 @@ export interface GalleryBlockSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  showControls?: T;
   autoplay?: T;
   autoplayInterval?: T;
   id?: T;
@@ -3289,10 +3324,9 @@ export interface Footer {
  */
 export interface FooterBranchesMapBlock {
   /**
-   * Assign branch pages to map positions. Names and links come from the page. Points without an assigned, published branch are hidden on the website.
+   * Choose branches and their order. Map positions, names and links come from each branch page. Unpublished branches and branches without a map position are hidden.
    */
   points: {
-    position: 'praha' | 'hradec-kralove' | 'ostrava' | 'zlin' | 'brno';
     branch?: (number | null) | Page;
     id?: string | null;
   }[];
@@ -3397,6 +3431,10 @@ export interface FooterLinksBlock {
  */
 export interface ContactDetails {
   id: number;
+  /**
+   * This branch supplies the address for the organization's structured data (SEO).
+   */
+  headOffice?: (number | null) | Page;
   phone?: string | null;
   email?: string | null;
   dataBoxId?: string | null;
@@ -3548,7 +3586,6 @@ export interface FooterBranchesMapBlockSelect<T extends boolean = true> {
   points?:
     | T
     | {
-        position?: T;
         branch?: T;
         id?: T;
       };
@@ -3618,6 +3655,7 @@ export interface FooterLinksBlockSelect<T extends boolean = true> {
  * via the `definition` "contact-details_select".
  */
 export interface ContactDetailsSelect<T extends boolean = true> {
+  headOffice?: T;
   phone?: T;
   email?: T;
   dataBoxId?: T;

@@ -12,11 +12,16 @@ export const Gallery = ({
     theme = "light",
     sizes = "100vw",
     locale = defaultLocale,
-}: Pick<GalleryBlock, "images" | "autoplay" | "autoplayInterval"> & {
+    aspectRatio,
+    showControls,
+}: Pick<GalleryBlock, "autoplay" | "autoplayInterval"> & {
+    images?: GalleryBlock["images"] | null;
     compact?: boolean;
     theme?: "light" | "dark";
     sizes?: string;
     locale?: AppLocale;
+    aspectRatio?: "21/9";
+    showControls?: boolean | null;
 }) => {
     const slides = getGalleryImages(images);
     if (!slides.length) return null;
@@ -30,6 +35,8 @@ export const Gallery = ({
             theme={theme}
             sizes={sizes}
             locale={locale}
+            aspectRatio={aspectRatio}
+            showControls={showControls !== false}
         />
     );
 };
