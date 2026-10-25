@@ -1,38 +1,7 @@
 .map {
-    --map-accent: #b0cb0e;
-    --dot-size: clamp(6px, 1.35cqw, 10px);
     --label-gap: 18px;
-    --map-motion-duration: 240ms;
     --map-label-duration: 150ms;
     --map-label-delay: 60ms;
-    position: relative;
-    isolation: isolate;
-    container-type: inline-size;
-    width: 100%;
-    aspect-ratio: 1183 / 680;
-}
-
-.background {
-    display: block;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    user-select: none;
-}
-
-.points {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.point {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    transform: translate(-50%, -50%);
 }
 
 .point[data-active="true"] {
@@ -68,48 +37,6 @@
     transition:
         transform var(--map-motion-duration) cubic-bezier(0.22, 1, 0.36, 1),
         opacity var(--map-label-duration) ease;
-}
-
-.dot {
-    position: relative;
-    width: var(--dot-size);
-    height: var(--dot-size);
-    pointer-events: none;
-    transform: scale(1);
-    transition: transform var(--map-motion-duration)
-        cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.dot::before,
-.dot::after {
-    position: absolute;
-    border-radius: 50%;
-    content: "";
-}
-
-.dot::before {
-    inset: -50%;
-    background: var(--map-accent);
-    filter: blur(calc(var(--dot-size) * 0.75));
-    transition:
-        inset var(--map-motion-duration) ease,
-        filter var(--map-motion-duration) ease;
-}
-
-.dot::after {
-    inset: 0;
-    background: #d9d9d9;
-}
-
-.point[data-active="true"] .dot {
-    /* The reference increases the core diameter from 16px to 29px. */
-    transform: scale(1.8125);
-}
-
-.point[data-active="true"] .dot::before {
-    /* A 59px halo and 9.5px blur around the reference's 29px core. */
-    inset: -51.724%;
-    filter: blur(calc(var(--dot-size) * 0.3276));
 }
 
 .point[data-active="true"] .connector {
@@ -175,7 +102,6 @@
 
 @media (prefers-reduced-motion: reduce) {
     .map {
-        --map-motion-duration: 0ms;
         --map-label-duration: 0ms;
         --map-label-delay: 0ms;
     }

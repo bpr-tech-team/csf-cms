@@ -2,6 +2,7 @@ import { contentIcon } from "@/fields/contentIcon";
 import type { GroupField, TextFieldSingleValidation } from "payload";
 import { text, textarea } from "payload/shared";
 
+import { branchMapPositions } from "@/components/BranchesMap/positions";
 import { isGoogleMapsEmbedURL } from "@/utilities/branchData";
 
 const validateText: TextFieldSingleValidation = (value, options) =>
@@ -23,6 +24,23 @@ export const branchInfo: GroupField = {
         },
     },
     fields: [
+        {
+            name: "mapPosition",
+            type: "select",
+            label: {
+                cs: "Zvýrazněný bod na mapě",
+                en: "Highlighted map point",
+            },
+            options: Object.entries(branchMapPositions).map(
+                ([value, { label }]) => ({ value, label }),
+            ),
+            admin: {
+                description: {
+                    cs: "Bod zvýrazněný v úvodním bloku pobočky, společný pro všechny jazyky. Bez výběru se mapa zobrazí bez zvýrazněného bodu.",
+                    en: "Point highlighted in the branch hero, shared across all languages. Leave empty to display the map without a highlighted point.",
+                },
+            },
+        },
         {
             name: "address",
             type: "textarea",

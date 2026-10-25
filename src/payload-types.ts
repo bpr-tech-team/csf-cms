@@ -189,6 +189,10 @@ export interface Page {
    * These details are shared by the branch page and branch grids.
    */
   branchInfo?: {
+    /**
+     * Point highlighted in the branch hero, shared across all languages. Leave empty to display the map without a highlighted point.
+     */
+    mapPosition?: ('praha' | 'hradec-kralove' | 'ostrava' | 'zlin' | 'brno') | null;
     address: string;
     phones: {
       number: string;
@@ -286,7 +290,7 @@ export interface HeroBlock {
   /**
    * Upload an image without a gradient. It fills the hero and is cropped from the center; the gradient and shading are added automatically.
    */
-  backgroundMedia: number | Media;
+  backgroundMedia?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'hero';
@@ -1959,6 +1963,7 @@ export interface PagesSelect<T extends boolean = true> {
   branchInfo?:
     | T
     | {
+        mapPosition?: T;
         address?: T;
         phones?:
           | T
@@ -3289,10 +3294,9 @@ export interface Footer {
  */
 export interface FooterBranchesMapBlock {
   /**
-   * Assign branch pages to map positions. Names and links come from the page. Points without an assigned, published branch are hidden on the website.
+   * Choose branches and their order. Map positions, names and links come from each branch page. Unpublished branches and branches without a map position are hidden.
    */
   points: {
-    position: 'praha' | 'hradec-kralove' | 'ostrava' | 'zlin' | 'brno';
     branch?: (number | null) | Page;
     id?: string | null;
   }[];
@@ -3397,6 +3401,10 @@ export interface FooterLinksBlock {
  */
 export interface ContactDetails {
   id: number;
+  /**
+   * This branch supplies the address for the organization's structured data (SEO).
+   */
+  headOffice?: (number | null) | Page;
   phone?: string | null;
   email?: string | null;
   dataBoxId?: string | null;
@@ -3548,7 +3556,6 @@ export interface FooterBranchesMapBlockSelect<T extends boolean = true> {
   points?:
     | T
     | {
-        position?: T;
         branch?: T;
         id?: T;
       };
@@ -3618,6 +3625,7 @@ export interface FooterLinksBlockSelect<T extends boolean = true> {
  * via the `definition` "contact-details_select".
  */
 export interface ContactDetailsSelect<T extends boolean = true> {
+  headOffice?: T;
   phone?: T;
   email?: T;
   dataBoxId?: T;

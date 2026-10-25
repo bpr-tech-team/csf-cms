@@ -1,25 +1,14 @@
 import type { ArrayFieldValidation, Block } from "payload";
 import { array } from "payload/shared";
 
-import { branchMapPositions } from "./positions";
-
 const validatePoints: ArrayFieldValidation = async (value, options) => {
     const result = await array(value, options);
     if (result !== true || !Array.isArray(value)) return result;
 
-    const positions = new Set<string>();
     const branches = new Set<string>();
 
     for (const point of value) {
         if (!point || typeof point !== "object") continue;
-
-        const position = "position" in point ? point.position : undefined;
-        if (typeof position === "string") {
-            if (positions.has(position)) {
-                return "Každou pozici na mapě lze použít pouze jednou.";
-            }
-            positions.add(position);
-        }
 
         const relation = "branch" in point ? point.branch : undefined;
         const branch =
@@ -60,20 +49,11 @@ export const FooterBranchesMap: Block = {
             validate: validatePoints,
             admin: {
                 description: {
-                    cs: "Přiřaďte k pozicím na mapě stránky poboček. Název a odkaz se přebírají ze stránky. Body bez přiřazené zveřejněné pobočky se na webu nezobrazí.",
-                    en: "Assign branch pages to map positions. Names and links come from the page. Points without an assigned, published branch are hidden on the website.",
+                    cs: "Vyberte pobočky a jejich pořadí. Pozice na mapě, název a odkaz se přebírají ze stránky pobočky. Nezveřejněné pobočky a pobočky bez pozice na mapě se nezobrazí.",
+                    en: "Choose branches and their order. Map positions, names and links come from each branch page. Unpublished branches and branches without a map position are hidden.",
                 },
             },
             fields: [
-                {
-                    name: "position",
-                    type: "select",
-                    required: true,
-                    label: { cs: "Pozice na mapě", en: "Map position" },
-                    options: Object.entries(branchMapPositions).map(
-                        ([value, { label }]) => ({ value, label }),
-                    ),
-                },
                 {
                     name: "branch",
                     type: "relationship",

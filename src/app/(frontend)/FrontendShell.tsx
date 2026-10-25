@@ -7,7 +7,11 @@ import { InitHeroReveal } from "@/components/HeroSection/InitHeroReveal";
 import { Footer } from "@/globals/Footer/Component";
 import { Header } from "@/globals/Header/Component";
 import type { AppLocale } from "@/i18n/config";
-import { localeLanguages, withLocalePrefix } from "@/i18n/config";
+import {
+    defaultLocale,
+    localeLanguages,
+    withLocalePrefix,
+} from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
 import { Providers } from "@/providers";
 import { InitTheme } from "@/providers/Theme/InitTheme";
@@ -22,6 +26,7 @@ import {
 import { cn } from "@/utilities/ui";
 import { mergeOpenGraph } from "@/utilities/mergeOpenGraph";
 import { getCachedGlobal } from "@/utilities/getGlobals";
+import { getBranchDirectory } from "@/utilities/getBranches";
 import { draftMode } from "next/headers";
 import React from "react";
 import localFont from "next/font/local";
@@ -53,11 +58,23 @@ export async function FrontendShell({
     children: React.ReactNode;
     locale: AppLocale;
 }) {
-    const [{ isEnabled }, footerData, contactDetails] = await Promise.all([
-        draftMode(),
-        getCachedGlobal("footer", 1, locale, "layout-v3")(),
-        getCachedGlobal("contact-details", 1)(),
-    ]);
+    const [{ isEnabled }, footerData, contactDetails, branches] =
+        await Promise.all([
+            draftMode(),
+            getCachedGlobal("footer", 1, locale, "layout-v4")(),
+            getCachedGlobal(
+                "contact-details",
+                1,
+                defaultLocale,
+                "head-office-v1",
+            )(),
+            getBranchDirectory(locale),
+        ]);
+    const headOfficeId =
+        typeof contactDetails.headOffice === "object"
+            ? contactDetails.headOffice?.id
+            : contactDetails.headOffice;
+    const headOffice = branches.find((branch) => branch.id === headOfficeId);
 
     return (
         <html
@@ -70,9 +87,15 @@ export async function FrontendShell({
                 <InitTheme />
                 <InitHeroReveal />
                 <link href="/favicon.ico" rel="icon" sizes="any" />
-                <JsonLd data={organizationJsonLd(contactDetails)} />
+                <JsonLd data={organizationJsonLd(contactDetails, headOffice)} />
                 <JsonLd data={websiteJsonLd(locale)} />
-                <JsonLd data={professionalServiceJsonLd(contactDetails)} />
+                <JsonLd
+                    data={professionalServiceJsonLd(contactDetails, {
+                        branches,
+                        headOffice,
+                        locale,
+                    })}
+                />
             </head>
             <body className="[--site-header-height:--spacing(18)] xl:[--site-header-height:--spacing(26)]">
                 <Providers locale={locale}>

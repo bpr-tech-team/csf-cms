@@ -10,47 +10,6 @@ export const seoConfig = {
     defaultOgImagePath: "/csf-og.png",
     logoPath: "/csf-logo.png",
     foundingDate: "1998",
-    address: {
-        streetAddress: "Střelecká 672/14",
-        postalCode: "500 02",
-        addressLocality: "Hradec Králové",
-        addressCountry: "CZ",
-    },
-    branches: [
-        {
-            name: "CSF Hradec Králové",
-            streetAddress: "Střelecká 672",
-            postalCode: "500 02",
-            addressLocality: "Hradec Králové",
-            telephone: "+420 495 533 495",
-        },
-        {
-            name: "CSF Praha",
-            streetAddress: "Za potokem 46/4",
-            postalCode: "106 00",
-            addressLocality: "Praha 10 - Záběhlice",
-            telephone: "+420 739 802 122",
-        },
-        {
-            name: "CSF Brno",
-            streetAddress: "Zelinkova 1355/2",
-            postalCode: "627 00",
-            addressLocality: "Brno",
-        },
-        {
-            name: "CSF Ostrava",
-            streetAddress: "Varšavská 469/96",
-            postalCode: "709 00",
-            addressLocality: "Ostrava",
-            telephone: "+420 602 767 462",
-        },
-        {
-            name: "CSF Zlín",
-            streetAddress: "Březnická 5602",
-            postalCode: "760 01",
-            addressLocality: "Zlín",
-        },
-    ],
 } as const;
 
 export const getSiteUrl = () => {

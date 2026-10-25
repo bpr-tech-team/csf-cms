@@ -2,20 +2,15 @@ import type { ContactDetails, Page } from "@/payload-types";
 import type { AppLocale } from "@/i18n/config";
 import { localeLanguages, withLocalePrefix } from "@/i18n/config";
 import { frontendMessages } from "@/i18n/frontend";
+import type { BranchDirectoryEntry } from "@/utilities/getBranches";
 
 import { getAbsoluteUrl, getCanonicalUrl, seoConfig } from "./config";
+import { branchJsonLd, branchPostalAddress } from "./branchData";
 
-const postalAddress = (
-    address: typeof seoConfig.address | (typeof seoConfig.branches)[number],
+export const organizationJsonLd = (
+    contacts?: Partial<ContactDetails>,
+    headOffice?: BranchDirectoryEntry,
 ) => ({
-    "@type": "PostalAddress",
-    streetAddress: address.streetAddress,
-    postalCode: address.postalCode,
-    addressLocality: address.addressLocality,
-    addressCountry: "addressCountry" in address ? address.addressCountry : "CZ",
-});
-
-export const organizationJsonLd = (contacts?: Partial<ContactDetails>) => ({
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${getCanonicalUrl()}/#organization`,
@@ -29,7 +24,7 @@ export const organizationJsonLd = (contacts?: Partial<ContactDetails>) => ({
     sameAs: contacts?.socialLinks?.length
         ? contacts.socialLinks.map(({ url }) => url)
         : undefined,
-    address: postalAddress(seoConfig.address),
+    address: branchPostalAddress(headOffice?.branchInfo?.address),
 });
 
 export const websiteJsonLd = (locale: AppLocale = "cs") => ({
@@ -46,6 +41,15 @@ export const websiteJsonLd = (locale: AppLocale = "cs") => ({
 
 export const professionalServiceJsonLd = (
     contacts?: Partial<ContactDetails>,
+    {
+        branches = [],
+        headOffice,
+        locale = "cs",
+    }: {
+        branches?: BranchDirectoryEntry[];
+        headOffice?: BranchDirectoryEntry;
+        locale?: AppLocale;
+    } = {},
 ) => ({
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -55,7 +59,7 @@ export const professionalServiceJsonLd = (
     image: getCanonicalUrl(seoConfig.defaultOgImagePath),
     email: contacts?.email || undefined,
     telephone: contacts?.phone || undefined,
-    address: postalAddress(seoConfig.address),
+    address: branchPostalAddress(headOffice?.branchInfo?.address),
     areaServed: {
         "@type": "Country",
         name: "Česká republika",
@@ -63,12 +67,10 @@ export const professionalServiceJsonLd = (
     branchOf: {
         "@id": `${getCanonicalUrl()}/#organization`,
     },
-    department: seoConfig.branches.map((branch) => ({
-        "@type": "LocalBusiness",
-        name: branch.name,
-        address: postalAddress(branch),
-        telephone: "telephone" in branch ? branch.telephone : undefined,
-    })),
+    department: branches.flatMap((branch) => {
+        const department = branchJsonLd(branch, locale);
+        return department ? [department] : [];
+    }),
 });
 
 export const blogPostingJsonLd = (

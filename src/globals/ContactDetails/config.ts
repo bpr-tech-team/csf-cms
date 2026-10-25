@@ -15,6 +15,20 @@ export const ContactDetails: GlobalConfig = {
         },
     },
     fields: [
+        {
+            name: "headOffice",
+            type: "relationship",
+            relationTo: "pages",
+            maxDepth: 0,
+            filterOptions: { pageType: { equals: "branch" } },
+            label: { cs: "Hlavní pobočka", en: "Head office" },
+            admin: {
+                description: {
+                    cs: "Adresa této pobočky se používá ve strukturovaných datech organizace (SEO).",
+                    en: "This branch supplies the address for the organization's structured data (SEO).",
+                },
+            },
+        },
         { name: "phone", type: "text", label: { cs: "Telefon", en: "Phone" } },
         { name: "email", type: "email", label: "Email" },
         {

@@ -34,6 +34,27 @@ listed legacy aliases. An alias never renders another copy of the page. Missing/
 pages retain the existing Payload Redirects lookup and then return not found.
 Draft preview continues to work on the canonical typed route.
 
+Branch map positions are stored once in `branchInfo.mapPosition`. Hero maps
+highlight this position; Footer maps store only branch relationships and their
+display order, and resolve positions from the referenced published pages.
+Branches without a position are omitted from the Footer map. If multiple selected
+branches share a city, the first visible one in the Footer's order is used.
+
+The public branch directory includes every published `branch` page, including
+published test pages. It supplies the `LocalBusiness` departments in JSON-LD.
+Addresses, primary phone numbers, email addresses and localized page URLs come
+from those pages. The shared Organization/ProfessionalService address comes from
+the branch selected as `ContactDetails.headOffice`; unpublished or deleted head
+offices are not replaced with an arbitrary branch. Existing multiline Czech
+addresses ending in a postal code and city are emitted as `PostalAddress`;
+unrecognized address formats remain Schema.org Text without guessed components.
+
+Both the public directory and branch relationships use the `branches` cache tag.
+Branch edits, publication changes and deletion invalidate it in both languages.
+The canonical-map migration copies legacy Footer positions into pages and their
+versions before removing the redundant Footer field; conflicting assignments
+stop the migration before any content is changed.
+
 Static generation and on-demand revalidation remain enabled. Proxy matches only
 page URLs that need alias or localized-slug resolution; homepages, assets, API,
 admin and canonical Czech branch/post routes bypass it. Its Payload lookup

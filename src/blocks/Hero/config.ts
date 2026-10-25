@@ -22,6 +22,6 @@ export const Hero: Block = {
     fields: [
         blockSpacingFields(),
         ...heroContentFields(),
-        heroBackgroundField(),
+        heroBackgroundField(true, { excludeBranches: true }),
     ],
 };

@@ -1,0 +1,86 @@
+.map {
+    --map-accent: #b0cb0e;
+    --dot-size: clamp(6px, 1.35cqw, 10px);
+    --map-motion-duration: 240ms;
+    position: relative;
+    isolation: isolate;
+    container-type: inline-size;
+    width: 100%;
+    aspect-ratio: 1183 / 680;
+}
+
+.background {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+}
+
+.points {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.point {
+    position: absolute;
+    display: flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+}
+
+.dot {
+    position: relative;
+    display: block;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    flex-shrink: 0;
+    pointer-events: none;
+    transform: scale(1);
+    transition: transform var(--map-motion-duration)
+        cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dot::before,
+.dot::after {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+}
+
+.dot::before {
+    inset: -50%;
+    background: var(--map-accent);
+    filter: blur(calc(var(--dot-size) * 0.75));
+    transition:
+        inset var(--map-motion-duration) ease,
+        filter var(--map-motion-duration) ease;
+}
+
+.dot::after {
+    inset: 0;
+    background: #d9d9d9;
+}
+
+.highlighted {
+    /* The reference increases the core diameter from 16px to 29px. */
+    transform: scale(1.8125);
+}
+
+.highlighted::before {
+    /* A 59px halo and 9.5px blur around the reference's 29px core. */
+    inset: -51.724%;
+    filter: blur(calc(var(--dot-size) * 0.3276));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .map {
+        --map-motion-duration: 0ms;
+    }
+}
