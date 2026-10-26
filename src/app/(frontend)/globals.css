@@ -135,6 +135,22 @@ html[data-hero-reveal-enabled] [data-hero-reveal="error"] img[data-hero-image] {
     }
 }
 
+:root {
+    /* Button paints from Figma, including the source colors' fractional RGB. */
+    --button-default-background: #b0cb0e;
+    --button-default-foreground: color(srgb 0.035 0.063 0.039);
+    --button-default-hover-background: #ffffff;
+    --button-default-hover-foreground: var(--color-ink-950);
+    --button-default-pressed-background: color(srgb 0.561 0.659 0.024);
+    --button-light-foreground: color(srgb 0.98 0.988 0.973);
+    --button-outline-background: rgb(14 14 14 / 0.9);
+    --button-outline-border: rgb(176 203 14 / 0.5);
+    --button-outline-hover-background: rgb(250 252 248 / 0.89);
+    --button-outline-pressed-background: color(srgb 0.69 0.796 0.055 / 0.9);
+    --button-hover-border: color(srgb 0.686 0.796 0.031);
+    --button-hover-shadow: 0 0 24px 0 color(srgb 0.686 0.796 0.031 / 0.75);
+}
+
 :root,
 [data-theme="light"] {
     --background: var(--color-paper-0);

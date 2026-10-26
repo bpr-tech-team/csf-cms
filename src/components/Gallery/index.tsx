@@ -20,7 +20,7 @@ export const Gallery = ({
     theme?: "light" | "dark";
     sizes?: string;
     locale?: AppLocale;
-    aspectRatio?: "21/9";
+    aspectRatio?: "21/9" | "8/7";
     showControls?: boolean | null;
 }) => {
     const slides = getGalleryImages(images);

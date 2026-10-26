@@ -234,15 +234,7 @@ export const FlexibleContentBlock = ({
                                                                     .appearance ||
                                                                 "default"
                                                             }
-                                                            className={cn(
-                                                                "max-w-full whitespace-normal text-center",
-                                                                element.link
-                                                                    .appearance ===
-                                                                    "outline" &&
-                                                                    (isDark
-                                                                        ? "border-border-dark hover:bg-olive-900 hover:text-paper-0"
-                                                                        : "border-border-light hover:bg-brand-100 hover:text-ink-950"),
-                                                            )}
+                                                            className="max-w-full whitespace-normal text-center"
                                                             locale={locale}
                                                         />
                                                     </div>

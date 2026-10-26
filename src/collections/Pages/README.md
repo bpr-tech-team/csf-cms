@@ -59,12 +59,20 @@ The `branchDetails` block (Informace o pobočce) reads opening hours and contact
 from `branchInfo`. Hours appear on the left and contacts on the right on wide
 screens; narrow screens stack them in that order. Empty opening hours omit that
 column. Optional ordered `branchInfo.images` are shared across languages and use
-the existing Gallery below the information, with a 21:9 crop and autoplay off.
-One image opens in the same lightbox without carousel controls; multiple images
+the existing Gallery below the information, with autoplay off. A valid optional
+`branchInfo.mapEmbedUrl` adds an interactive Google Maps iframe beside the gallery.
+At `lg` (1024px) and above, both panels use equal-width columns with a 24px gap;
+below that they stack with the gallery first. Paired panels use an 8:7 crop,
+20px rounded corners without borders. Gallery indicators remain below the
+photo so the photo and map boundaries align even with multiple slides.
+One image opens in the same lightbox without carousel arrows; multiple images
 can be switched manually. The enlarged view shows the full original image.
-Without valid images, the photo row is omitted. The former `mapEmbedUrl` field
-remains stored for compatibility but is hidden in the editor and no longer
-rendered by this block.
+A gallery without a map retains its full-width 21:9 crop; a map without photos
+uses the full width at 21:9 with a minimum height of 280px. Without either, the
+media row is omitted. Invalid map URLs are rejected in the editor and omitted
+at render time. The shared map URL is editable in Branch details; paste only the
+iframe src from Google Maps Share → Embed a map. Existing map data is reused;
+no database schema migration is needed.
 
 Gallery blocks, galleries within Flexible content, and the Branch information
 block offer `showControls` (Zobrazit ovládání), enabled by default. Disabling it

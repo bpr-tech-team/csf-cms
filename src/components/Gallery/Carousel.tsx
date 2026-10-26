@@ -27,7 +27,7 @@ type GalleryCarouselProps = {
     theme: "light" | "dark";
     sizes: string;
     locale: AppLocale;
-    aspectRatio?: "21/9";
+    aspectRatio?: "21/9" | "8/7";
     showControls?: boolean;
 };
 
@@ -218,8 +218,11 @@ export const GalleryCarousel = ({
                     <div
                         className={cn(
                             "overflow-hidden rounded-[1.25rem] bg-ink-950",
-                            aspectRatio === "21/9"
-                                ? "aspect-[21/9]"
+                            aspectRatio
+                                ? {
+                                      "21/9": "aspect-[21/9]",
+                                      "8/7": "aspect-[8/7]",
+                                  }[aspectRatio]
                                 : cn(
                                       "aspect-[15/11]",
                                       !compact && "md:aspect-[1377/500]",
