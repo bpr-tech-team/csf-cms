@@ -39,7 +39,7 @@ export const processStepsFields = (): Field[] => [
             cs: "Kroky",
             en: "Steps",
         },
-        maxRows: 4,
+        maxRows: 6,
         minRows: 1,
         required: true,
     },
