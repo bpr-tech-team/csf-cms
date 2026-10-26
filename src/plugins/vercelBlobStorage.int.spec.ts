@@ -1,10 +1,49 @@
 // @vitest-environment node
 
-import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import type { Config, PayloadRequest } from "payload";
+import type { Config, Field, FieldHook, PayloadRequest } from "payload";
 import { verifyClientUploadReceipt } from "payload/internal";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { Media } from "@/collections/Media";
+
+afterEach(() => vi.unstubAllEnvs());
+
+async function configureStorage(token: string | undefined) {
+    vi.stubEnv("BLOB_READ_WRITE_TOKEN", token);
+    vi.stubEnv("STORAGE_VERCEL_BLOB_BASE_URL", undefined);
+    vi.resetModules();
+    const { plugins } = await import("./index");
+    const config: Config = {
+        secret: "test-secret",
+        db: postgresAdapter({ pool: {} }),
+        collections: [Media],
+    };
+    return plugins[0](config);
+}
+
+function getURLAfterRead(fields: Field[], size?: string): FieldHook {
+    let nestedFields = fields;
+    if (size) {
+        for (const name of ["sizes", size]) {
+            const group = nestedFields.find(
+                (field) =>
+                    field.type === "group" &&
+                    "name" in field &&
+                    field.name === name,
+            );
+            if (!group || group.type !== "group")
+                throw new Error(`Missing ${name} storage fields`);
+            nestedFields = group.fields;
+        }
+    }
+    const field = nestedFields.find(
+        (field) => field.type === "text" && field.name === "url",
+    );
+    if (field?.type !== "text" || !field.hooks?.afterRead?.[0])
+        throw new Error("Missing storage URL hook");
+    return field.hooks.afterRead[0];
+}
 
 type UploadTarget = {
     clientUploadContext: { signedReceipt: string };
@@ -19,16 +58,7 @@ async function createUploadRequest({
     existingObjectKey?: string;
     canWrite?: boolean;
 } = {}) {
-    const config: Config = {
-        secret: "test-secret",
-        db: postgresAdapter({ pool: {} }),
-        collections: [{ slug: "media", fields: [], upload: true }],
-    };
-    const configured = await vercelBlobStorage({
-        collections: { media: true },
-        clientUploads: true,
-        token: "vercel_blob_rw_test_test",
-    })(config);
+    const configured = await configureStorage("vercel_blob_rw_test_test");
     const endpoint = configured.endpoints?.find(
         ({ path }) => path === "/vercel-blob-client-upload-route",
     );
@@ -50,7 +80,7 @@ async function createUploadRequest({
         user: { id: 1, collection: "users" },
         t: (key: string) => key,
         payload: {
-            secret: config.secret,
+            secret: configured.secret,
             collections: {
                 media: {
                     config: {
@@ -82,6 +112,61 @@ async function createUploadRequest({
 
     return { issue, req };
 }
+
+describe("public media delivery", () => {
+    it.each([
+        {
+            prefix: "campaign",
+            _objectKey: "existing-key",
+            folder: "campaign/existing-key",
+        },
+        { prefix: "legacy", _objectKey: undefined, folder: "legacy" },
+        { prefix: "", _objectKey: undefined, folder: "" },
+    ])(
+        "serves originals and variants directly from Blob for $folder",
+        async ({ prefix, _objectKey, folder }) => {
+            const configured = await configureStorage(
+                "vercel_blob_rw_test_test",
+            );
+            const media = configured.collections!.find(
+                ({ slug }) => slug === "media",
+            )!;
+            const data = {
+                filename: "hero photo.png",
+                prefix,
+                _objectKey,
+                sizes: { large: { filename: "hero photo-1400x788.png" } },
+            };
+            for (const size of [undefined, "large"]) {
+                const hook = getURLAfterRead(media.fields, size);
+                const url = await hook({
+                    data,
+                    value: "/api/media/file/hero.png",
+                } as unknown as Parameters<FieldHook>[0]);
+                const filename = size
+                    ? "hero%20photo-1400x788.png"
+                    : "hero%20photo.png";
+                expect(url).toBe(
+                    `https://test.public.blob.vercel-storage.com/${folder ? `${folder}/` : ""}${filename}`,
+                );
+            }
+            expect(media.access).toEqual(Media.access);
+        },
+    );
+
+    it("preserves local storage when Blob is not configured", async () => {
+        const configured = await configureStorage(undefined);
+        const media = configured.collections!.find(
+            ({ slug }) => slug === "media",
+        )!;
+        expect(media.upload).toEqual(Media.upload);
+        const url = media.fields.find(
+            (field) => field.type === "text" && field.name === "url",
+        );
+        expect(url?.type === "text" && url.hooks?.afterRead).toBeUndefined();
+        expect(media.access).toEqual(Media.access);
+    });
+});
 
 describe("Vercel Blob client upload destinations", () => {
     it.each([undefined, "previous-object-key"])(

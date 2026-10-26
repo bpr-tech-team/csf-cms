@@ -18,6 +18,16 @@ const NEXT_PUBLIC_SERVER_URL =
         ? `https://${vercelHost}`
         : process.env.__NEXT_PRIVATE_ORIGIN || "http://localhost:3000");
 
+// Match the Blob adapter's public origin when local development only has a token.
+const blobStoreId = process.env.BLOB_READ_WRITE_TOKEN?.match(
+    /^vercel_blob_rw_([a-z\d]+)_[a-z\d]+$/i,
+)?.[1]?.toLowerCase();
+const blobPublicUrl =
+    process.env.BLOB_PUBLIC_URL ||
+    (blobStoreId
+        ? `https://${blobStoreId}.public.blob.vercel-storage.com`
+        : undefined);
+
 const nextConfig: NextConfig = {
     env: { NEXT_PUBLIC_SERVER_URL },
     // Temporarily required on Windows until Next.js fixes Turbopack Sass resolution.
@@ -36,12 +46,11 @@ const nextConfig: NextConfig = {
         ],
         qualities: [65, 75, 100],
         remotePatterns: [
-            ...(process.env.BLOB_PUBLIC_URL
+            ...(blobPublicUrl
                 ? [
                       {
                           protocol: "https" as const,
-                          hostname: new URL(process.env.BLOB_PUBLIC_URL)
-                              .hostname,
+                          hostname: new URL(blobPublicUrl).hostname,
                           port: "",
                           pathname: "/**",
                       },
