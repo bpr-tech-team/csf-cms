@@ -5,7 +5,11 @@ import type { BranchDetailsBlock as Props, Page } from "@/payload-types";
 import { BranchOpeningHours } from "@/components/BranchOpeningHours";
 import { Gallery } from "@/components/Gallery";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
-import { branchLabels, phoneHref } from "@/utilities/branchData";
+import {
+    branchLabels,
+    isGoogleMapsEmbedURL,
+    phoneHref,
+} from "@/utilities/branchData";
 import { getGalleryImages } from "@/utilities/gallery";
 import { applyTypography } from "@/utilities/typography";
 import { cn } from "@/utilities/ui";
@@ -35,6 +39,9 @@ export const BranchDetailsBlock = ({
     const hasHours = hours.length > 0;
     const images = info.images ?? [];
     const hasImages = getGalleryImages(images).length > 0;
+    const mapUrl = info.mapEmbedUrl?.trim();
+    const hasMap = Boolean(mapUrl && isGoogleMapsEmbedURL(mapUrl));
+    const hasBoth = hasImages && hasMap;
     const linkClassName =
         "underline underline-offset-4 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring";
 
@@ -128,16 +135,50 @@ export const BranchDetailsBlock = ({
                         </dl>
                     </div>
                 </div>
-                {hasImages && (
-                    <div data-branch-gallery>
-                        <Gallery
-                            images={images}
-                            aspectRatio="21/9"
-                            autoplay={false}
-                            showControls={showControls}
-                            sizes="(min-width: 80rem) 76rem, 100vw"
-                            locale={locale}
-                        />
+                {(hasImages || hasMap) && (
+                    <div
+                        className={cn(
+                            "grid items-start gap-6",
+                            hasBoth && "lg:grid-cols-2",
+                        )}
+                        data-branch-media
+                    >
+                        {hasImages && (
+                            <div className="min-w-0" data-branch-gallery>
+                                <Gallery
+                                    images={images}
+                                    aspectRatio={hasBoth ? "8/7" : "21/9"}
+                                    autoplay={false}
+                                    showControls={showControls}
+                                    sizes={
+                                        hasBoth
+                                            ? "(min-width: 80rem) 37.25rem, (min-width: 64rem) 29.25rem, (min-width: 48rem) 44rem, (min-width: 40rem) 37.5rem, calc(100vw - 2.5rem)"
+                                            : "(min-width: 80rem) 76rem, (min-width: 64rem) 60rem, (min-width: 48rem) 44rem, (min-width: 40rem) 37.5rem, calc(100vw - 2.5rem)"
+                                    }
+                                    locale={locale}
+                                />
+                            </div>
+                        )}
+                        {hasMap && (
+                            <div
+                                className={cn(
+                                    "relative min-w-0 overflow-hidden rounded-[1.25rem] bg-paper-0",
+                                    hasBoth
+                                        ? "aspect-[8/7]"
+                                        : "aspect-[21/9] min-h-[280px]",
+                                )}
+                                data-branch-map
+                            >
+                                <iframe
+                                    src={mapUrl}
+                                    title={`${labels.map} — ${page.title}`}
+                                    className="absolute inset-0 size-full border-0"
+                                    loading="lazy"
+                                    allowFullScreen
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                />
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

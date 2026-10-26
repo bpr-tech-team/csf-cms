@@ -150,7 +150,6 @@ export const branchInfo: GroupField = {
                 en: "Google Maps embed URL",
             },
             admin: {
-                hidden: true,
                 description: {
                     cs: "V Google Maps zvolte Sdílet → Vložení mapy. Vložte pouze URL z atributu src, nikoli celý HTML kód.",
                     en: "In Google Maps choose Share → Embed a map. Paste only the src URL, not the full HTML code.",
