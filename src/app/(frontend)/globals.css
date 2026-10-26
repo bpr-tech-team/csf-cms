@@ -237,10 +237,72 @@ html[data-hero-reveal-enabled] [data-hero-reveal="error"] img[data-hero-image] {
 }
 
 @media (any-pointer: fine) {
-    html,
-    html * {
-        cursor:
-            url("/cursors/glow.svg") 24 24,
-            auto !important;
+    html {
+        --site-cursor-variant: normal;
+        cursor: var(--site-cursor-native, auto);
     }
+
+    /* Use the original dark halo on interactive targets. */
+    :is(
+        a[href],
+        button,
+        summary,
+        select,
+        [role="button"],
+        [role="link"],
+        [role="checkbox"],
+        [role="radio"],
+        input:is(
+            [type="button"],
+            [type="submit"],
+            [type="reset"],
+            [type="checkbox"],
+            [type="radio"],
+            [type="range"],
+            [type="color"],
+            [type="file"]
+        ),
+        .cursor-pointer,
+        .hover\:cursor-pointer:hover
+    ) {
+        --site-cursor-variant: hover;
+        cursor: var(--site-cursor-native, pointer);
+    }
+
+    :is(input, textarea, [contenteditable="true"], [contenteditable=""]):not(
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="color"],
+        [type="file"]
+    ) {
+        cursor: text;
+    }
+
+    :is(:disabled, [aria-disabled="true"]) {
+        cursor: not-allowed;
+    }
+}
+
+html[data-site-cursor="ready"],
+html[data-site-cursor="ready"] * {
+    cursor: none !important;
+}
+
+.site-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 64px;
+    height: 64px;
+    pointer-events: none;
+    z-index: 2147483647;
+}
+
+.site-cursor[hidden],
+.site-cursor img[hidden] {
+    display: none;
 }
