@@ -1,7 +1,6 @@
-import { blockSpacingFields } from "@/fields/blockSpacing";
 import type { Block } from "payload";
 
-import { homepageSectionIntro } from "@/fields/homepageSection";
+import { processStepsFields } from "./fields";
 
 export const ProcessSteps: Block = {
     slug: "processSteps",
@@ -9,60 +8,20 @@ export const ProcessSteps: Block = {
         images: {
             thumbnail: {
                 url: "/block-previews/process-steps.webp",
-                alt: "Procesní kroky",
+                alt: "Procesní kroky s animací pomocí scroll",
             },
         },
     },
     interfaceName: "ProcessStepsBlock",
-    fields: [
-        blockSpacingFields(),
-        ...homepageSectionIntro({ includeDescription: true }),
-        {
-            name: "items",
-            type: "array",
-            labels: {
-                singular: { cs: "Krok", en: "Step" },
-                plural: { cs: "Kroky", en: "Steps" },
-            },
-            admin: {
-                initCollapsed: true,
-            },
-            fields: [
-                {
-                    name: "title",
-                    type: "text",
-                    label: {
-                        cs: "Název kroku",
-                        en: "Step title",
-                    },
-                    required: true,
-                },
-                {
-                    name: "description",
-                    type: "textarea",
-                    label: {
-                        cs: "Popis",
-                        en: "Description",
-                    },
-                },
-            ],
-            label: {
-                cs: "Kroky",
-                en: "Steps",
-            },
-            maxRows: 4,
-            minRows: 1,
-            required: true,
-        },
-    ],
+    fields: processStepsFields(),
     labels: {
         plural: {
-            cs: "Procesní kroky",
-            en: "Process steps",
+            cs: "Procesní kroky (scroll)",
+            en: "Process steps (scroll)",
         },
         singular: {
-            cs: "Procesní kroky",
-            en: "Process steps",
+            cs: "Procesní kroky (scroll)",
+            en: "Process steps (scroll)",
         },
     },
 };

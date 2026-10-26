@@ -31,6 +31,7 @@ import * as migration_20261025_082441_branch_hero_map_position from "./20261025_
 import * as migration_20261025_090452_canonical_branch_map from "./20261025_090452_canonical_branch_map";
 import * as migration_20261025_094728_branch_images from "./20261025_094728_branch_images";
 import * as migration_20261025_100759_gallery_controls from "./20261025_100759_gallery_controls";
+import * as migration_20261026_072055_process_steps_auto from "./20261026_072055_process_steps_auto";
 
 export const migrations = [
     {
@@ -197,5 +198,10 @@ export const migrations = [
         up: migration_20261025_100759_gallery_controls.up,
         down: migration_20261025_100759_gallery_controls.down,
         name: "20261025_100759_gallery_controls",
+    },
+    {
+        up: migration_20261026_072055_process_steps_auto.up,
+        down: migration_20261026_072055_process_steps_auto.down,
+        name: "20261026_072055_process_steps_auto",
     },
 ];
