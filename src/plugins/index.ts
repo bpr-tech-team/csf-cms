@@ -37,7 +37,8 @@ export const plugins: Plugin[] = [
     // including replacements, so duplicate names cannot overwrite other originals.
     vercelBlobStorage({
         alwaysInsertFields: true,
-        collections: { media: true },
+        // Media is public: serve files from Blob's CDN without the Payload proxy.
+        collections: { media: { disablePayloadAccessControl: true } },
         token: process.env.BLOB_READ_WRITE_TOKEN,
         clientUploads: true,
     }),
