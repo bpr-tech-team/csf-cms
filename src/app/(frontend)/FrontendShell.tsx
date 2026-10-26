@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import { SiteCursor } from "@/components/SiteCursor";
 import { AdminBar } from "@/components/AdminBar";
 import { InitHeroReveal } from "@/components/HeroSection/InitHeroReveal";
 import { Footer } from "@/globals/Footer/Component";
@@ -98,6 +99,7 @@ export async function FrontendShell({
                 />
             </head>
             <body className="[--site-header-height:--spacing(18)] xl:[--site-header-height:--spacing(26)]">
+                <SiteCursor />
                 <Providers locale={locale}>
                     <AdminBar
                         adminBarProps={{
