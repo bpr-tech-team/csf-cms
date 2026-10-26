@@ -158,7 +158,7 @@ function FooterBlock({
                         )}
                     </Link>
                     {block.description && (
-                        <p className="max-w-68 text-body-sm leading-6 font-normal whitespace-pre-line text-neutral-inverse-muted">
+                        <p className="text-body-sm leading-6 font-normal whitespace-pre-line text-neutral-inverse-muted">
                             {applyTypography(block.description, { locale })}
                         </p>
                     )}

@@ -29,15 +29,22 @@ export const HeaderNav: React.FC<{
     const id = useId();
     const isMobile = variant === "mobile";
     const messages = frontendMessages[locale];
-    const navItems = (data.navItems || []).filter((item) =>
+    const customerZoneItem: NonNullable<HeaderType["navItems"]>[number] =
+        data.customerZoneType === "dropdown"
+            ? { ...data.customerZoneMenu, itemType: "dropdown" }
+            : { link: data.customerZoneLink, itemType: "link" };
+    const navItems = [
+        ...(data.navItems || []).map((item) => ({
+            item,
+            isCustomerZone: false,
+        })),
+        { item: customerZoneItem, isCustomerZone: true },
+    ].filter(({ item }) =>
         item.itemType === "dropdown"
             ? item.label &&
               item.children?.some((child) => getLinkHref(child.link, locale))
             : getLinkHref(item.link, locale),
     );
-    const customerZoneLink = getLinkHref(data.customerZoneLink, locale)
-        ? data.customerZoneLink
-        : null;
     const contactLink = getLinkHref(data.contactLink, locale)
         ? data.contactLink
         : null;
@@ -125,7 +132,7 @@ export const HeaderNav: React.FC<{
                     isMobile ? "flex flex-col" : "flex items-center gap-6",
                 )}
             >
-                {navItems.map((item, index) => {
+                {navItems.map(({ item, isCustomerZone }, index) => {
                     const children = (item.children || []).filter((child) =>
                         getLinkHref(child.link, locale),
                     );
@@ -152,14 +159,22 @@ export const HeaderNav: React.FC<{
                             : "min-h-26 gap-1.5 text-lg",
                         isOpen || current ? "text-brand-500" : "text-paper-0",
                         !isMobile &&
+                            (!isCustomerZone || isDropdown) &&
                             (isOpen || current) &&
                             "after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-brand-500",
                     );
                     return (
                         <li
-                            key={item.id || index}
+                            key={
+                                isCustomerZone
+                                    ? "customer-zone"
+                                    : item.id || index
+                            }
                             className={cn(
                                 isMobile && "border-b border-paper-0/10",
+                                !isMobile &&
+                                    isCustomerZone &&
+                                    "ml-26 first:ml-32",
                             )}
                             onPointerEnter={(event) => {
                                 if (
@@ -417,20 +432,6 @@ export const HeaderNav: React.FC<{
                     );
                 })}
             </ul>
-            {customerZoneLink && (
-                <CMSLink
-                    {...customerZoneLink}
-                    typography={false}
-                    locale={locale}
-                    className={cn(
-                        headerFocus,
-                        "text-paper-0 no-underline hover:text-brand-500",
-                        isMobile
-                            ? "flex min-h-15 items-center border-b border-paper-0/10 py-3 text-lg font-medium"
-                            : "ml-32 text-lg",
-                    )}
-                />
-            )}
             {contactLink && (
                 <div
                     className={

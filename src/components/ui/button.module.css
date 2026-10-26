@@ -1,0 +1,75 @@
+.default,
+.outline {
+    position: relative;
+    border: 0;
+}
+
+/* Paint the stroke inside the button without changing its size or text layout. */
+.default::before,
+.outline::before {
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid transparent;
+    border-radius: inherit;
+    pointer-events: none;
+    content: "";
+    transition: border-color var(--transition-duration-fast)
+        var(--ease-standard);
+}
+
+.default {
+    color: var(--button-default-foreground);
+    background-color: var(--button-default-background);
+}
+
+.outline {
+    color: var(--button-light-foreground);
+    background-color: var(--button-outline-background);
+}
+
+.outline::before {
+    border-width: 2px;
+    border-color: var(--button-outline-border);
+}
+
+@media (hover: hover) {
+    .default:where(:not(:disabled, [aria-disabled="true"])):hover {
+        color: var(--button-default-hover-foreground);
+        background-color: var(--button-default-hover-background);
+        box-shadow: var(--button-hover-shadow);
+    }
+
+    .default:where(:not(:disabled, [aria-disabled="true"])):hover::before {
+        border-color: var(--button-default-background);
+    }
+
+    .outline:where(:not(:disabled, [aria-disabled="true"])):hover {
+        color: var(--button-default-foreground);
+        background-color: var(--button-outline-hover-background);
+        box-shadow: var(--button-hover-shadow);
+    }
+
+    .outline:where(:not(:disabled, [aria-disabled="true"])):hover::before {
+        border-width: 1.5px;
+        border-color: var(--button-hover-border);
+    }
+}
+
+/* Pressed styles take precedence over hover, including on touch screens. */
+.default:where(:not(:disabled, [aria-disabled="true"])):active {
+    color: var(--button-default-foreground);
+    background-color: var(--button-default-pressed-background);
+    box-shadow: none;
+}
+
+.outline:where(:not(:disabled, [aria-disabled="true"])):active {
+    color: var(--button-light-foreground);
+    background-color: var(--button-outline-pressed-background);
+    box-shadow: none;
+}
+
+.default:where(:not(:disabled, [aria-disabled="true"])):active::before,
+.outline:where(:not(:disabled, [aria-disabled="true"])):active::before {
+    border-width: 1.5px;
+    border-color: var(--button-light-foreground);
+}
