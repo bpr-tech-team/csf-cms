@@ -32,6 +32,7 @@ import * as migration_20261025_090452_canonical_branch_map from "./20261025_0904
 import * as migration_20261025_094728_branch_images from "./20261025_094728_branch_images";
 import * as migration_20261025_100759_gallery_controls from "./20261025_100759_gallery_controls";
 import * as migration_20261026_072055_process_steps_auto from "./20261026_072055_process_steps_auto";
+import * as migration_20261026_144752_header_customer_zone_menu from "./20261026_144752_header_customer_zone_menu";
 
 export const migrations = [
     {
@@ -203,5 +204,10 @@ export const migrations = [
         up: migration_20261026_072055_process_steps_auto.up,
         down: migration_20261026_072055_process_steps_auto.down,
         name: "20261026_072055_process_steps_auto",
+    },
+    {
+        up: migration_20261026_144752_header_customer_zone_menu.up,
+        down: migration_20261026_144752_header_customer_zone_menu.down,
+        name: "20261026_144752_header_customer_zone_menu",
     },
 ];

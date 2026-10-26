@@ -3299,7 +3299,8 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
-  customerZoneLink: {
+  customerZoneType: 'link' | 'dropdown';
+  customerZoneLink?: {
     type?: ('reference' | 'custom') | null;
     newTab?: boolean | null;
     reference?: {
@@ -3308,6 +3309,36 @@ export interface Header {
     } | null;
     url?: string | null;
     label: string;
+  };
+  customerZoneMenu?: {
+    label?: string | null;
+    children?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?: {
+              relationTo: 'pages';
+              value: number | Page;
+            } | null;
+            url?: string | null;
+            label: string;
+          };
+          icon: ContentIcon;
+          id?: string | null;
+        }[]
+      | null;
+    showOverviewLink?: boolean | null;
+    overviewLink?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'pages';
+        value: number | Page;
+      } | null;
+      url?: string | null;
+      label: string;
+    };
   };
   contactLink: {
     type?: ('reference' | 'custom') | null;
@@ -3559,6 +3590,7 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  customerZoneType?: T;
   customerZoneLink?:
     | T
     | {
@@ -3567,6 +3599,36 @@ export interface HeaderSelect<T extends boolean = true> {
         reference?: T;
         url?: T;
         label?: T;
+      };
+  customerZoneMenu?:
+    | T
+    | {
+        label?: T;
+        children?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              icon?: T | ContentIconSelect<T>;
+              id?: T;
+            };
+        showOverviewLink?: T;
+        overviewLink?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
       };
   contactLink?:
     | T
