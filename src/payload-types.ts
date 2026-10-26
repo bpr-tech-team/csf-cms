@@ -171,6 +171,7 @@ export interface Page {
     | LogoMarqueeBlock
     | CenteredCtaBlock
     | ProcessStepsBlock
+    | ProcessStepsAutoBlock
     | CompanyTimelineBlock
     | ServiceSectionIntroBlock
     | SplitContentBlock
@@ -1048,6 +1049,40 @@ export interface ProcessStepsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'processSteps';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsAutoBlock".
+ */
+export interface ProcessStepsAutoBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  eyebrow?: string | null;
+  heading: string;
+  /**
+   * Each row contains an exact heading fragment highlighted in green. Every matching occurrence is highlighted.
+   */
+  highlightedTexts?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  description?: string | null;
+  items: {
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'processStepsAuto';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1967,6 +2002,7 @@ export interface PagesSelect<T extends boolean = true> {
         logoMarquee?: T | LogoMarqueeBlockSelect<T>;
         centeredCta?: T | CenteredCtaBlockSelect<T>;
         processSteps?: T | ProcessStepsBlockSelect<T>;
+        processStepsAuto?: T | ProcessStepsAutoBlockSelect<T>;
         companyTimeline?: T | CompanyTimelineBlockSelect<T>;
         serviceSectionIntro?: T | ServiceSectionIntroBlockSelect<T>;
         splitContent?: T | SplitContentBlockSelect<T>;
@@ -2369,6 +2405,32 @@ export interface CenteredCtaBlockSelect<T extends boolean = true> {
  * via the `definition` "ProcessStepsBlock_select".
  */
 export interface ProcessStepsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  eyebrow?: T;
+  heading?: T;
+  highlightedTexts?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  description?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsAutoBlock_select".
+ */
+export interface ProcessStepsAutoBlockSelect<T extends boolean = true> {
   spacingTop?: T;
   spacingBottom?: T;
   eyebrow?: T;

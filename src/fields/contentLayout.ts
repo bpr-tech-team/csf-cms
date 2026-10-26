@@ -14,6 +14,7 @@ import { LogoMarquee } from "@/blocks/LogoMarquee/config";
 import { MediaFeatureGrid } from "@/blocks/MediaFeatureGrid/config";
 import { MetricsStrip } from "@/blocks/MetricsStrip/config";
 import { ProcessSteps } from "@/blocks/ProcessSteps/config";
+import { ProcessStepsAuto } from "@/blocks/ProcessStepsAuto/config";
 import { ProductsGrid } from "@/blocks/ProductsGrid/config";
 import { ServicesGrid } from "@/blocks/ServicesGrid/config";
 import { TechnologySpotlight } from "@/blocks/TechnologySpotlight/config";
@@ -41,6 +42,7 @@ const contentBlocks: Block[] = [
     LogoMarquee,
     CenteredCTA,
     ProcessSteps,
+    ProcessStepsAuto,
     CompanyTimeline,
     ServiceSectionIntro,
     SplitContent,

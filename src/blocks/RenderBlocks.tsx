@@ -31,6 +31,7 @@ import { LogoMarqueeBlock } from "@/blocks/LogoMarquee/Component";
 import { MediaFeatureGridBlock } from "@/blocks/MediaFeatureGrid/Component";
 import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
 import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
+import { ProcessStepsAutoBlock } from "@/blocks/ProcessStepsAuto/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
 import { ServicesGridBlock } from "@/blocks/ServicesGrid/Component";
 import { FlexibleContentBlock } from "@/blocks/FlexibleContent/Component";
@@ -227,6 +228,16 @@ export const RenderBlocks: React.FC<{
                                     {...block}
                                     sectionSpacing={sectionSpacing}
                                     key={index}
+                                />
+                            );
+
+                        case "processStepsAuto":
+                            return (
+                                <ProcessStepsAutoBlock
+                                    locale={locale}
+                                    {...block}
+                                    sectionSpacing={sectionSpacing}
+                                    key={block.id ?? index}
                                 />
                             );
 

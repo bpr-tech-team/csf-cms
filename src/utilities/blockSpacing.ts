@@ -130,6 +130,11 @@ const definitions = {
         flow: "standalone",
     },
     processSteps: { surface: "light", spacing: standard, flow: "standalone" },
+    processStepsAuto: {
+        surface: "light",
+        spacing: standard,
+        flow: "standalone",
+    },
     companyTimeline: {
         surface: "light",
         spacing: { top: "timelineTop", bottom: "timelineBottom" },
