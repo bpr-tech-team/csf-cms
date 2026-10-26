@@ -48,8 +48,9 @@ const PaginationLink = ({
         className={cn(
             buttonVariants({
                 size,
-                variant: isActive ? "outline" : "ghost",
+                variant: "ghost",
             }),
+            isActive && "border border-input bg-transparent",
             className,
         )}
         {...props}

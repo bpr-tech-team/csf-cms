@@ -3,7 +3,6 @@ import { CMSLink } from "@/components/Link";
 import { defaultLocale, type AppLocale } from "@/i18n/config";
 import type { HeroBlock } from "@/payload-types";
 import { applyTypography } from "@/utilities/typography";
-import { cn } from "@/utilities/ui";
 
 type HeroContentProps = Pick<
     HeroBlock,
@@ -45,11 +44,7 @@ export const HeroContent = ({
                             <CMSLink
                                 {...link}
                                 appearance={link.appearance ?? "default"}
-                                className={cn(
-                                    "h-auto min-h-13 max-w-full py-3 text-center whitespace-normal wrap-anywhere",
-                                    link.appearance === "outline" &&
-                                        "border-brand-500/60 text-paper-0 hover:border-brand-500 hover:bg-brand-100 hover:text-paper-0",
-                                )}
+                                className="h-auto min-h-13 max-w-full py-3 text-center whitespace-normal wrap-anywhere"
                                 locale={locale}
                                 size="lg"
                             />
