@@ -36,6 +36,11 @@ export const branchLabels = {
         contacts: "Kontaktní údaje",
         hours: "Provozní doba",
         map: "Mapa pobočky",
+        photo: "Foto",
+        mapToggle: "Mapa",
+        mediaPreview: "Náhled pobočky",
+        details: "Detail pobočky",
+        directions: "Navigovat",
     },
     en: {
         address: "Address",
@@ -45,5 +50,10 @@ export const branchLabels = {
         contacts: "Contact details",
         hours: "Opening hours",
         map: "Branch location",
+        photo: "Photo",
+        mapToggle: "Map",
+        mediaPreview: "Branch preview",
+        details: "Branch details",
+        directions: "Directions",
     },
 } as const;
