@@ -72,7 +72,10 @@ const LogoGroup = ({
     return (
         <div
             aria-hidden={ariaHidden || undefined}
-            className="flex shrink-0 items-center gap-12 pr-12 md:gap-20 md:pr-20"
+            className={cn(
+                styles.logoGroup,
+                "flex shrink-0 items-center gap-12 pr-12 md:gap-20 md:pr-20",
+            )}
         >
             {items.map((item, index) => {
                 const logo = (

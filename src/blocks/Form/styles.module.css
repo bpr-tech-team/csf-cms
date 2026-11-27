@@ -23,6 +23,25 @@
     border-color: var(--form-panel-border);
 }
 
+.largeText[id] {
+    scroll-margin-top: max(
+        0px,
+        calc(var(--site-header-height) + 1rem - var(--section-space-top))
+    );
+}
+
+.largeText
+    [data-slot="form-item"]:has(> input, > textarea)
+    > [data-slot="form-label"] {
+    font-size: 1rem;
+    line-height: 1.35;
+    letter-spacing: normal;
+
+    @media (min-width: 48rem) {
+        font-size: 1.125rem;
+    }
+}
+
 .root [data-slot="form-control"]:not([role="checkbox"]) {
     background-color: var(--form-control-background);
     border-color: var(--form-control-border);

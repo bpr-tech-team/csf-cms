@@ -30,6 +30,7 @@ import { ClientServiceBlock } from "@/blocks/ClientService/Component";
 import { LogoMarqueeBlock } from "@/blocks/LogoMarquee/Component";
 import { MediaFeatureGridBlock } from "@/blocks/MediaFeatureGrid/Component";
 import { MetricsStripBlock } from "@/blocks/MetricsStrip/Component";
+import { PdfDownloadsBlock } from "@/blocks/PdfDownloads/Component";
 import { ProcessStepsBlock } from "@/blocks/ProcessSteps/Component";
 import { ProcessStepsAutoBlock } from "@/blocks/ProcessStepsAuto/Component";
 import { ProductsGridBlock } from "@/blocks/ProductsGrid/Component";
@@ -264,6 +265,16 @@ export const RenderBlocks: React.FC<{
                         case "gallery":
                             return (
                                 <GalleryBlock
+                                    {...block}
+                                    sectionSpacing={sectionSpacing}
+                                    key={block.id ?? index}
+                                    locale={locale}
+                                />
+                            );
+
+                        case "pdfDownloads":
+                            return (
+                                <PdfDownloadsBlock
                                     {...block}
                                     sectionSpacing={sectionSpacing}
                                     key={block.id ?? index}

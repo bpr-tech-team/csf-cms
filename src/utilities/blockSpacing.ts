@@ -1,6 +1,7 @@
 import type { Form, FormBlock, Page } from "@/payload-types";
 import type { PostCardData } from "@/utilities/postCards";
 import { getGalleryImages } from "@/utilities/gallery";
+import { getPdfDownloadUrl } from "@/blocks/PdfDownloads/downloadUrl";
 
 export type SpacingSize = "auto" | "none" | "compact" | "normal" | "large";
 export type SectionSpacing = {
@@ -40,6 +41,7 @@ export type BlockPresentationOptions = {
 
 type Definition = {
     surface: Surface | "theme" | "form";
+    defaultTheme?: NonNullable<BlockPresentationOptions["theme"]>;
     spacing: SectionSpacingDefaults;
     // Joining is an explicit design choice, not inferred from background alone.
     flow: "content" | "standalone";
@@ -125,7 +127,8 @@ const definitions = {
         flow: "standalone",
     },
     centeredCta: {
-        surface: "dark",
+        surface: "theme",
+        defaultTheme: "dark",
         spacing: { top: "cta", bottom: "cta" },
         flow: "standalone",
     },
@@ -154,6 +157,16 @@ const definitions = {
         isVisible: (block) =>
             block.blockType === "gallery" &&
             getGalleryImages(block.images).length > 0,
+    },
+    pdfDownloads: {
+        surface: "light",
+        spacing: { top: "compact", bottom: "compact" },
+        flow: "standalone",
+        isVisible: (block) =>
+            block.blockType === "pdfDownloads" &&
+            Boolean(
+                block.documents?.some(({ file }) => getPdfDownloadUrl(file)),
+            ),
     },
     computerAudience: {
         surface: "light",
@@ -198,7 +211,7 @@ export const getBlockPresentation = (
     let spacing = definition.spacing;
 
     if (definition.surface === "theme") {
-        surface = options.theme === "dark" ? "dark" : "light";
+        surface = options.theme ?? definition.defaultTheme ?? "light";
     } else if (definition.surface === "form") {
         surface = options.appearance === "homepageDark" ? "dark" : "light";
     } else {

@@ -177,6 +177,7 @@ export interface Page {
     | SplitContentBlock
     | FlexibleContentBlock
     | GalleryBlock
+    | PdfDownloadsBlock
     | ComputerAudienceBlock
     | ComputerCatalogBlock
     | ComputerProductCatalogBlock
@@ -612,6 +613,10 @@ export interface FormBlock {
   spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   appearance?: ('default' | 'homepageDark') | null;
   eyebrow?: string | null;
+  /**
+   * Enlarges the heading and text-field labels in this block.
+   */
+  largeText?: boolean | null;
   form: number | Form;
   enableEmployee?: boolean | null;
   /**
@@ -993,6 +998,7 @@ export interface CenteredCtaBlock {
    * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
    */
   spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  theme?: ('light' | 'dark') | null;
   heading: string;
   link: {
     type?: ('reference' | 'custom') | null;
@@ -1398,6 +1404,29 @@ export interface GalleryBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'gallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PdfDownloadsBlock".
+ */
+export interface PdfDownloadsBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  heading: string;
+  documents: {
+    label: string;
+    file: number | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pdfDownloads';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2008,6 +2037,7 @@ export interface PagesSelect<T extends boolean = true> {
         splitContent?: T | SplitContentBlockSelect<T>;
         flexibleContent?: T | FlexibleContentBlockSelect<T>;
         gallery?: T | GalleryBlockSelect<T>;
+        pdfDownloads?: T | PdfDownloadsBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
         computerCatalog?: T | ComputerCatalogBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
@@ -2232,6 +2262,7 @@ export interface FormBlockSelect<T extends boolean = true> {
   spacingBottom?: T;
   appearance?: T;
   eyebrow?: T;
+  largeText?: T;
   form?: T;
   enableEmployee?: T;
   employee?:
@@ -2385,6 +2416,7 @@ export interface LogoMarqueeBlockSelect<T extends boolean = true> {
 export interface CenteredCtaBlockSelect<T extends boolean = true> {
   spacingTop?: T;
   spacingBottom?: T;
+  theme?: T;
   heading?: T;
   link?:
     | T
@@ -2642,6 +2674,24 @@ export interface GalleryBlockSelect<T extends boolean = true> {
   showControls?: T;
   autoplay?: T;
   autoplayInterval?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PdfDownloadsBlock_select".
+ */
+export interface PdfDownloadsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  heading?: T;
+  documents?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

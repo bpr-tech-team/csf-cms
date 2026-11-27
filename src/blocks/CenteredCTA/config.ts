@@ -17,6 +17,17 @@ export const CenteredCTA: Block = {
     fields: [
         blockSpacingFields(),
         {
+            name: "theme",
+            type: "radio",
+            defaultValue: "dark",
+            admin: { layout: "horizontal" },
+            label: { cs: "Barevné téma", en: "Color theme" },
+            options: [
+                { label: { cs: "Světlé", en: "Light" }, value: "light" },
+                { label: { cs: "Tmavé", en: "Dark" }, value: "dark" },
+            ],
+        },
+        {
             name: "heading",
             type: "textarea",
             label: {

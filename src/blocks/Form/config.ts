@@ -52,6 +52,20 @@ export const FormBlock: Block = {
             },
         },
         {
+            name: "largeText",
+            type: "checkbox",
+            label: {
+                cs: "Větší nadpis a popisky polí",
+                en: "Larger heading and field labels",
+            },
+            admin: {
+                description: {
+                    cs: "Zvětší nadpis a popisky textových polí v tomto bloku.",
+                    en: "Enlarges the heading and text-field labels in this block.",
+                },
+            },
+        },
+        {
             name: "form",
             type: "relationship",
             label: {

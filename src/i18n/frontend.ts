@@ -109,7 +109,7 @@ export const frontendMessages: Record<
         pageRangeShowing: "Zobrazeno",
         postsDescription:
             "Novinky a odborné články CSF o IT službách, ICT infrastruktuře, cloudových řešeních, hardwaru a servisu.",
-        postsTitle: "Novinky",
+        postsTitle: "Case Studies",
         postsGrid: {
             search: "Hledat podle názvu",
             placeholder: "Název článku…",

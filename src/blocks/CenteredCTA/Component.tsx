@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { CMSLink } from "@/components/Link";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
+import { cn } from "@/utilities/ui";
 import React from "react";
 
 export const CenteredCTABlock = ({
@@ -16,16 +17,25 @@ export const CenteredCTABlock = ({
     backgroundMedia,
     heading,
     link,
+    theme,
     locale = defaultLocale,
 }: CenteredCtaBlockProps & BlockSpacingProps & { locale?: AppLocale }) => {
+    const isLight = theme === "light";
+
     return (
         <BlockSection
             blockType="centeredCta"
+            theme={theme}
             spacing={
                 sectionSpacing ?? { top: spacingTop, bottom: spacingBottom }
             }
-            className="relative overflow-hidden border-b border-border-dark text-center text-paper-0"
-            data-theme="dark"
+            className={cn(
+                "relative overflow-hidden border-b text-center",
+                isLight
+                    ? "border-border-light text-ink-950"
+                    : "border-border-dark text-paper-0",
+            )}
+            data-theme={isLight ? "light" : "dark"}
         >
             {backgroundMedia && (
                 <MediaAsset
@@ -47,7 +57,7 @@ export const CenteredCTABlock = ({
                     className="mx-auto max-w-[60rem]"
                     heading={heading}
                     showRule={false}
-                    tone="inverse"
+                    tone={isLight ? "default" : "inverse"}
                 />
                 {link && (
                     <CMSLink
