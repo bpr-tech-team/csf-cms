@@ -1,6 +1,7 @@
 import type { Form, FormBlock, Page } from "@/payload-types";
 import type { PostCardData } from "@/utilities/postCards";
 import { getGalleryImages } from "@/utilities/gallery";
+import { getPdfDownloadUrl } from "@/blocks/PdfDownloads/downloadUrl";
 
 export type SpacingSize = "auto" | "none" | "compact" | "normal" | "large";
 export type SectionSpacing = {
@@ -154,6 +155,16 @@ const definitions = {
         isVisible: (block) =>
             block.blockType === "gallery" &&
             getGalleryImages(block.images).length > 0,
+    },
+    pdfDownloads: {
+        surface: "light",
+        spacing: { top: "compact", bottom: "compact" },
+        flow: "standalone",
+        isVisible: (block) =>
+            block.blockType === "pdfDownloads" &&
+            Boolean(
+                block.documents?.some(({ file }) => getPdfDownloadUrl(file)),
+            ),
     },
     computerAudience: {
         surface: "light",

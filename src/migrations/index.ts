@@ -33,6 +33,7 @@ import * as migration_20261025_094728_branch_images from "./20261025_094728_bran
 import * as migration_20261025_100759_gallery_controls from "./20261025_100759_gallery_controls";
 import * as migration_20261026_072055_process_steps_auto from "./20261026_072055_process_steps_auto";
 import * as migration_20261026_144752_header_customer_zone_menu from "./20261026_144752_header_customer_zone_menu";
+import * as migration_20261127_133245_pdf_downloads from "./20261127_133245_pdf_downloads";
 
 export const migrations = [
     {
@@ -209,5 +210,10 @@ export const migrations = [
         up: migration_20261026_144752_header_customer_zone_menu.up,
         down: migration_20261026_144752_header_customer_zone_menu.down,
         name: "20261026_144752_header_customer_zone_menu",
+    },
+    {
+        up: migration_20261127_133245_pdf_downloads.up,
+        down: migration_20261127_133245_pdf_downloads.down,
+        name: "20261127_133245_pdf_downloads",
     },
 ];

@@ -13,6 +13,7 @@ import { ClientService } from "@/blocks/ClientService/config";
 import { LogoMarquee } from "@/blocks/LogoMarquee/config";
 import { MediaFeatureGrid } from "@/blocks/MediaFeatureGrid/config";
 import { MetricsStrip } from "@/blocks/MetricsStrip/config";
+import { PdfDownloads } from "@/blocks/PdfDownloads/config";
 import { ProcessSteps } from "@/blocks/ProcessSteps/config";
 import { ProcessStepsAuto } from "@/blocks/ProcessStepsAuto/config";
 import { ProductsGrid } from "@/blocks/ProductsGrid/config";
@@ -48,6 +49,7 @@ const contentBlocks: Block[] = [
     SplitContent,
     FlexibleContent,
     Gallery,
+    PdfDownloads,
     ComputerAudience,
     ComputerCatalog,
     ComputerProductCatalog,

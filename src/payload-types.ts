@@ -177,6 +177,7 @@ export interface Page {
     | SplitContentBlock
     | FlexibleContentBlock
     | GalleryBlock
+    | PdfDownloadsBlock
     | ComputerAudienceBlock
     | ComputerCatalogBlock
     | ComputerProductCatalogBlock
@@ -1401,6 +1402,29 @@ export interface GalleryBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PdfDownloadsBlock".
+ */
+export interface PdfDownloadsBlock {
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingTop?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  /**
+   * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
+   */
+  spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  heading: string;
+  documents: {
+    label: string;
+    file: number | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pdfDownloads';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ComputerAudienceBlock".
  */
 export interface ComputerAudienceBlock {
@@ -2008,6 +2032,7 @@ export interface PagesSelect<T extends boolean = true> {
         splitContent?: T | SplitContentBlockSelect<T>;
         flexibleContent?: T | FlexibleContentBlockSelect<T>;
         gallery?: T | GalleryBlockSelect<T>;
+        pdfDownloads?: T | PdfDownloadsBlockSelect<T>;
         computerAudience?: T | ComputerAudienceBlockSelect<T>;
         computerCatalog?: T | ComputerCatalogBlockSelect<T>;
         computerProductCatalog?: T | ComputerProductCatalogBlockSelect<T>;
@@ -2642,6 +2667,24 @@ export interface GalleryBlockSelect<T extends boolean = true> {
   showControls?: T;
   autoplay?: T;
   autoplayInterval?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PdfDownloadsBlock_select".
+ */
+export interface PdfDownloadsBlockSelect<T extends boolean = true> {
+  spacingTop?: T;
+  spacingBottom?: T;
+  heading?: T;
+  documents?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
