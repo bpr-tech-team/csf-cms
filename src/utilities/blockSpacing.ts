@@ -41,6 +41,7 @@ export type BlockPresentationOptions = {
 
 type Definition = {
     surface: Surface | "theme" | "form";
+    defaultTheme?: NonNullable<BlockPresentationOptions["theme"]>;
     spacing: SectionSpacingDefaults;
     // Joining is an explicit design choice, not inferred from background alone.
     flow: "content" | "standalone";
@@ -126,7 +127,8 @@ const definitions = {
         flow: "standalone",
     },
     centeredCta: {
-        surface: "dark",
+        surface: "theme",
+        defaultTheme: "dark",
         spacing: { top: "cta", bottom: "cta" },
         flow: "standalone",
     },
@@ -209,7 +211,7 @@ export const getBlockPresentation = (
     let spacing = definition.spacing;
 
     if (definition.surface === "theme") {
-        surface = options.theme === "dark" ? "dark" : "light";
+        surface = options.theme ?? definition.defaultTheme ?? "light";
     } else if (definition.surface === "form") {
         surface = options.appearance === "homepageDark" ? "dark" : "light";
     } else {

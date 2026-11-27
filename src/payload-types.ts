@@ -998,6 +998,7 @@ export interface CenteredCtaBlock {
    * Auto takes adjacent blocks into account. A manual choice changes only this side of the block.
    */
   spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
+  theme?: ('light' | 'dark') | null;
   heading: string;
   link: {
     type?: ('reference' | 'custom') | null;
@@ -2415,6 +2416,7 @@ export interface LogoMarqueeBlockSelect<T extends boolean = true> {
 export interface CenteredCtaBlockSelect<T extends boolean = true> {
   spacingTop?: T;
   spacingBottom?: T;
+  theme?: T;
   heading?: T;
   link?:
     | T

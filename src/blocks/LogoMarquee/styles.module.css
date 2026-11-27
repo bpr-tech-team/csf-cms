@@ -10,10 +10,28 @@
 
 .marquee {
     animation: marquee var(--homepage-marquee-duration) linear infinite;
+    mix-blend-mode: lighten;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .marquee {
+        width: 100%;
         animation: none;
+    }
+
+    .logoGroup {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        padding-inline: 0.75rem;
+    }
+
+    .logoGroup > * {
+        flex-basis: 8rem;
+    }
+
+    .logoGroup[aria-hidden="true"] {
+        display: none;
     }
 }
