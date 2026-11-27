@@ -613,6 +613,10 @@ export interface FormBlock {
   spacingBottom?: ('auto' | 'none' | 'compact' | 'normal' | 'large') | null;
   appearance?: ('default' | 'homepageDark') | null;
   eyebrow?: string | null;
+  /**
+   * Enlarges the heading and text-field labels in this block.
+   */
+  largeText?: boolean | null;
   form: number | Form;
   enableEmployee?: boolean | null;
   /**
@@ -2257,6 +2261,7 @@ export interface FormBlockSelect<T extends boolean = true> {
   spacingBottom?: T;
   appearance?: T;
   eyebrow?: T;
+  largeText?: T;
   form?: T;
   enableEmployee?: T;
   employee?:

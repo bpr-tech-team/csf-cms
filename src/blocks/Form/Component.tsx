@@ -53,6 +53,7 @@ export const FormBlock: React.FC<
         eyebrow,
         form: formFromProps,
         introContent,
+        largeText,
     } = props;
     const {
         confirmationMessage,
@@ -130,6 +131,7 @@ export const FormBlock: React.FC<
                 }
                 className={cn(
                     styles.root,
+                    largeText && styles.largeText,
                     isHomepageDark ? "text-paper-0" : "text-foreground",
                 )}
                 data-theme={isHomepageDark ? "dark" : "light"}
@@ -141,16 +143,22 @@ export const FormBlock: React.FC<
                         !showEmployee && "lg:max-w-[46rem]!",
                     )}
                 >
-                    {eyebrow && !hasSubmitted && (
-                        <Eyebrow
-                            locale={locale}
-                            align="center"
-                            className="mb-5"
-                            tone={isHomepageDark ? "inverse" : "neutral"}
-                        >
-                            {eyebrow}
-                        </Eyebrow>
-                    )}
+                    {eyebrow &&
+                        !hasSubmitted &&
+                        (largeText ? (
+                            <h2 className="mb-5 text-center text-2xl leading-tight font-bold text-balance md:text-3xl">
+                                {applyTypography(eyebrow, { locale })}
+                            </h2>
+                        ) : (
+                            <Eyebrow
+                                locale={locale}
+                                align="center"
+                                className="mb-5"
+                                tone={isHomepageDark ? "inverse" : "neutral"}
+                            >
+                                {eyebrow}
+                            </Eyebrow>
+                        ))}
                     {enableIntro && introContent && !hasSubmitted && (
                         <RichText
                             locale={locale}
