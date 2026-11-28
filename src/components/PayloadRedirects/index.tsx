@@ -5,7 +5,7 @@ import { getDocument } from "@/utilities/getDocument";
 import { getCachedRedirects } from "@/utilities/getRedirects";
 import type { AppLocale } from "@/i18n/config";
 import { defaultLocale, withLocalePrefix } from "@/i18n/config";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { getPagePath } from "@/utilities/getPagePath";
 
 interface Props {
@@ -25,8 +25,11 @@ export const PayloadRedirects: React.FC<Props> = async ({
     const redirectItem = redirects.find((redirect) => redirect.from === url);
 
     if (redirectItem) {
+        const sendRedirect =
+            redirectItem.type === "308" ? permanentRedirect : redirect;
+
         if (redirectItem.to?.type === "custom" && redirectItem.to.url) {
-            redirect(
+            sendRedirect(
                 redirectItem.to.url.startsWith("/")
                     ? withLocalePrefix(redirectItem.to.url, locale)
                     : redirectItem.to.url,
@@ -49,7 +52,7 @@ export const PayloadRedirects: React.FC<Props> = async ({
                 locale,
             );
             if (document?.slug) {
-                redirect(
+                sendRedirect(
                     withLocalePrefix(
                         getPagePath(document as Page, locale),
                         locale,

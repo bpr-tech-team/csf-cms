@@ -22,6 +22,6 @@ export async function getRedirects() {
  * Cache rules and target IDs only. Read target documents directly from Payload.
  */
 export const getCachedRedirects = () =>
-    unstable_cache(async () => getRedirects(), ["redirect-rules-v2"], {
+    unstable_cache(async () => getRedirects(), ["redirect-rules-v3"], {
         tags: ["redirects"],
     });

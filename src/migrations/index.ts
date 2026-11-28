@@ -36,6 +36,7 @@ import * as migration_20261026_144752_header_customer_zone_menu from "./20261026
 import * as migration_20261127_133245_pdf_downloads from "./20261127_133245_pdf_downloads";
 import * as migration_20261127_190026_form_large_text from "./20261127_190026_form_large_text";
 import * as migration_20261127_213801_centered_cta_theme from "./20261127_213801_centered_cta_theme";
+import * as migration_20261128_074638_redirect_http_status from "./20261128_074638_redirect_http_status";
 
 export const migrations = [
     {
@@ -227,5 +228,10 @@ export const migrations = [
         up: migration_20261127_213801_centered_cta_theme.up,
         down: migration_20261127_213801_centered_cta_theme.down,
         name: "20261127_213801_centered_cta_theme",
+    },
+    {
+        up: migration_20261128_074638_redirect_http_status.up,
+        down: migration_20261128_074638_redirect_http_status.down,
+        name: "20261128_074638_redirect_http_status",
     },
 ];
