@@ -44,6 +44,8 @@ export const plugins: Plugin[] = [
     }),
     redirectsPlugin({
         collections: ["pages"],
+        redirectTypes: ["307", "308"],
+        redirectTypeFieldOverride: { defaultValue: "307" },
         overrides: {
             labels: {
                 plural: {
@@ -55,22 +57,8 @@ export const plugins: Plugin[] = [
                     en: "Redirect",
                 },
             },
-            // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
-            fields: ({ defaultFields }) => {
-                return defaultFields.map((field) => {
-                    if ("name" in field && field.name === "from") {
-                        return {
-                            ...field,
-                            admin: {
-                                description: {
-                                    cs: "Po změně tohoto pole je potřeba znovu sestavit web.",
-                                    en: "You will need to rebuild the website when changing this field.",
-                                },
-                            },
-                        };
-                    }
-                    return field;
-                });
+            admin: {
+                defaultColumns: ["from", "type", "to.type", "createdAt"],
             },
             hooks: {
                 afterChange: [revalidateRedirects],

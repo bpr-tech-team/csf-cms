@@ -1791,9 +1791,6 @@ export interface User {
  */
 export interface Redirect {
   id: number;
-  /**
-   * You will need to rebuild the website when changing this field.
-   */
   from: string;
   to?: {
     type?: ('reference' | 'custom') | null;
@@ -1803,6 +1800,7 @@ export interface Redirect {
     } | null;
     url?: string | null;
   };
+  type: '307' | '308';
   updatedAt: string;
   createdAt: string;
 }
@@ -3064,6 +3062,7 @@ export interface RedirectsSelect<T extends boolean = true> {
         reference?: T;
         url?: T;
       };
+  type?: T;
   updatedAt?: T;
   createdAt?: T;
 }
